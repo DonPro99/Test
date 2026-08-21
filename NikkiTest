@@ -1,99 +1,71 @@
-@if (managementInfoLinksModel) {
-  <div id="mngmtLinksForm">
-    <div>
-      <div class="grid ">
-        @if (managementInfoLinksModel.managementLinks && managementInfoLinksModel.managementLinks.length > 0) {
-          <div class="col-6 boxinfo">
-            <div class="grid">
-              <div class="col-12">
-                <h4>Management Action Links</h4>
-              </div>
-            </div>
-            @for (item of managementInfoLinksModel.managementLinks; track item; let idx = $index) {
-              <div class="grid" >
-                @if(item.hasNavigation) {
-                  <div class="col-12" >
-                    @if(item.isNewWindow) {
-                      <div >
-                        <a href="{{item.url}}" class="mgt{{item.code}}" target="_new"> {{item.displayName}} 
-                          @if(item.subDisplayName) {
-                            <span >( {{item.subDisplayName}} )</span>
-                          }
-                        </a>
-                      </div>
-                    }
-                    @else {
-                      <a href="javascript:void(0)" class="mgt{{item.code}}" (click)="navigateToUrl(item)">{{item.displayName}} 
-                        @if(item.subDisplayName) {
-                          <span>( {{item.subDisplayName}} )</span>
-                        }
-                      </a>
-                    }
-                  </div>
-                }
-                @else {
-                  <div class="col-12">
-                    <span class="mgt{{item.code}} a-non-href"> {{item.displayName}} 
-                      @if(item.subDisplayName) {
-                        <span>( {{item.subDisplayName}} )</span>
-                      }
-                    </span>
-                  </div>
-                }
-              </div>
-            }
-          </div>
-        }
-        @if (managementInfoLinksModel.informationLinks && managementInfoLinksModel.informationLinks.length > 0) {
-          <div class="col-6 boxinfo">
-            <div class="grid">
-              <div class="col-12">
-                <h4>Information Links</h4>
-              </div>
-            </div>
-            @for (item of managementInfoLinksModel.informationLinks; track item; let idx = $index) {
-              <div class="grid" >
-                @if (item.code==='CC' && managementInfoLinksModel.cloaVersionLinks.length > 1) {
-                  <div class="col-12" >
-                    <a href="javascript:void(0)" class="inf{{item.code}}" (click)="$any(cloaVersionsPanel).show($event)">{{item.displayName}}</a>
-                  </div>
-                }
-                @else {
-                  @if(item.hasNavigation) {
-                    <div class="col-12" >
-                      @if(item.isNewWindow) {
-                        <div >
-                          <a href="{{item.url}}" class="inf{{item.code}}" target="_new"> {{item.displayName}}</a>
-                        </div>
-                      }
-                      @else {
-                        <a href="javascript:void(0)" class="inf{{item.code}}" (click)="navigateToUrl(item)">{{item.displayName}}</a>
-                      }
-                    </div>
-                  }
-                  @else {
-                    <div class="col-12">
-                      <span class="inf{{item.code}} a-non-href"> {{item.displayName}}</span>
-                    </div>
-                  }
-                }
-              </div>
-            }
-          </div>
-        }
-      </div>
-    </div>
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { PlanningPageService } from '../services/planningpage.service';
+import { ManagementInfoLinksModel } from '../models/planningpage/managementinfolinks';
+import { BaseComponent, DesigneeTypeEnum, LinkViewModel, OfficeEnum, UtilityService } from 'dms-web-shared';
+import { NavigationExtras, Router } from '@angular/router';
+import { TokenStorageService } from '../services/tokenstorage.service';
+import { DesigneeInfoModel } from '../models/planningpage/designeeinfo';
+import { ConfirmationService } from 'primeng/api';
+import { takeUntil } from 'rxjs/operators';
 
-    <p-popover #cloaVersionsPanel ariaCloseLabel="Close this dialog">
-      <div id="cloaVersionsDiv" class="col-12 boxinfo">
-        @for (item of managementInfoLinksModel.cloaVersionLinks; track item; let idx = $index) {
-          <div>
-            <div class="grid cloalinks">
-              <a href="javascript:void(0)" class="cloaVersion{{item.code}}" (click)="navigateToUrl(item)">{{item.displayName}}</a>
-            </div>
-          </div>
-        }
-      </div>
-    </p-popover>
-  </div>
+@Component({
+    selector: 'app-managementinformationlinks',
+    templateUrl: './managementinformationlinks.component.html',
+    styleUrls: ['./managementinformationlinks.component.scss'],
+    standalone: false
+})
+export class ManagementinformationlinksComponent extends BaseComponent implements OnInit, OnChanges {
+
+  @Input() designeeInfo: DesigneeInfoModel | undefined;
+  @Input() roleId: number | undefined;
+  @Input() isLinked: boolean = false;
+  @Input() selected = false;
+  managementInfoLinksModel: ManagementInfoLinksModel | undefined;
+
+  constructor(private router: Router,
+    private utilityService: UtilityService,
+    private storageService: TokenStorageService,
+    private confirmationService: ConfirmationService,
+    private planningPageService: PlanningPageService) { super(); }
+
+  ngOnInit() {
+    const currentOfficeId = this.storageService.getCurrentOffice();
+    const userofficeroleId = this.storageService.getCurrentUserOfficeRole();
+    this.planningPageService.managementInformationLinks(this.designeeInfo?.applicationId!, this.roleId!, this.designeeInfo!.isMyDesignee!, currentOfficeId, userofficeroleId!).pipe(takeUntil(this.destroying$)).subscribe(d => {
+      this.managementInfoLinksModel = d;
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if ((changes['designeeInfo'] && !changes['designeeInfo'].firstChange && this.selected === true) ||
+    (changes['selected'] && !changes['selected'].firstChange && this.selected === true)){
+      this.ngOnInit();
+    }
+  }
+
+  navigateToUrl(item: LinkViewModel) {
+    if (item.code === 'IDT' && this.designeeInfo?.office?.id === OfficeEnum.AFG970 && this.designeeInfo.type?.id == DesigneeTypeEnum.SAE) {
+      this.confirmationService.confirm({
+        key: 'dms',
+        icon: undefined,
+        header: 'Message',
+        message: 'This designee cannot be transferred to another office as an SAE. Please contact the policy office, AFS-650, for further guidance.',
+        acceptVisible: true,
+        acceptLabel:  'Ok',
+        acceptIcon: 'fa fa-check',
+        rejectVisible: false,
+        accept: () => { }
+      });
+    } else {
+      if (item.code == 'SEF' && this.isLinked) {
+        item.url = `${item.url}?isLink=${this.isLinked}`;
+      }
+      const index = item.url?.indexOf('?');
+      const navigateUrl = index === -1 ? item.url : item.url?.slice(0, index);
+      const navigationExtras: NavigationExtras = {
+        queryParams: this.utilityService.getQueryParams(item.url!)
+      };
+      this.router.navigate([navigateUrl], navigationExtras);
+    }
+  }
 }
