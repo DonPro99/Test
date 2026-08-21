@@ -1,0 +1,99 @@
+@if (managementInfoLinksModel) {
+  <div id="mngmtLinksForm">
+    <div>
+      <div class="grid ">
+        @if (managementInfoLinksModel.managementLinks && managementInfoLinksModel.managementLinks.length > 0) {
+          <div class="col-6 boxinfo">
+            <div class="grid">
+              <div class="col-12">
+                <h4>Management Action Links</h4>
+              </div>
+            </div>
+            @for (item of managementInfoLinksModel.managementLinks; track item; let idx = $index) {
+              <div class="grid" >
+                @if(item.hasNavigation) {
+                  <div class="col-12" >
+                    @if(item.isNewWindow) {
+                      <div >
+                        <a href="{{item.url}}" class="mgt{{item.code}}" target="_new"> {{item.displayName}} 
+                          @if(item.subDisplayName) {
+                            <span >( {{item.subDisplayName}} )</span>
+                          }
+                        </a>
+                      </div>
+                    }
+                    @else {
+                      <a href="javascript:void(0)" class="mgt{{item.code}}" (click)="navigateToUrl(item)">{{item.displayName}} 
+                        @if(item.subDisplayName) {
+                          <span>( {{item.subDisplayName}} )</span>
+                        }
+                      </a>
+                    }
+                  </div>
+                }
+                @else {
+                  <div class="col-12">
+                    <span class="mgt{{item.code}} a-non-href"> {{item.displayName}} 
+                      @if(item.subDisplayName) {
+                        <span>( {{item.subDisplayName}} )</span>
+                      }
+                    </span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+        @if (managementInfoLinksModel.informationLinks && managementInfoLinksModel.informationLinks.length > 0) {
+          <div class="col-6 boxinfo">
+            <div class="grid">
+              <div class="col-12">
+                <h4>Information Links</h4>
+              </div>
+            </div>
+            @for (item of managementInfoLinksModel.informationLinks; track item; let idx = $index) {
+              <div class="grid" >
+                @if (item.code==='CC' && managementInfoLinksModel.cloaVersionLinks.length > 1) {
+                  <div class="col-12" >
+                    <a href="javascript:void(0)" class="inf{{item.code}}" (click)="$any(cloaVersionsPanel).show($event)">{{item.displayName}}</a>
+                  </div>
+                }
+                @else {
+                  @if(item.hasNavigation) {
+                    <div class="col-12" >
+                      @if(item.isNewWindow) {
+                        <div >
+                          <a href="{{item.url}}" class="inf{{item.code}}" target="_new"> {{item.displayName}}</a>
+                        </div>
+                      }
+                      @else {
+                        <a href="javascript:void(0)" class="inf{{item.code}}" (click)="navigateToUrl(item)">{{item.displayName}}</a>
+                      }
+                    </div>
+                  }
+                  @else {
+                    <div class="col-12">
+                      <span class="inf{{item.code}} a-non-href"> {{item.displayName}}</span>
+                    </div>
+                  }
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <p-popover #cloaVersionsPanel ariaCloseLabel="Close this dialog">
+      <div id="cloaVersionsDiv" class="col-12 boxinfo">
+        @for (item of managementInfoLinksModel.cloaVersionLinks; track item; let idx = $index) {
+          <div>
+            <div class="grid cloalinks">
+              <a href="javascript:void(0)" class="cloaVersion{{item.code}}" (click)="navigateToUrl(item)">{{item.displayName}}</a>
+            </div>
+          </div>
+        }
+      </div>
+    </p-popover>
+  </div>
+}
