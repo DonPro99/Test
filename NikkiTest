@@ -1,1 +1,31 @@
-postActivitySearchCriteria
+{applicationId: 95748, isInternal: true, isOneYear: true,…}
+applicationId
+: 
+95748
+isInternal
+: 
+true
+isOneYear
+: 
+true
+pageModel
+: 
+{first: 0, rows: 10, sortField: "trackingNumber", sortOrder: -1, filters: {}, globalFilter: null}
+filters
+: 
+{}
+first
+: 
+0
+globalFilter
+: 
+null
+rows
+: 
+10
+sortField
+: 
+"trackingNumber"
+sortOrder
+: 
+-1
