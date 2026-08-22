@@ -1,2 +1,3 @@
-DELETE FROM [DMS_NEW].[dbo].[PracticalOralTestType]
-WHERE [DesigneeTypeId] = 31 AND [IsActive] = 0
+SELECT [Id], [Name], [DesigneeTypeId], [SortOrder], [IsActive]
+FROM [DMS_NEW].[dbo].[PracticalOralTestType]
+WHERE [DesigneeTypeId] = 31
