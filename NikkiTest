@@ -1,2 +1,39 @@
-PreApprovalTestCheckInformation
+using System.Collections.Generic;
+using Dms.Core.EntityFramework.Model.Lookup;
+using Dms.Services.ViewModel.Lookup;
 
+namespace Dms.Services.ViewModel.Activity
+{
+    public class PreApprovalTestCheckInformationViewModel
+    {
+        public ICollection<FunctionCodeViewModel> RequestedAuthorizations { get; set; }
+        public ICollection<FunctionCodeViewModel> TemporaryAuthorizations { get; set; }
+        public ICollection<FunctionCodeViewModel> SelectedRequestAuthorizations { get; set; }
+        public ICollection<FunctionCodeViewModel> SelectedTemporaryAuthorizations { get; set; }
+        public ICollection<FunctionCodeViewModel> AdminDpeSaeFunctionCodes { get; set; }  
+              
+        public string ReasonforAuthorization { get; set; }
+        public int? GradeCertificateId { get; set; }
+        public int? AircraftCategoryId { get; set; }
+        public int? AircraftClassId { get; set; }
+        public int? PracticalOralTestId { get; set; }
+        public BaseLookup AircraftMakeModelId { get; set; }
+        public bool? IsAircraftNotRequired { get; set; }
+        public bool? IsFlightPortionOnly { get; set; }
+        public bool? IsRecommendingInstructorNotAvailable { get; set; }
+        
+        public string RecommendingInstructor { get; set; }
+        
+        public string RecommendingInstructorCertificateNumber { get; set; }
+        public bool? IsTemporaryFunctionCode { get; set; }
+        public bool IsMultipleApplicants { get; set; }
+        public bool? IsOtherAdminActivity { get; set; }
+        public int? ObservationId { get; set; }
+        public bool? IsTrainingDeviceTestCheck { get; set; }
+        public BaseLookup SimulatorId { get; set; }
+        public bool? IsAircraftTestCheck { get; set; }
+        public string AircraftRegistrationNumber { get; set; }
+        public string AirlineFlightNumber { get; set; }
+        public BaseLookup TypeOfCheck { get; set; }
+    }
+}
