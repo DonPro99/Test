@@ -1,5 +1,56 @@
-ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenFPE] bit NULL;
-ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenMCE] bit NULL;
-ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenGIE] bit NULL;
-ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenFIRE] bit NULL;
-ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenBAE] bit NULL;
+dms-test-check-information.component.html
+
+@if (form.get('isOtherAdminActivity')?.value != true) {
+  <div class="col-12 c-label md:col-4 lg:col-4 xl:col-3"><span class="c-label-required">*</span>Select Authorizations</div>
+  @if (isAdminPeGen) {
+    <div class="grid col-12 py-0">
+      <div class="col-12 c-control md:col-8 lg:col-8 xl:col-9 md:col-offset-4">
+        <dms-check-box-binary identity="id_testchkinfo_chk_fpe" formControlName="isAdminPeGenFPE" ...>
+        ...
+        </dms-check-box-binary>
+      </div>
+      <div class="col-12 c-error-message md:col-8 lg:col-8 xl:col-9 md:col-offset-4">
+        @if (form.hasError('adminPeGenAuthRequired') && formSubmitted) {
+          <span class="message-error-sm">An authorization type must be selected.</span>
+        }
+      </div>
+    </div>
+  }
+}
+
+
+============
+
+@if (form.get('isOtherAdminActivity')?.value != true) {
+  <div class="col-12 c-label md:col-4 lg:col-4 xl:col-3"><span class="c-label-required">*</span>Select Authorizations</div>
+  @if (isAdminPeGen && !isPostActivity) {
+    <div class="grid col-12 py-0">
+      <div class="col-12 c-control md:col-8 lg:col-8 xl:col-9 md:col-offset-4">
+        <dms-check-box-binary identity="id_testchkinfo_chk_fpe" formControlName="isAdminPeGenFPE" ...>
+        ...
+        </dms-check-box-binary>
+      </div>
+      <div class="col-12 c-error-message md:col-8 lg:col-8 xl:col-9 md:col-offset-4">
+        @if (form.hasError('adminPeGenAuthRequired') && formSubmitted) {
+          <span class="message-error-sm">An authorization type must be selected.</span>
+        }
+      </div>
+    </div>
+  }
+}
+
+
+==============================
+
+if (flags.isAdminPeGen) {
+  form.setValidators([...]);
+  form.updateValueAndValidity();
+}
+
+→
+
+csharp
+if (flags.isAdminPeGen && !flags.isPostActivity) {
+  form.setValidators([...]);
+  form.updateValueAndValidity();
+}
