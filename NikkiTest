@@ -1,3 +1,2 @@
-SELECT [Id], [Name], [DesigneeTypeId], [SortOrder], [IsActive]
-FROM [DMS_NEW].[dbo].[PracticalOralTestType]
-WHERE [DesigneeTypeId] = 31
+PreApprovalTestCheckInformation
+
