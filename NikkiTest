@@ -54,3 +54,18 @@ if (flags.isAdminPeGen && !flags.isPostActivity) {
   form.setValidators([...]);
   form.updateValueAndValidity();
 }
+
+=============
+
+if (flags.isAdminPeGen) {
+  form.setValidators([...]);
+  form.updateValueAndValidity();
+}
+
+→
+
+csharp
+if (flags.isAdminPeGen && !flags.isPostActivity) {
+  form.setValidators([...]);
+  form.updateValueAndValidity();
+}
