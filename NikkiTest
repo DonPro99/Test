@@ -40,3 +40,14 @@ IsAdminPeGenBAE = preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenBAE == nu
 IsTrainingDeviceTestCheck =  preApprvoalRequest.AfsPreApprovalRequest.IsTrainingDeviceTestCheck,
 
 
+
+
+==============PreApprovalTestCheckInformationViewModel
+
+public bool? IsOtherAdminActivity { get; set; }
+public bool? IsAdminPeGenFPE { get; set; }
+public bool? IsAdminPeGenMCE { get; set; }
+public bool? IsAdminPeGenGIE { get; set; }
+public bool? IsAdminPeGenFIRE { get; set; }
+public bool? IsAdminPeGenBAE { get; set; }
+public int? ObservationId { get; set; }
