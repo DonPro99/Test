@@ -14,3 +14,89 @@ namespace Dms.Services.ViewModel.Activity
         public bool? AcknowledgeMedicallyQualified { get; set; }
     }
 }
+
+
+=====
+
+using Dms.Services.Implementation.Activity;
+using Dms.Services.Interface.Lookup;
+using Moq;
+using System.Collections.Generic;
+using Dms.Services.Interface.Task;
+using Dms.Services.Interface.Activity;
+using Dms.Services.Interface.Message;
+using Dms.Services.Interface.Shared;
+using NUnit.Framework;
+using System.Linq;
+using Dms.Services.ViewModel.Security;
+using Dms.Core.Utils;
+using Dms.Services.ViewModel.Lookup;
+using System.Threading.Tasks;
+using Dms.Services.Interface.Security;
+using NUnit.Framework.Legacy;
+
+namespace Dms.UnitTest.Services.Faa
+{
+    [Parallelizable(ParallelScope.Self)]
+    internal class DpePreApprovalRequestServiceTest
+    {
+        private PreApprovalRequestBaseService _preApprovalRequestBaseService { get; set; }
+        private readonly Mock<ITaskService> _taskService;
+        private readonly Mock<IDocumentService> _documentService;
+        private readonly Mock<IActivityService> _activityService;
+        private readonly Mock<IMessageService> _messageService;
+        private readonly Mock<ISharedService> _sharedService;
+        private readonly Dictionary<int, int> designeeApplication = new Dictionary<int, int>();
+        private readonly Mock<ILookupService> _lookupService;
+        private readonly Mock<IUserService> _userService;
+        private TestSetupClass SetUp { get; set; }
+        protected bool isPostActivity = true;
+        public DpePreApprovalRequestServiceTest()
+        {
+
+            _taskService = new Mock<ITaskService>();
+            _documentService = new Mock<IDocumentService>();
+            _activityService = new Mock<IActivityService>();
+            _messageService = new Mock<IMessageService>();
+            _sharedService = new Mock<ISharedService>();
+            _lookupService = new Mock<ILookupService>();
+            _userService = new Mock<IUserService>();
+            SetUp = new TestSetupClass("DpePreApprovalRequest");
+            SetUp.Seed();
+            _sharedService.Setup(svc => svc.GetDesigneeInfoByCloa(It.IsAny<int>())).Returns(
+              new DesigneeViewModel
+              {
+                  StatusId = 1,
+                  Status = "Active"
+              });
+
+            _lookupService.Setup(q => q.LookupValues("typeRatings")).Returns(Task.FromResult(new LookupViewModel()
+            {
+                TypeRatings = new List<TypeRatingViewModel>()
+               {
+                new TypeRatingViewModel(){Id=1, Name="A-300",IsActive=true}
+               }
+            }));
+            _preApprovalRequestBaseService = new DpePreApprovalRequestService(SetUp.DmsTestContext, _taskService.Object, _documentService.Object, _activityService.Object, _messageService.Object, _sharedService.Object, _lookupService.Object, _userService.Object);
+            SetUp.MockInternalUserData("dpePreApprovalRequestInternalUser");
+            SetUp.MockExternalUserData("dpePreApprovalRequestExternalUser");
+            var designeeTypeId = SetUp.DmsTestContext.DesigneeTypes.Where(d => d.Id == (int)DesigneeTypeEnum.DPE).Where(d => d.IsActive).Select(d => d.Id).ToArray().FirstOrDefault();
+            var userId = SetUp.DmsTestContext.Users.Where(u => u.UserName == "dpePreApprovalRequestExternalUser").Select(u => u.Id).First();
+            var interUserId = SetUp.DmsTestContext.Users.Where(u => u.UserName == "FAA\\dpePreApprovalRequestInternalUser").Select(u => u.Id).First();
+            SetUp.MockApplicantionData(userId, designeeTypeId);
+            var applictionData = SetUp.DmsTestContext.Applications.Where(a => a.UserId == userId && a.DesigneeTypeId == designeeTypeId).ToDictionary(a => a.DesigneeTypeId.Value, a => a.Id).First();
+            designeeApplication.Add(applictionData.Key, applictionData.Value);
+            SetUp.MockCloaData(userId, interUserId, applictionData.Value, designeeTypeId);
+            SetUp.MockPreApprovalPostActivityData(userId, interUserId, applictionData.Value, designeeTypeId);
+        }
+        [Test]
+        [TestCase((int)DesigneeTypeEnum.DPE)]
+        public void GetNew_PreApprovalRequest_ByApplicationId_ShouldReturns_New_preApproalResult_forDPE(int designeeTypeId)
+        {
+            int applicationId = designeeApplication.First(a => a.Key == designeeTypeId).Value;
+            var cloaId = SetUp.DmsTestContext.Cloas.FirstOrDefault(it => it.ApplicationId == applicationId).Id;
+            var preApproalResult = _preApprovalRequestBaseService.GetNew(applicationId);
+            ClassicAssert.IsNotNull(preApproalResult);
+        }
+    }
+}
