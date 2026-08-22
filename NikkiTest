@@ -8,3 +8,5 @@ public bool? IsAdminPeGenBAE { get; set; }
 public virtual PreApprovalRequestCancellationType PreApprovalRequestCancellationType { get; set; }
 
 AfsPreApprovalRequest
+
+grep -n "\.IsOtherAdminActivity =" CloaPreApprovalRequestViewModelMapper__1_.cs
