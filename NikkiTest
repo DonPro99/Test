@@ -1,3 +1,5 @@
+AfsPreApprovalRequest.cs	Add 5 new bool? properties (the entity itself)
+
 public bool? IsMultipleApplicants { get; set; }
 public bool? IsOtherAdminActivity { get; set; }
 public bool? IsAdminPeGenFPE { get; set; }
@@ -7,6 +9,34 @@ public bool? IsAdminPeGenFIRE { get; set; }
 public bool? IsAdminPeGenBAE { get; set; }
 public virtual PreApprovalRequestCancellationType PreApprovalRequestCancellationType { get; set; }
 
-AfsPreApprovalRequest
+====
+AfsPreApprovalRequestService.cs	7 lines in SaveAfsGroup1And2Info() only 
 
-grep -n "\.IsOtherAdminActivity =" CloaPreApprovalRequestViewModelMapper__1_.cs
+preApprovalRequest.AfsPreApprovalRequest.IsMultipleApplicants = model.TestCheckInformation.IsMultipleApplicants;
+preApprovalRequest.AfsPreApprovalRequest.IsOtherAdminActivity = model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault();
+preApprovalRequest.AfsPreApprovalRequest.IsAdminPeGenFPE = model.TestCheckInformation.IsAdminPeGenFPE.GetValueOrDefault();
+preApprovalRequest.AfsPreApprovalRequest.IsAdminPeGenMCE = model.TestCheckInformation.IsAdminPeGenMCE.GetValueOrDefault();
+preApprovalRequest.AfsPreApprovalRequest.IsAdminPeGenGIE = model.TestCheckInformation.IsAdminPeGenGIE.GetValueOrDefault();
+preApprovalRequest.AfsPreApprovalRequest.IsAdminPeGenFIRE = model.TestCheckInformation.IsAdminPeGenFIRE.GetValueOrDefault();
+preApprovalRequest.AfsPreApprovalRequest.IsAdminPeGenBAE = model.TestCheckInformation.IsAdminPeGenBAE.GetValueOrDefault();
+preApprovalRequest.AfsPreApprovalRequest.IsTrainingDeviceTestCheck = model.TestCheckInformation.IsTrainingDeviceTestCheck.HasValue && model.TestCheckInformation.IsTrainingDeviceTestCheck.Value;
+
+SaveAfsGroup1And2Info in AfsPreApprovalRequestService.cs — the 7 lines above (save direction, covers both insert & update)
+
+===================
+
+GetPreApprovalTestCheckInformationViewModel() in CloaPreApprovalRequestViewModelMapper.cs — 
+
+Add these 5 lines right after IsOtherAdminActivity
+
+
+IsMultipleApplicants = preApprvoalRequest.AfsPreApprovalRequest.IsMultipleApplicants == null ? false : (bool)preApprvoalRequest.AfsPreApprovalRequest.IsMultipleApplicants,
+IsOtherAdminActivity = preApprvoalRequest.AfsPreApprovalRequest.IsOtherAdminActivity == null ? false : (bool)preApprvoalRequest.AfsPreApprovalRequest.IsOtherAdminActivity,
+IsAdminPeGenFPE = preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenFPE == null ? false : (bool)preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenFPE,
+IsAdminPeGenMCE = preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenMCE == null ? false : (bool)preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenMCE,
+IsAdminPeGenGIE = preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenGIE == null ? false : (bool)preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenGIE,
+IsAdminPeGenFIRE = preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenFIRE == null ? false : (bool)preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenFIRE,
+IsAdminPeGenBAE = preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenBAE == null ? false : (bool)preApprvoalRequest.AfsPreApprovalRequest.IsAdminPeGenBAE,
+IsTrainingDeviceTestCheck =  preApprvoalRequest.AfsPreApprovalRequest.IsTrainingDeviceTestCheck,
+
+
