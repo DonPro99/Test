@@ -1,1 +1,1 @@
-Yes there is a cache for lookup but it should clear with app pool recycle
+this.http.post('preapprovalrequest/afs/new', payload)
