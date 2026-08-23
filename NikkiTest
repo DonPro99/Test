@@ -1,3 +1,5 @@
+In AfsPreApprovalRequestService.cs, SetPostActivityUrlForInternal
+
 if (statusId is ((int)PreApprovalRequestStatusEnum.Completed) or ((int)PreApprovalRequestStatusEnum.Canceled)
         or ((int)PreApprovalRequestStatusEnum.Initiated) or ((int)PreApprovalRequestStatusEnum.Pending)
         or ((int)PreApprovalRequestStatusEnum.Submitted) or ((int)PreApprovalRequestStatusEnum.Returned))
