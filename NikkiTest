@@ -1,8 +1,2 @@
-static afsGroup2Types() {
-  return [
-    DesigneeTypeEnum.DPE,
-    DesigneeTypeEnum.SAE,
-    DesigneeTypeEnum.ADMINPE,
-    DesigneeTypeEnum.ADMINPEGEN,
-  ];
-}
+case (int)DesigneeTypeEnum.ADMINPEGEN:
+    return GetAdminPeGenPostActivityType(isAdminPeGenFPE, isAdminPeGenMCE, isAdminPeGenGIE, isAdminPeGenFIRE, isAdminPeGenBAE);
