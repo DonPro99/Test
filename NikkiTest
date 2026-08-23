@@ -1,22 +1,302 @@
-http://localhost:4200/api/PreApprovalRequest/postactivity/NaN/false
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { PlanningPageService } from '../services/planningpage.service';
+import { ActivityPaperWork, BaseComponent, CryptoService, DesigneeGroupEnum, DesigneeTypeEnum, RequestListModel } from 'dms-web-shared';
+import { Router } from '@angular/router';
+import { Popover } from 'primeng/popover';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { sortBy } from 'lodash';
+import { Table } from 'primeng/table';
+import { takeUntil } from 'rxjs/operators';
+import { LabelValueModel } from 'dms-sdk';
+import { 
+  LazyLoadEvent,
+  MessageService as ToastService,
+ } from 'primeng/api';
 
-==========
+
+@Component({
+    selector: 'workactivity',
+    templateUrl: './workactivity.component.html',
+    styleUrls: ['./workactivity.component.scss'],
+    standalone: false
+})
+export class WorkactivityComponent extends BaseComponent implements OnInit, OnChanges {
+
+  @Input() applicationId!: number;
+  @Input() designeeGroupId!: number;
+  @Input() selected = false;
+  preApprovals: ActivityPaperWork[] = [];
+  postActivities: ActivityPaperWork[] = [];
+  preTableSelectedColumns!: any[];
+  postTableSelectedColumns!: any[];
+  preTableColumns!: any[];
+  postTableColumns!: any[];
+  activityPaperWork!: ActivityPaperWork;
+  isAfsGroup = false;
+  isAfsGroup3 = false;
+  form: FormGroup | undefined | null;
+  loading = false;
+  poLoading = false;
+  isAovGroup = false;
+  prLabel:string = 'Pre-approval Request(s)';
+  poLabel:string = 'Post Activity Report(s)';
+  oneYearDataOptions: LabelValueModel[] = [
+    { label: "Past one year data", value: true },
+    { label: "All data", value: false }
+  ];
+  @ViewChild('dtPostActivities') postActivityTable: Table | undefined;
+  @ViewChild('dtPreApproval') preApprovalTable: Table | undefined;
+  prTotalRecords: number = 0;
+  poTotalRecords: number = 0;
+  prSummary?: string;
+  poSummary?: string;
+  tempPreApprovals: ActivityPaperWork[] = [];
+  preApprovalSearchCriteria: RequestListModel = new RequestListModel();
+  postActivitySearchCriteria: RequestListModel = new RequestListModel();
+  @ViewChild('versions') versionsView!: Popover;
+
+  constructor(private readonly planningPageService: PlanningPageService,
+              private readonly router: Router,
+              private readonly cryptoService: CryptoService,
+            private readonly toastService: ToastService,
+              private readonly cdr: ChangeDetectorRef) {
+              super();
+            }
+
+  public static buildForm(): FormGroup {
+    return new FormBuilder()
+            .group({
+              preTableSelectedColumns: new FormControl(''),
+              postTableSelectedColumns: new FormControl(''),
+              oneYearData: new FormControl(true)
+          });
+  }
+
+  ngOnInit() {
+    this.preApprovalSearchCriteria.applicationId = this.applicationId;
+    this.preApprovalSearchCriteria.isInternal = true;
+    this.preApprovalSearchCriteria.isOneYear = true;
+    this.postActivitySearchCriteria.applicationId = this.applicationId;
+    this.postActivitySearchCriteria.isInternal = true;
+    this.postActivitySearchCriteria.isOneYear = true;
+
+    this.form = WorkactivityComponent.buildForm();
+
+    this.preTableColumns = [{ field: 'trackingNumber', header: 'Tracking #', sortOrder: 1, hasFilter: true, hasSorting: true },
+    { field: 'applicantName', header: 'Applicant Name', sortOrder: 2, hasFilter: true, hasSorting: true },
+    { field: 'typeOfRequest', header: 'Type Of Request', sortOrder: 3, hasFilter: true, hasSorting: true },
+    { field: 'preApprovalType', header: 'Pre-Approval Type', sortOrder: 4, hasFilter: [DesigneeGroupEnum.AOV, DesigneeGroupEnum.Manufacturing,DesigneeGroupEnum.AFS].includes(this.designeeGroupId), hasSorting: [DesigneeGroupEnum.AOV, DesigneeGroupEnum.Manufacturing,DesigneeGroupEnum.AFS].includes(this.designeeGroupId) },
+    { field: 'activityStatus', header: 'Activity Status', sortOrder: 5, hasFilter: true, hasSorting: true },
+    { field: 'proposedStartDate', header: this.designeeGroupId === DesigneeGroupEnum.Manufacturing ? 'Date of Requested Activity' : 'Proposed Start Date', sortOrder: 6, hasFilter: true, hasSorting: true },
+    { field: 'modifiedDate', header: 'Modified Date', sortOrder: 7, hasFilter: true, hasSorting: true }];
+
+    this.postTableColumns = [{ field: 'trackingNumber', header: 'Tracking #', sortOrder: 1, hasFilter: true, hasSorting: true },
+    { field: 'applicantName', header: 'Applicant Name', sortOrder: 2, hasFilter: true, hasSorting: true },
+    { field: 'typeOfRequest', header: 'Type Of Request', sortOrder: 3, hasFilter: true, hasSorting: true },
+    { field: 'preApprovalType', header: 'Pre-Approval Type', sortOrder: 4, hasFilter: true, hasSorting: true },
+    { field: 'activityStatus', header: 'Activity Status', sortOrder: 5, hasFilter: true, hasSorting: true },
+    { field: 'proposedStartDate', header: 'Proposed Start Date', sortOrder: 6, hasFilter: true, hasSorting: true },
+    { field: 'dueDate', header: 'Due Date', sortOrder: 7, hasFilter: true, hasSorting: true },
+    { field: 'submissionDate', header: 'Submission Date', sortOrder: 8, hasFilter: true, hasSorting: true }];
+
+    if (this.designeeGroupId !== DesigneeGroupEnum.Manufacturing) {
+      this.postTableColumns.push({
+        field: "postActivityVersions",
+        header: "Version(s)",
+        sortOrder: 9,
+        hasFilter: false,
+        hasSorting: false,
+        minWidth: '8rem'
+      });
+
+      this.preTableColumns.push({
+        field: "isPossibleObservation",
+        header: "Possible Observation",
+        sortOrder: 8,
+        hasFilter: true,
+        hasSorting: true,
+        minWidth: '7rem'
+      });
+    }
+
+    this.preTableSelectedColumns = this.preTableColumns.filter(p => this.designeeGroupId === DesigneeGroupEnum.Manufacturing || p.field !== 'applicantName');
+    this.postTableSelectedColumns = this.postTableColumns.filter(p => this.designeeGroupId === DesigneeGroupEnum.Manufacturing || p.field !== 'applicantName');
+    this.form?.get('preTableSelectedColumns')?.setValue(this.preTableSelectedColumns);
+    this.form?.get('postTableSelectedColumns')?.setValue(this.postTableSelectedColumns);
+
+    this.isAfsGroup = this.designeeGroupId === DesigneeGroupEnum.AFS;
+    this.isAovGroup = this.designeeGroupId == DesigneeGroupEnum.AOV;
+    this.form?.get('oneYearData')?.valueChanges.pipe(takeUntil(this.destroying$)).subscribe((oneYearData: boolean) => {
+      this.preApprovalSearchCriteria.isOneYear = oneYearData;
+      this.postActivitySearchCriteria.isOneYear = oneYearData;
+      this.loadPreApprovalsPage(null);
+      this.loadPostActivities(null);
+    });
+    if(this.isAovGroup){
+      this.prLabel = 'Pre-Approval Request(s)';
+      this.poLabel = 'Post-Activity Report(s)';
+    }
+    this.cdr.detectChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const applicationChanged = changes['applicationId'] && !changes['applicationId'].firstChange;
+    const selectedChangedToTrue = changes['selected'] && !changes['selected'].firstChange && this.selected === true;
+
+    if (!applicationChanged && !selectedChangedToTrue) {
+      return;
+    }
+
+    this.form = null;
+    this.cdr.detectChanges();
+    this.ngOnInit();
+
+    if (applicationChanged) {
+      this.resetPreApprovalPagination();
+      this.resetPostActivityPagination();
+      this.loadPreApprovalsPage(null);
+      this.loadPostActivities(null);
+    }
+  }
+
+  private resetPreApprovalPagination() {
+    if (this.preApprovalTable != null) {
+      this.preApprovalTable.first = 0;
+    }
+    if (this.preApprovalSearchCriteria.pageModel) {
+      this.preApprovalSearchCriteria.pageModel.first = 0;
+    }
+  }
+
+  private resetPostActivityPagination() {
+    if (this.postActivityTable != null) {
+      this.postActivityTable.first = 0;
+    }
+    if (this.postActivitySearchCriteria.pageModel) {
+      this.postActivitySearchCriteria.pageModel.first = 0;
+    }
+  }
+
+  navigate(activity: ActivityPaperWork) {
+    if (activity.isNewWindow) {
+      window.open(`${activity.url}`, '_blank');
+    } else {
+      this.router.navigate([activity.url]);
+    }
+  }
+
+  selectVersion(event: any, activityPaperWork: ActivityPaperWork, overlaypanel: Popover) {
+    if(overlaypanel) {
+      this.activityPaperWork = activityPaperWork;
+      overlaypanel.toggle(event);
+    }
+  }
+
+  async getPostActivityVersion(postActivityId: number, designeeTypeId: number, isAdminType: boolean = false) {
+    const afsGroup3 = [DesigneeTypeEnum.APD, DesigneeTypeEnum.TCE, DesigneeTypeEnum.DADE];
+    const isAfsGroup3 = afsGroup3.includes(designeeTypeId);    
+    const url = isAfsGroup3
+      ? `/postactivity/group3/summary/${postActivityId}/${isAdminType}/false/false`
+      : this.isAovGroup ? `/postactivity/aovgroups/${await this.cryptoService.encrypt(postActivityId)}/false?isVersion=${true}` : `/postactivity/afsgroups/${postActivityId}/false/false`;
+    window.open(`${url}`, '_blank');
+  }
+
+  addRemovePreTableColumn() {
+    this.preTableSelectedColumns = sortBy(this.form?.getRawValue().preTableSelectedColumns, ['sortOrder']);
+  }
+
+  addRemovePostTableColumn() {
+    this.postTableSelectedColumns = sortBy(this.form?.getRawValue().postTableSelectedColumns, ['sortOrder']);
+    this.postActivityTable?.reset();
+  }
 
 
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ActivityStatusEnum, CryptoService, PreApprovalRequestService } from 'dms-web-shared';
+  loadPostActivities(event: any) {
+    this.poLoading = true;
+    if (event) {
+      this.postActivitySearchCriteria.pageModel = event;
+    }
 
-@Injectable({ providedIn: 'root' })
-export class PostActivityDataResolver  {
-  constructor(private service: PreApprovalRequestService, private cryptoService: CryptoService) { }
+    if (!this.postActivitySearchCriteria.pageModel) {
+      this.postActivitySearchCriteria.pageModel = { filters: this.postActivityTable?.filters, sortField: this.postActivityTable?.sortField, sortOrder: this.postActivityTable?.sortOrder } as LazyLoadEvent;
+    }
 
-  async resolve(
-    route: ActivatedRouteSnapshot
-  ): Promise<Observable<any> | Promise<any> | any> {
-    const postActivityId = +(await this.cryptoService.decrypt(route.params['postActivityId']));
-    const activityStatus = +route.queryParams['activityStatus'] === ActivityStatusEnum.Completed;
-    return this.service.getPostActivity(postActivityId, activityStatus);
+    this.planningPageService.getPostActivityList(this.postActivitySearchCriteria)
+      .pipe(takeUntil(this.destroying$))
+      .subscribe({
+        next: (d:any) => {
+        this.poLoading = false;
+        this.poTotalRecords = d.total;
+        this.postActivities = d.data;
+        this.setPoSummary();
+        },
+        error: () => {
+          this.poLoading = false;
+          this.toastService.add({ 
+            key: 'dms', 
+            severity: 'error', 
+            summary: 'Error Message', 
+            detail: 'Fetching Post-Activites failed.'}); 
+        }});  
+  }
+
+  loadPreApprovalsPage(event: any) {
+    this.loading = true;
+    if (event) {
+      this.preApprovalSearchCriteria.pageModel = event;
+    }
+
+    if (!this.preApprovalSearchCriteria.pageModel) {
+      this.preApprovalSearchCriteria.pageModel = { filters: this.preApprovalTable?.filters, sortField: this.preApprovalTable?.sortField, sortOrder: this.preApprovalTable?.sortOrder } as LazyLoadEvent;
+    }
+
+    this.planningPageService.getPreApprovalList(this.preApprovalSearchCriteria)
+      .pipe(takeUntil(this.destroying$))
+      .subscribe({
+        next: (d:any) => {
+        this.loading = false;
+        this.prTotalRecords = d.total;
+        this.preApprovals = d.data;
+        this.tempPreApprovals = this.preApprovals;
+        this.setSummary();
+        },
+        error: () => {
+          this.loading = false;
+          this.toastService.add({ 
+            key: 'dms', 
+            severity: 'error', 
+            summary: 'Error Message', 
+            detail: 'Fetching Pre-Approvals failed.'}); 
+        }});  
+  }
+
+  setSummary() {
+    if (this.preApprovalSearchCriteria && this.preApprovalSearchCriteria.pageModel && this.prTotalRecords) {
+        const toCount = (this.preApprovalSearchCriteria.pageModel.rows! + this.preApprovalSearchCriteria.pageModel.first!) < this.prTotalRecords ? (this.preApprovalSearchCriteria.pageModel.rows! + this.preApprovalSearchCriteria.pageModel.first!) : this.prTotalRecords;
+        this.prSummary = `Showing ${(this.preApprovalSearchCriteria.pageModel.first! + 1).toLocaleString()} to ${toCount.toLocaleString()} of ${this.prTotalRecords.toLocaleString()} Pre-Approvals`;
+    }
+    else{
+        this.prSummary = '';
+    }
+  }
+
+  setPoSummary() {
+    if (this.postActivitySearchCriteria && this.postActivitySearchCriteria.pageModel && this.poTotalRecords) {
+        const toCount = (this.postActivitySearchCriteria.pageModel.rows! + this.postActivitySearchCriteria.pageModel.first!) < this.prTotalRecords ? (this.postActivitySearchCriteria.pageModel.rows! + this.postActivitySearchCriteria.pageModel.first!) : this.poTotalRecords;
+        this.poSummary = `Showing ${(this.postActivitySearchCriteria.pageModel.first! + 1).toLocaleString()} to ${toCount.toLocaleString()} of ${this.poTotalRecords.toLocaleString()} Post-Activites`;
+    }
+    else{
+        this.poSummary = '';
+    }
+  }
+
+  isPossibleObservation(value:string){
+    if(value =='Yes'){
+      this.preApprovals = this.tempPreApprovals.filter(pr => pr.isPossibleObservation == true)
+    } else if(value =='No') {
+      this.preApprovals = this.tempPreApprovals.filter(pr => pr.isPossibleObservation == false)
+    } else {
+      this.preApprovals = this.tempPreApprovals;
+    }
   }
 }
