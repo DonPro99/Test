@@ -1,1 +1,1 @@
-Does the API cache lookup values in memory? Can you restart the API app pool, or is there a way to trigger the /Reset/Lookup endpoint?
+Yes there is a cache for lookup but it should clear with app pool recycle
