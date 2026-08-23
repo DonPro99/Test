@@ -1641,6 +1641,12 @@ namespace Dms.Services.Implementation.Activity
             preApprovalRequest.AfsPreApprovalRequest.CategoryId = model.CategoryId != 0 ? model.CategoryId : null;
             preApprovalRequest.AfsPreApprovalRequest.IsMultipleApplicants = model.TestCheckInformation.IsMultipleApplicants;
             preApprovalRequest.AfsPreApprovalRequest.IsOtherAdminActivity = model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault();
+            preApprovalRequest.AfsPreApprovalRequest.IsAdminPeGenFPE = model.TestCheckInformation.IsAdminPeGenFPE.GetValueOrDefault();
+            preApprovalRequest.AfsPreApprovalRequest.IsAdminPeGenMCE = model.TestCheckInformation.IsAdminPeGenMCE.GetValueOrDefault();
+            preApprovalRequest.AfsPreApprovalRequest.IsAdminPeGenGIE = model.TestCheckInformation.IsAdminPeGenGIE.GetValueOrDefault();
+            preApprovalRequest.AfsPreApprovalRequest.IsAdminPeGenFIRE = model.TestCheckInformation.IsAdminPeGenFIRE.GetValueOrDefault();
+            preApprovalRequest.AfsPreApprovalRequest.IsAdminPeGenBAE = model.TestCheckInformation.IsAdminPeGenBAE.GetValueOrDefault();
+            preApprovalRequest.AfsPreApprovalRequest.IsTrainingDeviceTestCheck = model.TestCheckInformation.IsTrainingDeviceTestCheck.HasValue && model.TestCheckInformation.IsTrainingDeviceTestCheck.Value;
             preApprovalRequest.AfsPreApprovalRequest.IsTrainingDeviceTestCheck = model.TestCheckInformation.IsTrainingDeviceTestCheck.HasValue && model.TestCheckInformation.IsTrainingDeviceTestCheck.Value;
             preApprovalRequest.AfsPreApprovalRequest.ObservationTypeId = model.TestCheckInformation.ObservationId;
             preApprovalRequest.AfsPreApprovalRequest.SimulatorId = model.TestCheckInformation.SimulatorId?.Id;
