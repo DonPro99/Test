@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Dms.Core.EntityFramework.Model.Lookup;
-
 namespace Dms.Services.ViewModel
 {
     public class ActivityPaperWorkViewModel
@@ -40,7 +39,6 @@ namespace Dms.Services.ViewModel
         
         public string JustificationForCancellation { get; set; }
         public int? CancellationTypeId { get; set; }
-
         public bool IsAdminType { get; set; }
         public int? DesigneeCategoryId { get; set; }
         public int? DesigneeGroupId { get; set; }
@@ -50,5 +48,6 @@ namespace Dms.Services.ViewModel
         public string FormDataAuthFunctionCodes { get; set; }
         public string FormDataSelectedFunctionCodes { get; set; }
         public string FormDataSelectedRequestAuthorizations { get; set; }
+        public string FormDataTestCheckInformation { get; set; }
     }
 }
