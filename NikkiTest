@@ -1,315 +1,143 @@
-import { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import { MockComponent } from 'ng-mocks';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AdminpeIndexComponent } from './adminpe-index.component';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { SelectItem } from 'primeng/api';
 import {
-  ActivityRequestStatusEnum, Address, CategoryEnum, DesigneeInformation, DesigneeTypeEnum,
-  DesigneeSummaryComponent, DmsActivityLocationComponent, DmsApplicationInformationComponent, DmsTestCheckInformationComponent, DmsTestInformationComponent,
-  DmsTextAreaComponent, FunctionCode, LookupItem, LookupService,
-  OtherPreApprovalRequest, PostActivity, PreApprovalActivityLocation, PreApprovalApplicantInformation,
-  PreApprovalApplicationInformation, PreApprovalRequestInfo, PreApprovalRequestInfoModel,
-  PreApprovalRequestStatusEnum, PreApprovalRequestSummaryComponent, PreApprovalTestCheckInformation,
-  PreApprovalTestInformation, RequestInformationComponent, UploadControlComponent
+  ActivityRequestStatusEnum,
+  DesigneeTypeEnum,
+  DmsApplicationInformationComponent,
+  DmsTestCheckInformationComponent,
+  LookupService,
+  PreApprovalRequestInfoModel,
+  PreApprovalTabEnum,
 } from 'dms-web-shared';
-import { TabsModule } from 'primeng/tabs';
-import { DmsInputTextArea } from 'dms-sdk';
-class Page {
-  constructor(private fixture: ComponentFixture<AdminpeIndexComponent>) {
-  }
-  get component(): AdminpeIndexComponent {
-    return this.fixture.componentInstance;
-  }
-  private query(className: string): DebugElement {
-    return this.fixture.debugElement.query(By.css(className));
-  }
-  get tabView() {
-    return this.query('p-tabs');
-  }
-}
-class SetUp {
-  static getSpy(key: string) {
-    switch (key) {
-      case 'lookupService':
-        return jasmine.createSpyObj(key, ['populateLookupData', 'getPreApprovalCancelReasons']);
-      default:
-        break;
-    }
-  }
-  static getMockUpData(): PreApprovalRequestInfoModel {
-    const model = new PreApprovalRequestInfoModel();
-    model.designeeInfo = new DesigneeInformation();
-    model.designeeInfo.typeId = 1;
-    model.postActivity = new PostActivity();
-    model.postActivity.id = 1;
-    model.isPostActivityReadOnly = false;
-    model.otherPreApprovalRequest = new OtherPreApprovalRequest();
-    model.otherPreApprovalRequest.isAutoPostActivity = false;
-    model.otherPreApprovalRequest.selectedPreApprovalRequestTypeId = CategoryEnum.Tags
-    model.id = 468867;
-    model.testInformation = this.GetPreApprovalTestInformation();
-    model.testCheckInformation = this.GetPreApprovalTestCheckInformation();
-    model.comments = "testing";
-    model.documentReference = this.GetDocumentReference();
-    model.applicantInformation = this.GetPreApprovalApplicantInformation();
-    model.applicationInformation = this.GetApplicationInformation();
-    model.activityLocation = this.GetActivityLocation();
-    model.dpreFunctionCodes = SetUp.GetSelectedFunctionCodes();
-    model.authFunctionCodes = SetUp.GetFunctionCodes();
-    model.requestInfo = this.GetPreApprovalRequestInfo();
-    model.statusId = 3;
-    return model;
-  }
-  static GetPreApprovalRequestInfo() {
-    const obj = new PreApprovalRequestInfo();
-    obj.activityStatus = new LookupItem(3, "Pending", true);
-    obj.submittedDate = new Date().toDateString();
-    return obj;
-  }
-  static GetFunctionCodes(): FunctionCode[] {
-    const functionCodes: FunctionCode[] = [];
-    functionCodes.push(new FunctionCode(1, '1', 'One', 'One', 10, null, true, null, null, null, { id: 1, name: 'test 1' }, 10));
-    functionCodes.push(new FunctionCode(2, '2', 'Two', 'Two', 11, null, true, null, null, null, { id: 2, name: 'test 2' }, 11));
-    functionCodes.push(new FunctionCode(3, '3', 'Three', 'Three', 12, null, true, null, null, null, { id: 2, name: 'test 2' }, 12));
-    functionCodes.push(new FunctionCode(4, '4', 'Four', 'Four', 13, null, true, null, null, null, { id: 4, name: 'test 4' }, 13));
-    functionCodes.push(new FunctionCode(5, '5', 'Five', 'Five', 14, null, null, null, null, null, { id: 5, name: 'test 5' }, 14));
-    functionCodes.push(new FunctionCode(6, '6', 'Six', 'Six', 15, null, null, null, null, null, { id: 5, name: 'test 6' }, 15));
+import { PreApprovalBaseComponent } from './pre-approval-base.component';
 
-    return functionCodes;
-  }
-  static GetDocumentReference() {
-    return {
-      hasReferenceId: true,
-      documentReferenceId: 273179,
-      createdBy: 34168,
-      documentReferenceEnum: 3,
-      referenceId: 273179,
-      secondaryReferenceId: null,
-      uploadedFiles: [{
-        documentReferenceId: 273179,
-        documentId: 125973,
-        file: null,
-        fileName: 'test.docx',
-        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        fileSize: 12,
-        createdDate: '2021-03-22T14:59:28.233',
-        createdBy: 0
-      }]
-    }
+@Component({
+    selector: 'dms-pr-adminpe-index',
+    templateUrl: './adminpe-index.component.html',
+    standalone: false
+})
+export class AdminpeIndexComponent
+  extends PreApprovalBaseComponent
+  implements OnInit {
+  activityRequestStatusEnum = ActivityRequestStatusEnum;
+  practicalTypes: SelectItem[] = [];
 
-  }
-  static GetActivityLocation() {
-    const obj = new PreApprovalActivityLocation();
-    obj.facilityonRecord = true;
-    obj.facilityAddress = new Address(1, 'Address of Can Softtech', null, '123 test st', '', 'Herdon');
-    obj.otherAddress = new Address(1, 'Address of Can Softtech', null, '123 test st', '', 'Herdon');
-    obj.domestic = true;
-    obj.locationAddress = new Address(1, 'Address of Can Softtech', null, '123 test st', '', 'Herdon');
-    obj.isOutsideOfficeDistrict = false;
-    obj.isActivityOutsideUsa = false;
-    obj.officeId = 1;
-    obj.airport = new LookupItem(1, 'ORD', true);
-    obj.selectedLocationAddressId = 1;
-    obj.isLineCheck = true;
-    return obj;
-  }
-
-  static getCancelReasons() {
-    const rsn = '[{"label":"- Select -","value":null},{"label":"Applicant No Show","value":1},  {"label":"Applicant Not Ready","value":2},{"label":"Error on Pre-Approval","value":3},{"label":"Mechanical","value":4},{"label":"Weather","value":5},{"label":"Other","value":6}]';
-    return JSON.parse(rsn);
-  }
-
-  static GetPreApprovalTestInformation() {
-    const obj = new PreApprovalTestInformation();
-    const startEndDate = new Date();
-    startEndDate.setDate(startEndDate.getDate() + 2);
-    obj.proposeStartDate = startEndDate.toDateString();
-    startEndDate.setDate(startEndDate.getDate() + 90);
-    obj.proposeEndDate = startEndDate.toDateString();
-    obj.timeZoneId = 5;
-    obj.practicalOralTestId = 1;
-    obj.proposedStartTime = "12:00";
-    return obj;
-  }
-  static GetPreApprovalTestCheckInformation() {
-    const obj = new PreApprovalTestCheckInformation();
-    obj.isOtherAdminActivity = false;
-    obj.temporaryAuthorizations = SetUp.GetFunctionCodes();
-    obj.selectedRequestAuthorizations = SetUp.GetFunctionCodes();
-    obj.requestedAuthorizations = SetUp.GetFunctionCodes();
-    obj.isAircraftNotRequired = false;
-    return obj;
-  }
-
-  static GetPreApprovalApplicantInformation() {
-    const obj = new PreApprovalApplicantInformation();
-    obj.name = 'Can Softtech';
-    obj.phone = '929-273-0456';
-    obj.email = 'info@cansofttech.com';
-    obj.certificateNumber = 'CERT-001';
-    return obj;
-  }
-  static GetApplicationInformation() {
-    const obj = new PreApprovalApplicationInformation();
-    obj.certificateRatingTypeId = 1;
-    obj.selectedCertificateRatingTypeIds = [1, 2, 3, 4, 5];
-    return obj;
-  }
-  static GetSelectedFunctionCodes() {
-    return [
-      {
-        isSelected: true,
-        functionCodeType: { id: 1, name: 'test' },
-        authSelectedFunctionCodes: [1, 2]
-      },
-      {
-        isSelected: true,
-        functionCodeType: { id: 2, name: 'testing' },
-        authSelectedFunctionCodes: [3, 4]
-      }
-    ];
-  }
-}
-
-describe('AdminpeIndexComponent', () => {
-  let component: AdminpeIndexComponent;
-  let fixture: ComponentFixture<AdminpeIndexComponent>;
-  const spies: any[] = [];
-  let page: Page;
-  function createSpy() {
-    spies.push(SetUp.getSpy('lookupService'));
-  }
-  createSpy();
-
-  async function createComponent() {
-    fixture = TestBed.createComponent(AdminpeIndexComponent);
-    page = new Page(fixture);
-    component = page.component;
-    page.component.pr = SetUp.getMockUpData();
-    page.component.activeIndex = 2;
-    page.component.isDisabled = false;
-    spies[0].getPreApprovalCancelReasons.and.returnValue(SetUp.getCancelReasons());
-    fixture.detectChanges();
-    await fixture.whenStable();
-  }
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AdminpeIndexComponent,
-        MockComponent(DesigneeSummaryComponent),
-        MockComponent(RequestInformationComponent),
-        MockComponent(DmsTestCheckInformationComponent),
-        MockComponent(DmsActivityLocationComponent),
-        MockComponent(DmsApplicationInformationComponent),
-        MockComponent(UploadControlComponent),
-        MockComponent(DmsTextAreaComponent),
-        MockComponent(PreApprovalRequestSummaryComponent),
+  constructor(public override lookupService: LookupService) {
+    super(lookupService);
+    this.props = {
+      title: 'Administrative Activity Pre-Approval Request',
+      userguideComponent: 'PreAppvAdmin',
+      headers: [
+        PreApprovalTabEnum.preApprovalTab,
+        PreApprovalTabEnum.testCheckTab,
+        PreApprovalTabEnum.locationTab,
+        PreApprovalTabEnum.applicantTab,
+        PreApprovalTabEnum.uploadTab,
+        PreApprovalTabEnum.summaryTab,
       ],
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        BrowserAnimationsModule,
-        TabsModule,
-        DmsInputTextArea],
-      providers: [
-        { provide: LookupService, useValue: spies[0] },
-      ]
-    })
-      .compileComponents();
-    createComponent();
-  }));
+      uploadRefMessage: [],
+      formGroupMap: {
+        1: ['testCheckInformation'],
+        2: ['activityLocation'],
+        3: ['applicationInformation'],
+        4: ['comments', 'uploadId'],
+      },
+    };
+    this.practicalTypes = [];
+  }
 
-  it('should create', () => {
-    expect(page.component).toBeTruthy();
-  });
+  public static override buildForm(
+    model: PreApprovalRequestInfoModel,
+    options: any
+  ): FormGroup {
+    options.categoryId = 0;
+    const form = PreApprovalBaseComponent.buildForm(model, options);
+    // Using the application's actual designee type (e.g. Admin-PE-GEN, id 31) rather than hardcoding Admin-PE, 
+    // so this shared component correctly reflects which designee type is being processed.
+    const designeeTypeId = model.designeeInfo?.typeId ?? DesigneeTypeEnum.ADMINPE;
 
-  it('should go through onTabChange function call', () => {
-    fixture.detectChanges();
-    spyOn(page.component, 'onTabChange');
-    const firstTabButton = fixture.debugElement.query(By.css('.p-tablist .p-tab'));
-    firstTabButton.nativeElement.click();
-    expect(page.component.onTabChange).toHaveBeenCalled();
-  });
+    form.addControl(
+      'testCheckInformation',
+      DmsTestCheckInformationComponent.buildForm(
+        model.testCheckInformation!,
+        model.testInformation!,
+        model.applicantInformation!,
+        {
+          designeeTypeId,
+          categoryId: options.categoryId,
+          isDisabled: options.isDisabled,
+        }
+      )
+    );
 
-  it('should go through emitFieldChange function call', () => {
-    component.emitFieldChange(true);
-    fixture.detectChanges(false);
-    expect(component.emitChange.emit).toBeDefined();
-  });
+    form.addControl(
+      'applicationInformation',
+      DmsApplicationInformationComponent.buildForm(
+        model.applicationInformation!,
+        {
+          designeeTypeId,
+          categoryId: options.categoryId,
+          isDisabled: options.isDisabled,
+        }
+      )
+    );
 
-  it('should call isAutoPreapproval function', () => {
-    expect(page.component.isAutoPreApproval).toBe(false);
+    return form;
+  }
 
-    page.component.pr.testCheckInformation.isOtherAdminActivity = true;
-    expect(page.component.isAutoPreApproval).toBe(true);
-  });
+  public static override buildModel(
+    form: FormGroup,
+    model: PreApprovalRequestInfoModel
+  ) {
+    PreApprovalBaseComponent.buildModel(form, model);
+    DmsApplicationInformationComponent.buildModel(
+      form.get('applicationInformation') as FormGroup,
+      model.applicationInformation!
+    );
+    DmsTestCheckInformationComponent.buildModel(
+      form.get('testCheckInformation') as FormGroup,
+      model.testCheckInformation!,
+      model.testInformation!,
+      model.applicantInformation!,
+      model.designeeTypeId!,
+      model.categoryId || 0
+    );
+  }
 
-  it('should call buildModel function', () => {
-    page.component.getModel();
-    spyOn(DmsTestInformationComponent, 'buildModel');
-    page.component.form.markAllAsTouched();
-    AdminpeIndexComponent.buildModel(page.component.form, page.component.pr);
-    expect(DmsTestInformationComponent.buildModel).toHaveBeenCalled();
-  });
+  async ngOnInit() {
+    await super.setBaseConfig(this.pr!);
+    this.props.tabCount = this.props.headers.length - 1;
+    this.getConfig.emit(this.props);
 
-  it('set pr id to 0 and should be timezoneid set to 5', () => {
-    page.component.pr.id = 0;
-    page.component.ngOnInit();
-    expect(page.component.pr.testInformation.timeZoneId).toEqual(5);
-  });
-
-  it('should call setSummaryTab', () => {
-    page.component.setSummaryTab();
-    expect(page.component.summaryForm.status).toEqual("DISABLED");
-  });
-
-  it('set uploaded files count to 0 and should call buildform', () => {
-    page.component.pr.documentReference = null;
-    AdminpeIndexComponent.buildForm(page.component.pr, {
-      categoryId: 0,
-      isDisabled: false
+    this.form = AdminpeIndexComponent.buildForm(this.pr!, {
+      isDisabled: this.isDisabled,
     });
-    expect(page.component.form.valid).toBeTrue();
-  });
-  it('should call when status is cancel',() => {   
-    component.pr.requestInfo.activityStatus.id = ActivityRequestStatusEnum.Approved;    
-    component.pr.statusId = PreApprovalRequestStatusEnum.Cancelled;
-    component.ngOnInit();   
-    fixture.detectChanges();  
-    expect(component.isCancel).toEqual(true);
-    expect(component.cancelReasons.length).toEqual(7);
-  });
+  }
 
-  it('should pass the actual designee type (Admin-PE-GEN) to DmsTestCheckInformationComponent.buildForm, not a hardcoded Admin-PE value', () => {
-    spyOn(DmsTestCheckInformationComponent, 'buildForm').and.callThrough();
-    const model = SetUp.getMockUpData();
-    model.designeeInfo.typeId = DesigneeTypeEnum.ADMINPEGEN;
+  override onTabChange($event: any) {
+    AdminpeIndexComponent.buildModel(this.form!, this.pr!);
+    super.onTabChange($event);
+  }
 
-    AdminpeIndexComponent.buildForm(model, { isDisabled: false });
+    getModel() {
+    AdminpeIndexComponent.buildModel(this.form!, this.pr!);
+    return this.pr;
+  }
 
-    expect(DmsTestCheckInformationComponent.buildForm).toHaveBeenCalledWith(
-      model.testCheckInformation,
-      model.testInformation,
-      model.applicantInformation,
-      jasmine.objectContaining({ designeeTypeId: DesigneeTypeEnum.ADMINPEGEN })
+  get isAutoPreApproval() {
+    if (this.pr!.testCheckInformation?.isOtherAdminActivity) {
+      return true;
+    }
+    const selectedFcs = this.pr!.testCheckInformation!.selectedRequestAuthorizations!.map(
+      (item) => item.id
     );
-  });
-
-  it('should still pass Admin-PE correctly when the application is actually Admin-PE (regression check)', () => {
-    spyOn(DmsTestCheckInformationComponent, 'buildForm').and.callThrough();
-    const model = SetUp.getMockUpData();
-    model.designeeInfo.typeId = DesigneeTypeEnum.ADMINPE;
-
-    AdminpeIndexComponent.buildForm(model, { isDisabled: false });
-
-    expect(DmsTestCheckInformationComponent.buildForm).toHaveBeenCalledWith(
-      model.testCheckInformation,
-      model.testInformation,
-      model.applicantInformation,
-      jasmine.objectContaining({ designeeTypeId: DesigneeTypeEnum.ADMINPE })
+    return (
+      !this.pr!.activityLocation?.isOutsideOfficeDistrict &&
+      super.canAutoApprove(
+        selectedFcs,
+        this.pr!.testCheckInformation?.requestedAuthorizations!
+      )
     );
-  });
-});
+  }
+}
