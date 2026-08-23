@@ -1,184 +1,99 @@
-@if (form) {
-  <div id="preApprovalTestInfo" [formGroup]="$any(form)" class="mb-3">
-    <p-panel id="preApprovalTestCheckInfoPanel" [toggleable]="true" header="Test Information">
-      <div class="grid">
-        <div class="col-12 c-label md:col-4 lg:col-4 xl:col-3"></div>
-        <div class="col-12 c-control md:col-5 lg:col-5 xl:col-4">
-          @if (isAdminPreapprovals && !(isAdminPeGen && isPostActivity)) {
-            <dms-check-box-binary identity="id_pch_dt_isOtherAdminActivity" formControlName="isOtherAdminActivity"
-              [hideValidationPlaceHolder]="true" [value]="true" label="Other administrative activity" name="isOtherAdminActivity"
-              (clickEvent)="onChangeOfOtherAdminActivity($event)" [doSpotLight]="markAsModified(modifiedControls, 'isOtherAdminActivity').borderRed">
-            </dms-check-box-binary>
-          }
-        </div>
-      </div>
-      @if ((testCheckInformation?.temporaryAuthorizations?.length ?? 0) > 0) {
-        <dms-radio-button
-          identity="id_testcheckinfo_pradio_authorization" formControlName="isTemporaryFunctionCode"
-          [radioValues]="isTemporaryFunctionCodeRadioButtonValues" (clickEvent)="onAuthorizationChange()" layout="grid"
-          label="{{!hideFlightInfo ? 'Select authorization':''}}">
-        </dms-radio-button>
-      }
-      @if (form.get('isOtherAdminActivity')?.value != true) {
-      <div class="col-12 c-label md:col-4 lg:col-4 xl:col-3"><span class="c-label-required">*</span>Select Authorizations</div>
-      @if (isAdminPeGen && !isPostActivity)  {
-        <div class="grid col-12 py-0">
-          <div class="col-12 c-control md:col-8 lg:col-8 xl:col-9 md:col-offset-4">
-            <dms-check-box-binary identity="id_testchkinfo_chk_fpe" formControlName="isAdminPeGenFPE"
-              [hideValidationPlaceHolder]="true" [value]="true" label="Admin-PE-GEN-FPE" name="isAdminPeGenFPE">
-            </dms-check-box-binary>
-            <dms-check-box-binary identity="id_testchkinfo_chk_mce" formControlName="isAdminPeGenMCE"
-              [hideValidationPlaceHolder]="true" [value]="true" label="Admin-PE-GEN-MCE" name="isAdminPeGenMCE">
-            </dms-check-box-binary>
-            <dms-check-box-binary identity="id_testchkinfo_chk_gie" formControlName="isAdminPeGenGIE"
-              [hideValidationPlaceHolder]="true" [value]="true" label="Admin-PE-GEN-GIE" name="isAdminPeGenGIE">
-            </dms-check-box-binary>
-            <dms-check-box-binary identity="id_testchkinfo_chk_fire" formControlName="isAdminPeGenFIRE"
-              [hideValidationPlaceHolder]="true" [value]="true" label="Admin-PE-GEN-FIRE" name="isAdminPeGenFIRE">
-            </dms-check-box-binary>
-            <dms-check-box-binary identity="id_testchkinfo_chk_bae" formControlName="isAdminPeGenBAE"
-              [hideValidationPlaceHolder]="true" [value]="true" label="Admin-PE-GEN-BAE" name="isAdminPeGenBAE">
-            </dms-check-box-binary>
-          </div>
-          <div class="col-12 c-error-message md:col-8 lg:col-8 xl:col-9 md:col-offset-4">
-            @if (form.hasError('adminPeGenAuthRequired') && (formSubmitted || form.touched || form.dirty)) {
-              <span class="message-error-sm">An authorization type must be selected.</span>
-            }
-          </div>
-        </div>
-      }
-    }
-
-      @if (form.get('isTemporaryFunctionCode')?.value != null) {
-        <div class="grid col-12 py-0">
-          <div class="col-12 md:col-4 lg:col-4 xl:col-3 md:pt-3">
-            @if (form.get('isTemporaryFunctionCode')?.value != null && form.get('isTemporaryFunctionCode')?.value === false) {
-              <label>
-                <span class="c-label-required">*</span>
-                What temporary authorization are you requesting?
-              </label>
-            }
-          </div>
-          <div class="col-12 md:col-8 lg:col-8 xl:col-9" [ngClass]="markAsModified(modifiedControls, 'authorizations')">
-            <ng-container >
-              @if (functionCodeSelection && form.get('functionCodeSelection')) {
-                <dms-functioncode-selection
-                  [form]="$any(form.get('functionCodeSelection'))" [functionCodeSelectionViewModel]="functionCodeSelection"
-                  [isDisabled]=false (click)="onDataChange($event)"
-                  [isRadio]="true" [makeModelCount]="1" [designeeTypeId]="designeeTypeId">
-                </dms-functioncode-selection>
-              }
-            </ng-container>
-          </div>
-        </div>
-      }
-      @if (form.get('isTemporaryFunctionCode')?.value != null && form.get('isTemporaryFunctionCode')?.value === false) {
-        <dms-input-text-area
-          identity="id_testchkinfo_ta_reasonforAuthorization" formControlName="reasonforAuthorization" [showLegendLength]="true" layout="grid"
-          label="Reason for the temporary authorization request" controlSize="medium" [rows]="6" [cols]="50" [maxlength]="4000"
-          [doSpotLight]="markAsModified(modifiedControls, 'reasonforAuthorization').borderRed">
-        </dms-input-text-area>
-      }
-      @if (showTypeofPractical) {
-        <dms-dropdown identity="id_testchkinfo_pdd_practicalOralTestId" #practicalOralTestId [options]="practicalTypes"
-          [label]="isAdminPreapprovals ? 'Type of Activity' : 'Type of Practical Test or Check'"
-          formControlName="practicalOralTestId" placeholder="Select a Type of Test"
-          layout="grid" controlSize="large" [doSpotLight]="checkTestControlHasChanged('practicalOralTestId')">
+@if (isLoaded && form) {
+  <div [formGroup]="$any(form)" id="preApprovalApplicationInfo"class="mb-3">
+    <p-panel id="preApprovalApplicationInfoPanel" [toggleable]="true" header="Application Information">
+      @if (!isAfsGroup2 && !isDpre) {
+        <dms-dropdown [filter]="false" (clickEvent)="onDataChange()" [options]="certificationRatingTypes"
+          formControlName="certificateRatingTypeId" identity="id_appinfo_pdd_certificateRatingTypeId"
+          placeholder="Select an Rating"  layout="grid" controlSize="medium" [validationMessages]="certificationRatingTypeValidationMessage"
+          label="Certificate or Rating applied for on the basis of">
         </dms-dropdown>
       }
-      @if (showGradeofCertificate || (isIacra && isAdminPreapprovals && !hideFlightInfo && getControlValue('gradeCertificateId') > 0)) {
-        <dms-dropdown identity="id_testchkinfo_pdd_gradeCertificateId" [options]="gradeCertificates"
-          [label]="isAdminPreapprovals ? 'Grade of Certificate sought' : 'Grade of Certificate that is sought in the test'"
-          formControlName="gradeCertificateId" placeholder="Select Certificate"
-          (changeEvent)="populateCategories(getControlValue('gradeCertificateId'))" layout="grid" controlSize="large"
-          >
-        </dms-dropdown>
+      @if (isAfsGroup2) {
+        <dms-check-box-group identity="id_appinfo_chk_certificateRatingTypeId" layout="flex"
+          [formControl]="$any(form.get('certificateRatingTypeId'))" [checkBoxValues]="certificationRatingTypesLabelValuePair"
+          label="Certificate or Rating applied for on the basis of" [validationMessages]="certificationRatingTypeCheckboxErrorMessage"
+          [doSpotLight]="markAsModified(modifiedControls, 'certificateRatingTypeId').borderRed">
+        </dms-check-box-group>
       }
-      @if (showAircraftCategory || (isIacra && isAdminPreapprovals && getControlValue('aircraftCategoryId') > 0)) {
-        <dms-dropdown identity="id_testchkinfo_pdd_aircraftCategoryId" [options]="aircraftCategories"
-          formControlName="aircraftCategoryId" placeholder="Select an aircraft category"
-          (changeEvent)="populateAircraftClass(getControlValue('gradeCertificateId'),getControlValue('aircraftCategoryId'))"
-          layout="grid" controlSize="large" label="Aircraft category sought"
-          >
-        </dms-dropdown>
-      }
-      @if (showAircraftClass || (isIacra && isAdminPreapprovals && getControlValue('aircraftClassId') > 0)) {
-        <dms-dropdown identity="id_testchkinfo_pdd_aircraftClassId" [options]="aircraftClass"
-          formControlName="aircraftClassId" placeholder="Select an aircraft class"
-          layout="grid" controlSize="large" label="Aircraft class sought"
-          >
-        </dms-dropdown>
-      }
-      @if (!isAdminPreapprovals) {
-        <dms-check-box-binary identity="id_testchkinfo_chk_aircraft" formControlName="isAircraftNotRequired"
-          [hideValidationPlaceHolder]="true" [value]="true" label="Aircraft is not required for this test" name="aircraft"
-          [doSpotLight]="markAsModified(modifiedControls, 'aircraft').borderRed">
-        </dms-check-box-binary>
-      }
-      @if (showAirCraft) {
-        <dms-auto-complete  identity="id_testchkinfo_pac_aircraftMakeModelId"
-          formControlName="aircraftMakeModelId" (completeMethod)="filterMakeModel($event)"
-          placeholder="Enter aircraft make model" [suggestions]="makeModels" field="name" [virtualScrollItemSize]="100" [minLength]="3"
-          (clearEvent)="makeModelChange($event)" ariaLabel="Search with aircraft make model" [forceSelection]="true"
-          label="{{!isAdminPreapprovals ? 'Aircraft Make and Model to be used for the test':'Make/Model/Series sought'}}"
-          [doSpotLight]="markAsModified(modifiedControls, 'aircraftMakeModelId').borderRed" controlSize="large" layout="grid">
+      @if ((!isAfsGroup2 && !isDpre && form.get('certificateRatingTypeId')?.value === 1) || (isAfsGroup2 && showFollowUp(3))) {
+        <dms-auto-complete
+          label="Name and designation number of FAA-approved school in which the applicant enrolled" (completeMethod)="filterSchools($event)"
+          (clearEvent)="clearSchool()" (focusEvent)="onDataChange()" [forceSelection]="true" [minLength]="2" formControlName="schoolId"
+          [doSpotLight]="markAsModified(modifiedControls, 'schoolId').borderRed"  identity="id_applicationinfo_pac_schoolid"
+          [suggestions]="schools" field="name" ariaLabel="Search with School Name" [validationMessages]="schoolIdValidationMessage"
+          controlSize="large">
         </dms-auto-complete>
       }
-      @if (!isPostActivity) {
-        <div>
-          @if (form) {
-            <dms-testinfo-page [designeeTypeId]="designeeTypeId" [form]="form.get('testInformation')"
-              [triggerFieldChangeEvent]="triggerFieldChangeEvent" (OnTriggerFieldChange)="onTextDataChange($event)"
-              [modifiedControls]="modifiedTestInfoControls">
-            </dms-testinfo-page>
-          }
-          @if (isAdminPreapprovals && !isAdminPeGen) {
-            <dms-radio-button identity="id_testcheckinfo_pradio_isMultipleApplicants"
-              formControlName="isMultipleApplicants" [radioValues]="isMultipleApplicantsRadioButtonValues" (clickEvent)="onChange($event)"
-              layout="grid" label="{{isAdminPreapprovals ? 'Multiple Applicants?':''}}">
-            </dms-radio-button>
-          }
-          @if (!getControlValue('isMultipleApplicants')) {
-            <dms-input-textbox identity="id_testchkinfo_text_name"
-              formControlName="name" label="Name of the Applicant" layout="grid" controlSize="medium"
-              placeholder="Applicant Name" [doSpotLight]="checkApplicantControlHasChanged('name')">
-            </dms-input-textbox>
-          }
-          @if (getControlValue('isMultipleApplicants') === false) {
-            <dms-input-textbox identity="id_testchkinfo_text_certificateNumber"
-              formControlName="certificateNumber" label="Certificate number of the Applicant" layout="grid" controlSize="medium"
-              placeholder="Certificate Number" [doSpotLight]="util.showError(form, 'certificateNumber') ? true : false">
-            </dms-input-textbox>
-          }
-        </div>
+      @if (!isAfsGroup2 && !isDpre && form.get('certificateRatingTypeId')?.value === 1) {
+        <dms-radio-button
+          (clickEvent)="onDataChange()" [radioValues]="isCfrSectionTest" identity="id_appinfo_radio_isCfrSectionTest"
+          formControlName="isCfrSectionTest"  label="14 CFR Section 65.80 test?"
+          layout="grid" [doSpotLight]="markAsModified(modifiedControls, 'facilityonRecord').borderRed"
+          [validationMessages]="isCfrSectionTestValidationMessage">
+        </dms-radio-button>
       }
-      @if (!isAdminPreapprovals) {
-        <div class="grid">
-          <div class="col-12 c-label md:col-4 lg:col-4 xl:col-3 md:pt-3 pl-3">
-            <label>Recommending Instructor</label>
+      @if ((!isAfsGroup2 && !isDpre && form.get('certificateRatingTypeId')?.value === 1) && form.get('isCfrSectionTest')?.value === true) {
+        <dms-auto-complete
+          label="Name and designation number of FAA-approved school in which the applicant enrolled" (completeMethod)="filterCfrSchools($event)"
+          (clearEvent)="clearCfrSectionSchool()" (focusEvent)="onDataChange()" [forceSelection]="true" [minLength]="2" formControlName="cfrSectionSchoolId"
+          [doSpotLight]="markAsModified(modifiedControls, 'cfrSectionSchoolId').borderRed"  identity="id_applicationinfo_pac_cfrSectionSchoolId_"
+          [suggestions]="cfrSchools" field="name" ariaLabel="Search with School Name" [validationMessages]="schoolIdValidationMessage"
+          controlSize="large">
+        </dms-auto-complete>
+      }
+      @if ((!isAfsGroup2 && !isDpre && form.get('certificateRatingTypeId')?.value === 2) || isDpre) {
+        <div class="grid col-12 p-0">
+          <div class="col-12 c-label md:col-4 lg:col-4 xl:col-3 md:pt-3">
+            <label for=""><span class="c-label-required">*</span>Type of Experience</label>
           </div>
-          <div class="col-12 c-control md:col-8 lg:col-8 xl:col-9">
-            <dms-check-box-binary identity="id_testchkinfo_chk_recommendingInstructor" name="isMultipleApplicants"
-              formControlName="isRecommendingInstructorNotAvailable" [hideValidationPlaceHolder]="true" [value]="true"
-              label="Recommending Instructor N/A">
+          <div class="grid col-12 c-control gap-2 md:col-5 lg:col-5 xl:col-4">
+            <dms-check-box-binary identity="id_appinfo_chk_isCivilExperience"
+              [hideValidationPlaceHolder]="true" [value]="true" formControlName="isCivilExperience"
+              label="Civil Experience" (clickEvent)="onDataChange()" layout="grid"
+              [doSpotLight]="markAsModified(modifiedControls, 'isCivilExperience').borderRed">
+            </dms-check-box-binary>
+            <dms-check-box-binary identity="id_appinfo_chk_isMilitaryExperience"
+              [hideValidationPlaceHolder]="true" [value]="true" formControlName="isMilitaryExperience"
+              label="Military Experience" (clickEvent)="onDataChange()" layout="grid"
+              [doSpotLight]="markAsModified(modifiedControls, 'isMilitaryExperience').borderRed">
             </dms-check-box-binary>
           </div>
+          <div class="col-12 c-error-message md:col-3 lg:col-3 xl:col-5 md:pt-3">
+            @if (form.hasError('experience') && (form.get('isCivilExperience')?.touched
+              || form.get('isCivilExperience')?.dirty
+              || form.get('isMilitaryExperience')?.touched
+              || form.get('isMilitaryExperience')?.dirty)) {
+              <span
+                class="message-error-sm">
+                Please select an option.
+              </span>
+            }
+          </div>
         </div>
       }
-      @if (!isAdminPreapprovals) {
-        <dms-input-textbox identity="id_testchkinfo_text_recInstructor" formControlName="recommendingInstructor"
-          layout="grid" controlSize="small" label="Name of Recommending Instructor"
-          [doSpotLight]="util.showError(form, 'recommendingInstructor') ? true : false"
-          [hideValidationPlaceHolder]="!getControlValue('isRecommendingInstructorNotAvailable') && isPostActivity ? false : true">
-        </dms-input-textbox>
+      @if ((!isAfsGroup2 && !isDpre && form.get('certificateRatingTypeId')?.value === 2) || isDpre) {
+        <dms-dropdown
+          formControlName="authorizedTestOfficeId" [options]="offices"
+          [disabled]="isDisabled || isEditPostActivity" [filter]="true" identity="id_appinfo_pdd_authorizedTestOfficeId"
+          placeholder="Select a school"  layout="grid" controlSize="medium"
+          [validationMessages]="authorizedTestOfficeIdValidationMessage"
+          label="Office that authorized the test for this applicant"
+          [doSpotLight]="markAsModified(modifiedControls, 'authorizedTestOfficeId').borderRed">
+        </dms-dropdown>
       }
-      @if (!isAdminPreapprovals) {
-        <dms-input-textbox identity="id_testchkinfo_text_recgInstructorCertNo"
-          formControlName="recommendingInstructorCertificateNumber" layout="grid" controlSize="small"
-          label="Flight Instructor Certificate number of Recommending Instructor"
-          [doSpotLight]="util.showError(form, 'recommendingInstructorCertificateNumber') ? true : false"
-          [hideValidationPlaceHolder]="!getControlValue('isRecommendingInstructorNotAvailable') && isPostActivity ? false : true">
-        </dms-input-textbox>
+      @if (isAfsGroup2 && showFollowUp(4)) {
+        <dms-dropdown [filter]="false" (clickEvent)="onDataChange()" [disabled]="isDisabled"
+          [options]="countries" formControlName="pilotCountryId" identity="id_appinfo_pdd_pilotCountryId"
+          placeholder="Select a country" layout="grid" controlSize="medium" [validationMessages]="pilotCountryIdValidationMessage"
+          label="Country that Issued the foreign pilot license">
+        </dms-dropdown>
+      }
+      @if (isAfsGroup2 && showFollowUp(5)) {
+        <dms-auto-complete label="Name of Air Carrier" (completeMethod)="filterCarriers($event)"
+          (clearEvent)="clearAirCarrierId()" [forceSelection]="true" [minLength]="3" [virtualScrollItemSize]="100" [suggestions]="carriers"
+          ariaLabel="Search with air carrier" ield="name" formControlName="airCarrierId" field="name"
+          identity="id_applicationinfo_pac_airCarrierId" [validationMessages]="airCarrierIdValidationMessage">
+        </dms-auto-complete>
       }
     </p-panel>
   </div>
