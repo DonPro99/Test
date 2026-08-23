@@ -1,547 +1,315 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import {
-  ActionButton,
-  ActivityRequestStatusEnum,
-  BaseComponent,
-  ButtonActionsEnum,
-  CloaStatusEnum,
-  CryptoService,
-  LookupService,
-  PreApprovalRequestInfoModel,
-  PreApprovalRequestService,
-  PreApprovalTabInfo, 
-  UtilityService,
-  getControl
-} from 'dms-web-shared';
-import { AuthenticationService } from '../../services/authentication.service';
-import { DmeIndexComponent } from './dme-index.component';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
-import { MessageService as ToastService } from 'primeng/api';
-import { Location } from '@angular/common';
-import { Observable, Subscriber } from 'rxjs';
-import { FormGroup } from '@angular/forms';
-import { DpeIndexComponent } from './dpe-index.component';
+import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { MockComponent } from 'ng-mocks';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminpeIndexComponent } from './adminpe-index.component';
-import { DpreIndexComponent } from './dpre-index.component';
-import { DartIndexComponent } from './dart-index.component';
-import { SaeIndexComponent } from './sae-index.component';
-import { takeUntil } from 'rxjs/operators';
-
-@Component({
-    selector: 'pr-grp1-index',
-    styleUrls: ['./index.component.scss'],
-    templateUrl: './index.component.html',
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
-})
-export class IndexComponent extends BaseComponent implements OnInit {
-  designeeTypeId: number = 0;
-  categoryId?: number = 0;
-  data?: PreApprovalRequestInfoModel;
-  activeIndex: number = 0;
-  props: any;
-  isAdmin: boolean = false;
-  isAutoPreApproval = false;
-
-  @ViewChild('active') index?:
-    | DmeIndexComponent
-    | DpreIndexComponent
-    | DartIndexComponent
-    | DpeIndexComponent
-    | SaeIndexComponent
-    | AdminpeIndexComponent
-  summaryForm: FormGroup | undefined;
-  copyPreApprovalRequestId: number | undefined;
-
-  get userId() {
-    return this.authenticationService.getActiveUser().userId;
+import {
+  ActivityRequestStatusEnum, Address, CategoryEnum, DesigneeInformation, DesigneeTypeEnum,
+  DesigneeSummaryComponent, DmsActivityLocationComponent, DmsApplicationInformationComponent, DmsTestCheckInformationComponent, DmsTestInformationComponent,
+  DmsTextAreaComponent, FunctionCode, LookupItem, LookupService,
+  OtherPreApprovalRequest, PostActivity, PreApprovalActivityLocation, PreApprovalApplicantInformation,
+  PreApprovalApplicationInformation, PreApprovalRequestInfo, PreApprovalRequestInfoModel,
+  PreApprovalRequestStatusEnum, PreApprovalRequestSummaryComponent, PreApprovalTestCheckInformation,
+  PreApprovalTestInformation, RequestInformationComponent, UploadControlComponent
+} from 'dms-web-shared';
+import { TabsModule } from 'primeng/tabs';
+import { DmsInputTextArea } from 'dms-sdk';
+class Page {
+  constructor(private fixture: ComponentFixture<AdminpeIndexComponent>) {
   }
-
-  get isDisabled() {
-    return (
-      this.data?.requestInfo?.activityStatus?.id ===
-        ActivityRequestStatusEnum.Completed ||
-      this.data?.requestInfo?.activityStatus?.id ===
-        ActivityRequestStatusEnum.Canceled ||
-      this.data?.requestInfo?.activityStatus?.id ===
-        ActivityRequestStatusEnum.Denied ||
-      ![CloaStatusEnum.Active, CloaStatusEnum.Superseded].includes(
-        this.data?.designeeInfo?.statusId ?? 0
-      )
-    );
+  get component(): AdminpeIndexComponent {
+    return this.fixture.componentInstance;
   }
-
-  constructor(
-    private titleService: Title,
-    private lookupService: LookupService,
-    private service: PreApprovalRequestService,
-    private authenticationService: AuthenticationService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private util: UtilityService,
-    private ref: ChangeDetectorRef,
-    private confirmationService: ConfirmationService,
-    private toastService: ToastService,
-    private location: Location,
-    private cryptoService: CryptoService
-  ) {
-    super();
-    this.props = {
-      title: 'Pre Approval Request',
-      userguideComponent: '',
-      tabCount: 0,
-      buttons: [],
-    };
-    this.activeIndex = -1;
-    this.titleService.setTitle(this.props.title);
-    this.isAdmin = false;
+  private query(className: string): DebugElement {
+    return this.fixture.debugElement.query(By.css(className));
   }
-
-  async ngOnInit() {
-    this.designeeTypeId = +this.route.snapshot.data['designeeTypeId'];
-    const preApprovalRequest$ = this.route.snapshot.data['preApprovalRequest'];
-    
-    preApprovalRequest$.pipe(takeUntil(this.destroying$)).subscribe(async (data: any) => {
-      this.data = data;
-      this.configure();
-      if (this.data) {
-        this.categoryId =
-          +this.route.snapshot.params['categoryId'] ||
-          +(this.data?.categoryId || 0);
-        this.data.categoryId = this.categoryId;
-
-        this.copyPreApprovalRequestId = +await this.cryptoService.decrypt(this.route.snapshot.queryParams['cloneId']) || 0;
-
-        if (this.copyPreApprovalRequestId > 0 && this.data.isApproved)
-          this.data.isApproved = false;
-  
-        if (this.copyPreApprovalRequestId > 0) {
-          this.data.justificationForCancellation = '';
-          this.data.cancellationTypeId = undefined;
-          this.data.testCheckInformation!.reasonforAuthorization = undefined;
-        }
-      }
-    });
-    
-  }
-
-  setConfig($event: any) {
-    this.props.title = $event.title;
-    this.props.userguideComponent = $event.userguideComponent;
-    this.titleService.setTitle(this.props.title);
-    this.props.tabCount = $event.tabCount;
-    this.props.formGroupMap = $event.formGroupMap;
-    this.ref.detectChanges(); // angular doesn't like resetting values in ngOnInit from child components
-    this.setActionButtons();
-  }
-
-  configure() {
-    this.props.buttons = [].concat(this.getActionButtons() as any);
-    this.activeIndex = 0;
-    this.setActionButtons();
-    if (this.isDisabled && this.index && this.index.form) {
-      this.index.form.disable();
-    }
-  }
-
-  getActionButtons(): ActionButton[] {
-    const buttons = this.lookupService.getActionButtons();
-    buttons.splice(
-      2,
-      0,
-      new ActionButton('Print', 'Print', 'print', true, false, 2, 'fa fa-print')
-    );
-    buttons.splice(
-      3,
-      0,
-      new ActionButton('Copy', 'Copy', 'copy', true, false, 3, 'fa fa-copy')
-    );
-    buttons.splice(
-      4,
-      0,
-      new ActionButton(
-        'Continue',
-        'Continue',
-        'continue',
-        true,
-        false,
-        7,
-        'fa fa-arrow-right'
-      )
-    );
-    return buttons;
-  }
-
-  get canPrint() {
-    return this.activeIndex === this.props.tabCount; // should be the last tab
-  }
-
-  get canCopy() {
-    if (this.data && this.data.id && this.data.id! > 0) {
-      if (this.data.requestInfo?.submittedDate) {
-        let tmpSubmittedDate = this.data.requestInfo.submittedDate.replace(
-          'AM',
-          ''
-        );
-        tmpSubmittedDate = tmpSubmittedDate.replace('PM', '');
-        const submittedDate = new Date(tmpSubmittedDate);
-        const year = submittedDate.getFullYear() + 1;
-        const submittedDateWithYr = new Date(
-          year,
-          submittedDate.getMonth(),
-          submittedDate.getDate()
-        );
-        const isWithinYear = submittedDateWithYr > new Date();
-        return (
-          isWithinYear &&
-          this.data.designeeInfo?.statusId === CloaStatusEnum.Active
-        );
-      } else {
-        return (
-          this.data.requestInfo?.activityStatus &&
-          this.data.requestInfo.activityStatus.isActive
-        );
-      }
-    }
-    return false;
-  }
-
-  private goToActionsPage() {
-    this.location.back();
-  }
-
-  private goToActivityPage() {
-    this.router.navigate(['/activity']);
-  }
-
-  private goToHomePage() {
-    this.router.navigate(['/home']);
-  }
-
-  private setActionButtons() {
-    this.props.buttons.forEach((a: { eventKey: any; isDisplay: boolean | undefined; type: string; displayOrder: number; }) => {
-      switch (a.eventKey) {
-        case ButtonActionsEnum.Save:
-          a.isDisplay = !this.isDisabled && !this.canPrint;
-          break;
-        case ButtonActionsEnum.Print:
-          a.isDisplay = this.canPrint;
-          break;
-        case ButtonActionsEnum.Continue:
-          a.type = 'button';
-          a.isDisplay = !this.canPrint;
-          a.displayOrder = 3;
-          break;
-        case ButtonActionsEnum.Copy:
-          a.isDisplay = this.canCopy && this.canPrint;
-          break;
-        case ButtonActionsEnum.Submit:
-          a.isDisplay = !this.isDisabled;
-          break;
-      }
-    });
-  }
-
-  setActiveIndex($event: any) {
-    this.setActiveTabIndex($event);
-    this.saveIfDirty();
-  }
-
-  private setActiveTabIndex($event: any) {
-    this.activeIndex = $event.index;
-    this.setActionButtons();
-    if ($event.isSummaryTab) {
-      this.index?.setSummaryTab();
-    } else {
-      if (this.index) {
-        this.index.summaryForm = undefined;
-      }
-    }
-  }
-
-  public saveIfDirty(): void {
-    if (this.index && this.index.form?.dirty) {
-      const saveData = this.updateModel();
-      this.saveRequest(saveData)
-        .pipe(takeUntil(this.destroying$))
-        .subscribe(() => {
-          if (this.index?.form) {
-            this.index.form.markAsPristine();
-          }
-        });
-    }
-  }
-
-  onPreApprovalChange() {
-    this.confirmationService.confirm({
-      key: 'dms',
-      icon: undefined,
-      header: 'New PreApproval Message',
-      acceptVisible: true,
-      rejectVisible: true,
-      acceptLabel: 'Continue',
-      rejectLabel: 'Cancel',
-      rejectIcon: 'fa fa-times',
-      acceptIcon: 'fa fa-check',
-      message:
-        'This Pre-Approval was already authorized by the Managing Specialist. You are about to make an update to a field that will require a new Pre-Approval. If you continue, your current Pre-Approval will be cancelled and all information will be transferred to a new Pre-Approval that will need to be submitted again. Continue?',
-      accept: () => {
-        if (this.data) {
-          this.service.reinitiateNew(this.data.id!).subscribe(async requestId => {
-            const url = '/preapprovalrequest/afs/reinitiate/' + await this.cryptoService.encrypt(requestId);
-            this.navigate(url);
-          });
-        }
-      },
-    });
-  }
-
-  private navigate(url: string) {
-    const index = url.indexOf('?');
-    const navigateUrl = index === -1 ? url : url.slice(0, index);
-    const navigationExtras: NavigationExtras = {
-      queryParams: this.util.getQueryParams(url),
-    };
-    this.router.navigate([navigateUrl], navigationExtras);
-  }
-
-  private updateModel() {
-    const model = this.index?.getModel();
-    return Object.assign({}, this.data, {
-      id: this.data?.id,
-      designeeTypeId: this.designeeTypeId,
-      userId: this.userId,
-      model,
-    });
-  }
-
-  buttonClick(eventKey: string) {
-    const saveData = this.updateModel();
-    switch (eventKey) {
-      case ButtonActionsEnum.Save:
-        this.saveRequest(saveData)
-          .pipe(takeUntil(this.destroying$))
-          .subscribe();
-        break;
-      case ButtonActionsEnum.Print:
-        window.print();
-        break;
-      case ButtonActionsEnum.Copy:
-        this.copy();
-        break;
-      case ButtonActionsEnum.Continue:
-        this.showTabError(this.activeIndex);
-        this.saveIfDirty();
-        // goto next tab
-        const nextTabIndex =
-          this.activeIndex !== this.props.tabCount // if it is not the last tab
-            ? this.activeIndex + 1 // move to next
-            : this.activeIndex; // stay at current index
-        this.setActiveTabIndex({
-          index: nextTabIndex,
-          isSummaryTab: nextTabIndex === +this.props.tabCount,
-        });
-        break;
-      case ButtonActionsEnum.Submit:
-        this.activeIndex = this.props.tabCount;
-        this.setActiveTabIndex({
-          index: this.activeIndex,
-          isSummaryTab: this.activeIndex === +this.props.tabCount,
-        });
-        this.showTabError(this.props.tabCount - 1);
-        this.util.markFormGroupTouched(this.index?.form ?? new FormGroup({}));
-        if (this.index?.form?.invalid) {
-          this.index?.tabView?.cd.markForCheck();
-          return;
-        }
-
-        // submit routine
-        saveData.isSubmit = true;
-        if (!saveData.isApproved) {
-          if (this.index?.isAutoPreApproval) {
-            this.saveRequest(saveData)
-              .pipe(takeUntil(this.destroying$))
-              .subscribe();
-          } else {
-            this.confirmationService.confirm({
-              key: 'dms',
-              icon: undefined,
-              header: 'Pre-Approval Submit Message',
-              acceptVisible: true,
-              rejectVisible: true,
-              acceptLabel: 'Continue',
-              rejectLabel: 'Cancel',
-              rejectIcon: 'fa fa-times',
-              acceptIcon: 'fa fa-check',
-              message:
-                'This Pre-Approval will require FAA authorization before proceeding. You will receive a message after Pre-Approval request is reviewed.',
-              accept: () => {
-                this.saveRequest(saveData)
-                  .pipe(takeUntil(this.destroying$))
-                  .subscribe();
-              },
-            });
-          }
-        } else {
-          this.saveRequest(saveData)
-            .pipe(takeUntil(this.destroying$))
-            .subscribe();
-        }
-        break;
-      case ButtonActionsEnum.Cancel:
-        this.goToHomePage();
-        break;
-      case ButtonActionsEnum.Back:
-        if (this.activeIndex < 1) {
-          this.goToActionsPage();
-        } else {
-          const previousTabIndex = this.activeIndex - 1;
-          this.setActiveTabIndex({
-            index: previousTabIndex,
-            isSummaryTab: previousTabIndex === (+this.props.tabCount)
-          });
-        }
-        break;
-    }
-  }
-
-  saveRequest(saveData: PreApprovalRequestInfoModel): Observable<any> {
-    const saveMessage = 'Pre-Approval request has been saved successfully.';
-    const updateMessage = 'Pre-Approval request has been updated successfully.';
-    const tabsInfo = this.index?.pr?.tabInfo;
-    if (saveData.id === 0) {
-      return new Observable((observer) => {
-        saveData.categoryId = this.categoryId;
-        this.service
-          .saveAfsPreApprovalRequest(saveData) 
-          .pipe(takeUntil(this.destroying$))
-          .subscribe(
-            (result) => {
-              this.data = result;
-              this.uploadDocuments(saveMessage, saveData, observer, tabsInfo!);
-            },
-            () => {
-              this.toastService.add({
-                key: 'dms',
-                severity: 'error',
-                summary: 'Error Message',
-                detail: 'Request failed.',
-              });
-            }
-          );
-      });
-    } else {
-      return new Observable((observer) => {
-        this.service
-          .updateAfsPreApprovalRequest(saveData)
-          .pipe(takeUntil(this.destroying$))
-          .subscribe({
-            next: (result) => {
-              this.data = result;
-              this.uploadDocuments(updateMessage, saveData, observer, tabsInfo!);
-            },
-            error: () => {
-              this.toastService.add({
-                key: 'dms',
-                severity: 'error',
-                summary: 'Error Message',
-                detail: 'Request failed.',
-              });
-            },
-          });
-      });
-    }
-  }
-
-  private uploadDocuments(
-    message: string,
-    saveData: PreApprovalRequestInfoModel,
-    observer: Subscriber<any>,
-    tabsInfo?: PreApprovalTabInfo
-  ) {
-    if (this.index && this.index.uploadControl) {
-      this.index.uploadControl
-        .fileUpload(this.data?.documentReference?.referenceId!)
-        .pipe(takeUntil(this.destroying$))
-        .subscribe({
-          next: () => {
-            this.index?.setTabsInfo(tabsInfo!);
-            this.toastService.add({
-              key: 'dms',
-              severity: 'success',
-              summary: 'Success Message',
-              detail: message,
-            });
-            if (saveData.isSubmit) {
-              this.goToActivityPage();
-            }
-            observer.next();
-            observer.complete();
-          },
-          error: () => {
-            this.toastService.add({
-              key: 'dms',
-              severity: 'error',
-              summary: 'Error Message',
-              detail: 'Upload Document failed.',
-            });
-          },
-        });
-      } else {
-        if (saveData.isSubmit) {
-          this.goToActivityPage();
-        }
-      }
-  }
-
-  showTabError(activeIndex: number) {
-    if (!this.index?.form) return;
-    let fgs: any[] = [];
-
-    for (let i = 0; i <= activeIndex; i++) {
-      if (this.props.formGroupMap[i] !== undefined) {
-        fgs = fgs.concat(this.props.formGroupMap[i]);
-      }
-    }
-
-    for (const fg of fgs) {
-      const control = getControl(this.index.form, fg);
-      if (control) {
-        control.markAllAsTouched();
-      }
-    }
-  }
-
-  copy() {
-    if (!this.data) return;
-    // Check for any pending post activities for designee before proceding copy show warning if any pending post activities.
-    this.service
-      .checkPendingPostActivitiesExists(this.data.designeeInfo?.applicationId!)
-      .pipe(takeUntil(this.destroying$))
-      .subscribe(async (data) => {
-        if (data) {
-          this.confirmationService.confirm({
-            header: 'Pending Post Activity',
-            icon: undefined,
-            key: 'dms',
-            acceptLabel: 'Ok',
-            acceptVisible: true,
-            rejectVisible: false,
-            acceptIcon: 'fa fa-check',
-            message:
-              'You must submit all overdue Post-Activity reports in order to initiate new Pre-Approval.',
-          });
-        } else {
-          const url = `/preapprovalrequest/afs/new/${await this.cryptoService.encrypt(this.categoryId)}?cloneId=${await this.cryptoService.encrypt(this.data?.id)}`;
-          const index = url.indexOf('?');
-          const navigateUrl = index === -1 ? url : url.slice(0, index);
-          const navigationExtras: NavigationExtras = {
-            queryParams: this.util.getQueryParams(url),
-          };
-          this.router.navigate([navigateUrl], navigationExtras);
-        }
-      });
+  get tabView() {
+    return this.query('p-tabs');
   }
 }
+class SetUp {
+  static getSpy(key: string) {
+    switch (key) {
+      case 'lookupService':
+        return jasmine.createSpyObj(key, ['populateLookupData', 'getPreApprovalCancelReasons']);
+      default:
+        break;
+    }
+  }
+  static getMockUpData(): PreApprovalRequestInfoModel {
+    const model = new PreApprovalRequestInfoModel();
+    model.designeeInfo = new DesigneeInformation();
+    model.designeeInfo.typeId = 1;
+    model.postActivity = new PostActivity();
+    model.postActivity.id = 1;
+    model.isPostActivityReadOnly = false;
+    model.otherPreApprovalRequest = new OtherPreApprovalRequest();
+    model.otherPreApprovalRequest.isAutoPostActivity = false;
+    model.otherPreApprovalRequest.selectedPreApprovalRequestTypeId = CategoryEnum.Tags
+    model.id = 468867;
+    model.testInformation = this.GetPreApprovalTestInformation();
+    model.testCheckInformation = this.GetPreApprovalTestCheckInformation();
+    model.comments = "testing";
+    model.documentReference = this.GetDocumentReference();
+    model.applicantInformation = this.GetPreApprovalApplicantInformation();
+    model.applicationInformation = this.GetApplicationInformation();
+    model.activityLocation = this.GetActivityLocation();
+    model.dpreFunctionCodes = SetUp.GetSelectedFunctionCodes();
+    model.authFunctionCodes = SetUp.GetFunctionCodes();
+    model.requestInfo = this.GetPreApprovalRequestInfo();
+    model.statusId = 3;
+    return model;
+  }
+  static GetPreApprovalRequestInfo() {
+    const obj = new PreApprovalRequestInfo();
+    obj.activityStatus = new LookupItem(3, "Pending", true);
+    obj.submittedDate = new Date().toDateString();
+    return obj;
+  }
+  static GetFunctionCodes(): FunctionCode[] {
+    const functionCodes: FunctionCode[] = [];
+    functionCodes.push(new FunctionCode(1, '1', 'One', 'One', 10, null, true, null, null, null, { id: 1, name: 'test 1' }, 10));
+    functionCodes.push(new FunctionCode(2, '2', 'Two', 'Two', 11, null, true, null, null, null, { id: 2, name: 'test 2' }, 11));
+    functionCodes.push(new FunctionCode(3, '3', 'Three', 'Three', 12, null, true, null, null, null, { id: 2, name: 'test 2' }, 12));
+    functionCodes.push(new FunctionCode(4, '4', 'Four', 'Four', 13, null, true, null, null, null, { id: 4, name: 'test 4' }, 13));
+    functionCodes.push(new FunctionCode(5, '5', 'Five', 'Five', 14, null, null, null, null, null, { id: 5, name: 'test 5' }, 14));
+    functionCodes.push(new FunctionCode(6, '6', 'Six', 'Six', 15, null, null, null, null, null, { id: 5, name: 'test 6' }, 15));
+
+    return functionCodes;
+  }
+  static GetDocumentReference() {
+    return {
+      hasReferenceId: true,
+      documentReferenceId: 273179,
+      createdBy: 34168,
+      documentReferenceEnum: 3,
+      referenceId: 273179,
+      secondaryReferenceId: null,
+      uploadedFiles: [{
+        documentReferenceId: 273179,
+        documentId: 125973,
+        file: null,
+        fileName: 'test.docx',
+        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        fileSize: 12,
+        createdDate: '2021-03-22T14:59:28.233',
+        createdBy: 0
+      }]
+    }
+
+  }
+  static GetActivityLocation() {
+    const obj = new PreApprovalActivityLocation();
+    obj.facilityonRecord = true;
+    obj.facilityAddress = new Address(1, 'Address of Can Softtech', null, '123 test st', '', 'Herdon');
+    obj.otherAddress = new Address(1, 'Address of Can Softtech', null, '123 test st', '', 'Herdon');
+    obj.domestic = true;
+    obj.locationAddress = new Address(1, 'Address of Can Softtech', null, '123 test st', '', 'Herdon');
+    obj.isOutsideOfficeDistrict = false;
+    obj.isActivityOutsideUsa = false;
+    obj.officeId = 1;
+    obj.airport = new LookupItem(1, 'ORD', true);
+    obj.selectedLocationAddressId = 1;
+    obj.isLineCheck = true;
+    return obj;
+  }
+
+  static getCancelReasons() {
+    const rsn = '[{"label":"- Select -","value":null},{"label":"Applicant No Show","value":1},  {"label":"Applicant Not Ready","value":2},{"label":"Error on Pre-Approval","value":3},{"label":"Mechanical","value":4},{"label":"Weather","value":5},{"label":"Other","value":6}]';
+    return JSON.parse(rsn);
+  }
+
+  static GetPreApprovalTestInformation() {
+    const obj = new PreApprovalTestInformation();
+    const startEndDate = new Date();
+    startEndDate.setDate(startEndDate.getDate() + 2);
+    obj.proposeStartDate = startEndDate.toDateString();
+    startEndDate.setDate(startEndDate.getDate() + 90);
+    obj.proposeEndDate = startEndDate.toDateString();
+    obj.timeZoneId = 5;
+    obj.practicalOralTestId = 1;
+    obj.proposedStartTime = "12:00";
+    return obj;
+  }
+  static GetPreApprovalTestCheckInformation() {
+    const obj = new PreApprovalTestCheckInformation();
+    obj.isOtherAdminActivity = false;
+    obj.temporaryAuthorizations = SetUp.GetFunctionCodes();
+    obj.selectedRequestAuthorizations = SetUp.GetFunctionCodes();
+    obj.requestedAuthorizations = SetUp.GetFunctionCodes();
+    obj.isAircraftNotRequired = false;
+    return obj;
+  }
+
+  static GetPreApprovalApplicantInformation() {
+    const obj = new PreApprovalApplicantInformation();
+    obj.name = 'Can Softtech';
+    obj.phone = '929-273-0456';
+    obj.email = 'info@cansofttech.com';
+    obj.certificateNumber = 'CERT-001';
+    return obj;
+  }
+  static GetApplicationInformation() {
+    const obj = new PreApprovalApplicationInformation();
+    obj.certificateRatingTypeId = 1;
+    obj.selectedCertificateRatingTypeIds = [1, 2, 3, 4, 5];
+    return obj;
+  }
+  static GetSelectedFunctionCodes() {
+    return [
+      {
+        isSelected: true,
+        functionCodeType: { id: 1, name: 'test' },
+        authSelectedFunctionCodes: [1, 2]
+      },
+      {
+        isSelected: true,
+        functionCodeType: { id: 2, name: 'testing' },
+        authSelectedFunctionCodes: [3, 4]
+      }
+    ];
+  }
+}
+
+describe('AdminpeIndexComponent', () => {
+  let component: AdminpeIndexComponent;
+  let fixture: ComponentFixture<AdminpeIndexComponent>;
+  const spies: any[] = [];
+  let page: Page;
+  function createSpy() {
+    spies.push(SetUp.getSpy('lookupService'));
+  }
+  createSpy();
+
+  async function createComponent() {
+    fixture = TestBed.createComponent(AdminpeIndexComponent);
+    page = new Page(fixture);
+    component = page.component;
+    page.component.pr = SetUp.getMockUpData();
+    page.component.activeIndex = 2;
+    page.component.isDisabled = false;
+    spies[0].getPreApprovalCancelReasons.and.returnValue(SetUp.getCancelReasons());
+    fixture.detectChanges();
+    await fixture.whenStable();
+  }
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        AdminpeIndexComponent,
+        MockComponent(DesigneeSummaryComponent),
+        MockComponent(RequestInformationComponent),
+        MockComponent(DmsTestCheckInformationComponent),
+        MockComponent(DmsActivityLocationComponent),
+        MockComponent(DmsApplicationInformationComponent),
+        MockComponent(UploadControlComponent),
+        MockComponent(DmsTextAreaComponent),
+        MockComponent(PreApprovalRequestSummaryComponent),
+      ],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        TabsModule,
+        DmsInputTextArea],
+      providers: [
+        { provide: LookupService, useValue: spies[0] },
+      ]
+    })
+      .compileComponents();
+    createComponent();
+  }));
+
+  it('should create', () => {
+    expect(page.component).toBeTruthy();
+  });
+
+  it('should go through onTabChange function call', () => {
+    fixture.detectChanges();
+    spyOn(page.component, 'onTabChange');
+    const firstTabButton = fixture.debugElement.query(By.css('.p-tablist .p-tab'));
+    firstTabButton.nativeElement.click();
+    expect(page.component.onTabChange).toHaveBeenCalled();
+  });
+
+  it('should go through emitFieldChange function call', () => {
+    component.emitFieldChange(true);
+    fixture.detectChanges(false);
+    expect(component.emitChange.emit).toBeDefined();
+  });
+
+  it('should call isAutoPreapproval function', () => {
+    expect(page.component.isAutoPreApproval).toBe(false);
+
+    page.component.pr.testCheckInformation.isOtherAdminActivity = true;
+    expect(page.component.isAutoPreApproval).toBe(true);
+  });
+
+  it('should call buildModel function', () => {
+    page.component.getModel();
+    spyOn(DmsTestInformationComponent, 'buildModel');
+    page.component.form.markAllAsTouched();
+    AdminpeIndexComponent.buildModel(page.component.form, page.component.pr);
+    expect(DmsTestInformationComponent.buildModel).toHaveBeenCalled();
+  });
+
+  it('set pr id to 0 and should be timezoneid set to 5', () => {
+    page.component.pr.id = 0;
+    page.component.ngOnInit();
+    expect(page.component.pr.testInformation.timeZoneId).toEqual(5);
+  });
+
+  it('should call setSummaryTab', () => {
+    page.component.setSummaryTab();
+    expect(page.component.summaryForm.status).toEqual("DISABLED");
+  });
+
+  it('set uploaded files count to 0 and should call buildform', () => {
+    page.component.pr.documentReference = null;
+    AdminpeIndexComponent.buildForm(page.component.pr, {
+      categoryId: 0,
+      isDisabled: false
+    });
+    expect(page.component.form.valid).toBeTrue();
+  });
+  it('should call when status is cancel',() => {   
+    component.pr.requestInfo.activityStatus.id = ActivityRequestStatusEnum.Approved;    
+    component.pr.statusId = PreApprovalRequestStatusEnum.Cancelled;
+    component.ngOnInit();   
+    fixture.detectChanges();  
+    expect(component.isCancel).toEqual(true);
+    expect(component.cancelReasons.length).toEqual(7);
+  });
+
+  it('should pass the actual designee type (Admin-PE-GEN) to DmsTestCheckInformationComponent.buildForm, not a hardcoded Admin-PE value', () => {
+    spyOn(DmsTestCheckInformationComponent, 'buildForm').and.callThrough();
+    const model = SetUp.getMockUpData();
+    model.designeeInfo.typeId = DesigneeTypeEnum.ADMINPEGEN;
+
+    AdminpeIndexComponent.buildForm(model, { isDisabled: false });
+
+    expect(DmsTestCheckInformationComponent.buildForm).toHaveBeenCalledWith(
+      model.testCheckInformation,
+      model.testInformation,
+      model.applicantInformation,
+      jasmine.objectContaining({ designeeTypeId: DesigneeTypeEnum.ADMINPEGEN })
+    );
+  });
+
+  it('should still pass Admin-PE correctly when the application is actually Admin-PE (regression check)', () => {
+    spyOn(DmsTestCheckInformationComponent, 'buildForm').and.callThrough();
+    const model = SetUp.getMockUpData();
+    model.designeeInfo.typeId = DesigneeTypeEnum.ADMINPE;
+
+    AdminpeIndexComponent.buildForm(model, { isDisabled: false });
+
+    expect(DmsTestCheckInformationComponent.buildForm).toHaveBeenCalledWith(
+      model.testCheckInformation,
+      model.testInformation,
+      model.applicantInformation,
+      jasmine.objectContaining({ designeeTypeId: DesigneeTypeEnum.ADMINPE })
+    );
+  });
+});
