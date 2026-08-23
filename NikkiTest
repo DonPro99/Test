@@ -1,3 +1,250 @@
-this.http.post('preapprovalrequest/afs/new', payload)
 
-dms-preapproval-request.component.ts or similar top-level component that assembles the whole multi-tab form for submission), not in dms-test-check-information.component.ts
+import { Component, OnInit, ViewChildren } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+    ActionButton, BaseComponent, ButtonActionsEnum, CryptoService,
+    DesigneeTypeEnum, DmsPreApprovalRequestDecision, DmsPreApprovalRequestDetailsComponent, DocumentReference,
+    LookupService, PreApprovalRequestInfoModel,
+    PreApprovalRequestStatusEnum
+} from 'dms-web-shared';
+import { PreApprovalRequestService } from '../services/preapprovalrequest.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { MessageService as ToastService } from 'primeng/api';
+import { TokenStorageService } from '../services/tokenstorage.service';
+import * as moment from 'moment';
+import { takeUntil } from 'rxjs/operators';
+
+
+@Component({
+    selector: 'preapprovalrequest',
+    templateUrl: 'preapprovalrequest.component.html',
+    styleUrls: ['preapprovalrequest.component.scss'],
+    standalone: false
+})
+
+export class PreApprovalRequestComponent extends BaseComponent implements OnInit {
+    preApprovalRequest: PreApprovalRequestInfoModel = new PreApprovalRequestInfoModel();
+    applicationId: number = 0;
+    designeeTypeId: number | undefined | null = 0;
+    form: FormGroup | undefined | null;
+    isReadOnly: boolean | undefined | null = false;
+    isGroup3 = false;
+    isAovGroup = false;
+    isAdministrativePreapproval = false;
+    isAdminPreApproval = false;
+    designeeTypeEnum: typeof DesigneeTypeEnum = DesigneeTypeEnum;
+    display24HoursMessage = false;
+    previousUrl: string = '';   
+    actionButtons: ActionButton[] = [];
+    isViewOnlyPage = false;
+    @ViewChildren(DmsPreApprovalRequestDetailsComponent) dmsPreApprovalRequestDetailsComponent: any;
+
+    constructor(private preApprovalRequestService: PreApprovalRequestService,
+                private router: Router,
+                private location: Location,
+                private storageService: TokenStorageService,
+                private route: ActivatedRoute,
+                private toastService: ToastService,
+                private cryptoService: CryptoService,
+                private lookupService: LookupService) { super(); }
+
+    public static buildModel(form: FormGroup, model: PreApprovalRequestInfoModel) {
+        DmsPreApprovalRequestDecision.buildModel(form, model);
+    }
+
+    public static buildForm(model: PreApprovalRequestInfoModel, isReadOnly: boolean, isGroup3: boolean, canSubmit: boolean) {
+        const form: any = new FormBuilder().group({
+            uploadId: [{ value: '', disabled: true }, []],
+            preApprovalDecisionFormGroup: DmsPreApprovalRequestDecision.buildForm(model, isReadOnly, isGroup3, canSubmit)
+        });
+        if (model.otherPreApprovalRequest) {
+            form.addControl('preApprovalFormGroup', DmsPreApprovalRequestDetailsComponent.buildForm(model, true));
+        }
+        return form;
+    }
+
+    get preApprovalFormGroup() {
+        return this.form!.get('preApprovalFormGroup') as FormGroup;
+    }
+
+    get preApprovalDecisionFormGroup() {
+        return this.form!.get('preApprovalDecisionFormGroup') as FormGroup;
+    }
+
+
+    async ngOnInit() {
+        await this.lookupService.populateLookupData()
+        let preApprovalRequestId: number = 0;        
+        this.route.params.pipe(takeUntil(this.destroying$)).subscribe(async p => {
+            preApprovalRequestId = +(await this.cryptoService.decrypt(p['preApprovalRequestId'])) || 0;
+            this.route.queryParams.pipe(takeUntil(this.destroying$)).subscribe(params => {
+                if (params['isViewOnlyPage']) {
+                    this.isViewOnlyPage = params['isViewOnlyPage'].toLowerCase() === 'true';
+                } else if (params['newTab']) {
+                    this.isViewOnlyPage = params['newTab'].toLowerCase() === 'true';
+                }
+            });
+            this.preApprovalRequestService.getPreApprovalRequest(preApprovalRequestId).pipe(takeUntil(this.destroying$)).subscribe(result => {
+                this.preApprovalRequest = result;
+                this.isGroup3 = [DesigneeTypeEnum.APD, DesigneeTypeEnum.TCE, DesigneeTypeEnum.DADE].includes(result.designeeInfo?.typeId!);
+                this.isAovGroup = result.designeeInfo?.typeId == DesigneeTypeEnum.DCTOE;
+                this.isAdministrativePreapproval = this.isGroup3 && !!this.preApprovalRequest.categoryId;
+                this.display24HoursMessage = (this.isGroup3 || this.isAovGroup ) && this.preApprovalRequest.isLessThan24Hours!;
+                this.isAdminPreApproval = (this.preApprovalRequest.categoryId !== 0 && this.preApprovalRequest.categoryId !== null);
+                if (this.preApprovalRequest.documentReference === null) {
+                    this.preApprovalRequest.documentReference = new DocumentReference();
+                }
+                this.designeeTypeId = result.designeeInfo?.typeId;
+                const prStatus : number [] = [PreApprovalRequestStatusEnum.Completed, PreApprovalRequestStatusEnum.Rejected, PreApprovalRequestStatusEnum.Cancelled];
+                this.isReadOnly = (this.isAovGroup && prStatus.includes(this.preApprovalRequest.statusId!)) || (this.isAovGroup && this.isViewOnlyPage) ? true : result.isPreApprovalMsDecisionReadOnly;            
+                this.form = PreApprovalRequestComponent.buildForm(this.preApprovalRequest, this.isReadOnly!, (this.isGroup3 || this.isAovGroup), this.canSubmit!);
+                this.preApprovalDecisionFormGroup.get('isApproved')?.valueChanges.pipe(takeUntil(this.destroying$)).subscribe((value: boolean) => {
+                    const controlName = [DesigneeTypeEnum.DARF, DesigneeTypeEnum.DMIR].includes(this.preApprovalRequest.designeeTypeId!) ? 'approverJusitification' : 'approverComment';
+                    if (value === undefined || value === null || value) {
+                        this.preApprovalDecisionFormGroup.get(controlName)
+                            ?.setValidators([]);
+                    } else {
+                        this.preApprovalDecisionFormGroup.get(controlName)
+                            ?.setValidators([Validators.required]);
+                    }
+                    this.preApprovalDecisionFormGroup.get(controlName)?.updateValueAndValidity();
+                });
+                this.preApprovalDecisionFormGroup.get('geoMsIsApprove')?.valueChanges.pipe(takeUntil(this.destroying$)).subscribe((value: boolean) => {
+                    if (value === undefined || value === null || value) {
+                        this.preApprovalDecisionFormGroup.get('geoMsJustification')?.setValidators([]);
+                        this.preApprovalDecisionFormGroup.get('geoExpansionSelectedOfficeId')?.setValidators([Validators.required]);
+                        this.preApprovalDecisionFormGroup.get('geoExpansionSelectedApproverId')?.setValidators([Validators.required]);
+
+                    } else {
+                        this.preApprovalDecisionFormGroup.get('geoMsJustification')?.setValidators([Validators.required]);
+                        this.preApprovalDecisionFormGroup.get('geoExpansionSelectedOfficeId')?.setValidators([]);
+                        this.preApprovalDecisionFormGroup.get('geoExpansionSelectedApproverId')?.setValidators([]);
+
+                    }
+                    this.preApprovalDecisionFormGroup.get('geoMsJustification')?.updateValueAndValidity();
+                    this.preApprovalDecisionFormGroup.get('geoExpansionSelectedOfficeId')?.updateValueAndValidity();
+                    this.preApprovalDecisionFormGroup.get('geoExpansionSelectedApproverId')?.updateValueAndValidity();
+                });
+
+                this.actionButtons = this.lookupService.getActionButtons().map(a => {
+                    switch (a.eventKey) {
+                        case ButtonActionsEnum.Back:
+                            a.isDisplay = (!this.isViewOnlyPage || !this.isReadOnly);
+                            a.title = 'Go back to previous page';
+                            a.displayOrder = 1;
+                            break;
+                        case ButtonActionsEnum.Save:
+                            a.isDisplay = false;
+                            break;
+                        case ButtonActionsEnum.Submit:
+                            a.isDisplay = this.canSubmit!;
+                            a.title = 'Submit information';
+                            a.displayOrder = 2;
+                            break;
+                        case ButtonActionsEnum.Cancel:
+                            a.isDisplay = (!this.isViewOnlyPage || !this.isReadOnly);
+                            a.title = 'Go to Home page';
+                            a.displayOrder = 4;
+                            break;
+                    }
+                    return a;
+                });
+                if (this.isViewOnlyPage) {
+                    this.actionButtons.push(new ActionButton('Close', 'Close', 'Close',
+                        (this.isReadOnly!), false, 5, 'fa fa-window-close'));
+                }
+                this.actionButtons.push(new ActionButton('Print', 'Print', 'print',
+                    true, false, 6, 'fa fa-print'));
+        });
+     });
+    }
+
+    actionButtonClick(eventKey: string) {
+        switch (eventKey) {
+            case ButtonActionsEnum.Print:
+                this.print();
+                break;
+            case ButtonActionsEnum.Cancel:
+                this.goToHomePage();
+                break;
+            case ButtonActionsEnum.Back:
+                this.location.back();
+                break;
+            case 'Close':
+                this.redirect();
+                break;
+            case ButtonActionsEnum.Submit:
+                this.submit();
+                break;
+        }
+    }
+
+    submit() {
+        this.form!.markAllAsTouched();
+        this.preApprovalRequest.userId = this.storageService.getUserId()!;
+        this.preApprovalRequest.approvedBy = (this.storageService.getAuthenticatedUser()!.roles && this.storageService.getAuthenticatedUser()!.roles.length > 0 
+                                                ? this.storageService.getAuthenticatedUser()!.roles[0].id : null)??0;
+
+        if (this.form!.valid) {
+            PreApprovalRequestComponent.buildModel(this.preApprovalDecisionFormGroup, this.preApprovalRequest);
+            this.preApprovalRequestService.saveMsPreApprovalRequestDecision(this.preApprovalRequest).subscribe({
+                next: () => {
+                    if (!this.isGroup3 && !this.isAovGroup) {
+                        this.dmsPreApprovalRequestDetailsComponent.first.uploadControl?.fileUpload()
+                        .pipe(takeUntil(this.destroying$))
+                        .subscribe({
+                            next: () => { 
+                                this.toastService.add({ key: 'dms', severity: 'success', summary: 'Success Message', detail: 'submitted successfully!' });
+                                this.goToHomePage();
+                            },
+                            error: () => { 
+                                this.toastService.add({ 
+                                key: 'dms', 
+                                severity: 'error', 
+                                summary: 'Error Message', 
+                                detail: 'Upload Document failed.'});  
+                                }
+                        });
+                    } else {
+                        this.toastService.add({ key: 'dms', severity: 'success', summary: 'Success Message', detail: 'submitted successfully!' });
+                        this.goToHomePage();
+                    }
+                },
+                error: () => {
+                    this.toastService.add({ key: 'dms', severity: 'error', summary: 'Error Message', detail: 'Request failed.' });
+                }
+            });
+        }
+    }
+    goToHomePage() {
+        this.router.navigate(['/home']);
+    }
+    redirect() {
+        if (this.isReadOnly && (this.designeeTypeId === DesigneeTypeEnum.DMIR || this.designeeTypeId === DesigneeTypeEnum.DARF
+            || this.designeeTypeId === DesigneeTypeEnum.TCE || this.designeeTypeId === DesigneeTypeEnum.APD
+            || this.designeeTypeId === DesigneeTypeEnum.DADE || this.designeeTypeId === DesigneeTypeEnum.DCTOE)) {
+            window.close();
+        }
+    }     
+    closeDialog() {
+        this.display24HoursMessage = false;
+    }
+    get canSubmit() {
+        if (this.isViewOnlyPage) {
+            return false;
+        }
+        if (this.isReadOnly && (!this.isGroup3 || this.preApprovalRequest.isMsReviewedAutoPreApproval)) {
+            return false;
+        }
+        if (this.isReadOnly && this.isGroup3 && [PreApprovalRequestStatusEnum.Completed, PreApprovalRequestStatusEnum.Cancelled , PreApprovalRequestStatusEnum.Rejected].includes(this.preApprovalRequest.statusId!)) {
+            return false;
+        }
+        // check if currentUserOfficeRoleId is Pre Approval Approve Task userofficeRole
+        const currentUserOfficeRoleIds = this.storageService.getCurrentUserOfficeRoles()!;
+        return currentUserOfficeRoleIds.some(a => a == this.preApprovalRequest.managingSpecialist) || (this.preApprovalRequest.decisionTaskUserOfficeRoleIds && this.preApprovalRequest.decisionTaskUserOfficeRoleIds.some(a => currentUserOfficeRoleIds!.some(b => b == a)));
+    }
+    print() {
+        window.print();
+    }
+}
