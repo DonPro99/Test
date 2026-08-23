@@ -1,8 +1,1 @@
-"testCheckInformation": {
-  "isAdminPeGenFPE": true,
-  "isAdminPeGenMCE": false,
-  "isAdminPeGenGIE": false,
-  "isAdminPeGenFIRE": false,
-  "isAdminPeGenBAE": false,
-  ...
-}
+const anyChecked = codes.some((code) => group.get(code)?.value === true);
