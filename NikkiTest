@@ -1,6 +1,8 @@
-model.isAdminPeGenFPE = value.isAdminPeGenFPE;
-model.isAdminPeGenMCE = value.isAdminPeGenMCE;
-model.isAdminPeGenGIE = value.isAdminPeGenGIE;
-model.isAdminPeGenFIRE = value.isAdminPeGenFIRE;
-model.isAdminPeGenBAE = value.isAdminPeGenBAE;
-
+"testCheckInformation": {
+  "isAdminPeGenFPE": true,
+  "isAdminPeGenMCE": false,
+  "isAdminPeGenGIE": false,
+  "isAdminPeGenFIRE": false,
+  "isAdminPeGenBAE": false,
+  ...
+}
