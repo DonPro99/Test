@@ -1,1 +1,10 @@
 while testing the post activity page today, I hit a NullPointerException/ArgumentNullException on my local internal setup, coming from LookupService.LookupValues() inside GetPostActivityList()
+
+
+SELECT TOP 20 pa.Id AS PostActivityId, pa.StatusId, a.DesigneeTypeId, u.UserName
+FROM PostActivities pa
+JOIN PreApprovalRequests pr ON pa.PreApprovalRequestId = pr.Id
+JOIN Applications a ON pr.ApplicationId = a.Id
+JOIN Users u ON a.UserId = u.Id
+WHERE a.DesigneeTypeId = 24  -- DPE, adjust to actual enum value
+ORDER BY pa.Id DESC
