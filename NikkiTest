@@ -1,10 +1,1 @@
-private static atLeastOneAdminPeGenAuthRequired(): (control: AbstractControl) => { [key: string]: boolean } | null {
-  return (group: AbstractControl) => {
-    if (group.get('isOtherAdminActivity')?.value === true) {
-      return null; // "Other" satisfies the requirement on its own
-    }
-    const codes = ['isAdminPeGenFPE', 'isAdminPeGenMCE', 'isAdminPeGenGIE', 'isAdminPeGenFIRE', 'isAdminPeGenBAE'];
-    const anyChecked = codes.some((code) => group.get(code)?.value === true);
-    return anyChecked ? null : { adminPeGenAuthRequired: true };
-  };
-}
+ng.getComponent(document.querySelector('dms-test-check-information')).form.errors
