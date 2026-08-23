@@ -1,3 +1,1667 @@
-url = $"/postactivity/afsgroups/{postActivity.Id}/false/false"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using Dms.Core.EntityFramework.Data;
+using Dms.Core.EntityFramework.Model.Lookup;
+using Dms.Core.Extensions;
+using System.Globalization;
+using Dms.Core.Utils;
+using Dms.Services.Interface.PlanningPage;
+using Dms.Services.ViewModel.Activity;
+using Dms.Services.ViewModel.Lookup;
+using Dms.Services.ViewModel.PlanningPage;
+using Newtonsoft.Json;
+using ActivityEntity = Dms.Core.EntityFramework.Model.Activity;
+using Dms.Core.EntityFramework.Model.Activity;
+using Dms.Core.EntityFramework.Model.Planning;
+using Dms.Services.Interface.Shared;
+using Microsoft.EntityFrameworkCore;
+using Dms.Services.ViewModel.Question;
+using Dms.Services.Interface.Lookup;
+using Dms.Core.EntityFramework.Model.Selection;
+using Microsoft.Extensions.Options;
+using Dms.Services.ViewModel.Report;
+using Dms.Services.Interface.Cloa;
+using System.Security.Claims;
+using Dms.Core.EntityFramework.Model.Audit;
+using Dms.Core.EntityFramework.Model.Cloa;
+using Dms.Services.ViewModel.Shared;
+using Dms.Core.EntityFramework.Model.Shared;
+using Dms.Services.Interface.Security;
+using Dms.Services.Extensions;
+using Dms.Services.ViewModel.Oda;
+using System.Diagnostics.CodeAnalysis;
 
-ActivityPaperWork gets constructed — likely in PlanningPageService.cs
+namespace Dms.Services.Implementation.PlanningPage
+{
+    public class PlanningPageService(DmsContext context, IDocumentService documentService,
+                                ILookupService lookupService, IOptions<ReportSettings> reportSettings,
+                                ICloaService cloaService, ClaimsPrincipal claimsPrincipal, ITokenService tokenService
+                                ) : IPlanningPageService
+    {
+        private readonly DmsContext _context = context;
+        private readonly IDocumentService _documentService = documentService;
+        private readonly ILookupService _lookupService = lookupService;
+        private readonly IOptions<ReportSettings> _reportSettings = reportSettings;
+        private readonly ICloaService _cloaService = cloaService;
+        private readonly ClaimsPrincipal _claimsPrincipal = claimsPrincipal;
+        private readonly ITokenService _tokenService = tokenService;
+
+        public DesigneeInfoViewModel DesigneeInfomation(int applicationId)
+        {
+            var cloaId = _context.Applications
+                            .Where(a => a.Id == applicationId)
+                            .Select(a => a.Cloas.Any(c => c.CloaStatusId == (int)CloaStatusEnum.Active || c.CloaStatusId == (int)CloaStatusEnum.Terminated)
+                                    ? a.Cloas
+                                        .Where(c => c.CloaStatusId == (int)CloaStatusEnum.Active || c.CloaStatusId == (int)CloaStatusEnum.Terminated)
+                                        .OrderByDescending(c => c.Id)
+                                        .Select(c => c.Id)
+                                        .FirstOrDefault()
+                                    : a.Cloas
+                                        .OrderByDescending(c => c.Id)
+                                        .Select(c => c.Id)
+                                        .FirstOrDefault()).First();
+
+            DesigneeInfoViewModel model = BuildInformation(cloaId);
+
+            if (model.Type.Id == (int)DesigneeTypeEnum.DERT || model.Type.Id == (int)DesigneeTypeEnum.DERY)
+            {
+                model.ProjectTeamMemberIds = _context.ProjectTeamManagers
+                .Where(t => t.Project.ApplicationId == applicationId)
+                .Select(s => s.UserOfficeRole.UserId).Distinct().ToArray();
+
+                var officeId = _context.Applications.Where(app => app.Id == applicationId).First().OfficeId;
+                model.ProjectTeamMembers = _context.ProjectTeamManagers
+                    .Where(p => p.UserOfficeRole.OfficeRole.OfficeId == officeId && p.UserOfficeRole.UserId == _tokenService.GetUserId())
+                    .Where(p => p.Project.ProjectStatusId == 1 || (p.Project.ProjectStatusId == 2 && p.Project.ModifiedDate <= DateTime.Today.AddMonths(6)))
+                    .Select(p => new
+                    {
+                        Id = p.Project.Application.Id,
+                        Name = p.CreatedUser.ToFullName(),
+                        DesigneeType = p.Project.Application.DesigneeType.Code,
+                        Code = p.Project.Application.Cloas.OrderByDescending(c => c.Id).First().DisciplineType.Name
+                    }).AsEnumerable().OrderBy(a => a.Name).Distinct()
+                    .Select(p => new BaseLookupViewModel
+                    {
+                        Id = p.Id,
+                        Name = p.Name + ", " + p.DesigneeType,
+                        Code = p.Code
+                    }).ToList();
+            }
+            return model;
+        }
+
+        [SuppressMessage("SonarQube", "S3776:Cognitive Complexity of methods should not be too high", 
+        Justification = "Complexity is aligned with business filtering requirements. Method is isolated and readable. Refactoring would fragment related logic without meaningful improvement")]
+        private DesigneeInfoViewModel BuildInformation(int cloaId)
+        {
+            var recordNotes = BuildRecodNotes(cloaId);
+            var firstDayOfLastQuarter = DateTime.Today.FirstDayOfLastQuarter();
+            var lastDayOfLastQuarter = DateTime.Today.LastDayOfLastQuarter();
+            var startDateOfCurrentFiscalYear = DateTime.Today.GetFiscalYearStartDate();
+            var endDateOfCurrentFiscalYear = DateTime.Today.GetFiscalYearEndtDate();
+            var threeMonthDueDate = DateTime.Today.Date.AddDays(90);
+            var addressTypes = new List<int?>()
+            {
+                (int) AddressTypeEnum.ProductionApprovalHolder, (int) AddressTypeEnum.Supplier,
+                (int) AddressTypeEnum.WorkAddress
+            };
+            var darfAddressTypes = new List<int?>()
+                {(int) AddressTypeEnum.WorkAddress, (int) AddressTypeEnum.PhysicalAddress};
+            var model = _context.Cloas.Where(c => c.Id == cloaId)
+                .Select(cloa => new
+                {
+                    ApplicationDueDates = cloa.Application.ApplicationDueDates
+                        .Where(a => ((a.Activity.ModuleId == (int)ProcessTypeEnum.CorrectiveAction ||
+                                      a.Activity.ModuleId == (int)ProcessTypeEnum.Suspension) &&
+                                     a.Activity.StatusId != (int)ActivityStatusEnum.Cancelled &&
+                                     a.Activity.StatusId != (int)ActivityStatusEnum.Completed &&
+                                     a.Activity.StatusId != (int)ActivityStatusEnum.Saved) &&
+                                    a.DueDate <= threeMonthDueDate)
+                        .Select(a => new LinkViewModel
+                        {
+                            Value = a.DueDate.DateToString(),
+                            DisplayName = "Corrective Action",
+                            Code = "CA",
+                            IsLegacyUrl = a.DueDate < DateTime.Now.Date
+                        }),
+                    CloaDueDates = cloa.CloaDueDate,
+                    PersonalAddresseIds = cloa.Application.User.Addresses
+                    .Where(a => new int?[]
+                            {(int) AddressTypeEnum.PhysicalAddress, (int) AddressTypeEnum.MailingAddress}
+                        .Contains(a.Address.AddressTypeId)).Select(add => add.Id).ToArray(),
+                    DesigneeLocationIds = cloa.CloaAddresses
+                        .Where(a => cloa.Application.DesigneeTypeId == (int)DesigneeTypeEnum.DARF
+                            ? darfAddressTypes.Contains(a.Address.AddressTypeId)
+                            : addressTypes.Contains(a.Address.AddressTypeId)).Select(add => add.Id).ToArray(),
+                    DisciplineType = cloa.DisciplineType,
+                    BlackBoardUserInfoCompanyInformation = cloa.Application.User.BlackBoardUserInfo != null && cloa.Application.User.BlackBoardUserInfo.FormData != null ? 
+                                        JsonConvert.DeserializeObject<UserOdaDesignationsViewModel>(cloa.Application.User.BlackBoardUserInfo.FormData)
+                                        : new UserOdaDesignationsViewModel()
+        ,
+                    Select =
+                        new DesigneeInfoViewModel
+                        {
+                            Id = cloa.Application.UserId,
+                            DesigneeUserOfficeRoleId = cloa.Application.User.UserOfficeRoles.First(u => u.OfficeRoleId == (int)GlobalEnum.DesigneeOfficeRoleId).Id,
+                            Name = cloa.ProfileVersion.ToIncludeTitleFullName(),
+                            BirthDate = cloa.Application.User.Profile.DateOfBirth.DateToString(),
+                            Number = cloa.Application.User.UserSecurityInfo.DesigneeNumber,
+                            Status = new BaseLookup
+                            {
+                                Id = cloa.CloaStatusId,
+                                Name = cloa.CloaStatus.Name
+                            },
+                            Type = new BaseLookupViewModel
+                            {
+                                Id = cloa.Application.DesigneeType.Id,
+                                Name = cloa.Application.DesigneeType.Name,
+                                Code = cloa.Application.DesigneeType.Code,
+                            },
+                            DesigneeGroupId = cloa.Application.DesigneeType.DesigneeGroupId,
+                            HasDisplay = cloa.Application.User.Profile.PhotoId != null,
+                            PhotoId = cloa.Application.User.Profile.PhotoId,
+                            GenderId = cloa.Application.User.Profile.GenderId.HasValue
+                                ? cloa.Application.User.Profile.GenderId.Value
+                                : 0,
+                            PhoneNumber = cloa.Application.User.Profile.Phone,
+                            IsDomestic = cloa.Application.User.Profile.IsDomestic.HasValue
+                                ? cloa.Application.User.Profile.IsDomestic.Value
+                                : false,
+                            EmailAddress = cloa.Application.User.EmailAddress,
+                            CertificateNumber = string.IsNullOrWhiteSpace(cloa.CertificateNumber) ? string.Empty : cloa.CertificateNumber.PadLeft(9, '0'),
+                            CertificateIssuedDate = cloa.CertificateIssuedDate.DateToString(),
+                            MedicalCertificationDate = cloa.MedicalCertificationDate.DateToString(),
+                            Ftn = string.IsNullOrWhiteSpace(cloa.Ftn) ? string.Empty : cloa.Ftn.PadLeft(8, '0'),
+                            PreApprovalStatus = !cloa.Application.PreApprovalRequests.Any(p =>
+                                p.IsPreApprovalOnHold.HasValue && p.IsPreApprovalOnHold.Value),
+                            CloaId = cloa.Id,
+                            ApplicationId = cloa.ApplicationId,
+                            ExpirationDate = cloa.ExpirationDate.ToShortDateString(),
+                            TerminationDate = cloa.TerminationDate.DateToString(),
+                            AppointmentDate = cloa.AppointmentDate.ToShortDateString(),
+                            CloaUpdatedDate = cloa.CreatedDate.ToShortDateString(),
+                            Office = new BaseLookupViewModel
+                            {
+                                Id = cloa.OfficeId,
+                                Code = ((int)DesigneeTypeEnum.DERT == cloa.Application.DesigneeTypeId || (int)DesigneeTypeEnum.DERY == cloa.Application.DesigneeTypeId) ? "" : cloa.Office.Code,
+                                Name = cloa.Office.Name
+                            },
+                            ManagingSpecialist = new BaseLookupViewModel
+                            {
+                                Id = cloa.MsUserOfficeRole.Id,
+                                Name = cloa.MsUserOfficeRole.User.Profile.ToFullName(),
+                                Code = cloa.MsUserOfficeRole.OfficeRole.Role.Code,
+                            },
+                            AppointingOfficial = new BaseLookupViewModel
+                            {
+                                Id = cloa.AppointingUserOfficeRole.Id,
+                                Name = cloa.AppointingUserOfficeRole.User.Profile.ToFullName(),
+                                Code = cloa.AppointingUserOfficeRole.OfficeRole.Role.Code,
+                            },
+                            PerformanceEvaluationDueDate =
+                                cloa.CloaDueDate.PerformanceEvaluationDueDate.DateToNoneString(),
+                            RecordNotes = recordNotes,
+                            DesigneeClassTypeId = cloa.DesigneeClassTypeId,
+                            AovCompanyTypeName = cloa.AovCompanyTypeId != null ? cloa.AovCompanyType.Name
+                            : string.Empty
+                        }
+                })
+                .AsEnumerable()
+                .Select(divm =>
+                {
+                    divm.Select.PersonalAddresses = _context.AddressReferences
+                                                        .Where(x => divm.PersonalAddresseIds.Contains(x.Id))
+                                                        .Where(x => x.ApplicationId == null)
+                                                        .Select(a => a.Address)
+                                                        .Select(AddressViewModel.Projection)
+                                                        .ToList();
+                    divm.Select.DesigneeLocations = _context.AddressReferences
+                                                        .Where(x => divm.DesigneeLocationIds.Contains(x.Id))
+                                                        .Select(a => a.Address)
+                                                        .Select(AddressViewModel.Projection)
+                                                        .ToList();
+                    divm.Select.DisciplineType = divm.DisciplineType?.Name;
+                    divm.Select.SelectedOdaNames = divm.BlackBoardUserInfoCompanyInformation!=null && divm.BlackBoardUserInfoCompanyInformation.OdaCompanies != null ?
+                           string.Join(',',divm.BlackBoardUserInfoCompanyInformation.OdaCompanies.Select(it => it.OdaOrganizationName).ToList()).ToString()
+                           : string.Empty;
+
+                    (DateTime? trainingDueDate, DateTime? seminarDueDate) = GetNextTrainingDueDate(divm.Select.Id, divm.Select.Type.Id, divm.Select.ApplicationId);
+                    divm.Select.TrainingDueDate = trainingDueDate?.DateToString();
+                    divm.Select.SeminarDueDate = seminarDueDate?.DateToString();
+                    divm.Select.DueItems = !(new int[] {(int)CloaStatusEnum.Terminated, (int)CloaStatusEnum.Expired}).Contains(divm.Select.Status.Id) ? BuildDueDates(divm.ApplicationDueDates, divm.CloaDueDates, threeMonthDueDate, divm.Select.DesigneeGroupId, divm.Select.TrainingDueDate, divm.Select.SeminarDueDate): [];
+
+                    return divm.Select;
+                })
+                .First();
+
+            model.FiscalYearPostActivityCount = _context.PreApprovalRequests
+                            .Where(par => par.Application.Id == model.ApplicationId)
+                            .Count(p => p.PostActivities.OrderByDescending(po => po.Id).FirstOrDefault().StatusId ==
+                           (int)PreApprovalRequestStatusEnum.Completed &&
+                           p.PostActivities.OrderByDescending(po => po.Id).FirstOrDefault()
+                           .CompletedDate.HasValue &&
+                           p.PostActivities.OrderByDescending(po => po.Id).FirstOrDefault()
+                           .CompletedDate >= startDateOfCurrentFiscalYear &&
+                           p.PostActivities.OrderByDescending(po => po.Id).FirstOrDefault()
+                           .CompletedDate <= endDateOfCurrentFiscalYear);
+            model.LastQtrPostActivityCount = _context.PreApprovalRequests
+                                .Where(par => par.Application.Id == model.ApplicationId)
+                                .Count(p => p.PostActivities.OrderByDescending(po => po.Id).FirstOrDefault()
+                                                .CompletedDate >= firstDayOfLastQuarter &&
+                                            p.PostActivities.OrderByDescending(po => po.Id).FirstOrDefault()
+                                                .CompletedDate <= lastDayOfLastQuarter &&
+                                            p.PostActivities.OrderByDescending(po => po.Id).FirstOrDefault().StatusId ==
+                                            (int)PreApprovalRequestStatusEnum.Completed);
+            model.LastQtrPreApprovalCount = _context.PreApprovalRequests
+                                .Where(par => par.Application.Id == model.ApplicationId)
+                                .Count(p => p.SubmittedDate >= firstDayOfLastQuarter &&
+                                            p.SubmittedDate <= lastDayOfLastQuarter &&
+                                            p.StatusId == (int)PreApprovalRequestStatusEnum.Completed);
+
+            model.FiscalYear81103Count = _context.FormItems
+                        .Where(par => par.Application.Id == model.ApplicationId)
+                        .Count(p => p.CreatedDate >= startDateOfCurrentFiscalYear &&
+                                    p.CreatedDate <= endDateOfCurrentFiscalYear &&
+                                    p.FormStatusId == (int)FormStatusEnum.Submitted &&
+                                    p.FormTypeId == (int)FormTypeEnum.E81103 &&
+                                    (
+                                        p.FormItemTypeId == (int)FormItemTypeEnum.Project ||
+                                        p.FormItemTypeId == (int)FormItemTypeEnum.Repair ||
+                                        p.FormItemTypeId == (int)FormItemTypeEnum.Alteration
+                                    ));
+            model.FiscalYear81103ProjectCount = _context.FormItems
+                        .Where(par => par.Application.Id == model.ApplicationId)
+                        .Count(p => p.CreatedDate >= startDateOfCurrentFiscalYear &&
+                                    p.CreatedDate <= endDateOfCurrentFiscalYear &&
+                                    p.FormStatusId == (int)FormStatusEnum.Submitted &&
+                                    p.FormTypeId == (int)FormTypeEnum.E81103 &&
+                                    p.FormItemTypeId == (int)FormItemTypeEnum.Project
+                               );
+            model.FiscalYear81103RepairCount = _context.FormItems
+                        .Where(par => par.Application.Id == model.ApplicationId)
+                        .Count(p => p.CreatedDate >= startDateOfCurrentFiscalYear &&
+                                    p.CreatedDate <= endDateOfCurrentFiscalYear &&
+                                    p.FormStatusId == (int)FormStatusEnum.Submitted &&
+                                    p.FormTypeId == (int)FormTypeEnum.E81103 &&
+                                    p.FormItemTypeId == (int)FormItemTypeEnum.Repair
+                               );
+            model.FiscalYear81103AlterationCount = _context.FormItems
+                        .Where(par => par.Application.Id == model.ApplicationId)
+                        .Count(p => p.CreatedDate >= startDateOfCurrentFiscalYear &&
+                                    p.CreatedDate <= endDateOfCurrentFiscalYear &&
+                                    p.FormStatusId == (int)FormStatusEnum.Submitted &&
+                                    p.FormTypeId == (int)FormTypeEnum.E81103 &&
+                                    p.FormItemTypeId == (int)FormItemTypeEnum.Alteration
+                               );
+
+            model.FiscalYearNon81103Count = _context.FormItems
+                        .Where(par => par.Application.Id == model.ApplicationId)
+                        .Count(p => p.CreatedDate >= startDateOfCurrentFiscalYear &&
+                                    p.CreatedDate <= endDateOfCurrentFiscalYear &&
+                                    p.FormStatusId == (int)FormStatusEnum.Submitted &&
+                                    p.FormTypeId == (int)FormTypeEnum.Non81103
+                               );
+
+            model.DesigneeClassType = model.DesigneeClassTypeId != null ? ((DesigneeClassTypeEnum)model.DesigneeClassTypeId).ToDescription() : string.Empty;
+            MyOtherDesigneeTypes(model);
+            model.Mou = _documentService.GetDocumentsByRef((int)DocumentReferenceEnum.MouDocument, model.ApplicationId, null);
+            // Failing while included in main query
+            var cloaFunctionCodes = _context.CloaFunctionCodes
+                                            .Include(c => c.FunctionCode)
+                                            .Include(r => r.CloaFunctionCodeTypeRatings).ThenInclude(m => m.TypeRating)
+                                            .Include(r => r.CloaFunctionCodeMakeModels).ThenInclude(m => m.MakeModel)
+                                            .Where(cf => cf.CloaId == cloaId && cf.IsActive && cf.FunctionCodeId != (int)FunctionCodeEnum.DPERPE && cf.FunctionCodeId != (int)FunctionCodeEnum.SAERPE)
+                                            .OrderBy(c => c.FunctionCode.SortOrder)
+                                            .ToArray();
+            model.Authorizations = string.Join(", ", cloaFunctionCodes.SelectMany(cf =>
+                                                model.Type.Id == (int)DesigneeTypeEnum.TCE && cf.CloaFunctionCodeMakeModels != null && cf.CloaFunctionCodeMakeModels.Any()
+                                                ? cf.CloaFunctionCodeMakeModels.Select(m => cf.FunctionCode.Name.Replace("M/M/S", m.MakeModel.Code)).Distinct().ToArray()
+                                                : model.Type.Id != (int)DesigneeTypeEnum.TCE && cf.CloaFunctionCodeTypeRatings != null && cf.CloaFunctionCodeTypeRatings.Any()
+                                                ? cf.CloaFunctionCodeTypeRatings.Select(m => cf.FunctionCode.Name.Replace("XXXX", m.TypeRating.Name)).Distinct().ToArray()
+                                                : new List<string>{
+                                                                cf.FunctionCode.Name
+                                                }.ToArray()).Distinct());
+            if (model.Type.Id == (int)DesigneeTypeEnum.DERT || model.Type.Id == (int)DesigneeTypeEnum.DERY)
+            {
+                var disciplineFarparts = _context.CloaDisciplineFarParts
+                                        .Include(df => df.DisciplineFarPartType).ThenInclude(df => df.DisciplineType)
+                                        .Where(cf => cf.CloaId == cloaId)
+                                        .Select(cf => new
+                                        {
+                                            DisciplineType = model.Type.Code + " - " + cf.DisciplineFarPartType.DisciplineType.Name,
+                                            FarPartType = cf.DisciplineFarPartType.FarPartType.Name,
+                                        })
+                                        .OrderBy(c => c.FarPartType)
+                                        .ToArray();
+                model.Authorizations = disciplineFarparts.Length > 0 ? disciplineFarparts.Select(cf => cf.DisciplineType).Distinct().First() + '/' + string.Join(",", disciplineFarparts.Select(cf => cf.FarPartType.ToString())) : null;
+            }
+
+            if (model.Type.Id == (int)DesigneeTypeEnum.DCTOE)
+            {
+                var responseQuery = _context.ApplicationResponses.Where(ar => (ar.ApplicationId == model.ApplicationId) && ar.AnswerId.HasValue)
+                        .Include(ar => ar.QuestionAnswer)
+                        .Select(a => new ResponseViewModel
+                        {
+                            Id = a.Id,
+                            AnswerId = a.AnswerId,
+                            QuestionId = a.QuestionAnswer.QuestionId,
+                            ResponseText = a.Response,
+                            ApplicationVersionId = a.ApplicationVersionId,
+                            TaskId = a.TaskId
+                        });
+                var sectionIds = new List<int>();
+                sectionIds.Add((int)Sectionsenum.DesigneeQuestions);
+
+            }
+
+            var linkedAccount = _context.UserLinkedAccounts.Where(u => u.IsActive).Include(u => u.OldUser).ThenInclude(u => u.Applications).FirstOrDefault(u => u.UserId == model.Id);
+
+            if (linkedAccount != null)
+            {
+                var linkedAmeAccountApplication = linkedAccount.OldUser.Applications.FirstOrDefault(a => a.DesigneeTypeId == (int)DesigneeTypeEnum.AME);
+
+                if (linkedAmeAccountApplication != null)
+                {
+                    model.OldApplicationId = linkedAmeAccountApplication.Id;
+                }
+            }
+
+            return model;
+        }
+
+        private (DateTime? trainingDueDate, DateTime? seminarDueDate) GetNextTrainingDueDate(int userId, int? designeeTypeId, int? applicationId)
+        {
+            var dueDate = _context.NextTrainingDueDates.Where(n => n.UserId == userId && 
+                                    (designeeTypeId == null || n.DesigneeTypeId == designeeTypeId) && 
+                                    (applicationId == null || n.ApplicationId == applicationId))
+                            .Select(n => n).FirstOrDefault();
+
+            return new (dueDate?.NextTrainingDueDate, dueDate?.NextSeminarDueDate);
+        }
+
+        [SuppressMessage("SonarQube", "S3776:Cognitive Complexity of methods should not be too high", 
+        Justification = "Complexity is aligned with business filtering requirements. Method is isolated and readable. Refactoring would fragment related logic without meaningful improvement")]
+        private List<RecordNoteViewModel> BuildRecodNotes(int cloaId)
+        {
+            var cloa = _context.Cloas
+                        .Include(c => c.Application.RecordNote)
+                        .Where(c => c.Id == cloaId)
+                        .FirstOrDefault();
+
+            var msUserId = _context.UserOfficeRoles.Where(w => w.Id == cloa.ManagingSpecialistId).Select(s => s.UserId).FirstOrDefault();
+
+            var authenticationInformation = GetAuthenticationInformation();
+            var isCurrentUserAnMs = msUserId == authenticationInformation.AuthenticatedUserId || msUserId == authenticationInformation.ImpersonatedUserId;
+
+            var recordNotes = cloa.Application.RecordNote != null && !string.IsNullOrEmpty(cloa.Application.RecordNote.Notes)
+                                    ? JsonConvert.DeserializeObject<List<RecordNoteViewModel>>(cloa.Application.RecordNote.Notes)
+                                    : new List<RecordNoteViewModel>();
+
+            var msProxies = _context.UserOfficeRoles.Where(u => u.FormData != null &&
+                                                                u.IsProxyRequestApproved.Value &&
+                                                                u.IsActive &&
+                                                                JsonExtensions.JsonIntValue(u.FormData, "$.UserOfficeRoleId") == cloa.ManagingSpecialistId).ToList();
+
+            if (msProxies.Count > 0)
+            {
+                foreach (var msProxy in msProxies)
+                {
+                    var isCurrentUserProxyMs = msProxy.UserId == authenticationInformation.AuthenticatedUserId || msProxy.UserId == authenticationInformation.ImpersonatedUserId;
+
+                    if (isCurrentUserProxyMs)
+                    {
+                        return recordNotes.Where(w => w.CreatedBy == msProxy.UserId).Select(d => { d.SortDate = string.IsNullOrWhiteSpace(d.Date) ? (DateTime?)null : DateTime.Parse(d.Date); return d; }).OrderByDescending(d => d.SortDate).ToList();
+                    }
+                }
+            }
+
+            return recordNotes.Where(w => isCurrentUserAnMs && w.CreatedBy == msUserId).Select(d => { d.SortDate = string.IsNullOrWhiteSpace(d.Date) ? (DateTime?)null : DateTime.Parse(d.Date); return d; }).OrderByDescending(d => d.SortDate).ToList();
+        }
+
+        private void MyOtherDesigneeTypes(DesigneeInfoViewModel model)
+        {
+            model.UserDesigneeList = _context.Cloas.Include(c => c.CloaDisciplineFarParts)
+                                      .Where(c => c.Application.UserId == model.Id &&
+                                                                        (c.CloaStatusId == (int)CloaStatusEnum.Active ||
+                                                                        c.CloaStatusId == (int)CloaStatusEnum.Expired ||
+                                                                        (c.CloaStatusId == (int)CloaStatusEnum.Terminated && c.TerminationDate.Value.AddDays(30) > DateTime.Now) ||
+                                                                        c.CloaStatusId == (int)CloaStatusEnum.Suspended))
+                                                                .Select(c => new LinkViewModel
+                                                                {
+                                                                    Id = c.ApplicationId,
+                                                                    DisplayName = c.Application.DesigneeTypeId == (int)DesigneeTypeEnum.TCE
+                                                                        ? $"{c.Application.DesigneeType.Code} ({c.Designator.Code})"
+                                                                      :
+                                                                      (c.Application.DesigneeTypeId == (int)DesigneeTypeEnum.DERT || c.Application.DesigneeTypeId == (int)DesigneeTypeEnum.DERY)
+                                                                      ? $"{c.Application.DesigneeType.Code} - {c.DisciplineType.Name}"
+                                                                      : c.Application.DesigneeType.Code,
+                                                                    Url = model.ApplicationId == c.ApplicationId ? string.Empty : $"/planningpage/{c.ApplicationId}",
+                                                                    HasNavigation = model.ApplicationId != c.ApplicationId
+                                                                }).ToArray();
+        }
+
+        private static IList<LinkViewModel> BuildDueDates(IEnumerable<LinkViewModel> applicationDueDates, CloaDueDate cloaDueDate, DateTime threeMonthDueDate, int designeeGroupId, string trainingDueDate, string seminarDueDate)
+        {
+            var dueItems = applicationDueDates
+                .Union(
+                [
+                    BuildDueDateLink(threeMonthDueDate, cloaDueDate.PerformanceEvaluationDueDate, "Performance Evaluation", "PE"),
+                    BuildDueDateLink(threeMonthDueDate, (trainingDueDate != null && trainingDueDate != "None" ) ? DateTime.Parse(trainingDueDate) : null, "Training", "TR"),
+                    BuildDueDateLink(threeMonthDueDate, (seminarDueDate != null && seminarDueDate != "None" ) ? DateTime.Parse(seminarDueDate) : null, "Seminar", "SM"),
+                    BuildDueDateLink(threeMonthDueDate, cloaDueDate.AnnualProfileUpdateDueDate, "Annual Request to Extend Expiration Date", "PU"),
+                    BuildDueDateLink(threeMonthDueDate, cloaDueDate.SuspensionReleaseRequestDueDate, "Suspension Release Request", "SR"),
+                    BuildDueDateLink(threeMonthDueDate, cloaDueDate.DirectObservationDueDate, "Direct Observation", "DO", cloaDueDate.WitnessingDueDate),
+                ]).ToArray();
+
+            dueItems = dueItems.Where(d => d.Value != "None").OrderBy(o => DateTime.Parse(o.Value)).ToArray();
+            switch (designeeGroupId)
+            {
+                case (int)DesigneeGroupEnum.Manufacturing:
+                    dueItems = dueItems.Where(d => d.Code != "SM").ToArray();
+                    break;
+                case (int)DesigneeGroupEnum.AFS:
+                    dueItems = dueItems.Where(d => d.Code != "SM" && d.Code != "WT").ToArray();
+                    break;
+                case (int)DesigneeGroupEnum.AME:
+                    dueItems = dueItems.Where(d => d.Code != "WT").ToArray();
+                    break;
+                case (int)DesigneeGroupEnum.Engineering:
+                    if (dueItems.Count() == 0 && trainingDueDate != null)
+                    {
+                        dueItems = dueItems.Union(new List<LinkViewModel> { BuildDueDateLink(threeMonthDueDate, DateTime.Parse(trainingDueDate, CultureInfo.InvariantCulture), "Training", "TR") }).ToArray();
+                        dueItems = dueItems.Where(d => d.Value != "None").OrderBy(o => DateTime.Parse(o.Value)).ToArray();
+                    }
+                    break;
+            }
+
+            return dueItems;
+        }
+
+        private static LinkViewModel BuildDueDateLink(DateTime threeMonthDueDate, DateTime? date1, string displayName, string code, DateTime? date2 = null)
+        {
+            var model = new LinkViewModel
+            {
+                DisplayName = displayName,
+                Code = code,
+                Value = "None",
+                IsLegacyUrl = false
+            };
+
+            if (date1.HasValue)
+            {
+                model.Value = date1.Value <= threeMonthDueDate ? date1.DateToString() : "None";
+                model.IsLegacyUrl = date1.Value < DateTime.Now.Date;
+            }
+            else if (date2.HasValue)
+            {
+                model.Value = date2 <= threeMonthDueDate ? date2.DateToString() : "None";
+                model.IsLegacyUrl = date2 < DateTime.Now.Date;
+            }
+
+            return model;
+        }
+
+
+        [SuppressMessage("SonarQube", "S3776:Cognitive Complexity of methods should not be too high", 
+        Justification = "Complexity is aligned with business filtering requirements. Method is isolated and readable. Refactoring would fragment related logic without meaningful improvement")]
+        public IList<ActivityHistoryViewModel> Activities(int applicationId, int designeeGroupId, int roleId, bool isMyDesignee)
+        {
+            BuildActivityFilters(designeeGroupId, roleId, out Expression<Func<ActivityEntity.Activity, bool>> filter, out Expression<Func<ActivityEntity.Activity, bool>> asiFilter);
+
+            var list = _context.Activities
+                                .Include(a => a.Cloa)
+                                    .ThenInclude(c => c.Application)
+                                .Include(a => a.CreatedUser)
+                                .Include(a => a.ModifiedUser)
+                                .Include(a => a.AuditPrimaryLog.ImpersonationLog)
+                            .Where(filter)
+                            .Where(asiFilter)
+                            .Where(a => a.Cloa.ApplicationId == applicationId)
+                            .Select(a => new
+                            {
+                                DesigneeUserId = a.Cloa.Application.UserId,
+                                DesigneeNameWithCloa = a.Cloa.ProfileVersion.ToFullName(),
+                                Activity = new ActivityHistoryViewModel
+                                {
+                                    Id = a.Id,
+                                    Name = a.Module.Name,
+                                    ModuleId = a.ModuleId,
+                                    TrackingNumber = a.TrackingNumber,
+                                    StatusId = a.StatusId,
+                                    Status = a.ActivityStatus.Name,
+                                    FormData = a.FormData,
+                                    Comments = a.Comments,
+                                    ReviewComments = a.ActivityComment != null ? a.ActivityComment.ReviewedComments : null,
+                                    ApplicationId = applicationId,
+                                    CloaId = a.CloaId.GetValueOrDefault(0),
+                                    NewCloaId = a.NewCloaId,
+                                    ModifiedDate = a.ModifiedDate.GetValueOrDefault(a.CreatedDate),
+                                    ModifiedBy = (a.AuditPrimaryLog != null && a.AuditPrimaryLog.ImpersonationLog != null) ? a.AuditPrimaryLog.ImpersonationLog.ImpersonatedUserId : a.ModifiedBy.GetValueOrDefault(a.CreatedBy),
+                                    IsSeed = a.ActivityType.IsSeed,
+                                    ActivityTypeId = a.ActivityTypeId,
+                                    DesigneeTypeId = a.Cloa.Application.DesigneeTypeId.GetValueOrDefault(),
+                                    Url = a.Module.RolePermissionDesigneeTypes.Any(r => r.LinkType.Code == "AL" && r.DesigneeTypeId == a.Cloa.Application.DesigneeTypeId)
+                                        ? a.Module.RolePermissionDesigneeTypes.Where(r => r.LinkType.Code == "AL" && r.DesigneeTypeId == a.Cloa.Application.DesigneeTypeId).Select(r => r.Permission.UrlRouter).FirstOrDefault()
+                                        : a.Module.RolePermissionDesigneeTypes.Where(r => r.LinkType.Code == "AL").Select(r => r.Permission.UrlRouter).FirstOrDefault(),
+                                    CreatedById = designeeGroupId == (int)DesigneeGroupEnum.Manufacturing ? a.CreatedBy : a.ModifiedBy.GetValueOrDefault(a.CreatedBy),
+                                    CreatedOrModifiedBy = designeeGroupId == (int)DesigneeGroupEnum.Manufacturing
+                                                        ? a.CreatedUser.ToFullName()
+                                                        : a.GetModifiedBy(),
+                                    // PostActivityModified table is removed as part of PO refactoring of group1 and group2
+                                    IsPostActivityCompleted = true
+                                }
+                            }).AsEnumerable()
+                            .Select(e =>
+                            {
+                                if (e.Activity.CreatedById == e.DesigneeUserId)
+                                    e.Activity.CreatedOrModifiedBy = e.DesigneeNameWithCloa;
+                                return e.Activity;
+                            })
+                            .OrderByDescending(a => a.ModifiedDate).ToArray();
+
+            IList<ActivityTypeViewModel> oversightActivities = null;
+            if (list.Any(a => a.ModuleId == (int)ProcessTypeEnum.Oversight))
+            {
+                oversightActivities = _lookupService.LookupValues().Result.ActivityTypes;
+            }
+
+            ArrangeActvities(designeeGroupId, roleId, ref list, oversightActivities);
+
+            DisableActivityIfNotHisDesignee(list, isMyDesignee, roleId);
+
+            return list;
+        }
+
+        private void ArrangeActvities(int designeeGroupId, int roleId, ref ActivityHistoryViewModel[] list, IList<ActivityTypeViewModel> oversightActivities)
+        {
+            list = list.Where(a => (a.IsPostActivityCompleted.GetValueOrDefault(true))).Select(a =>
+            {
+                switch (a.ModuleId)
+                {
+                    case (int)ProcessTypeEnum.SelectAndAppoint:
+                        a.Name = ((ActivityTypeEnum)(a.ActivityTypeId.Value)).ToDescription();
+                        a.FormData = string.IsNullOrWhiteSpace(a.FormData) ? string.Empty : JsonConvert.DeserializeObject<string>(a.FormData);
+                        if (designeeGroupId == (int)DesigneeGroupEnum.Engineering)
+                        {
+
+                            a.Url = $"/selection/derappointmentreview/{a.FormData}/6/1";
+                        }
+                        break;
+                    case (int)ProcessTypeEnum.Oversight:
+                        var formData = JsonConvert.DeserializeObject<OverSightActivityInformation>(a.FormData);
+                        a.Name = string.IsNullOrWhiteSpace(a.FormData) ? string.Empty : oversightActivities.First(o => o.Id == formData.OversightActivityTypeId).Name;
+                        break;
+                    case (int)ProcessTypeEnum.Expansion:
+                        if (designeeGroupId != (int)DesigneeGroupEnum.AME)
+                        {
+                            a.Name = "Request Additional Authorizations";
+                            if (a.DesigneeTypeId == (int)DesigneeTypeEnum.DERT || a.DesigneeTypeId == (int)DesigneeTypeEnum.DERY)
+                            {
+                                a.Url = $"Expand/der-decision/{a.Id}/9999";
+                            }
+                            else if ((a.ActivityTypeId == (int)ActivityTypeEnum.EvaluationPanelResult) &&
+                                (a.DesigneeTypeId == (int)DesigneeTypeEnum.DME ||
+                                a.DesigneeTypeId == (int)DesigneeTypeEnum.DPE ||
+                                a.DesigneeTypeId == (int)DesigneeTypeEnum.SAE ||
+                                a.DesigneeTypeId == (int)DesigneeTypeEnum.DPRE ||
+                                a.DesigneeTypeId == (int)DesigneeTypeEnum.DART))
+                            {
+                                a.Name = "Evaluation Panel Results";
+                                a.Url = $"expand/evaluationpanelresults/{a.FormData}/{a.DesigneeTypeId}";
+                            }
+                        }
+
+                        break;
+                    case (int)ProcessTypeEnum.AnnualProfileUpdate:
+                        a.CloaId = a.NewCloaId ?? a.CloaId;
+                        break;
+                    case (int)ProcessTypeEnum.DeploymentWorkflow:
+                        var data = string.IsNullOrWhiteSpace(a.FormData) ? null : JsonConvert.DeserializeObject<List<DerExpansionViewModel>>(a.FormData).OrderByDescending(d => d.VersionNumber).FirstOrDefault();
+                        a.Url = $"reduce/decision/der/versions/:activityId/{data?.VersionNumber}";
+                        break;
+                }
+
+                switch (a.StatusId)
+                {
+                    case (int)ActivityStatusEnum.Submitted:
+                    case (int)ActivityStatusEnum.Pending:
+                    case (int)ActivityStatusEnum.Initiated:
+                        a.Status = ActivityStatusEnum.Pending.ToDescription();
+                        break;
+                    case (int)ActivityStatusEnum.Completed:
+                        a.Status = ActivityStatusEnum.Completed.ToDescription();
+                        break;
+                    case (int)ActivityStatusEnum.Denied:
+                        a.Status = ActivityStatusEnum.Denied.ToDescription();
+                        break;
+                }
+
+                GeneralAndReportUserNavigationSettings(roleId, a);
+
+                return a;
+            }).ToArray();
+        }
+
+        private static void GeneralAndReportUserNavigationSettings(int roleId, ActivityHistoryViewModel a)
+        {
+            var trainingRoles = new List<int> {(int)RoleEnum.AfsTrainingAdministrator, (int)RoleEnum.AamTrainingAdministrator, (int)RoleEnum.AirTrainingAdministrator, (int)RoleEnum.AvsTrainingAdministrator, (int)RoleEnum.AovTrainingAdministrator};
+            
+            var odaRoleIds= new int[]{(int)RoleEnum.OMTM,(int)RoleEnum.ODAAO,(int)RoleEnum.OMTL,(int)RoleEnum.ODAAS };
+            if ((roleId == (int)RoleEnum.FaaGeneralUser || roleId == (int)RoleEnum.Reporting || odaRoleIds.Contains(roleId)) &&
+                                a.StatusId != (int)ActivityStatusEnum.Completed &&
+                                a.StatusId != (int)ActivityStatusEnum.Cancelled &&
+                                a.StatusId != (int)ActivityStatusEnum.Denied)
+            {
+                a.HasNavigation = false;
+            }
+            if ((roleId == (int)RoleEnum.FaaGeneralUser || roleId == (int)RoleEnum.Reporting || odaRoleIds.Contains(roleId) || trainingRoles.Contains(roleId)) &&
+               a.ModuleId == (int)ProcessTypeEnum.RecordFeedback)
+            {
+                a.HasNavigation = true;
+            }
+        }
+
+        private static void BuildActivityFilters(int designeeGroupId, int roleId, out Expression<Func<ActivityEntity.Activity, bool>> filter, out Expression<Func<ActivityEntity.Activity, bool>> asiFilter)
+        {
+            filter = (def => true);
+            asiFilter = (def => true);
+            switch (designeeGroupId)
+            {
+                case (int)DesigneeGroupEnum.AFS:
+                    filter = (a => a.ModuleId != (int)ProcessTypeEnum.EquipmentCertification &&
+                                    a.ModuleId != (int)ProcessTypeEnum.ManageDesignee &&
+                                  !(a.ModuleId == (int)ProcessTypeEnum.Oversight
+                                    && (a.StatusId != (int)ActivityStatusEnum.Completed && a.StatusId != (int)ActivityStatusEnum.Cancelled)));
+                    if (roleId == (int)RoleEnum.AviationSafetyInspector)
+                    {
+                        asiFilter = (a => (a.StatusId == (int)ActivityStatusEnum.Pending
+                                        || a.StatusId == (int)ActivityStatusEnum.Completed
+                                        || (a.ModuleId == (int)ProcessTypeEnum.RecordFeedback && a.StatusId == (int)ActivityStatusEnum.Saved)
+                                        || (a.ModuleId == (int)ProcessTypeEnum.Counseling && a.StatusId == (int)ActivityStatusEnum.Saved)
+                                        || (a.ModuleId == (int)ProcessTypeEnum.InvestigationRecord && a.StatusId == (int)ActivityStatusEnum.Saved)
+                                        || (a.ModuleId == (int)ProcessTypeEnum.Oversight && a.StatusId == (int)ActivityStatusEnum.Cancelled)));
+                    }
+
+                    break;
+                case (int)DesigneeGroupEnum.Manufacturing:
+                    filter = (a => a.ModuleId != (int)ProcessTypeEnum.EquipmentCertification &&
+                                    a.ModuleId != (int)ProcessTypeEnum.ManageDesignee &&
+                                    !((a.ModuleId == (int)ProcessTypeEnum.Witnessing || a.ModuleId == (int)ProcessTypeEnum.Oversight)
+                                        && a.StatusId != (int)ActivityStatusEnum.Completed && a.StatusId != (int)ActivityStatusEnum.Cancelled)
+                                     && !(a.ModuleId == (int)ProcessTypeEnum.SiteEvaluationForm &&
+                                         a.StatusId == (int)ActivityStatusEnum.Cancelled &&
+                                         a.ModifiedBy == (int)ActivityUserEnum.SystemAdmin)
+                                        );
+                    break;
+                case (int)DesigneeGroupEnum.AME:
+                    filter = (a => a.ModuleId != (int)ProcessTypeEnum.EquipmentCertification &&
+                                    a.ModuleId != (int)ProcessTypeEnum.ManageDesignee &&
+                                    !((a.ModuleId == (int)ProcessTypeEnum.Witnessing || a.ModuleId == (int)ProcessTypeEnum.Oversight)
+                                        && a.StatusId != (int)ActivityStatusEnum.Completed && a.StatusId != (int)ActivityStatusEnum.Cancelled)
+                                     && !(a.ModuleId == (int)ProcessTypeEnum.SiteEvaluationForm &&
+                                         a.StatusId == (int)ActivityStatusEnum.Cancelled &&
+                                         a.ModifiedBy == (int)ActivityUserEnum.SystemAdmin)
+                                        );
+                    break;
+                case (int)DesigneeGroupEnum.Engineering:
+                    filter = (a => a.ModuleId != (int)ProcessTypeEnum.EquipmentCertification &&
+                                   a.ModuleId != (int)ProcessTypeEnum.ManageDesignee &&
+                                   !(a.ModuleId == (int)ProcessTypeEnum.DeploymentWorkflow && a.StatusId != (int)ActivityStatusEnum.Completed) &&
+                                 !(a.ModuleId == (int)ProcessTypeEnum.Oversight && a.StatusId != (int)ActivityStatusEnum.Completed));
+                    if (roleId == (int)RoleEnum.AviationSafetyInspector)
+                    {
+                        asiFilter = (a => (a.StatusId == (int)ActivityStatusEnum.Pending || a.StatusId == (int)ActivityStatusEnum.Completed || (a.ModuleId == (int)ProcessTypeEnum.RecordFeedback && a.StatusId == (int)ActivityStatusEnum.Saved) || (a.ModuleId == (int)ProcessTypeEnum.Counseling && a.StatusId == (int)ActivityStatusEnum.Saved)));
+                    }
+                    if (roleId == (int)RoleEnum.AviationSafetyEngineer)
+                    {
+                        asiFilter = (a => (a.StatusId == (int)ActivityStatusEnum.Pending || a.StatusId == (int)ActivityStatusEnum.Completed || (a.ModuleId == (int)ProcessTypeEnum.RecordFeedback && a.StatusId == (int)ActivityStatusEnum.Saved)));
+                    }
+
+                    break;
+            }
+        }
+
+        public bool SaveReivew(ActivityHistoryViewModel model)
+        {
+            var activity = _context.Activities.Include(a => a.ActivityComment).Single(a => a.Id == model.Id);
+            if (activity.ActivityComment == null)
+            {
+                activity.ActivityComment = new ActivityComment()
+                {
+                    ReviewedComments = model.ReviewComments
+                };
+            }
+            else
+            {
+                activity.ActivityComment.ReviewedComments = model.ReviewComments;
+            }
+
+            _context.SaveChanges();
+            return true;
+        }
+
+        public bool SaveRecordNote(DesigneeInfoViewModel model)
+        {
+            var officeId = _context.Applications.Where(a => a.Id == model.ApplicationId).Select(s => s.OfficeId).FirstOrDefault();
+            var msId = _context.Applications
+                            .Where(a => a.Id == model.ApplicationId)
+                            .Select(a => a.Cloas.Any(c => c.CloaStatusId == (int)CloaStatusEnum.Active || c.CloaStatusId == (int)CloaStatusEnum.Terminated)
+                                    ? a.Cloas
+                                        .Where(c => c.CloaStatusId == (int)CloaStatusEnum.Active || c.CloaStatusId == (int)CloaStatusEnum.Terminated)
+                                        .OrderByDescending(c => c.Id)
+                                        .Select(c => c.ManagingSpecialistId)
+                                        .FirstOrDefault()
+                                    : a.Cloas
+                                        .OrderByDescending(c => c.Id)
+                                        .Select(c => c.ManagingSpecialistId)
+                                        .FirstOrDefault())
+                            .First();
+
+            var userIdOfMs = _context.UserOfficeRoles.Where(w => w.Id == msId).Select(s => s.UserId).FirstOrDefault();
+            var note = _context.RecordNotes.SingleOrDefault(r => r.ApplicationId == model.ApplicationId);
+
+            var authenticationInformation = GetAuthenticationInformation();
+
+            if (note != null)
+            {
+                var currentUserId = userIdOfMs;
+                var isCurrentUserProxyMs = false;
+
+                var msProxies = _context.UserOfficeRoles.Where(u => u.FormData != null &&
+                                                                    u.IsProxyRequestApproved.Value &&
+                                                                    u.IsActive &&
+                                                                    JsonExtensions.JsonIntValue(u.FormData, "$.UserOfficeRoleId") == msId).ToList();
+                if (msProxies.Count > 0)
+                {
+                    foreach (var msProxy in msProxies)
+                    {
+                        isCurrentUserProxyMs = msProxy.UserId == authenticationInformation.AuthenticatedUserId || msProxy.UserId == authenticationInformation.ImpersonatedUserId;
+
+                        if (isCurrentUserProxyMs)
+                        {
+                            currentUserId = msProxy.UserId;
+                        }
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(note.Notes))
+                {
+                    var existingNotesByOtherUsers = JsonConvert.DeserializeObject<IEnumerable<RecordNoteViewModel>>(note.Notes).Where(w => w.CreatedBy != currentUserId).ToList();
+                    model.RecordNotes = model.RecordNotes.Union(existingNotesByOtherUsers).ToList();
+                }
+                note.Notes = JsonConvert.SerializeObject(model.RecordNotes);
+            }
+            else
+            {
+                _context.RecordNotes.Add(new RecordNote
+                {
+                    ApplicationId = model.ApplicationId,
+                    Notes = JsonConvert.SerializeObject(model.RecordNotes),
+                });
+            }
+
+            _context.SaveChanges();
+            return true;
+        }
+
+        private AuthenticationModel GetAuthenticationInformation()
+        {
+            var claim = _claimsPrincipal != null && _claimsPrincipal.FindFirst("user") != null ? _claimsPrincipal.FindFirst("user").Value : null;
+            var authenticationInformation = claim != null ? JsonConvert.DeserializeObject<AuthenticationModel>(claim) : new AuthenticationModel() { AuthenticatedUserId = 1 };
+
+            return authenticationInformation;
+        }
+
+        public AmeHomeViewModel GetAdditionalInfo(int applicationId, int cloaId, string designeeNumber)
+        {
+            var additionalDesigneeInfo = _context.AdditionalDesigneeInfos
+                            .Where(a => a.ApplicationId == applicationId)
+                            .Select(a => new
+                            {
+                                a.Application.UserId,
+                                a.AlternativeEmail,
+                                a.FirstClassDate,
+                                a.IsFlightSurgeon,
+                                a.OtherPrimaryMecicalSpeciality,
+                                a.PrimaryMedicalSpecialityId,
+                                a.MedicalLicense,
+                                a.Npi,
+                                a.FaxNumber,
+                                a.isTrainingExtension,
+                                a.TrainingDate,
+                                a.OfficeHour,
+                                a.Comments,
+                                VersionId = a.Application.Versions.OrderByDescending(v => v.Id).Select(v => v.Id).FirstOrDefault(),
+                                MedicalSchool = a.Application.EducationDetails.FirstOrDefault(e => e.EducationTypeId == (int)EducationTypeEnum.Medical),
+                                DesignationTypes = a.Application.SelectionProcessApplicationDesignations
+                                                .Where(s => s.SelectionProcessDesignationType.IsActive)
+                                                .Select(s => new DesignationTypeViewModel
+                                                {
+                                                    Id = s.SelectionProcessDesignationType.Id,
+                                                    DesignationDate = s.DesignationDate.DateToString()
+                                                }).ToArray(),
+                                FunctionCodes = a.Application.Cloas.Where(c => c.Id == cloaId).SelectMany(c => c.CloaFunctionCodes.Select(f => f.FunctionCodeId)).ToArray()
+                            }).FirstOrDefault();
+
+            var model = new AmeHomeViewModel
+            {
+                UserId = additionalDesigneeInfo?.UserId ?? 0,
+                ApplicationId = applicationId,
+                AlternativeEmail = additionalDesigneeInfo?.AlternativeEmail,
+                FirstClassDate = additionalDesigneeInfo?.FirstClassDate.DateToString(),
+                IsFlightSurgeon = additionalDesigneeInfo?.IsFlightSurgeon,
+                MedicalLicense = additionalDesigneeInfo?.MedicalLicense,
+                Npi = additionalDesigneeInfo?.Npi,
+                FaxNumber = additionalDesigneeInfo?.FaxNumber,
+                PrimaryMedicalSpecialityId = additionalDesigneeInfo?.PrimaryMedicalSpecialityId,
+                OtherPrimaryMecicalSpeciality = additionalDesigneeInfo?.OtherPrimaryMecicalSpeciality,
+                isTrainingExtension = additionalDesigneeInfo?.isTrainingExtension,
+                TrainingDate = additionalDesigneeInfo?.TrainingDate?.ToString(),
+                OfficeHour = additionalDesigneeInfo?.OfficeHour,
+                Comments = additionalDesigneeInfo?.Comments,
+                ActionHistory = _context.AmeActionHistories
+                                                        .Where(a => a.DesigneeNumber == designeeNumber)
+                                                        .Select(a => new ActionHistoryViewModel
+                                                        {
+                                                            ActionDate = a.Date.ToShortDateString(),
+                                                            EnteredDate = a.EnteredDate.ToShortDateString(),
+                                                            Comment = a.Reason,
+                                                            Status = a.Status
+                                                        }).ToArray(),
+                FunctionCodes = additionalDesigneeInfo?.FunctionCodes,
+                SelectedDesignationTypes = additionalDesigneeInfo?.DesignationTypes.Select(d => d.Id).ToArray(),
+                DesignationTypes = _context.SelectionProcessDesignationFunctionCodes.Include(spdfc => spdfc.SelectionProcessDesignationType)
+                    .Where(d => additionalDesigneeInfo != null &&
+                                additionalDesigneeInfo.FunctionCodes.Contains(d.FunctionCodeId.GetValueOrDefault()) &&
+                                d.SelectionProcessDesignationType.IsActive)
+                    .AsEnumerable()
+                    .Select(d => new DesignationTypeViewModel
+                    {
+                        Id = d.SelectionProcessDesignationTypeId,
+                        Name = d.SelectionProcessDesignationType.Name,
+                        DesignationDate = additionalDesigneeInfo?.DesignationTypes.Where(a => a.Id == d.SelectionProcessDesignationTypeId).Select(a => a.DesignationDate).FirstOrDefault()
+                    })
+                    .DistinctBy(d => d.Id).ToArray()
+            };
+
+            var systemVariables = _lookupService.GetSystemVariables().Result;
+            var versionId= additionalDesigneeInfo?.VersionId ?? 1;
+            var questionAnswers = _context.ApplicationResponses.Where(a => a.ApplicationVersionId ==  versionId  &&
+                                                                    (a.QuestionAnswer.QuestionId == Convert.ToInt32(systemVariables["MedicalDegreeQuestionId"]) ||
+                                                                    a.QuestionAnswer.QuestionId == Convert.ToInt32(systemVariables["PilotLicenseQuestionId"])))
+                                                                .Select(a => new
+                                                                {
+                                                                    a.QuestionAnswer.QuestionId,
+                                                                    a.QuestionAnswer.AnswerText,
+                                                                    a.Response
+                                                                }).ToArray();
+
+            model.IsFirstClass = _context.Cloas.Any(c => c.Id == cloaId && c.DesigneeClassTypeId == (int)DesigneeClassTypeEnum.FirstClass);
+            model.PilotLicense = questionAnswers.Where(q => q.QuestionId == Convert.ToInt32(systemVariables["PilotLicenseQuestionId"])).Select(q => q.Response).FirstOrDefault();
+            model.MedicalLicenseType = questionAnswers.Where(q => q.QuestionId == Convert.ToInt32(systemVariables["MedicalDegreeQuestionId"])).Select(q => q.AnswerText).FirstOrDefault();
+            model.MedicalSchool = additionalDesigneeInfo?.MedicalSchool?.Name;
+            model.GraduateDate = additionalDesigneeInfo?.MedicalSchool?.GraduationDate.DateToString();
+            model.MedicalSpecialityOptions = _context.QuestionAnswer.Where(q => q.QuestionId == Convert.ToInt32(systemVariables["MedicalSpecialityQuestionId"]) && q.IsActive)
+            .Select(q => new AnswerViewModel
+            {
+                Id = q.Id,
+                AnswerText = q.AnswerText,
+            }).ToArray();
+            return model;
+        }
+
+        public bool SaveAdditionalInfo(AmeHomeViewModel model)
+        {
+            var additionalDesigneeInfo = _context.AdditionalDesigneeInfos.FirstOrDefault(a => a.ApplicationId == model.ApplicationId);
+            var designationTypes = _context.SelectionProcessApplicationDesignations
+                                    .Where(s => s.ApplicationId == model.ApplicationId)
+                                    .Select(s => s).ToArray();
+
+            var removeDesignationTypes = designationTypes.Where(d => model.SelectedDesignationTypes != null && !model.SelectedDesignationTypes.Contains(d.SelectionProcessDesignationTypeId)).ToArray();
+            var updateDesignationTypes = designationTypes.Where(d => model.SelectedDesignationTypes != null && model.SelectedDesignationTypes.Contains(d.SelectionProcessDesignationTypeId)).ToArray();
+            var addDesignationTypes = (model.SelectedDesignationTypes ?? Array.Empty<int>()).Where(d => !designationTypes.Any(t => t.SelectionProcessDesignationTypeId == d)).ToArray();
+
+            if (removeDesignationTypes.Any())
+            {
+                _context.SelectionProcessApplicationDesignations.RemoveRange(removeDesignationTypes);
+            }
+
+            updateDesignationTypes.ToList().ForEach(d =>
+            {
+                var item = model.DesignationTypes.First(t => t.Id == d.SelectionProcessDesignationTypeId);
+                d.DesignationDate = string.IsNullOrWhiteSpace(item.DesignationDate) ? (DateTime?)null : Convert.ToDateTime(item.DesignationDate);
+            });
+
+            model.DesignationTypes?.Where(d => addDesignationTypes.Contains(d.Id)).ToList().ForEach(d =>
+            {
+                _context.SelectionProcessApplicationDesignations.Add(
+                new SelectionProcessApplicationDesignation
+                {
+                    SelectionProcessDesignationTypeId = d.Id,
+                    DesignationDate = string.IsNullOrWhiteSpace(d.DesignationDate) ? (DateTime?)null : Convert.ToDateTime(d.DesignationDate),
+                    ApplicationId = model.ApplicationId,
+                    SelectionProcessApplicationId = model.SelectionProcessApplicationId,
+                });
+            });
+
+            if (additionalDesigneeInfo != null)
+            {
+                additionalDesigneeInfo.AlternativeEmail = model.AlternativeEmail;
+                additionalDesigneeInfo.IsFlightSurgeon = model.IsFlightSurgeon;
+                additionalDesigneeInfo.PrimaryMedicalSpecialityId = model.PrimaryMedicalSpecialityId;
+                additionalDesigneeInfo.OtherPrimaryMecicalSpeciality = model.OtherPrimaryMecicalSpeciality;
+                additionalDesigneeInfo.MedicalLicense = model.MedicalLicense;
+                additionalDesigneeInfo.Npi = model.Npi;
+                additionalDesigneeInfo.FaxNumber = model.FaxNumber;
+                additionalDesigneeInfo.isTrainingExtension = model.isTrainingExtension;
+                additionalDesigneeInfo.TrainingDate = model.isTrainingExtension == true ? Convert.ToDateTime(model.TrainingDate) : (DateTime?)null;
+                additionalDesigneeInfo.OfficeHour = model.OfficeHour;
+                additionalDesigneeInfo.Comments = model.Comments;
+            }
+
+            var mailingAddress = _context.AddressReferences
+                                            .Where(a => a.UserId == model.UserId && a.Address.AddressTypeId == (int)AddressTypeEnum.MailingAddress)
+                                            .Select(a => a.Address).FirstOrDefault();
+            if (mailingAddress != null)
+            {
+                mailingAddress.AddressLine1 = model.MailingAddress.Address1;
+                mailingAddress.AddressLine2 = model.MailingAddress.Address2;
+                mailingAddress.City = model.MailingAddress.City;
+                mailingAddress.CountryId = model.MailingAddress.Country?.Id;
+                mailingAddress.StateId = model.MailingAddress.State?.Id;
+                mailingAddress.ZipCode = model.MailingAddress.ZipCode;
+            }
+            else if (model.MailingAddress != null)
+            {
+                var addressReference = new AddressReference
+                {
+                    UserId = model.UserId,
+                    Address = new Address
+                    {
+                        AddressTypeId = (int)AddressTypeEnum.MailingAddress,
+                        AddressLine1 = model.MailingAddress.Address1,
+                        AddressLine2 = model.MailingAddress.Address2,
+                        City = model.MailingAddress.City,
+                        CountryId = model.MailingAddress.Country?.Id,
+                        StateId = model.MailingAddress.State?.Id,
+                        ZipCode = model.MailingAddress.ZipCode
+                    }
+                };
+
+                _context.AddressReferences.Add(addressReference);
+            }
+
+            _context.SaveChanges();
+            return true;
+        }
+
+        public ManagementInformationLinksViewModel GetManagementInformationLinks(int applicationId, int roleId,
+            bool isMyDesignee, int officeId, int? userOfficeRoleId = null)
+        {
+            var cloa = _context.Cloas.Where(it => it.ApplicationId == applicationId)
+                .Include(c => c.Application).ThenInclude(app => app.Versions)
+                .Include(c => c.Application.DesigneeType)
+                .Include(c => c.Application.User.UserSecurityInfo)
+                .AsEnumerable()
+                .Select(v => new CloaViewModel
+                {
+                    Id = v.Id,
+                    CloaStatus = v.CloaStatusId,
+                    DesigneeTypeId = v.Application.DesigneeTypeId,
+                    DesigneeGroupId = v.Application.DesigneeType.DesigneeGroupId,
+                    ExpirationDate = v.ExpirationDate,
+                    ModifiedDate = v.ModifiedDate,
+                    ApplicationIsActive = v.Application.IsActive,
+                    ApplicationId = applicationId,
+                    IsDeployed = v.Application.Versions.OrderByDescending(x => x.Id).First().IsDeployed ?? false,
+                    IsAutoPreApproval = v.IsAutoPreApproval,
+                    DesigneeNumber = v.Application.User.UserSecurityInfo.DesigneeNumber,
+                    VersionId = v.Application.Versions.OrderByDescending(av => av.Id).First().VersionId,
+                    UserId = v.Application.UserId,
+                    TerminationDate = v.TerminationDate,
+                    OfficeId = v.OfficeId,
+                    AppointingOfficialId = v.AppointingOfficialId
+                }).Last();
+
+            var cloaIds = _context.Cloas.Where(it => it.ApplicationId == applicationId).Select(v => v.Id).ToList();
+
+            var rolePermissionDesigneeTypes = _context.RolePermissionDesigneeTypes.Where(p =>
+                p.DesigneeTypeId == cloa.DesigneeTypeId.GetValueOrDefault() && p.RolePermission.RoleId == roleId &&
+                p.IsActive);
+            var managementLinks = rolePermissionDesigneeTypes
+                .Where(p => p.LinkTypeId == (int)LinkTypeEnum.ManagementActionLinks).OrderBy(p => p.SortOrder)
+                .Select(item => new LinkViewModel
+                {
+                    Id = item.RolePermission.Permission.Id,
+                    Code = item.RolePermission.Permission.Code,
+                    DisplayName = item.RolePermission.Permission.Id == (int)PermissionEnum.PreApprovalSetting ? $"Manage {item.RolePermission.Permission.Name}" : item.RolePermission.Permission.Name,
+                    ModuleId = item.ModuleId,
+                    Url = item.RolePermission.Permission.UrlRouter,
+                    HasNavigation = true
+                }).ToList();
+
+            if (cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DCTOE)
+            {
+                managementLinks = managementLinks.Where(m => m.Code != "IDT").ToList();
+            }
+            var moduleIds = managementLinks.Where(it => it.ModuleId.HasValue).Select(itd => itd.ModuleId).ToList();
+
+            if (moduleIds.Contains((int)ProcessTypeEnum.ManageCloa))
+            {
+                moduleIds.Add((int)ProcessTypeEnum.ChangeDesignationLocation);
+                moduleIds.Add((int)ProcessTypeEnum.Expansion);
+            }
+            if (!moduleIds.Contains((int)ProcessTypeEnum.Expansion) && (cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DME ||
+                cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DART || cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DPRE))
+            {
+                moduleIds.Add((int)ProcessTypeEnum.Expansion);
+            }
+
+            var activityStatusIds = new List<int>()
+            {
+                (int) ActivityStatusEnum.Saved, (int) ActivityStatusEnum.Pending, (int) ActivityStatusEnum.Initiated,
+                (int) ActivityStatusEnum.Submitted, (int) ActivityStatusEnum.Returned
+            };
+            var activities = _context.Activities.Where(ita => moduleIds.Contains(ita.ModuleId)
+                                                              && ita.CloaId.HasValue &&
+                                                              cloaIds.Contains(ita.CloaId.Value)
+                                                              && activityStatusIds.Contains(ita.StatusId))
+                .Select(a => new ActivityEntity.Activity
+                {
+                    ModuleId = a.ModuleId,
+                    StatusId = a.StatusId
+                }).ToArray();
+
+            var informationLinks = rolePermissionDesigneeTypes
+                .Where(p => p.LinkTypeId == (int)LinkTypeEnum.InformationLinks).OrderBy(p => p.SortOrder)
+                .Select(item => new LinkViewModel
+                {
+                    Id = item.RolePermission.Permission.Id,
+                    Code = item.RolePermission.Permission.Code,
+                    DisplayName = item.RolePermission.Permission.Id == (int)PermissionEnum.PreApprovalSetting ? $"View {item.RolePermission.Permission.Name}" : item.RolePermission.Permission.Name,
+                    HasNavigation = true,
+                    Url = item.RolePermission.Permission.UrlRouter
+                }).ToList();
+
+            SetManagementActionLinksUrl(managementLinks, cloa, roleId, isMyDesignee);
+            SetInformationLinksUrl(informationLinks, cloa);
+            var cloaVersionLinks = SetCloaVersionsLinksUrl(applicationId);
+
+            EnableManagementLinksForOtherDesignees(managementLinks, cloa, isMyDesignee, roleId);
+            RemoveHyperlinksByRules(cloa, managementLinks, informationLinks, CheckTerminationType(cloaIds), roleId, officeId, userOfficeRoleId);
+            DisableLinksByActivityStatus(cloa, managementLinks, activities, isMyDesignee);
+
+            if (_context.Activities.Any(ita => ita.CloaId.HasValue && ita.Cloa.Application.UserId == cloa.UserId && ita.ModuleId == (int)ProcessTypeEnum.Termination && activityStatusIds.Contains(ita.StatusId)))
+            {
+                managementLinks = managementLinks.Select(m =>
+                {
+                    if (m.ModuleId == (int)ProcessTypeEnum.Termination)
+                    {
+                        m.HasNavigation = false;
+                    }
+                    return m;
+                }).ToList();
+            }
+
+            return new ManagementInformationLinksViewModel()
+            {
+                ManagementLinks = managementLinks,
+                InformationLinks = informationLinks,
+                CloaVersionLinks = cloaVersionLinks
+            };
+        }
+
+        private bool CheckTerminationType(IList<int> cloaIds)
+        {
+            var terminationActivity = _context.Activities.Include(a => a.Responses).Where(ita =>
+                    (ita.ModuleId == (int)ProcessTypeEnum.Termination || ita.ModuleId == (int)ProcessTypeEnum.VoluntarySurrenderRequest)
+                    && ita.CloaId.HasValue && cloaIds.Contains(ita.CloaId.Value)
+                    && ita.StatusId == (int)ActivityStatusEnum.Completed)
+                .OrderByDescending(a => a.Id).FirstOrDefault();
+
+            if (terminationActivity == null || terminationActivity?.ModuleId == (int)ProcessTypeEnum.VoluntarySurrenderRequest) return false;
+
+            var decision = JsonConvert.DeserializeObject<TerminationViewModel>(terminationActivity.FormData);
+            var systemVariables = _lookupService.GetSystemVariables().Result;
+            bool isForCause = terminationActivity.Responses.Any(r =>
+                             r.AnswerId == Convert.ToInt32(systemVariables["TerminationForCauseQuestionAnswerId"]))
+                         && (decision?.AoTerminationDecisionId == 4 || !_context.Activities.Any(ita =>
+                             ita.CloaId == terminationActivity.CloaId &&
+                             ita.ModuleId == (int)ProcessTypeEnum.AppealForTermination &&
+                             ita.StatusId == (int)ActivityStatusEnum.Completed));
+            return isForCause;
+        }
+
+        private void EnableManagementLinksForOtherDesignees(IList<LinkViewModel> managementLinks, CloaViewModel cloa, bool isMyDesignee, int roleId)
+        {
+            var isOnlyMs = roleId == (int)RoleEnum.ManagingSpecialist && !isMyDesignee;
+            if (!isOnlyMs) return;
+
+            bool isDer = (cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DERT || cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DERY);
+            managementLinks = managementLinks.Select(it => { it.HasNavigation = (it.Code == "RF" && isDer); return it; }).ToArray();
+            switch (cloa.DesigneeGroupId)
+            {
+                case (int)DesigneeGroupEnum.AFS:
+                case (int)DesigneeGroupEnum.AME:
+                    EnableManagementLinks(managementLinks, new List<string>() { "CSG", "RF" });
+                    break;
+                case (int)DesigneeGroupEnum.Manufacturing:
+                    EnableManagementLinks(managementLinks, new List<string>() { "CSG", "RF", "DO" });
+                    break;
+            }
+        }
+
+        private void EnableManagementLinks(IList<LinkViewModel> managementLinks, List<string> codes)
+        {
+            codes.ForEach(code =>
+            {
+                if (managementLinks.Any(it => it.Code == code))
+                {
+                    managementLinks.First(it => it.Code == code).HasNavigation = true;
+                }
+            });
+        }
+
+        private static void RemoveHyperlinksByRules(CloaViewModel cloa, List<LinkViewModel> managementLinks, List<LinkViewModel> informationLinks, Boolean isForCauseTermination, int roleId, int officeId, int? userOfficeRoleId = null)
+        {
+            if ((cloa.IsDeployed || (cloa.ApplicationIsActive.HasValue && !cloa.ApplicationIsActive.Value)) && informationLinks.Any(it => it.Code == "OA"))
+            {
+                informationLinks.Remove(informationLinks.First(it => it.Code == "OA"));
+            }
+
+            if (cloa.DesigneeTypeId == (int)DesigneeTypeEnum.AME)
+            {
+                if (
+                    ((cloa.CloaStatus != (int)CloaStatusEnum.Terminated && !(!isForCauseTermination && cloa.CloaStatus == (int)CloaStatusEnum.Expired))
+                       || (cloa.CloaStatus == (int)CloaStatusEnum.Terminated && isForCauseTermination)
+                       || (cloa.TerminationDate.HasValue && cloa.TerminationDate.Value.AddYears(1) < DateTime.Now))
+                 && managementLinks.Any(it => it.Code == "RI"))
+                {
+                    managementLinks.Remove(managementLinks.First(it => it.Code == "RI"));
+                }
+                if (roleId == (int)RoleEnum.AppointingOfficial && userOfficeRoleId != null && cloa.AppointingOfficialId != userOfficeRoleId && managementLinks.Any(it => it.Code == "SEF"))
+                {
+                    managementLinks.Remove(managementLinks.First(it => it.Code == "SEF"));
+                }
+            }
+
+            if ((cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DPE || cloa.DesigneeTypeId == (int)DesigneeTypeEnum.SAE ||
+                 cloa.DesigneeTypeId == (int)DesigneeTypeEnum.ADMINPE) && (managementLinks.Any(it => it.Code == "MCL"))) 
+            {
+                    managementLinks.Remove(managementLinks.First(it => it.Code == "MCL"));
+            }
+            //If the applicant is coming through normal onbaording (ie, not through workflow deployment),
+            //then dont bother showing the Manage Cloa link. In other words, the Manage Cloa link is only for
+            //those coming through deployment workflow channel.
+            if (cloa.DesigneeTypeId == (int)DesigneeTypeEnum.APD || cloa.DesigneeTypeId == (int)DesigneeTypeEnum.TCE || cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DADE)
+            {
+                if (cloa.IsDeployed == false && managementLinks.Any(it => it.Code == "MCL"))
+                {
+                    managementLinks.RemoveAll(item => item.Code == "MCL");
+                }
+                else if (cloa.IsDeployed && managementLinks.Any(it => it.Code == "MCL"))
+                {
+                    managementLinks.Remove(managementLinks.First(it => it.Code == "MCL"));
+                }
+            }
+
+            if (roleId == (int)RoleEnum.OfficeAdministrator && officeId != cloa.OfficeId)
+            {
+                managementLinks.RemoveAll(item => item.Code != "RF");
+            }
+        }
+
+        private void DisableLinksByActivityStatus(CloaViewModel cloa, List<LinkViewModel> managementLinks, IList<ActivityEntity.Activity> activities, bool isMyDesignee)
+        {
+            var isSuspensionPending = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.Suspension);
+            var isSuspensionProcess = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.Suspension && (ita.StatusId == (int)ActivityStatusEnum.Pending || ita.StatusId == (int)ActivityStatusEnum.Submitted));
+            var isTerminationPending = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.Termination);
+            var isTerminationProcess = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.Termination && (ita.StatusId == (int)ActivityStatusEnum.Pending || ita.StatusId == (int)ActivityStatusEnum.Submitted));
+            var isMalPending = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.ReduceAuthorizationsRequest);
+            var isMalProcess = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.ReduceAuthorizationsRequest && (ita.StatusId == (int)ActivityStatusEnum.Pending || ita.StatusId == (int)ActivityStatusEnum.Submitted));
+            var isCorrectiveActionPending = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.CorrectiveAction && (ita.StatusId == (int)ActivityStatusEnum.Pending || ita.StatusId == (int)ActivityStatusEnum.Submitted));
+            var cloaExpired = cloa.CloaStatus == (int)CloaStatusEnum.Expired;
+            var isChangeDesigneeLocationPending = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.ChangeDesignationLocation);
+            var isExpansionPending = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.Expansion && ita.StatusId != (int)ActivityStatusEnum.Saved);
+            var isExpansionProcess = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.Expansion && (ita.StatusId == (int)ActivityStatusEnum.Pending || ita.StatusId == (int)ActivityStatusEnum.Submitted));
+            var isCloaOnSuspensionSave = cloa.CloaStatus == (int)CloaStatusEnum.Suspended || isSuspensionPending;
+            var isCloaOnSuspension = cloa.CloaStatus == (int)CloaStatusEnum.Suspended || isSuspensionProcess;
+            var isCloaOnTerminationSave = cloa.CloaStatus == (int)CloaStatusEnum.Terminated || isTerminationPending;
+            var isCloaOnTermination = cloa.CloaStatus == (int)CloaStatusEnum.Terminated || isTerminationProcess;
+            var isMclPending = activities.Any(ita => ita.ModuleId == (int)ProcessTypeEnum.ManageCloa);
+            var isMclTasksPending = IsManageCloaTasksPending(cloa);
+            var isMalTasksPending = IsManageAuthorizationTasksPending(cloa);
+            var isOpePending = activities.Any(ope =>
+                ope.ModuleId == (int)ProcessTypeEnum.OverallPerformanceEvaluation &&
+                !new[] { (int)ActivityStatusEnum.Cancelled, (int)ActivityStatusEnum.Completed }.Contains(ope.StatusId)
+            );
+
+            DisableLinksByActivityStatus(cloa, managementLinks, activities, isCloaOnSuspensionSave, isCloaOnTerminationSave, isTerminationProcess, isMalPending, isMalProcess,
+                                        isCorrectiveActionPending, cloaExpired, isChangeDesigneeLocationPending, isExpansionPending, isExpansionProcess,
+                                        isCloaOnSuspension, isCloaOnTermination, isMclPending, isMclTasksPending, isMalTasksPending, isMyDesignee, isOpePending);
+        }
+
+        private static void DisableLinksByActivityStatus(CloaViewModel cloa, List<LinkViewModel> managementLinks, IList<ActivityEntity.Activity> activities, bool isCloaOnSuspensionSave, bool isCloaOnTerminationSave,
+        bool isTerminationProcess, bool isMalPending, bool isMalProcess, bool isCorrectiveActionPending, bool cloaExpired, bool isChangeDesigneeLocationPending, bool isExpansionPending,
+            bool isExpansionProcess, bool isCloaOnSuspension, bool isCloaOnTermination, bool isMclPending, bool isMclTasksPending, bool isMalTasksPending, bool isMyDesignee, bool isOpePending)
+        {
+            if (managementLinks.Any(l => l.Code == "CRA" && isMyDesignee))
+            {
+                managementLinks.First(l => l.Code == "CRA").HasNavigation = !(isCloaOnTermination || cloaExpired);
+            }
+
+            foreach (var link in managementLinks.Where(l => l.HasNavigation))
+            {
+                switch (link.Code)
+                {
+                    case "OPE":
+                        link.HasNavigation = !(activities.Any(ita => ita.ModuleId == link.ModuleId) || isCloaOnTermination);
+                        break;
+                    case "IDT":
+                        var isIdtPending = activities.Any(ita => ita.ModuleId == link.ModuleId);
+                        link.HasNavigation =
+                                !(
+                                  (cloa.CloaStatus == (int)CloaStatusEnum.Terminated || isTerminationProcess)
+                                  || isMalProcess || isMalTasksPending || isIdtPending
+                                  || isCorrectiveActionPending || isOpePending
+                                  || (cloa.DesigneeGroupId == (int)DesigneeGroupEnum.Manufacturing
+                                      && isExpansionProcess)
+                                  || activities.Any(a => a.ModuleId == (int)ProcessTypeEnum.Expansion && a.StatusId == (int)ActivityStatusEnum.Initiated)
+                                );
+                        break;
+                    case "MAL":
+                        link.HasNavigation = !(isCloaOnSuspension || isCloaOnTermination || isMalPending || isMalTasksPending || isExpansionProcess || isMclPending);
+                        break;
+                    case "SD":
+                        link.HasNavigation = !(isCloaOnSuspensionSave || isCloaOnSuspension || isCloaOnTermination || cloaExpired);
+                        break;
+                    case "TD":
+                        link.HasNavigation = !(isCloaOnTerminationSave || isCloaOnTermination);
+                        break;
+                    case "MCL":
+                        link.HasNavigation = !(isCloaOnSuspension || isCloaOnTermination || cloaExpired || isChangeDesigneeLocationPending || isExpansionPending || isMclPending || isMclTasksPending || isMalPending);
+                        break;
+                    case "CVSR":
+                        var isCompanyVsRequestPending = activities.Any(ita => ita.ModuleId == link.ModuleId);
+                        link.HasNavigation = !(isCloaOnTermination || (cloaExpired && cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DMIR) || isCompanyVsRequestPending);
+                        break;
+                    case "DO":
+                    case "RI":
+                        var isActvityPending = activities.Any(ita => ita.ModuleId == link.ModuleId);
+                        link.HasNavigation = !isActvityPending;
+                        break;
+                    case "INV":
+                        link.HasNavigation = !activities.Any(ita => ita.ModuleId == link.ModuleId);
+                        break;
+                }
+            }
+        }
+
+        private bool IsManageCloaTasksPending(CloaViewModel cloa)
+        {
+            return (_context.Tasks
+                            .Join(
+                                _context.TaskSubTypes,
+                                t => t.SubTypeId,
+                                tst => tst.Id,
+                                (t, tst) =>
+                                    new
+                                    {
+                                        t = t,
+                                        tst = tst
+                                    }
+                            )
+                            .Join(
+                                _context.TaskTypes,
+                                temp0 => temp0.tst.TaskTypeId,
+                                tt => tt.Id,
+                                (temp0, tt) =>
+                                    new
+                                    {
+                                        temp0 = temp0,
+                                        tt = tt
+                                    }
+                            )
+                            .Where(
+                                temp1 =>
+                                    (((temp1.tt.Id == (int)TaskTypeEnum.ManageCloa) && (temp1.temp0.t.StatusId != (int)TaskStatusEnum.Completed)) &&
+                                        (temp1.temp0.t.ActionId == cloa.Id)
+                                    )
+                            )
+                        .Select(temp1 => temp1.temp0.t)).Any();
+        }
+
+        private bool IsManageAuthorizationTasksPending(CloaViewModel cloa)
+        {
+            return (_context.Tasks
+                        .Join(
+                            _context.TaskSubTypes,
+                            t => t.SubTypeId,
+                            tst => tst.Id,
+                            (t, tst) =>
+                                new
+                                {
+                                    t = t,
+                                    tst = tst
+                                }
+                        )
+                        .Join(
+                            _context.TaskTypes,
+                            temp0 => temp0.tst.TaskTypeId,
+                            tt => tt.Id,
+                            (temp0, tt) =>
+                                new
+                                {
+                                    temp0 = temp0,
+                                    tt = tt
+                                }
+                        )
+                        .Where(
+                            temp1 =>
+                                (((temp1.tt.Id == (int)TaskTypeEnum.ManageAuthorizationAndLimitation) && (temp1.temp0.t.StatusId != (int)TaskStatusEnum.Completed)) &&
+                                    (temp1.temp0.t.ActionId == cloa.Id)
+                                )
+                        )
+                .Select(temp1 => temp1.temp0.t)).Any();
+        }
+
+        private IList<LinkViewModel> SetCloaVersionsLinksUrl(int applicationId)
+        {
+            var cloaVersionsLinks = new List<LinkViewModel>();
+            var cloaVeriosUrls = _context.Cloas.Where(it => it.ApplicationId == applicationId).Select(v => new
+            {
+                v.Id,
+                v.CreatedDate
+            }).OrderByDescending(itc => itc.Id).ToArray();
+            int verionNumber = cloaVeriosUrls.Count();
+            foreach (var item in cloaVeriosUrls)
+            {
+                cloaVersionsLinks.Add(new LinkViewModel
+                {
+                    DisplayName = $"Version {verionNumber} - {item.CreatedDate:MM/dd/yyyy}",
+                    Url = $"/cloainformation/{item.Id}/{false}",
+                });
+                verionNumber--;
+            }
+
+            return cloaVersionsLinks;
+        }
+
+        private void SetInformationLinksUrl(IList<LinkViewModel> informationLinks, CloaViewModel cloa)
+        {
+            foreach (var link in informationLinks)
+            {
+                switch (link.Code)
+                {
+                    case "CC": //CLOA/ID Card
+                        link.Url = $"/cloainformation/{cloa.Id}/{false}";
+                        break;
+                    case "CI": //Contact Information
+                        link.Url = $"/contactinformation/{cloa.Id}";
+                        break;
+                    case "OA": //Original Application
+                        link.Url = $"/application/summary/{cloa.ApplicationId}/{cloa.VersionId}";
+                        link.IsNewWindow = true;
+                        break;
+                    case "AL": //Authorizations and limitations
+                        link.Url = $"/manageauthorization/{cloa.Id}?isInfo=true";
+                        break;
+                    case "VTR": //View Training Record
+                        link.Url = $"/training/record/{cloa.ApplicationId}/{cloa.DesigneeTypeId}/{1}";
+                        break;
+                    case "SEF": //Site Evaluation Form
+                        link.Url = $"/sitevisits/siteevaluationform/history/{cloa.Id}";
+                        break;
+                    case "ECF": //Equipment Certification Form
+                        link.Url = $"/equipment/list/{cloa.Id}";
+                        break;
+                    case "PAS": //Auto PreApproval PostActivity
+                        link.DisplayName = "View Pre-Approval Settings";
+                        link.Url = $"/manageauthorization/manufacturing/{cloa.Id}?isInfo=true";
+                        break;
+                    case "INTPRRSAP": //Auto PreApproval PostActivity
+                        if (cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DCTOE)
+                        {
+                            link.Url = $"/manageauthorization/aov/{cloa.Id}?isInfo=true";
+                            link.DisplayName = "View Pre-Approval Settings";
+                        }
+                        else
+                        {
+                            link.Url = $"/manageauthorization/afs/{cloa.Id}?isInfo=true";
+                        }
+                        break;
+                    case "INTMENTOR":
+                        link.DisplayName = "View Mentoring Records";
+                        link.Url = $"/mentoring/list/{cloa.ApplicationId}";
+                        break;
+                    case "INTPRPOS": //AOV Auto PreApproval PostActivity
+                        link.DisplayName = "Manage Pre-Approval/Post Activity Settings";
+                        link.Url = $"/manageauthorization/aov/{cloa.Id}?isInfo=true";
+                        break;
+                    case "REQTR":
+                        link.Url = $"/managecourse/requiredtrainings/{cloa.UserId}/{cloa.DesigneeTypeId}/{cloa.Id}";
+                        break;
+                    default:
+                        link.Url = string.Empty;
+                        break;
+                }
+            }
+        }
+
+        private void SetManagementActionLinksUrl(IList<LinkViewModel> managementLinks, CloaViewModel cloa, int roleId, bool isMyDesignee)
+        {
+            foreach (var link in managementLinks)
+            {
+                switch (link.Code)
+                {
+                    case "CRA": //Corrective Action
+                        link.Url = $"/correctiveaction/{cloa.Id}";
+                        break;
+                    case "IDT": //Initiate Designee Transfer
+                        link.Url = $"/designeetransfer/{cloa.Id}";
+                        break;
+                    case "MAL": //Manage Authorizations and Limitations
+                        if (cloa.DesigneeGroupId == (int)DesigneeGroupEnum.Engineering)
+                        {
+                            link.Url = $"/manageauthorization/der/{cloa.Id}";
+                        }
+                        else
+                        {
+                            link.Url = $"/manageauthorization/{cloa.Id}";
+                        }
+                        break;
+                    case "OPE": //Overall Performance Evaluation
+                        link.Url = $"performance/evaluation/{cloa.Id}?designeeTypeId={cloa.DesigneeTypeId}";
+                        break;
+                    case "SD": //Suspend Designation
+                        link.Url = $"/suspension/{cloa.Id}";
+                        break;
+                    case "TD": //Terminate Designation
+                        link.Url = $"/termination/{cloa.Id}";
+                        break;
+                    case "RI": //Reinstate
+                        link.Url = $"/reinstate/recommendation/{cloa.Id}?roleId={roleId}";
+                        break;
+                    case "TR": //Training Record
+                        link.Url = GetTrainingRecordUrl(cloa, roleId, isMyDesignee);
+                        break;
+                    case "RF": //Record Feedback
+                        link.Url = $"/record/feedback/{cloa.Id}";
+                        break;
+                    case "CSG": //Counseling
+                        link.Url = $"/counseling/new/{cloa.Id}";
+                        break;
+                    case "ECF": //Equipment Certification Form
+                        link.Url = $"/equipment/list/{cloa.Id}";
+                        break;
+                    case "INV": //Investigation
+                        link.Url = $"/investigation/new/{cloa.Id}";
+                        break;
+                    case "MCL": //Manage CLOA
+                        if (cloa.DesigneeGroupId == (int)DesigneeGroupEnum.AFS)
+                        {
+                            link.Url = $"/Reduce/Recommendation/AfsGroup2/{cloa.Id}";
+                        }
+                        else if (cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DERT || cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DERY)
+                        {
+                            link.Url = $"/reduce/recommendation/der/{cloa.Id}";
+                        }
+                        else
+                        {
+                            link.Url = $"/reduce/recommendation/{cloa.Id}";
+                        }
+                        break;
+                    case "SEF": //Site Evaluation Form
+                        link.Url = roleId == (int)RoleEnum.SPA
+                                 ? $"/sitevisits/siteevaluationform?userId={cloa.UserId}"
+                                : $"/sitevisits/siteevaluationform/history/{cloa.Id}";
+                        break;
+                    case "DO": //Direct Observation
+                        link.Url = $"/DirectObservation/{cloa.Id}";
+                        break;
+                    case "CVSR": //Company Voluntary Surrender Request
+                        link.Url = $"/voluntarysurrender/{cloa.Id}";
+                        break;
+                    case "MSED": //Manage Status/Expiration Date
+                        link.Url = $"/cloaStatus/{cloa.Id}";
+                        break;
+                    case "PAS":
+                        link.Url = $"/manageauthorization/manufacturing/{cloa.Id}";
+                        break;
+                    case "INTPRRSAP":
+                        link.Url = $"/manageauthorization/afs/{cloa.Id}";
+                        break;
+                    case "ARC":
+                        link.Url = $"{_reportSettings.Value.ServiceUrl}/{link.Url.Replace(":ameNumber", cloa.DesigneeNumber)}";
+                        link.IsNewWindow = true;
+                        break;
+                    case "INTMENTOR":
+                        link.Url = $"/mentoring/0/{cloa.ApplicationId}";
+                        break;
+                    case "PODLNK":
+                        link.Url = $"/linkaccount/{cloa.UserId}";
+                        break;
+                    case "INTPRPOS": //AOV Auto PreApproval PostActivity
+                        link.Url = $"/manageauthorization/aov/{cloa.Id}";
+                        break;
+                    default:
+                        link.Url = string.Empty;
+                        break;
+                }
+            }
+        }
+
+        public bool SaveAfsAdditionalInfo(DesigneeInfoViewModel model)
+        {
+            try
+            {
+                var cloa = _context.Cloas.First(c => c.Id == model.CloaId);
+                var date = model.CertificateIssuedDate != null && model.CertificateIssuedDate != string.Empty ? Convert.ToDateTime(model.CertificateIssuedDate) : (DateTime?)null;
+                var certificateNumber = cloa.CertificateNumber != null && cloa.CertificateNumber.Length > 1 ? cloa.CertificateNumber.PadLeft(9, '0') : null;
+                var ftn = cloa.Ftn != null && cloa.Ftn.Length > 1 ? cloa.Ftn.PadLeft(8, '0') : null;
+
+                if (cloa.CertificateIssuedDate != date || certificateNumber != model.CertificateNumber || ftn != model.Ftn)
+                {
+                    var newCloa = new Dms.Services.ViewModel.Cloa.CloaGenerateViewModel
+                    {
+                        Id = model.CloaId,
+                        UserId = model.ModifiedBy,
+                        CertificateIssuedDate = date,
+                        CertificateNumber = model.CertificateNumber,
+                        Ftn = model.Ftn,
+                        DesigneeTypeId = model.Type.Id
+                    };
+                    _cloaService.GenerateNewCloa(newCloa);
+                    _context.SaveChanges();
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static void DisableActivityIfNotHisDesignee(ActivityHistoryViewModel[] list, bool isMyDesignee, int roleId)
+        {
+            if (isMyDesignee) return;
+            foreach (var link in list)
+            {
+                if (link.ModuleId == (int)ProcessTypeEnum.OverallPerformanceEvaluation)
+                {
+                    link.HasNavigation = link.StatusId == (int)ActivityStatusEnum.Completed;
+                }
+                if (link.ModuleId != (int)ProcessTypeEnum.RecordFeedback && link.ModuleId != (int)ProcessTypeEnum.Counseling && link.ModuleId != (int)ProcessTypeEnum.SiteEvaluationForm)
+                {
+                    link.HasNavigation = link.StatusId != (int)ActivityStatusEnum.Saved;
+                }
+                if (link.ModuleId == (int)ProcessTypeEnum.InvestigationRecord && roleId == (int)RoleEnum.AviationSafetyInspector)
+                {
+                    link.HasNavigation = link.StatusId == (int)ActivityStatusEnum.Saved || link.StatusId == (int)ActivityStatusEnum.Completed;
+                }
+            }
+        }
+
+        private static string GetTrainingRecordUrl(CloaViewModel cloa, int roleId, bool isMyDesignee)
+        {
+            if (cloa.DesigneeTypeId == (int)DesigneeTypeEnum.AME ||
+                            (cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DMIR || cloa.DesigneeTypeId == (int)DesigneeTypeEnum.DARF && (roleId == (int)RoleEnum.PolicyOwnerDmirDarf || roleId == (int)RoleEnum.PolicyOwnerOda)) ||
+                            (cloa.DesigneeGroupId == (int)DesigneeGroupEnum.AFS && (roleId == (int)RoleEnum.PolicyOwnerAfs || roleId == (int)RoleEnum.OfficeAdministrator || roleId == (int)RoleEnum.PolicyOwnerOda)))
+            {
+                return $"/training/record/{cloa.ApplicationId}/{cloa.DesigneeTypeId}/{0}";
+            }
+
+            return $"/training/record/{cloa.ApplicationId}/{cloa.DesigneeTypeId}/{(isMyDesignee ? 0 : 1)}";
+
+        }
+
+        public bool SaveAovAdditionalInfo(DesigneeInfoViewModel model)
+        {
+            var cloa = _context.Cloas.Include(c => c.CloaAddresses).First(c => c.Id == model.CloaId);
+            var date = model.CertificateIssuedDate != null && model.CertificateIssuedDate != string.Empty ? Convert.ToDateTime(model.CertificateIssuedDate) : (DateTime?)null;
+            var certificateNumber = cloa.CertificateNumber != null && cloa.CertificateNumber.Length > 1 ? cloa.CertificateNumber.PadLeft(9, '0') : null;
+            var medicalCertificationDate = model.MedicalCertificationDate != null && model.MedicalCertificationDate != string.Empty ? Convert.ToDateTime(model.MedicalCertificationDate) : (DateTime?)null;
+
+            if (cloa.CertificateIssuedDate != date || certificateNumber != model.CertificateNumber || medicalCertificationDate != cloa.MedicalCertificationDate)
+            {
+                var cloaGenerateModel = new Dms.Services.ViewModel.Cloa.CloaGenerateViewModel
+                {
+                    Id = model.CloaId,
+                    UserId = model.ModifiedBy,
+                    CertificateIssuedDate = date,
+                    CertificateNumber = model.CertificateNumber,
+                    MedicalCertificationDate = medicalCertificationDate,
+                    DesigneeTypeId = model.Type.Id
+                };
+                var newCloa = _cloaService.GenerateNewCloa(cloaGenerateModel);
+                _context.SaveChanges();
+
+                if (newCloa != null)
+                {
+                    newCloa.CloaAddresses =
+                        cloa.CloaAddresses.Select(c => new AddressReference
+                        {
+                            ApplicationId = newCloa.ApplicationId,
+                            AddressId = c.AddressId,
+                            CloaId = newCloa.Id,
+                            CloaFunctionCodes = c.CloaFunctionCodes
+                                                .Where(f => f.IsActive)
+                                                .Select(f => new CloaFunctionCode()
+                                                {
+                                                    CloaId = newCloa.Id,
+                                                    FunctionCodeId = f.FunctionCodeId,
+                                                    IsActive = f.IsActive,
+                                                    IsAutoPostActivity = f.IsAutoPostActivity,
+                                                    IsAutoPreApproval = f.IsAutoPreApproval,
+                                                    Limitation = f.Limitation,
+                                                }).ToList()
+                        }).ToList();
+                    _context.SaveChanges();
+                }
+            }
+            return true;
+        }
+    }
+}
