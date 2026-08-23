@@ -1,53 +1,6 @@
-using System;
-using System.Collections.Generic;
-using Dms.Core.EntityFramework.Model.Lookup;
-namespace Dms.Services.ViewModel
-{
-    public class ActivityPaperWorkViewModel
-    {
-        public int Id { get; set; }
-        public string TrackingNumber { get; set; }
-        public int? StatusId { get; set; }
-        public bool? IsApproved { get; set; }
-        public bool? IsOtherAdminActivity { get; set; }
-        public string ApproverComments { get; set; }
-        public int CreatedBy { get; set; }
-        public int? ModifiedBy { get; set; }
-        public int? CategoryId { get; set; }
-        public string Url { get; set; }
-        public bool HasNavigation { get; set; }
-        
-        public string TypeOfRequest { get; set; }
-        
-        public string PreApprovalType { get; set; }
-        
-        public string ActivityStatus { get; set; }
-        
-        public DateTime ModifiedDate { get; set; }
-        
-        public string Cancel { get; set; }
-        
-        public string ApplicantName { get; set; }
-        public DateTime? DueDate { get; set; }
-        public DateTime? SubmissionDate { get; set; }
-        public bool IsPossibleObservation { get; set; }
-        public DateTime? ProposedStartDate { get; set; }
-        public bool IsNewWindow { get; set; } = false;
-        public int PreApprovalRequestId { get; set; }
-        public IList<BaseLookup> PostActivityVersions {get; set;}
-        public int? DesigneeTypeId { get; set; }
-        
-        public string JustificationForCancellation { get; set; }
-        public int? CancellationTypeId { get; set; }
-        public bool IsAdminType { get; set; }
-        public int? DesigneeCategoryId { get; set; }
-        public int? DesigneeGroupId { get; set; }
-        public bool IsGroup3AdminPreApproval { get; set; }
-        public bool HasPostActivity { get; set; }
-        public int? PostActivityStatusId { get; set; }
-        public string FormDataAuthFunctionCodes { get; set; }
-        public string FormDataSelectedFunctionCodes { get; set; }
-        public string FormDataSelectedRequestAuthorizations { get; set; }
-        public string FormDataTestCheckInformation { get; set; }
-    }
-}
+SELECT TOP 5 FormData 
+FROM PostActivity 
+WHERE PreApprovalRequestId IN (
+  SELECT Id FROM PreApprovalRequest WHERE ApplicationId = <your test application id>
+)
+ORDER BY Id DESC
