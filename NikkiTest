@@ -1,1 +1,1 @@
-afsgroups/index.component
+import { IndexComponent as AfsPrIndexComponent } from './afsgroups/index.component';
