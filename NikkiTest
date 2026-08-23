@@ -1,100 +1,590 @@
-@if (isLoaded && form) {
-  <div [formGroup]="$any(form)" id="preApprovalApplicationInfo"class="mb-3">
-    <p-panel id="preApprovalApplicationInfoPanel" [toggleable]="true" header="Application Information">
-      @if (!isAfsGroup2 && !isDpre) {
-        <dms-dropdown [filter]="false" (clickEvent)="onDataChange()" [options]="certificationRatingTypes"
-          formControlName="certificateRatingTypeId" identity="id_appinfo_pdd_certificateRatingTypeId"
-          placeholder="Select an Rating"  layout="grid" controlSize="medium" [validationMessages]="certificationRatingTypeValidationMessage"
-          label="Certificate or Rating applied for on the basis of">
-        </dms-dropdown>
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  CategoryEnum,
+  CertificateRatingTypeEnum,
+  DesigneeTypeEnum,
+  LookupItem,
+  PreApprovalApplicationInformation,
+  PreApprovalCertificateRatingTypeEnum,
+} from '../../../models/exportparams.model';
+import { SelectItem } from 'primeng/api';
+import { LookupService } from '../../../services/lookup.service';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
+import { UtilityService } from '../../../services/utility.service';
+import { startWith, takeUntil } from 'rxjs/operators';
+import { markAsModified } from '../../../extensions/mark-as-modified.function';
+import { BaseComponent } from '../../shared/base/base.component';
+import { LabelValueModel } from 'dms-sdk';
+
+@Component({
+    selector: 'dms-application-information',
+    templateUrl: 'dms-application-information.component.html',
+    styleUrls: ['dms-application-information.component.scss'],
+    standalone: false
+})
+export class DmsApplicationInformationComponent extends BaseComponent implements OnInit {
+  @Input() designeeTypeId: number | undefined | null = 0;
+  @Input() form: FormGroup | undefined | null | AbstractControl;
+  @Input() isDisabled = false;
+  @Input() categoryId: number | undefined;
+  @Input() isPostActivity = false;
+  @Input() triggerFieldChangeEvent = false;
+
+  @Input() correctiveActionEditable = false;
+  @Output() OnTriggerFieldChange = new EventEmitter<boolean>();
+  @Input() modifiedControls: any[] = [];
+  @Input() isEditPostActivity = false;
+  offices: SelectItem[] = [];
+  schools: LookupItem[] = [];
+  cfrSchools: LookupItem[] = [];
+  carriers: LookupItem[] = [];
+  countries: SelectItem[] = [];
+  certificationRatingTypes: SelectItem[] = [];
+  isDart = false;
+  isDpre = false;
+  isDme = false;
+  isLoaded = false;
+  isAfsGroup2 = false;
+  isAdminPreapprovals = false;
+  showSchool = false;
+  showPilotCountry = false;
+  showAirCarrierName = false;
+
+  previousIsCivilExperience: boolean | undefined;
+  previousIsMilitaryExperience: boolean | undefined;
+  markAsModified: typeof markAsModified = markAsModified;
+  prevIsCfrSectionTest: any;
+  prevPilotCountryId: any;
+  prvSchoolId: any;
+  certificationRatingTypesLabelValuePair: LabelValueModel[] = [];
+  isCfrSectionTest: LabelValueModel[] = [{ label: "Yes", value: true }, { label: "No", value: false }];
+  certificationRatingTypeValidationMessage: Map<string, string> = new Map().set('required', 'Certificate Rating Type is required.');
+  certificationRatingTypeCheckboxErrorMessage: Map<string, string> = new Map().set('required','Select at least one Certificate or Rating');
+  schoolIdValidationMessage: Map<string, string> = new Map().set('required', 'School is required.');
+  isCfrSectionTestValidationMessage: Map<string, string> = new Map().set('required', 'Section is required.');
+  authorizedTestOfficeIdValidationMessage: Map<string, string> = new Map().set('required', 'Office is required.');
+  pilotCountryIdValidationMessage: Map<string, string> = new Map().set('required', 'Country is required.');
+  airCarrierIdValidationMessage: Map<string, string> = new Map().set('required', 'Air Carrier is required.');
+
+  constructor(
+    private lookupService: LookupService,
+    public util: UtilityService
+  ) { super(); }
+
+    // helpers to reduce complexity and nesting
+  private static normalizeOptions(options: any): any {
+    const result = { ...options };
+    if (result.isReadOnly === undefined) result.isReadOnly = false;
+    if (result.isDisabled === true) result.isReadOnly = true;
+    if (result.isPostActivity === undefined) result.isPostActivity = false;
+    if (result.correctiveActionEditable === undefined) result.correctiveActionEditable = false;
+    if (result.modifiedControls === undefined) result.modifiedControls = [];
+    if (result.isEditPostActivity === undefined) result.isEditPostActivity = false;
+    return result;
+  }
+
+  private static computeFlags(model: PreApprovalApplicationInformation, options: any) {
+    const flags: any = {};
+    flags.isDpre = options.designeeTypeId === DesigneeTypeEnum.DPRE;
+    flags.isDme = options.designeeTypeId === DesigneeTypeEnum.DME;
+    flags.isAdminPreapprovals =
+      options.categoryId === CategoryEnum.AdminDpe ||
+      options.categoryId === CategoryEnum.AdminSae ||
+      options.designeeTypeId === DesigneeTypeEnum.ADMINPE;
+
+    if (options.designeeTypeId === DesigneeTypeEnum.DART) {
+      flags.isDart = true;
+    } else if (
+      options.designeeTypeId === DesigneeTypeEnum.DPE ||
+      options.designeeTypeId === DesigneeTypeEnum.SAE ||
+      options.designeeTypeId === DesigneeTypeEnum.ADMINPE
+    ) {
+      flags.isAfsGroup2 = true;
+    } else {
+      flags.isDart = false;
+      flags.isAfsGroup2 = false;
+    }
+
+    flags.isExperienceOptionRequired = !flags.isAfsGroup2 && ((flags.isDme && model.certificateRatingTypeId === CertificateRatingTypeEnum.Experience) || flags.isDpre);
+
+    return flags;
+  }
+  private static createControl(value: any, disabled: boolean = false, validators: any[] = []) {
+    return new FormControl({ value, disabled }, validators);
+  }
+  public static buildForm(
+    model: PreApprovalApplicationInformation,
+    options: any
+  ): FormGroup {
+    options = DmsApplicationInformationComponent.normalizeOptions(options);
+
+    const flags = DmsApplicationInformationComponent.computeFlags(model, options);
+
+    const fb = new FormBuilder();
+    const form = fb.group({});
+
+    // Certificate control - different shape when AFS group 2 (multi-select) vs single value
+    if (flags.isAfsGroup2) {
+      form.addControl(
+        'certificateRatingTypeId',
+        DmsApplicationInformationComponent.createControl(
+          model.selectedCertificateRatingTypeIds,
+          DmsApplicationInformationComponent.isFieldReadOnlyForCorrectiveAction(
+            'certificateRatingTypeId',
+            options.correctiveActionEditable,
+            options.isReadOnly
+          ),
+          !flags.isAdminPreapprovals && options.isPostActivity ? [Validators.required] : []
+        )
+      );
+    } else {
+      form.addControl(
+        'certificateRatingTypeId',
+        DmsApplicationInformationComponent.createControl(
+          model.certificateRatingTypeId,
+          DmsApplicationInformationComponent.isFieldReadOnlyForCorrectiveAction(
+            'certificateRatingTypeId',
+            options.correctiveActionEditable,
+            options.isReadOnly
+          ),
+          !flags.isDart && !flags.isDpre ? [Validators.required] : []
+        )
+      );
+    }
+
+    // common simple controls
+    form.addControl(
+      'schoolId',
+      DmsApplicationInformationComponent.createControl(
+        model.schoolId,
+        DmsApplicationInformationComponent.isFieldReadOnlyForCorrectiveAction(
+          'schoolId',
+          options.correctiveActionEditable,
+          options.isReadOnly
+        )
+      )
+    );
+
+    form.addControl(
+      'isCivilExperience',
+      DmsApplicationInformationComponent.createControl(
+        model.isCivilExperience,
+        DmsApplicationInformationComponent.isFieldReadOnlyForCorrectiveAction(
+          'isCivilExperience',
+          options.correctiveActionEditable,
+          options.isReadOnly
+        )
+      )
+    );
+
+    form.addControl(
+      'isMilitaryExperience',
+      DmsApplicationInformationComponent.createControl(
+        model.isMilitaryExperience,
+        DmsApplicationInformationComponent.isFieldReadOnlyForCorrectiveAction(
+          'isMilitaryExperience',
+          options.correctiveActionEditable,
+          options.isReadOnly
+        )
+      )
+    );
+
+    form.addControl(
+      'isCfrSectionTest',
+      DmsApplicationInformationComponent.createControl(
+        model.isCfrSectionTest,
+        DmsApplicationInformationComponent.isFieldReadOnlyForCorrectiveAction(
+          'isCfrSectionTest',
+          options.correctiveActionEditable,
+          options.isReadOnly
+        )
+      )
+    );
+
+    form.addControl(
+      'cfrSectionSchoolId',
+      DmsApplicationInformationComponent.createControl(
+        model.cfrSectionSchoolId,
+        DmsApplicationInformationComponent.isFieldReadOnlyForCorrectiveAction(
+          'cfrSectionSchoolId',
+          options.correctiveActionEditable,
+          options.isReadOnly
+        )
+      )
+    );
+
+    form.addControl(
+      'authorizedTestOfficeId',
+      DmsApplicationInformationComponent.createControl(
+        model.authorizedTestOfficeId,
+        DmsApplicationInformationComponent.isFieldReadOnlyForCorrectiveAction(
+          'authorizedTestOfficeId',
+          options.correctiveActionEditable,
+          options.isReadOnly
+        )
+      )
+    );
+
+    form.addControl(
+      'pilotCountryId',
+      DmsApplicationInformationComponent.createControl(
+        model.pilotLicenseCountry,
+        DmsApplicationInformationComponent.isFieldReadOnlyForCorrectiveAction(
+          'pilotCountryId',
+          options.correctiveActionEditable,
+          options.isReadOnly
+        )
+      )
+    );
+
+    form.addControl(
+      'airCarrierId',
+      DmsApplicationInformationComponent.createControl(
+        model.airCarrierId,
+        DmsApplicationInformationComponent.isFieldReadOnlyForCorrectiveAction(
+          'airCarrierId',
+          options.correctiveActionEditable,
+          options.isReadOnly
+        )
+      )
+    );
+
+    // attach experience validator when required
+    if (flags.isExperienceOptionRequired) {
+      form.setValidators(DmsApplicationInformationComponent.requireExperience);
+    }
+
+    return form;
+  }
+
+  public static buildModel(
+    form: FormGroup,
+    model: PreApprovalApplicationInformation
+  ) {
+    const value = form.getRawValue();
+
+    model.selectedCertificateRatingTypeIds = [];
+    model.certificateRatingTypeId = undefined;
+
+    if (Array.isArray(value.certificateRatingTypeId)) {
+      model.selectedCertificateRatingTypeIds = value.certificateRatingTypeId;
+    } else {
+      model.certificateRatingTypeId = value.certificateRatingTypeId;
+    }
+    model.schoolId = value.schoolId;
+    model.isCivilExperience = value.isCivilExperience;
+    model.isMilitaryExperience = value.isMilitaryExperience;
+    model.isCfrSectionTest = value.isCfrSectionTest;
+    model.cfrSectionSchoolId = value.cfrSectionSchoolId;
+    model.authorizedTestOfficeId = value.authorizedTestOfficeId;
+    model.pilotLicenseCountry = value.pilotCountryId;
+    model.airCarrierId = value.airCarrierId;
+  }
+
+  private static isFieldReadOnlyForCorrectiveAction(
+    field: string,
+    correctiveActionEditable: boolean = false,
+    isReadOnly: boolean = false
+  ): boolean {
+    const correctiveActionReadonlyFields: string[] = [];
+    let isDisabled: boolean = isReadOnly;
+    if (
+      correctiveActionEditable &&
+      !isReadOnly &&
+      correctiveActionReadonlyFields &&
+      correctiveActionReadonlyFields.length > 0
+    ) {
+      isDisabled = correctiveActionReadonlyFields.some((it) => it === field);
+    }
+    return isDisabled;
+  }
+
+  private static requireExperience(form: AbstractControl): ValidationErrors | null {
+    const value = form.getRawValue();
+    return value.isCivilExperience === true ||
+      value.isMilitaryExperience === true
+      ? null
+      : { experience: true };
+  }
+
+  async ngOnInit() {
+    if (!this.form) return;
+    this.isDpre = this.designeeTypeId === DesigneeTypeEnum.DPRE;
+    this.isDme = this.designeeTypeId === DesigneeTypeEnum.DME;
+    if (
+      this.categoryId === CategoryEnum.AdminDpe ||
+      this.categoryId === CategoryEnum.AdminSae ||
+      this.designeeTypeId === DesigneeTypeEnum.ADMINPE
+    ) {
+      this.isAdminPreapprovals = true;
+    }
+
+    if (this.designeeTypeId === DesigneeTypeEnum.DART) {
+      this.isDart = true;
+    } else if (
+      this.designeeTypeId === DesigneeTypeEnum.DPE ||
+      this.designeeTypeId === DesigneeTypeEnum.SAE ||
+      this.designeeTypeId === DesigneeTypeEnum.ADMINPE
+    ) {
+      this.isAfsGroup2 = true;
+    }
+
+    await this.lookupService.populateLookupData();
+    this.populateData();
+    this.isLoaded = true;
+
+    this.initAppGroup();
+
+    if (this.form.get('isCivilExperience')) {
+      this.previousIsCivilExperience = this.form.get('isCivilExperience')?.value;
+    }
+
+    if (this.form.get('isMilitaryExperience')) {
+      this.previousIsMilitaryExperience = this.form.get(
+        'isMilitaryExperience'
+      )?.value;
+    }
+
+    if (this.form.get('isCfrSectionTest')) {
+      this.prevIsCfrSectionTest = this.form.get('isCfrSectionTest')?.value;
+    }
+
+    if (this.form.get('pilotCountryId')) {
+      this.prevPilotCountryId = this.form.get('pilotCountryId')?.value;
+    }
+
+    if (this.form.get('schoolId')) {
+      this.prvSchoolId = this.form.get('schoolId')?.value;
+    }
+
+    if (this.designeeTypeId === DesigneeTypeEnum.DME) {
+      this.form
+        .get('certificateRatingTypeId')
+        ?.setValidators([Validators.required]);
+      this.form.get('certificateRatingTypeId')?.updateValueAndValidity();
+    }
+  }
+  onDataChange(): boolean {
+    if (!this.form) return true;
+
+    if (!this.triggerFieldChangeEvent) return true;
+
+    if (!this.isAfsGroup2) {
+      this.restorePreviousFieldValues();
+      this.emitFieldChange();
+    }
+
+    return false;
+  }
+
+  private restorePreviousFieldValues(): void {
+    if (!this.form) return;
+    const setIfControlExists = (name: string, value: any) => {
+      const ctrl = this.form?.get(name);
+      if (ctrl !== undefined) {
+        ctrl?.setValue(value);
       }
-      @if (isAfsGroup2) {
-        <dms-check-box-group identity="id_appinfo_chk_certificateRatingTypeId" layout="flex"
-          [formControl]="$any(form.get('certificateRatingTypeId'))" [checkBoxValues]="certificationRatingTypesLabelValuePair"
-          label="Certificate or Rating applied for on the basis of" [validationMessages]="certificationRatingTypeCheckboxErrorMessage"
-          [doSpotLight]="markAsModified(modifiedControls, 'certificateRatingTypeId').borderRed">
-        </dms-check-box-group>
+    };
+
+    setIfControlExists('isCivilExperience', this.previousIsCivilExperience);
+    setIfControlExists('isMilitaryExperience', this.previousIsMilitaryExperience);
+    setIfControlExists('isCfrSectionTest', this.prevIsCfrSectionTest);
+    setIfControlExists('pilotCountryId', this.prevPilotCountryId);
+    setIfControlExists('schoolId', this.prvSchoolId);
+  }
+
+  populateData() {
+    this.certificationRatingTypes = this.isAfsGroup2 || this.isAdminPreapprovals
+        ? this.lookupService.getPreapprovalCertificateRatingTypes().filter((c) => c.value !== PreApprovalCertificateRatingTypeEnum.FourteenCfr14253Or14255)
+        : this.lookupService.getCertificateRatingTypes();
+
+    if (!this.isAdminPreapprovals) {
+      this.certificationRatingTypes.splice(PreApprovalCertificateRatingTypeEnum.AirCarrierTrainingProgram, 3);
+    }
+
+    this.offices = this.lookupService.getOfficesByDesigneeType(this.designeeTypeId!);
+    this.countries = this.lookupService.getCountries();
+    this.certificationRatingTypesLabelValuePair = this.certificationRatingTypes.map(data => ({label: data.label as string, value:data.value}));
+  }
+
+  isFieldReadOnlyForCorrectiveAction(field: string): boolean {
+    const correctiveActionReadonlyFields: string[] = [];
+
+    let isDisabled: boolean = this.isDisabled;
+    if (
+      this.correctiveActionEditable &&
+      !this.isDisabled &&
+      correctiveActionReadonlyFields &&
+      correctiveActionReadonlyFields.length > 0
+    ) {
+      isDisabled = correctiveActionReadonlyFields.some((it) => it === field);
+    }
+    return isDisabled;
+  }
+  initAppGroup() {
+    if (!this.form) return;
+
+    const certCtrl = this.form.get('certificateRatingTypeId');
+    certCtrl
+      ?.valueChanges
+      .pipe(takeUntil(this.destroying$), startWith(certCtrl?.value))
+      .subscribe((v) => this.onCertificateRatingTypeChange(v));
+
+    const cfrCtrl = this.form.get('isCfrSectionTest');
+    cfrCtrl
+      ?.valueChanges
+      .pipe(takeUntil(this.destroying$), startWith(cfrCtrl?.value))
+      .subscribe((v) => this.onCfrSectionTestChange(v));
+  }
+private onCertificateRatingTypeChange(certificateRatingTypeId?: any): void {
+    if (!this.form) return;
+
+    if (!this.isAfsGroup2) {
+      if (certificateRatingTypeId === CertificateRatingTypeEnum.GraduateofApprovedCourse) {
+        this.schoolValidatorsUpdateToRequired(true);
+        this.form.setValidators([]);
+        this.form.get('isCfrSectionTest')?.setValidators([Validators.required]);
+        this.form.get('isCfrSectionTest')?.updateValueAndValidity();
+        this.form.get('authorizedTestOfficeId')?.setValidators([]);
+        this.form.get('authorizedTestOfficeId')?.updateValueAndValidity();
+        return;
       }
-      @if ((!isAfsGroup2 && !isDpre && form.get('certificateRatingTypeId')?.value === 1) || (isAfsGroup2 && showFollowUp(3))) {
-        <dms-auto-complete
-          label="Name and designation number of FAA-approved school in which the applicant enrolled" (completeMethod)="filterSchools($event)"
-          (clearEvent)="clearSchool()" (focusEvent)="onDataChange()" [forceSelection]="true" [minLength]="2" formControlName="schoolId"
-          [doSpotLight]="markAsModified(modifiedControls, 'schoolId').borderRed"  identity="id_applicationinfo_pac_schoolid"
-          [suggestions]="schools" field="name" ariaLabel="Search with School Name" [validationMessages]="schoolIdValidationMessage"
-          controlSize="large">
-        </dms-auto-complete>
+
+      // default non-AFS-group2 path
+      this.form.setValidators([]);
+      const isExperienceOptionRequired =
+        (this.isDme && certificateRatingTypeId !== CertificateRatingTypeEnum.JsamtccProgram) || this.isDpre;
+      if (isExperienceOptionRequired) {
+        this.form.setValidators(DmsApplicationInformationComponent.requireExperience);
       }
-      @if (!isAfsGroup2 && !isDpre && form.get('certificateRatingTypeId')?.value === 1) {
-        <dms-radio-button
-          (clickEvent)="onDataChange()" [radioValues]="isCfrSectionTest" identity="id_appinfo_radio_isCfrSectionTest"
-          formControlName="isCfrSectionTest"  label="14 CFR Section 65.80 test?"
-          layout="grid" [doSpotLight]="markAsModified(modifiedControls, 'facilityonRecord').borderRed"
-          [validationMessages]="isCfrSectionTestValidationMessage">
-        </dms-radio-button>
+      this.schoolValidatorsUpdateToRequired(false);
+      this.form.get('isCfrSectionTest')?.setValue(false);
+      this.form.get('isCfrSectionTest')?.setValidators([]);
+      this.form.get('isCfrSectionTest')?.updateValueAndValidity();
+
+      if (certificateRatingTypeId !== CertificateRatingTypeEnum.JsamtccProgram && !this.isDpre) {
+        this.form.get('authorizedTestOfficeId')?.setValidators([Validators.required]);
+      } else {
+        this.form.get('authorizedTestOfficeId')?.setValidators([]);
       }
-      @if ((!isAfsGroup2 && !isDpre && form.get('certificateRatingTypeId')?.value === 1) && form.get('isCfrSectionTest')?.value === true) {
-        <dms-auto-complete
-          label="Name and designation number of FAA-approved school in which the applicant enrolled" (completeMethod)="filterCfrSchools($event)"
-          (clearEvent)="clearCfrSectionSchool()" (focusEvent)="onDataChange()" [forceSelection]="true" [minLength]="2" formControlName="cfrSectionSchoolId"
-          [doSpotLight]="markAsModified(modifiedControls, 'cfrSectionSchoolId').borderRed"  identity="id_applicationinfo_pac_cfrSectionSchoolId_"
-          [suggestions]="cfrSchools" field="name" ariaLabel="Search with School Name" [validationMessages]="schoolIdValidationMessage"
-          controlSize="large">
-        </dms-auto-complete>
-      }
-      @if ((!isAfsGroup2 && !isDpre && form.get('certificateRatingTypeId')?.value === 2) || isDpre) {
-        <div class="grid col-12 p-0">
-          <div class="col-12 c-label md:col-4 lg:col-4 xl:col-3 md:pt-3">
-            <label for=""><span class="c-label-required">*</span>Type of Experience</label>
-          </div>
-          <div class="grid col-12 c-control gap-2 md:col-5 lg:col-5 xl:col-4">
-            <dms-check-box-binary identity="id_appinfo_chk_isCivilExperience"
-              [hideValidationPlaceHolder]="true" [value]="true" formControlName="isCivilExperience"
-              label="Civil Experience" (clickEvent)="onDataChange()" layout="grid"
-              [doSpotLight]="markAsModified(modifiedControls, 'isCivilExperience').borderRed">
-            </dms-check-box-binary>
-            <dms-check-box-binary identity="id_appinfo_chk_isMilitaryExperience"
-              [hideValidationPlaceHolder]="true" [value]="true" formControlName="isMilitaryExperience"
-              label="Military Experience" (clickEvent)="onDataChange()" layout="grid"
-              [doSpotLight]="markAsModified(modifiedControls, 'isMilitaryExperience').borderRed">
-            </dms-check-box-binary>
-          </div>
-          <div class="col-12 c-error-message md:col-3 lg:col-3 xl:col-5 md:pt-3">
-            @if (form.hasError('experience') && (form.get('isCivilExperience')?.touched
-              || form.get('isCivilExperience')?.dirty
-              || form.get('isMilitaryExperience')?.touched
-              || form.get('isMilitaryExperience')?.dirty)) {
-              <span
-                class="message-error-sm">
-                Please select an option.
-              </span>
-            }
-          </div>
-        </div>
-      }
-      @if ((!isAfsGroup2 && !isDpre && form.get('certificateRatingTypeId')?.value === 2) || isDpre) {
-        <dms-dropdown
-          formControlName="authorizedTestOfficeId" [options]="offices"
-          [disabled]="isDisabled || isEditPostActivity" [filter]="true" identity="id_appinfo_pdd_authorizedTestOfficeId"
-          placeholder="Select a school"  layout="grid" controlSize="medium"
-          [validationMessages]="authorizedTestOfficeIdValidationMessage"
-          label="Office that authorized the test for this applicant"
-          [doSpotLight]="markAsModified(modifiedControls, 'authorizedTestOfficeId').borderRed">
-        </dms-dropdown>
-      }
-      @if (isAfsGroup2 && showFollowUp(4)) {
-        <dms-dropdown [filter]="false" (clickEvent)="onDataChange()" [disabled]="isDisabled"
-          [options]="countries" formControlName="pilotCountryId" identity="id_appinfo_pdd_pilotCountryId"
-          placeholder="Select a country" layout="grid" controlSize="medium" [validationMessages]="pilotCountryIdValidationMessage"
-          label="Country that Issued the foreign pilot license">
-        </dms-dropdown>
-      }
-      @if (isAfsGroup2 && showFollowUp(5)) {
-        <dms-auto-complete label="Name of Air Carrier" (completeMethod)="filterCarriers($event)"
-          (clearEvent)="clearAirCarrierId()" [forceSelection]="true" [minLength]="3" [virtualScrollItemSize]="100" [suggestions]="carriers"
-          ariaLabel="Search with air carrier" ield="name" formControlName="airCarrierId" field="name"
-          identity="id_applicationinfo_pac_airCarrierId" [validationMessages]="airCarrierIdValidationMessage">
-        </dms-auto-complete>
-      }
-    </p-panel>
-  </div>
+      this.form.get('authorizedTestOfficeId')?.updateValueAndValidity();
+      return;
+    }
+    return this.validatorsUpdateToRequired(certificateRatingTypeId);
+  }
+  private validatorsUpdateToRequired(certificateRatingTypeId?: any): void {
+    if (!this.form) return;
+
+    // AFS group 2 path
+    if (certificateRatingTypeId != null &&
+      certificateRatingTypeId.toString().indexOf(PreApprovalCertificateRatingTypeEnum.HolderofForeignLicense.toString()) > -1) {
+      this.form.get('pilotCountryId')?.setValidators([Validators.required]);
+      this.showPilotCountry = true;
+    } else {
+      this.form.get('pilotCountryId')?.setValidators([]);
+      this.showPilotCountry = false;
+    }
+
+    if (certificateRatingTypeId != null &&
+      certificateRatingTypeId.toString().indexOf(PreApprovalCertificateRatingTypeEnum.GraduateofanApprovedCourse.toString()) > -1) {
+      this.form.get('schoolId')?.setValidators([Validators.required]);
+      this.showSchool = true;
+    } else {
+      this.form.get('schoolId')?.setValidators([]);
+      this.showSchool = false;
+    }
+
+    if (certificateRatingTypeId != null &&
+      certificateRatingTypeId.toString().indexOf(PreApprovalCertificateRatingTypeEnum.AirCarrierTrainingProgram.toString()) > -1) {
+      this.form.get('airCarrierId')?.setValidators([Validators.required]);
+      this.showAirCarrierName = true;
+    } else {
+      this.form.get('airCarrierId')?.setValidators([]);
+      this.showAirCarrierName = false;
+    }
+
+    this.form.get('pilotCountryId')?.updateValueAndValidity();
+    this.form.get('airCarrierId')?.updateValueAndValidity();
+    this.form.get('schoolId')?.updateValueAndValidity();
+  }
+
+  private onCfrSectionTestChange(isCfrSectionTest: boolean): void {
+    if (!this.form) return;
+
+    const ctrl = this.form.get('cfrSectionSchoolId');
+    if (isCfrSectionTest) {
+      ctrl?.setValidators([Validators.required]);
+    } else {
+      ctrl?.setValidators([]);
+    }
+    ctrl?.updateValueAndValidity();
+  }
+
+  filterCarriers(event: any) {
+    this.lookupService
+      .getAirCarriers(event.query, this.designeeTypeId!)
+      .pipe(takeUntil(this.destroying$))
+      .subscribe((data) => {
+        this.carriers = data;
+      });
+  }
+
+  filterCfrSchools(event: any) {
+    this.lookupService
+      .filterSchools(event.query, this.designeeTypeId!)
+      .pipe(takeUntil(this.destroying$))
+      .subscribe((data) => {
+        this.cfrSchools = data;
+      });
+  }
+
+  filterSchools(event: any) {
+    this.lookupService
+      .filterSchools(event.query, this.designeeTypeId!)
+      .pipe(takeUntil(this.destroying$))
+      .subscribe((data) => {
+        this.schools = data;
+      });
+  }
+
+  public clearAirCarrierId() {
+    this.form?.get('airCarrierId')?.setValue(null);
+  }
+
+  public clearSchool() {
+    this.form?.get('schoolId')?.setValue(null);
+  }
+
+  public clearCfrSectionSchool() {
+    this.form?.get('cfrSectionSchoolId')?.setValue(null);
+  }
+
+  public showFollowUp(certificateRatingTypeId: number) {
+    const value = this.form?.get('certificateRatingTypeId')?.value;
+    if (!value) {
+      return false;
+    }
+    return value.toString().indexOf(certificateRatingTypeId.toString()) > -1;
+  }
+
+  private emitFieldChange() {
+    this.OnTriggerFieldChange.emit(this.triggerFieldChangeEvent);
+  }
+
+  private schoolValidatorsUpdateToRequired(isRequired: boolean) {
+    if(!this.form) return;
+    this.form
+      .get('schoolId')
+      ?.setValidators(isRequired ? [Validators.required] : []);
+    this.form.get('schoolId')?.updateValueAndValidity();
+    this.showSchool = isRequired;
+  }
 }
