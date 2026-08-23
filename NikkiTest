@@ -1,7 +1,6 @@
-model.isMultipleApplicants = value.isMultipleApplicants;
 model.isAdminPeGenFPE = value.isAdminPeGenFPE;
 model.isAdminPeGenMCE = value.isAdminPeGenMCE;
 model.isAdminPeGenGIE = value.isAdminPeGenGIE;
 model.isAdminPeGenFIRE = value.isAdminPeGenFIRE;
 model.isAdminPeGenBAE = value.isAdminPeGenBAE;
-model.isRecommendingInstructorNotAvailable = value.isRecommendingInstructorNotAvailable;
+
