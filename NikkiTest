@@ -1,4 +1,1 @@
-Issue #1 — Facility on Record default → Fixed (PreApprovalRequestBaseService.cs) — may need uncommenting
-Issue #2 — Outside office district (hide + not mandatory) → Fixed (dms-activity-location.component.ts) — retesting now
-Issue #3 — Pre-Approval Type not populating for Completed → Fixed for general case (AfsPreApprovalRequestService.cs) — needs retest specifically on Completed status
-Issue #4 — Make/Model/Series sought on Post Activity Report → Fixed (Post Activity's
+"Quick update — still not feeling great, going to take the rest of the day off. Will pick things back up tomorrow. Sorry for the back-and-forth, thanks for understanding
