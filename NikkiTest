@@ -7,43 +7,4 @@ ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenBAE] bit NULL;
 
 =============
 
-IsOtherAdminActivity = p.AfsPreApprovalRequest.IsOtherAdminActivity.GetValueOrDefault(false),
-IsAdminPeGenFPE = p.AfsPreApprovalRequest.IsAdminPeGenFPE.GetValueOrDefault(false),
-IsAdminPeGenMCE = p.AfsPreApprovalRequest.IsAdminPeGenMCE.GetValueOrDefault(false),
-IsAdminPeGenGIE = p.AfsPreApprovalRequest.IsAdminPeGenGIE.GetValueOrDefault(false),
-IsAdminPeGenFIRE = p.AfsPreApprovalRequest.IsAdminPeGenFIRE.GetValueOrDefault(false),
-IsAdminPeGenBAE = p.AfsPreApprovalRequest.IsAdminPeGenBAE.GetValueOrDefault(false),
-DesigneeTypeId2 = p.Application.DesigneeTypeId,  // see note below
-ProposedStartDate = p.ProposeStartDate,
-=======
-
-var preApprovalType = preApprovalFunctionCodes.FirstOrDefault(f => f.PreApprovalRequestId == d.Id)?.Type;
-if (string.IsNullOrWhiteSpace(preApprovalType)) 
-{
-    if (d.DesigneeTypeId2 == (int)DesigneeTypeEnum.ADMINPEGEN)
-    {
-        var codes = new (string Label, bool IsSelected)[]
-        {
-            ("FPE", d.IsAdminPeGenFPE),
-            ("MCE", d.IsAdminPeGenMCE),
-            ("GIE", d.IsAdminPeGenGIE),
-            ("FIRE", d.IsAdminPeGenFIRE),
-            ("BAE", d.IsAdminPeGenBAE),
-        };
-        preApprovalType = string.Join(", ", codes.Where(c => c.IsSelected).Select(c => c.Label));
-    }
-    if (string.IsNullOrWhiteSpace(preApprovalType))
-    {
-        preApprovalType = !d.IsOtherAdminActivity.GetValueOrDefault(false) ? string.Empty : "Other Activity";
-    }
-}
-d.PreApprovalType = preApprovalType;
-
-==========
-
-public bool IsAdminPeGenFPE { get; set; }
-public bool IsAdminPeGenMCE { get; set; }
-public bool IsAdminPeGenGIE { get; set; }
-public bool IsAdminPeGenFIRE { get; set; }
-public bool IsAdminPeGenBAE { get; set; }
-public int? DesigneeTypeId2 { get; set; }
+afs-post-activity.component.html and .ts
