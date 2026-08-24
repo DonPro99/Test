@@ -1,6 +1,19 @@
-this.gradeCertificates = this.lookupService.getGradeCertificateTypes(this.designeeTypeId!);
 
-
-const designeeTypeId = this.categoryId !== 0 ? DesigneeTypeEnum.ADMINPE : this.designeeTypeId;
-this.practicalTypes = this.lookupService.getPracticalTypesDesigneeTypeId(this.designeeTypeId!);  // ← fixed, uses this.designeeTypeId directly
-this.gradeCertificates = this.lookupService.getGradeCertificateTypes(designeeTypeId!);            // ← NOT fixed, still uses the forced variable
+    const designeeTypeId =
+      this.categoryId !== 0 ? DesigneeTypeEnum.ADMINPE : this.designeeTypeId;
+    this.practicalTypes = this.lookupService.getPracticalTypesDesigneeTypeId(
+      designeeTypeId!
+    );
+    // this logic is to cover all the admin preapproval functionalities
+    this.gradeCertificates = this.lookupService.getGradeCertificateTypes(
+      designeeTypeId!
+    );
+    this.isAdminPreapprovals =
+      this.categoryId !== 0 || this.designeeTypeId === DesigneeTypeEnum.ADMINPE || this.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN;
+    this.isAdminPeGen = this.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN;
+    this.hideFlightInfo = this.isAdminPreapprovals
+      ? this.getControlValue('isOtherAdminActivity')
+      : false;
+    // this.testCheckInformation?.aircraftMakeModelId = this.testCheckInformation?.isAircraftNotRequired ?
+    //     null : this.testCheckInformation?.aircraftMakeModelId;
+  
