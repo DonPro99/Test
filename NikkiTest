@@ -6,95 +6,774 @@ ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenBAE] bit NULL;
 
 
 =============
-@if (location && form && isLoaded ) {
-  <div [formGroup]="$any(form)" id="preApprovalTestLocationInfo" class="mb-3">
-    <p-panel id="preApprovalTestLocationInfoPanel" [toggleable]="true" header="{{locationHeader}}">
-      <div id="id_poinfo" class="alter-bg">
-        @if (showAirPort) {
-          <dms-auto-complete (completeMethod)="filterAirports($event)" (clearEvent)="airportChange($event)"
-            (selectEvent)="airportSelect($event)" (clickEvent)="onAirportClick($event)" [forceSelection]="true" [minLength]="2"
-            [virtualScrollItemSize]="50" [suggestions]="airports" ariaLabel="Search with Airport Name" field="name"
-            formControlName="airport" identity="id_activityloc_pac_airport" name="airport" placeholder="Name" layout="grid"
-            label="{{airportLabel}}" [doSpotLight]="markAsModified(modifiedControls, 'airport').borderRed"
-            [validationMessages]="airportInvalidMessage">
-          </dms-auto-complete>
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ActivityLocationRadioButtonEnum,
+  Address,
+  AddressParams,
+  DesigneeTypeEnum,
+  LookupItem,
+  PreApprovalActivityLocation,
+  SystemVariableViewModel
+} from '../../../models/exportparams.model';
+import { SelectItem } from 'primeng/api';
+import { LookupService } from '../../../services/lookup.service';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { DmsAddressComponent } from '../../address/dms-address.component';
+import { UtilityService } from '../../../services/utility.service';
+import { startWith, takeUntil } from 'rxjs/operators';
+import { markAsModified } from '../../../extensions/mark-as-modified.function';
+import { BaseComponent } from '../../shared/base/base.component';
+import { LabelValueModel } from 'dms-sdk';
+import { AutoCompleteCompleteEvent, AutoCompleteSelectEvent } from 'primeng/autocomplete';
+import { CryptoService } from  '../../../services/crypto.service';
+import { updateFormValidity } from '../../../extensions';
+@Component({
+    selector: 'dms-activity-location',
+    templateUrl: 'dms-activity-location.component.html',
+    styleUrls: ['dms-activity-location.component.scss'],
+    standalone: false
+})
+export class DmsActivityLocationComponent extends BaseComponent implements OnInit {
+  @Input() location?: PreApprovalActivityLocation;
+  @Input() designeeTypeId: number | undefined | null;
+  @Input() form: FormGroup | undefined | null | AbstractControl;
+  @Input() isDisabled : boolean | undefined | null = false;
+  @Input() triggerFieldChangeEvent = false;
+  @Output() OnTriggerFieldChange = new EventEmitter<boolean>();
+  @Input() correctiveActionEditable = false;
+  @Input() categoryId?: number;
+  @Input() modifiedControls: string[] = [];
+  @Input() isPostActivity = false;
+  @Input() showErrorMessageIcon = false;
+  isDpe = false;
+  facilityAddressReadOnly = false;
+  offices?: SelectItem[] = [];
+  locationAddresses?: SelectItem[] = [];
+  airports: LookupItem[] = [];
+  display = false;
+  isLoaded = false;
+  showFacilityName = false;
+  isAfsGroup2 = false;
+  isAdmin = false;
+  previousIsOutsideOfficeDistrict?: boolean;
+  previousIsActivityOutsideUsa?: boolean;
+  previousFacilityOnRecord?: number;
+  previousAirport?: string;
+  locationHeader = '';
+  showMultipleLocationAddresses = true;
+  showAirPort = false;
+  isAfsGroup3 = false;
+  DesigneeTypeEnum = DesigneeTypeEnum;
+  activityLocationRadioButtonEnum = ActivityLocationRadioButtonEnum;
+  showAddress = true;
+  markAsModified: typeof markAsModified = markAsModified;
+  displayRequired: boolean = false;
+  isAovGroup = false;
+  airportLabel = "Departure Airport or Nearest Airport";
+  companies: SelectItem[] = [];
+  activityLocationRadioButtonValues: LabelValueModel[] = [
+    { label: 'Facility on Record', value: this.activityLocationRadioButtonEnum.facilityOnRecord },
+    { label: 'Other Facility', value: this.activityLocationRadioButtonEnum.otherFacility}
+  ];
+  
+  isOutsideOfficeDistrictRadioButtonValues: LabelValueModel[] = [
+    { label: "Yes", value: true },
+    { label: "No", value: false }
+  ];
+
+  isActivityOutsideUsaRadioButtonValues: LabelValueModel[] = [
+    { label: "Inside US", value: true },
+    { label: "Outside US", value: false }
+  ];
+
+  airportInvalidMessage = new Map().set('required', 'Airport is required.');
+  companyInvalidMessage = new Map().set('required', 'Company Name is required.');
+  isoutsideofficeDistrictInvalidMessage = new Map().set('required', 'Activity outside District is required');
+  invalidMessages = new Map().set('required', 'This field is required');
+  officeInvalidMessage = new Map().set('required', 'Office is required.');
+
+  constructor(
+    private fb: FormBuilder,
+    private lookupService: LookupService,
+    private route: ActivatedRoute,
+    public util: UtilityService,
+    private cryptoService: CryptoService,
+  ) { super(); }
+
+  get getNameLabel() {
+    if (
+      !this.isAdmin &&
+      DmsActivityLocationComponent.groundPortionLabelTypes().includes(
+        this.designeeTypeId ?? 0
+      )
+    ) {
+      return 'Name of Facility for Ground Portion';
+    } else if (this.designeeTypeId === DesigneeTypeEnum.DADE) {
+      return 'Name of Facility For practical Test';
+    } else {
+      return 'Name of Facility';
+    }
+  }
+
+  get isActivityOutside() {
+    return (
+      this.form &&
+      this.form.get('isOutsideOfficeDistrict') &&
+      this.form.get('isOutsideOfficeDistrict')?.value &&
+      !this.isAfsGroup2
+    );
+  }
+
+  get showLineCheck() {
+    return this.designeeTypeId === DesigneeTypeEnum.APD && !this.isAdmin;
+  }
+
+  static isFieldReadOnlyForCorrectiveAction(
+    field: string,
+    isAfsGroup2: boolean,
+    isDisabled: boolean,
+    correctiveActionEditable: boolean,
+    isAovGroup: boolean = false,
+    isPostActivity: boolean = false
+  ): boolean {
+    const correctiveActionReadonlyFields: string[] = isAfsGroup2
+      ? ['']
+      : ['isOutsideOfficeDistrict', 'isActivityOutsideUsa', 'officeId'];
+    let readonly: boolean = isDisabled;
+    if (isAovGroup && isPostActivity) {
+      readonly = true;
+    } else if (correctiveActionEditable && !isDisabled) {
+      readonly = correctiveActionReadonlyFields.some((it) => it === field);
+    }
+    return readonly;
+  }
+
+  static buildForm(
+    location: PreApprovalActivityLocation,
+    categoryId: number,
+    designeeTypeId: number,
+    isDisabled: boolean = false,
+    correctiveActionEditable: boolean = false,
+    isPostActivity: boolean = false
+  ): FormGroup {
+    const isAovGroup =
+      designeeTypeId === DesigneeTypeEnum.DCTOE;
+    const isAfsGroup2 = DmsActivityLocationComponent.afsGroup2Types().includes(
+      designeeTypeId
+    );
+    const isAfsGroup3 = DmsActivityLocationComponent.afsGroup3Types().includes(
+      designeeTypeId
+    );
+    const isApdTceTypes = DmsActivityLocationComponent.apdTceTypes().includes(
+      designeeTypeId
+    );
+    const isAdmin =
+      designeeTypeId === DesigneeTypeEnum.ADMINPE ||
+      (categoryId && categoryId > 0);
+    const showAirPort = !isAdmin && (isAfsGroup2 || isApdTceTypes);
+
+    const facilityOnRecord =
+      designeeTypeId === DesigneeTypeEnum.APD && location.isLineCheck
+        ? ActivityLocationRadioButtonEnum.lineCheck
+        : location.facilityonRecord === false
+        ? ActivityLocationRadioButtonEnum.otherFacility
+        : ActivityLocationRadioButtonEnum.facilityOnRecord;
+
+    const form:any = new FormBuilder().group({
+      facilityonRecord: new FormControl(
+        {
+          value: facilityOnRecord,
+          disabled: DmsActivityLocationComponent.isFieldReadOnlyForCorrectiveAction(
+            'facilityonRecord',
+            isAfsGroup2,
+            isDisabled,
+            correctiveActionEditable
+          ),
+        },
+        []
+      ),
+      address: DmsAddressComponent.buildForm(
+        location.locationAddress as Address,
+        new AddressParams(isDisabled ||
+          facilityOnRecord === ActivityLocationRadioButtonEnum.facilityOnRecord,
+        true,
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        isAovGroup,
+        isAovGroup)
+      ),
+      isOutsideOfficeDistrict: new FormControl(
+        {
+          value: location.isOutsideOfficeDistrict,
+          disabled: isPostActivity || DmsActivityLocationComponent.isFieldReadOnlyForCorrectiveAction(
+            'isOutsideOfficeDistrict',
+            isAfsGroup2,
+            isDisabled,
+            correctiveActionEditable
+          ),
+        },
+        isAfsGroup2 || isAfsGroup3 ? [] : Validators.required
+      ),
+      isActivityOutsideUsa: new FormControl(
+        {
+          value: location.isActivityOutsideUsa,
+          disabled: DmsActivityLocationComponent.isFieldReadOnlyForCorrectiveAction(
+            'isActivityOutsideUsa',
+            isAfsGroup2,
+            isDisabled,
+            correctiveActionEditable
+          ),
+        },
+        []
+      ),
+      officeId: new FormControl(
+        {
+          value: location.officeId,
+          disabled: DmsActivityLocationComponent.isFieldReadOnlyForCorrectiveAction(
+            'officeId',
+            isAfsGroup2,
+            isDisabled,
+            correctiveActionEditable
+          ),
+        },
+        []
+      ),
+      airport: showAirPort
+        ? new FormControl(
+            {
+              value: location.airport,
+              disabled: DmsActivityLocationComponent.isFieldReadOnlyForCorrectiveAction(
+                'airport',
+                isAfsGroup2,
+                isDisabled,
+                correctiveActionEditable,
+                isAovGroup,
+                isPostActivity
+              ),
+            },
+            !isApdTceTypes ? Validators.required : []
+          )
+        : new FormControl(
+            {
+              value: '',
+              disabled: DmsActivityLocationComponent.isFieldReadOnlyForCorrectiveAction(
+                'airport',
+                isAfsGroup2,
+                isDisabled,
+                correctiveActionEditable,
+                isAovGroup,
+                isPostActivity
+              ),
+            },
+            []
+          ),
+      locationAddresses: new FormControl(
+        {
+          value: location.locationAddress?.id,
+          disabled: DmsActivityLocationComponent.isFieldReadOnlyForCorrectiveAction(
+            'locationAddresses',
+            isAfsGroup2,
+            isDisabled,
+            correctiveActionEditable
+          ),
+        },
+        []
+      ),
+    });
+
+    if(isAovGroup){
+      form.removeControl('isOutsideOfficeDistrict');
+      form.removeControl('isActivityOutsideUsa');
+      form.removeControl('officeId');
+      form.get('address').removeControl('phone');
+      form.addControl('company', new FormControl({ value: location.aovCompanyTypeId, disabled: isPostActivity},[Validators.required]));
+    }
+    return form;
+  }
+
+  static buildModel(form: FormGroup, model: PreApprovalActivityLocation) {
+    const facilityonRecord = form.get('facilityonRecord')?.value;
+    model.locationAddress = new Address();
+    if (facilityonRecord !== ActivityLocationRadioButtonEnum.lineCheck) {
+      DmsAddressComponent.buildModel(
+        form.get('address') as FormGroup,
+        model.locationAddress
+      );
+    }
+
+    if (form.get('airport')) {
+      model.airport = form.get('airport')?.value;
+    }
+    if (form.get('company')) {
+      model.aovCompanyTypeId = form.get('company')?.value;
+    }
+    model.facilityonRecord =
+      facilityonRecord === ActivityLocationRadioButtonEnum.facilityOnRecord;
+    model.isLineCheck =
+      facilityonRecord === ActivityLocationRadioButtonEnum.lineCheck;
+    if (form.get('locationAddresses')) {
+      model.selectedLocationAddressId = form.get('locationAddresses')?.value;
+    }
+    if (form.get('isOutsideOfficeDistrict')) {
+      model.isOutsideOfficeDistrict = form.get('isOutsideOfficeDistrict')?.value;
+    }
+    if (form.get('isActivityOutsideUsa')) {
+      model.isActivityOutsideUsa = form.get('isActivityOutsideUsa')?.value;
+    }
+    if (form.get('officeId')) {
+      model.officeId = form.get('officeId')?.value;
+    }
+
+    model.selectedLocationAddressId = model.locationAddress.id;
+
+    return model;
+  }
+
+  static afsGroup2Types() {
+    return [
+      DesigneeTypeEnum.DPE,
+      DesigneeTypeEnum.SAE,
+      DesigneeTypeEnum.ADMINPE,
+      DesigneeTypeEnum.ADMINPEGEN,
+    ];
+  }
+
+  static groundPortionLabelTypes() {
+    return [DesigneeTypeEnum.DPE, DesigneeTypeEnum.SAE, DesigneeTypeEnum.DADE];
+  }
+
+  static apdTceTypes() {
+    return [DesigneeTypeEnum.APD, DesigneeTypeEnum.TCE];
+  }
+
+  static afsGroup3Types() {
+    return [DesigneeTypeEnum.APD, DesigneeTypeEnum.TCE, DesigneeTypeEnum.DADE];
+  }
+
+  async ngOnInit() {
+    this.route.params.pipe(takeUntil(this.destroying$)).subscribe((params) => {
+      this.setAdmin(params);
+    });
+
+    this.route.queryParams.pipe(takeUntil(this.destroying$)).subscribe((params) => {
+      this.setAdmin(params);
+    });
+    // this.faciltyAddressReadOnly = this.form.disabled;
+    await this.lookupService.populateLookupData();
+    this.populateData();
+    this.isLoaded = true;
+    this.isDpe = this.designeeTypeId === DesigneeTypeEnum.DPE;
+    this.isAfsGroup2 = DmsActivityLocationComponent.afsGroup2Types().includes(
+      this.designeeTypeId ?? 0
+    );
+    this.isAfsGroup3 = DmsActivityLocationComponent.afsGroup3Types().includes(
+      this.designeeTypeId ?? 0
+    );
+    this.isAovGroup = this.designeeTypeId === DesigneeTypeEnum.DCTOE;
+    this.airportLabel = this.isAovGroup ? 'Airport Name'  : 'Departure Airport or Nearest Airport';
+    if (
+      this.designeeTypeId === DesigneeTypeEnum.DART ||
+      this.isAfsGroup2 ||
+      this.isAfsGroup3
+    ) {
+      this.showFacilityName = true;
+    } else if(this.isAovGroup){
+      this.showFacilityName = false;      
+    }
+    if (
+      this.designeeTypeId === DesigneeTypeEnum.ADMINPE ||
+      (this.categoryId && this.categoryId > 0)
+    ) {
+      this.isAdmin = true;
+    }
+    this.locationHeader =
+      this.designeeTypeId === DesigneeTypeEnum.DART
+        ? 'Facility Information'
+        : 'Location';
+    this.showAirPort =
+      !this.isAdmin &&
+      (this.isAfsGroup2 ||
+        DmsActivityLocationComponent.apdTceTypes().includes(
+          this.designeeTypeId ?? 0
+        ));
+    this.setFlags();
+    // this.initActivityLocationChangeGroup();
+    this.addEvents();
+    this.previousFacilityOnRecord = this.util.getControlValue(
+      this.form,
+      'facilityonRecord'
+    );
+    this.previousIsOutsideOfficeDistrict = this.util.getControlValue(
+      this.form,
+      'isOutsideOfficeDistrict'
+    );
+    this.previousIsActivityOutsideUsa = this.util.getControlValue(
+      this.form,
+      'isActivityOutsideUsa'
+    );
+    this.previousAirport = this.util.getControlValue(this.form, 'airport');
+
+    if(!this.form || !this.location) return;
+
+    this.location.selectedLocationAddressId = this.form && this.form.get('address') &&
+    this.form.get('address.id')?.value; // Set the dafault to first address
+
+    this.displayRequired = !DmsActivityLocationComponent.apdTceTypes().includes(this.designeeTypeId ?? 0);
+
+    if (this.designeeTypeId == DesigneeTypeEnum.APD) {
+      this.form.get('facilityonRecord')?.valueChanges.pipe(takeUntil(this.destroying$), startWith(this.form.get('facilityonRecord')?.value)).subscribe(value => {
+        if (value && value == ActivityLocationRadioButtonEnum.lineCheck) {
+          this.form?.get('airport')?.setValidators([Validators.required]);
+          this.displayRequired = true;
+        } else {
+          this.form?.get('airport')?.setValidators([]);
+          this.displayRequired = false;
         }
-        @if (isAovGroup) {
-          <dms-dropdown identity="id_dctoe_company" name="company" formControlName="company" (clickEvent)="onDataChange($event,'aovcompany')"
-            [options]="companies" field="name" layout="grid" controlSize="medium" label="Company Name" placeholder="Company Name"
-            ariaLabel="Select a Company Name" [doSpotLight]="markAsModified(modifiedControls, 'company').borderRed"
-            [validationMessages]="companyInvalidMessage">
-          </dms-dropdown>
-        }
-        @if (designeeTypeId !== DesigneeTypeEnum.DART) {
-          <dms-radio-button (clickEvent)="onDataChange($event)" [radioValues]="activityLocationRadioButtonValues"
-            formControlName="facilityonRecord" identity="id_actloc_radio" label=" " layout="grid"
-            [doSpotLight]="markAsModified(modifiedControls, 'facilityonRecord').borderRed">
-          </dms-radio-button>
-        }
-        @if (showMultipleLocationAddresses) {
-          <dms-dropdown [filter]="true" (clickEvent)="onDataChange($event)" [options]="locationAddresses"
-            formControlName="locationAddresses" identity="id_actloc_pdd_locations" placeholder="Select an address"
-            label="Select Location" layout="grid" controlSize="medium">
-          </dms-dropdown>
-        }
-      </div>
-      @if (showAddress) {
-        <div class="col-12">
-          @if (form) {
-            <dms-address
-              (OnTriggerFieldChange)="onDataChange($event)"
-              [addressGroup]="$any(form.get('address'))"
-              [designeeTypeId]="designeeTypeId"
-              [hideName]=!showFacilityName
-              [hidePhone]="true"
-              [hideType]="true"
-              [modifiedControls]="modifiedControls"
-              [nameLabel]="getNameLabel"
-              [readOnlyAddress]="facilityAddressReadOnly"
-              [triggerFieldChangeEvent]="triggerFieldChangeEvent"
-              [showErrorMessageIcon]="showErrorMessageIcon"
-              [hideAirTrafficControlTower]="!isAovGroup"
-              [hideAirport]="!isAovGroup"
-              formKey="location">
-            </dms-address>
-          }
-        </div>
+
+        this.form?.get('airport')?.updateValueAndValidity();
+      });
+    }
+
+    if(this.showLineCheck)
+    {
+      this.activityLocationRadioButtonValues.push({ label: 'Line Check', value: this.activityLocationRadioButtonEnum.lineCheck })
+    }
+  }
+
+  OnTriggerFieldChangeEvent() {
+    if (this.triggerFieldChangeEvent) {
+      this.emitFieldChange();
+    }
+  }
+
+  onOutsideOfficeChange(event: any) {
+    if (
+      !this.triggerFieldChangeEvent &&
+      !this.form?.disabled &&
+      !this.isAfsGroup2
+    ) {
+      if (!this.form?.get('isOutsideOfficeDistrict')?.disabled) {
+        this.showDialog();
       }
-      <div id="id_poinfo" class="alter-bg">
-        @if (!isAfsGroup2 && !isAfsGroup3 && !isAovGroup) {
-          <dms-radio-button
-            identity="id_actloc_radio_isOutsideOfficeDistrict"  formControlName="isOutsideOfficeDistrict"
-            [radioValues]="isOutsideOfficeDistrictRadioButtonValues" layout="grid" name="isOutsideOfficeDistrict"
-            (clickEvent)="setActivityOfficeDistrict($event)" label="Activity outside of your assigned field office district?"
-            [validationMessages]="isoutsideofficeDistrictInvalidMessage">
-          </dms-radio-button>
+    } else {
+      this.onDataChange(event);
+    }
+  }
+
+  onDataChange(event: any, control?:string) {
+    if (!event) return true;
+    if (control == 'aovcompany') return true;
+    if (this.triggerFieldChangeEvent) {
+      this.emitFieldChange();
+      event.target && event.preventDefault(); // if this is an event object then only preventDefault
+      if (!this.form || !this.location) return;
+      this.form.get('facilityonRecord')?.setValue(this.previousFacilityOnRecord);
+      this.location.isOutsideOfficeDistrict = this.previousIsOutsideOfficeDistrict;
+      this.form.get('isOutsideOfficeDistrict')?.setValue(this.previousIsOutsideOfficeDistrict);
+      this.form.get('isActivityOutsideUsa')?.setValue(this.previousIsActivityOutsideUsa);
+      this.form.get('airport')?.setValue(this.previousAirport);
+      updateFormValidity(this.form as FormGroup);
+      if (navigator.userAgent.indexOf('Chrome') !== -1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  onAirportChange(event: Event) {
+    if (
+      (this.designeeTypeId === DesigneeTypeEnum.APD ||
+        this.designeeTypeId === DesigneeTypeEnum.DPE ||
+        this.designeeTypeId === DesigneeTypeEnum.SAE ) &&
+      !this.isAdmin
+    ) {
+      this.onDataChange(event);
+    }
+  }
+
+  setFlags(): any {
+    this.showMultipleLocationAddresses = (
+      (this.isAfsGroup2 ||
+        this.isAfsGroup3 ||
+        this.isAovGroup ||
+        this.designeeTypeId === DesigneeTypeEnum.DME ||
+        this.designeeTypeId === DesigneeTypeEnum.DPRE) &&
+        this.form && this.form.get('facilityonRecord')?.value ===
+        ActivityLocationRadioButtonEnum.facilityOnRecord &&
+      (this.location?.facilityAddresses??[]).length > 1 ) ?? false;
+  }
+
+  addEvents() {
+    if (!this.form || !this.location) { return; }
+
+    this.subscribeFacilityOnRecord();
+    this.subscribeIsOutsideOfficeDistrict();
+    this.subscribeLocationAddresses();
+  }
+
+  private subscribeFacilityOnRecord(): void {
+    const ctrl = this.form?.get('facilityonRecord');
+    if (!ctrl) return;
+
+    ctrl.valueChanges
+      .pipe(
+        takeUntil(this.destroying$),
+        startWith(this.util.getControlValue(this.form, 'facilityonRecord'))
+      )
+      .subscribe((value: number) => {
+        this.handleFacilityOnRecordChange(value);
+        this.facilityAddressReadOnly =
+          value === ActivityLocationRadioButtonEnum.facilityOnRecord;
+        this.showAddress = value !== ActivityLocationRadioButtonEnum.lineCheck;
+      });
+  }
+  private handleFacilityOnRecordChange(value: number): void {
+    switch (value) {
+      case ActivityLocationRadioButtonEnum.facilityOnRecord:
+        this.handleFacilityOnRecordSelected();
+        break;
+
+      case ActivityLocationRadioButtonEnum.otherFacility:
+        this.handleOtherFacilitySelected();
+        break;
+
+      case ActivityLocationRadioButtonEnum.lineCheck:
+        (this.form as any).removeControl('address');
+        this.showMultipleLocationAddresses = false;
+        break;
+
+      default:
+        break;
+    }
+  }
+  private handleFacilityOnRecordSelected(): void {
+    if (this.location?.facilityAddress && (this.location.facilityAddresses ?? []).length > 1) {
+      this.handleFacilityOnRecordSelectedWithValidFacilityAddress();
+    } else {
+      if (this.location?.facilityAddress != null) {
+        this.showMultipleLocationAddresses = false;
+        this.setLocationAddress(this.location.facilityAddress, true);
+      }
+      if (this.designeeTypeId === DesigneeTypeEnum.DCTOE) {
+        this.form?.get('airport')?.setValue(this.location?.facilityAirport);
+        this.form?.get('airport')?.updateValueAndValidity();
+      }
+    }
+  }
+  private handleFacilityOnRecordSelectedWithValidFacilityAddress() {
+    if(!this.location) { return; }
+
+    this.showMultipleLocationAddresses = true;
+    const locationAddressId = this.util.getControlValue(this.form, 'address.id');
+    const addressId =
+      locationAddressId !== 0 &&
+      this.location.facilityAddresses!.some((a) => a.id === locationAddressId)
+        ? locationAddressId
+        : this.location.facilityAddresses![0].id;
+
+    const selectedLocationAddress = this.location.facilityAddresses!.find(
+      (a) => a.id === addressId
+    );
+    this.form?.get('locationAddresses')?.setValue(selectedLocationAddress?.id, { emitEvent: false });
+    this.setLocationAddress(selectedLocationAddress, true);
+
+    if (this.location.locationAddress?.id !== 0 && this.location.otherAddress != null) {
+      if (this.location.otherAddress) this.location.otherAddress.id = 0;
+    }
+  }
+  private handleOtherFacilitySelected(): void {
+    this.showMultipleLocationAddresses = false;
+    if (this.location?.locationAddress?.id === this.location?.facilityAddress?.id) {
+      this.setLocationAddress(new Address(), this.isDisabled!);
+    } else {
+      this.setLocationAddress(this.location?.locationAddress as Address, this.isDisabled!);
+    }
+    if (this.designeeTypeId === DesigneeTypeEnum.DCTOE) {
+      this.form?.get('company')?.disable();
+    }
+  }
+  private subscribeIsOutsideOfficeDistrict(): void {
+    const ctrl = this.form?.get('isOutsideOfficeDistrict');
+    if (!ctrl) return;
+
+    ctrl.valueChanges
+      .pipe(
+        takeUntil(this.destroying$),
+        startWith(this.util.getControlValue(this.form, 'isOutsideOfficeDistrict'))
+      )
+      .subscribe((isOutsideOfficeDistrict: boolean) => {
+        if (!this.form) return;
+
+        const officeCtrl = this.form.get('officeId');
+        const outsideCtrl = this.form.get('isActivityOutsideUsa');
+
+        if (isOutsideOfficeDistrict && !this.isAfsGroup2) {
+          if (!this.form.disabled && !this.triggerFieldChangeEvent) {
+            // kept placeholder for original dialog behavior
+            // this.showDialog();
+          }
+          outsideCtrl?.setValidators([Validators.required]);
+          officeCtrl?.setValidators([Validators.required]);
+        } else {
+          outsideCtrl?.setValidators([]);
+          officeCtrl?.setValidators([]);
         }
-        @if (isActivityOutside) {
-          <dms-radio-button identity="id_actloc_radio_isActivityOutsideUsa"
-            [radioValues]="isActivityOutsideUsaRadioButtonValues" layout="grid" name="isActivityOutsideUsa" formControlName="isActivityOutsideUsa"
-            (clickEvent)="onDataChange($event)" label="Is the activity within or outside the U.S. ?" [validationMessages]="invalidMessages">
-          </dms-radio-button>
+
+        outsideCtrl?.updateValueAndValidity();
+        officeCtrl?.updateValueAndValidity();
+      });
+  }
+
+  private subscribeLocationAddresses(): void {
+    const ctrl = this.form?.get('locationAddresses');
+    if (!ctrl) return;
+
+    ctrl.valueChanges
+      .pipe(takeUntil(this.destroying$))
+      .subscribe((locationAddressId: number) => {
+        const facilityMode = this.form?.get('facilityonRecord')?.value;
+        if (facilityMode === ActivityLocationRadioButtonEnum.facilityOnRecord) {
+          const selectedLocationAddress = this.location!.facilityAddresses!.find(
+            (a) => a.id === locationAddressId
+          );
+          if (selectedLocationAddress) {
+            this.setLocationAddress(selectedLocationAddress, true);
+          }
+        } else if (facilityMode === ActivityLocationRadioButtonEnum.otherFacility) {
+          this.setLocationAddress(this.location?.locationAddress as Address, this.isDisabled!);
         }
-        @if (isActivityOutside) {
-          <dms-dropdown identity="id_actloc_pdd_officeId"  [filter]="true"
-            [options]="offices" formControlName="officeId" placeholder="Select an office" (clickEvent)="onDataChange($event)"
-            layout="grid" controlSize="medium" label="Identify FSDO or IFO with geographic responsibility."
-            [validationMessages]="officeInvalidMessage">
-          </dms-dropdown>
+      });
+  }
+
+
+  populateData() {
+    this.offices = this.lookupService.getOfficesByDesigneeType(
+      this.designeeTypeId??0
+    );
+
+    this.locationAddresses = this.location!.facilityAddresses!.map((address) => {
+      return {
+        label: address.address1,
+        value: address.id,
+      } as SelectItem;
+    });
+
+    this.companies = this.lookupService.aovCompanyTypes?.map(a => { return { label: a.name, value: a.id }});
+  }
+
+  showDialog() {
+    this.display = true;
+  }
+
+  closeDialog() {
+    this.display = false;
+  }
+
+  filterAirports(event: AutoCompleteCompleteEvent) {
+    if(event.query.trim()!=''){
+      this.lookupService.filterAirports(event.query).subscribe((d) => {
+        this.airports = d;
+      });
+    }
+  }
+
+  airportSelect(event: AutoCompleteSelectEvent) {
+    if(this.location) {
+      this.location.airport = event.value;
+    }
+    this.onAirportChange(event.originalEvent);
+  }
+
+  airportChange(event: Event | undefined) {
+    if (this.location && event && event.currentTarget) {
+      const ele = event.currentTarget as HTMLInputElement;
+      this.location.airport = (ele.value === '' ? null : this.location.airport);
+    }
+  }
+  onAirportClick(_event: any) {
+    if (this.triggerFieldChangeEvent ) {
+      this.emitFieldChange();      
+    }
+    
+  }
+
+  private async setAdmin(params: any) {
+    if (params.isAdmin) {
+      const admin  = await(this.cryptoService.decrypt(params.isAdmin));
+      this.isAdmin = admin.toString().toLowerCase() === 'true';
+      this.setShowAirport();
+    }
+  }
+
+  private emitFieldChange() {
+    this.OnTriggerFieldChange.emit(this.triggerFieldChangeEvent);
+  }
+
+  private setLocationAddress(address: Address | undefined, isDisabled: boolean) {
+    if (!address || !this.form || !this.location) return;
+    if (this.form.get('facilityonRecord')?.value === ActivityLocationRadioButtonEnum.otherFacility &&
+          this.location.locationAddress?.country && this.location.locationAddress?.country.id === SystemVariableViewModel.usaCountryId) {
+      address.country = this.location.locationAddress?.country;
+    }
+    const addressForm = DmsAddressComponent.buildForm(
+      address, 
+      new AddressParams(isDisabled,
+      true,
+      true,
+      true,
+      !this.showFacilityName,
+      true,
+      false)
+    );
+
+    if (this.form.get('address')) {
+      this.form
+        .get('address')
+        ?.patchValue(addressForm.value, { emitEvent: isDisabled });
+      if (isDisabled) {
+        this.form.get('address')?.disable({ emitEvent: false });
+        if(this.isAovGroup){
+          this.form.get('airport')?.setValue(this.location.airport);
+          this.form.get('airport')?.disable();
+          this.form.get('company')?.setValue(this.location.aovCompanyTypeId);
+          this.form.get('company')?.disable();
         }
-      </div>
-    </p-panel>
-  </div>
+      } else {
+        this.form.get('address')?.enable();
+        if(this.isAovGroup){
+          this.form.get('airport')?.enable();
+          this.form.get('company')?.enable();
+        }
+      }
+    } else {
+      (this.form as any).addControl('address', addressForm);
+    }
+  }
+
+  setActivityOfficeDistrict(event: any){
+    if(event.value){
+      this.onOutsideOfficeChange(event);
+    }else{
+      this.onDataChange(event);
+    }
+  }
+  
+  private setShowAirport(){
+    (this.isAfsGroup2 || DmsActivityLocationComponent.apdTceTypes().includes(this.designeeTypeId ?? 0));
+  }
 }
-<p-dialog [(visible)]="display" [closable]="false" [closeOnEscape]="false"
-  header="Activity Message" id="outsideDistrictMessage" [modal]="true">
-  <p>
-    Pre-Approval request outside of the Designee’s geographic area should be done at least 7 days in advance.
-    International Pre-Approval
-    request should be done at least 10 days in advance.
-  </p>
-  <ng-template pTemplate="footer">
-    <dms-button identity="btn_actloc_cmp_ok_1" label="Ok" (clickEvent)="closeDialog()" icon="fa fa-check"></dms-button>
-  </ng-template>
-</p-dialog>
