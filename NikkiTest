@@ -3,3 +3,6 @@ ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenMCE] bit NULL;
 ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenGIE] bit NULL;
 ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenFIRE] bit NULL;
 ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenBAE] bit NULL;
+
+
+AfsSummaryComponents
