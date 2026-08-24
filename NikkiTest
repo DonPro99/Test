@@ -6,18 +6,95 @@ ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenBAE] bit NULL;
 
 
 =============
-
-ngOnInit() {
-  super.initialize();
-  this.designeeTypeId = this.data?.preApprovalRequest?.designeeTypeId ?? DesigneeTypeEnum.ADMINPE;
-  this.isRedirectionFromCorrectiveAction =
-    this.route.snapshot.params['cAction'] === 'true';
-  this.form = AdminpeIndexComponent.buildForm(this.data, {
-    designeeTypeId: this.designeeTypeId,
-    isDisabled: this.isDisabled,
-    categoryId: this.categoryId,
-    isEditPostActivity: this.isEditPostActivity,
-    isAttachmentNotRequired: true,
-    isAdmin: this.isAdministrativePreapproval
-  });
+@if (location && form && isLoaded ) {
+  <div [formGroup]="$any(form)" id="preApprovalTestLocationInfo" class="mb-3">
+    <p-panel id="preApprovalTestLocationInfoPanel" [toggleable]="true" header="{{locationHeader}}">
+      <div id="id_poinfo" class="alter-bg">
+        @if (showAirPort) {
+          <dms-auto-complete (completeMethod)="filterAirports($event)" (clearEvent)="airportChange($event)"
+            (selectEvent)="airportSelect($event)" (clickEvent)="onAirportClick($event)" [forceSelection]="true" [minLength]="2"
+            [virtualScrollItemSize]="50" [suggestions]="airports" ariaLabel="Search with Airport Name" field="name"
+            formControlName="airport" identity="id_activityloc_pac_airport" name="airport" placeholder="Name" layout="grid"
+            label="{{airportLabel}}" [doSpotLight]="markAsModified(modifiedControls, 'airport').borderRed"
+            [validationMessages]="airportInvalidMessage">
+          </dms-auto-complete>
+        }
+        @if (isAovGroup) {
+          <dms-dropdown identity="id_dctoe_company" name="company" formControlName="company" (clickEvent)="onDataChange($event,'aovcompany')"
+            [options]="companies" field="name" layout="grid" controlSize="medium" label="Company Name" placeholder="Company Name"
+            ariaLabel="Select a Company Name" [doSpotLight]="markAsModified(modifiedControls, 'company').borderRed"
+            [validationMessages]="companyInvalidMessage">
+          </dms-dropdown>
+        }
+        @if (designeeTypeId !== DesigneeTypeEnum.DART) {
+          <dms-radio-button (clickEvent)="onDataChange($event)" [radioValues]="activityLocationRadioButtonValues"
+            formControlName="facilityonRecord" identity="id_actloc_radio" label=" " layout="grid"
+            [doSpotLight]="markAsModified(modifiedControls, 'facilityonRecord').borderRed">
+          </dms-radio-button>
+        }
+        @if (showMultipleLocationAddresses) {
+          <dms-dropdown [filter]="true" (clickEvent)="onDataChange($event)" [options]="locationAddresses"
+            formControlName="locationAddresses" identity="id_actloc_pdd_locations" placeholder="Select an address"
+            label="Select Location" layout="grid" controlSize="medium">
+          </dms-dropdown>
+        }
+      </div>
+      @if (showAddress) {
+        <div class="col-12">
+          @if (form) {
+            <dms-address
+              (OnTriggerFieldChange)="onDataChange($event)"
+              [addressGroup]="$any(form.get('address'))"
+              [designeeTypeId]="designeeTypeId"
+              [hideName]=!showFacilityName
+              [hidePhone]="true"
+              [hideType]="true"
+              [modifiedControls]="modifiedControls"
+              [nameLabel]="getNameLabel"
+              [readOnlyAddress]="facilityAddressReadOnly"
+              [triggerFieldChangeEvent]="triggerFieldChangeEvent"
+              [showErrorMessageIcon]="showErrorMessageIcon"
+              [hideAirTrafficControlTower]="!isAovGroup"
+              [hideAirport]="!isAovGroup"
+              formKey="location">
+            </dms-address>
+          }
+        </div>
+      }
+      <div id="id_poinfo" class="alter-bg">
+        @if (!isAfsGroup2 && !isAfsGroup3 && !isAovGroup) {
+          <dms-radio-button
+            identity="id_actloc_radio_isOutsideOfficeDistrict"  formControlName="isOutsideOfficeDistrict"
+            [radioValues]="isOutsideOfficeDistrictRadioButtonValues" layout="grid" name="isOutsideOfficeDistrict"
+            (clickEvent)="setActivityOfficeDistrict($event)" label="Activity outside of your assigned field office district?"
+            [validationMessages]="isoutsideofficeDistrictInvalidMessage">
+          </dms-radio-button>
+        }
+        @if (isActivityOutside) {
+          <dms-radio-button identity="id_actloc_radio_isActivityOutsideUsa"
+            [radioValues]="isActivityOutsideUsaRadioButtonValues" layout="grid" name="isActivityOutsideUsa" formControlName="isActivityOutsideUsa"
+            (clickEvent)="onDataChange($event)" label="Is the activity within or outside the U.S. ?" [validationMessages]="invalidMessages">
+          </dms-radio-button>
+        }
+        @if (isActivityOutside) {
+          <dms-dropdown identity="id_actloc_pdd_officeId"  [filter]="true"
+            [options]="offices" formControlName="officeId" placeholder="Select an office" (clickEvent)="onDataChange($event)"
+            layout="grid" controlSize="medium" label="Identify FSDO or IFO with geographic responsibility."
+            [validationMessages]="officeInvalidMessage">
+          </dms-dropdown>
+        }
+      </div>
+    </p-panel>
+  </div>
 }
+<p-dialog [(visible)]="display" [closable]="false" [closeOnEscape]="false"
+  header="Activity Message" id="outsideDistrictMessage" [modal]="true">
+  <p>
+    Pre-Approval request outside of the Designee’s geographic area should be done at least 7 days in advance.
+    International Pre-Approval
+    request should be done at least 10 days in advance.
+  </p>
+  <ng-template pTemplate="footer">
+    <dms-button identity="btn_actloc_cmp_ok_1" label="Ok" (clickEvent)="closeDialog()" icon="fa fa-check"></dms-button>
+  </ng-template>
+</p-dialog>
