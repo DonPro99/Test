@@ -1,10 +1,1 @@
-FacilityonRecord = (cloa.DesigneeInformation.TypeId == (int)DesigneeTypeEnum.DME || cloa.DesigneeInformation.TypeId == (int)DesigneeTypeEnum.DPRE || 
-cloa.DesigneeInformation.TypeId == (int)DesigneeTypeEnum.DPE || cloa.DesigneeInformation.TypeId == (int)DesigneeTypeEnum.SAE || 
-cloa.DesigneeInformation.TypeId == (int)DesigneeTypeEnum.ADMINPE || cloa.DesigneeInformation.TypeId == (int)DesigneeTypeEnum.ADMINPEGEN || 
-cloa.DesigneeInformation.TypeId == (int)DesigneeTypeEnum.APD || 
-cloa.DesigneeInformation.TypeId == (int)DesigneeTypeEnum.TCE || cloa.DesigneeInformation.TypeId == (int)DesigneeTypeEnum.DADE || 
-cloa.DesigneeInformation.TypeId == (int)DesigneeTypeEnum.DCTOE),
-
-PreApprovalRequestBaseService.cs, GetNewHelp()
-
-=========
+preapprovalrequest/afs/summary/:id,
