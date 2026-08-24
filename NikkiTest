@@ -1,6 +1,7 @@
-SELECT TOP 5 FormData 
-FROM PostActivity 
-WHERE PreApprovalRequestId IN (
-  SELECT Id FROM PreApprovalRequest WHERE ApplicationId = <your test application id>
+SELECT pa.Id AS PostActivityId, pa.PreApprovalRequestId, pr.ApplicationId, pr.Id AS PreApprovalRequestId
+FROM PostActivity pa
+JOIN PreApprovalRequest pr ON pa.PreApprovalRequestId = pr.Id
+WHERE pr.ApplicationId IN (
+    SELECT Id FROM Application WHERE DesigneeTypeId = 31  -- 31 = ADMINPEGEN, confirmed earlier today
 )
-ORDER BY Id DESC
+ORDER BY pa.Id DESC
