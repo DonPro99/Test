@@ -1,1 +1,6 @@
 this.gradeCertificates = this.lookupService.getGradeCertificateTypes(this.designeeTypeId!);
+
+
+const designeeTypeId = this.categoryId !== 0 ? DesigneeTypeEnum.ADMINPE : this.designeeTypeId;
+this.practicalTypes = this.lookupService.getPracticalTypesDesigneeTypeId(this.designeeTypeId!);  // ← fixed, uses this.designeeTypeId directly
+this.gradeCertificates = this.lookupService.getGradeCertificateTypes(designeeTypeId!);            // ← NOT fixed, still uses the forced variable
