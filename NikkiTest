@@ -1,7 +1,40 @@
-this.practicalTypes = this.lookupService.getPracticalTypesDesigneeTypeId(
-  this.designeeTypeId!
-);
-// this logic is to cover all the admin preapproval functionalities
-this.gradeCertificates = this.lookupService.getGradeCertificateTypes(
-  this.designeeTypeId!
-);
+1. Applicant/Application Tab — Certificate/Rating showing dropdown instead of checkbox group (BRD 3.1.4)
+
+Files changed:
+
+dms-application-information.component.ts
+
+Fix: Added DesigneeTypeEnum.ADMINPEGEN to isAfsGroup2 and isAdminPreapprovals checks (in both computeFlags() static method and ngOnInit()). This was missing, so Admin-PE-GEN fell through to the dropdown branch instead of the required checkbox group.
+
+2. Location Tab — "Activity outside of your assigned field office district?" incorrectly showing
+
+Files changed:
+
+dms-activity-location.component.ts
+
+Fix: Added DesigneeTypeEnum.ADMINPEGEN to the afsGroup2Types() static method's returned array. This single method controls both visibility (.html) and required-ness of that field — no .html change needed, since the template already correctly checks isAfsGroup2.
+
+3. Post Activity list — "Pre-Approval Type" column not populating for Admin-PE-GEN
+
+Files changed:
+
+AfsPreApprovalRequestService.cs
+ActivityPaperWorkViewModel.cs
+
+Fix:
+
+Added FormDataTestCheckInformation property to ActivityPaperWorkViewModel.cs
+In AfsPreApprovalRequestService.cs: added a new field to the GetPostActivityList() projection pulling TestCheckInformation JSON from FormData; added a new ADMINPEGEN case to PostActivityType() routing to a new GetAdminPeGenPostActivityType() helper method that parses the 5 checkbox values and builds a display string (e.g., "FPE, MCE")
+4. Test/Check Tab — "Type of Activity" and "Grade of Certificate sought" dropdowns empty
+
+Files changed:
+
+dms-test-check-information.component.ts
+
+Fix: In populateData(), both lookup calls were forcing DesigneeTypeEnum.ADMINPE via a local designeeTypeId variable instead of using the real this.designeeTypeId. Changed both lines to pass this.designeeTypeId! directly:
+
+ts
+this.practicalTypes = this.lookupService.getPracticalTypesDesigneeTypeId(this.designeeTypeId!);
+this.gradeCertificates = this.lookupService.getGradeCertificateTypes(this.designeeTypeId!);
+
+That's 4 issues, 4 files total from today. Want me to also include the DB seeding step (the PracticalOralTestType insert for designeeTypeId 31) as a 5th item, since that's also required for the "Type of Activity" fix to actually show data?
