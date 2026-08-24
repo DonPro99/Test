@@ -1,2 +1,5 @@
-"Quick update — still not feeling great, going to take the rest of the day off. Will pick things back up tomorrow. Sorry for the back-and-forth, thanks for understanding
-
+SELECT fc.Id, fc.Name, fc.CategoryId, c.Name AS CategoryName
+FROM FunctionCode fc
+LEFT JOIN Category c ON c.Id = fc.CategoryId
+WHERE fc.DesigneeTypeId = 27  -- APD
+ORDER BY fc.CategoryId
