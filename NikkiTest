@@ -7,137 +7,17 @@ ALTER TABLE [dbo].[AfsPreApprovalRequest] ADD [IsAdminPeGenBAE] bit NULL;
 
 =============
 
-import { Component, OnInit, Input } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
-import { AfsGroup2PostActivityBaseComponent } from './afs-group2-post-activity-base-component';
-import { LookupService } from '../../../../services/lookup.service';
-import {
-  AfsGroupsPostActivityViewModel,
-  DesigneeTypeEnum,
-  PreApprovalTestCheckInformation,
-} from '../../../../models/exportparams.model';
-import { Group2PostActivityComponent } from '../group2postactivity.component';
-import { ActivatedRoute } from '@angular/router';
-import { DmsTestCheckInformationComponent } from '../../afs/dms-test-check-information.component';
-import { DmsFunctionCodeSelectionComponent } from '../../../functionocode/functioncodeselection/dms-functioncode-selection.component';
-import { CryptoService } from '../../../../services/crypto.service';
-
-@Component({
-    selector: 'po-adminpe-index',
-    templateUrl: './adminpe-index.component.html',
-    styleUrls: ['adminpe-index.component.scss'],
-    standalone: false
-})
-export class AdminpeIndexComponent
-  extends AfsGroup2PostActivityBaseComponent
-  implements OnInit
-{
-  @Input() isExternal: boolean = false;
-  constructor(
-    private route: ActivatedRoute,
-    public override lookupService: LookupService,
-    public override cryptoService: CryptoService
-  ) {
-    super(lookupService, cryptoService);
-    this.designeeTypeId = DesigneeTypeEnum.ADMINPE;
-  }
-
-  isRedirectionFromCorrectiveAction = false;
-
-  public static override buildForm(
-    model: AfsGroupsPostActivityViewModel | undefined | null,
-    options: any
-  ): FormGroup | null {
-    if(!model) return null;
-    const form = AfsGroup2PostActivityBaseComponent.buildForm(model, options);
-
-    if(!form) return null;
-
-    const isTempCertificateIssue = [26, 30].includes(
-      model?.afsPostActivityGroup2?.postActivityResultTypeId??0
-    );
-    const isLetterOfDiscontinue = [28, 32].includes(
-      model.afsPostActivityGroup2?.postActivityResultTypeId??0
-    );
-
-    const functionCodeSelection =
-      DmsTestCheckInformationComponent.selectAuthorizations(
-        model.preApprovalRequest?.testCheckInformation as PreApprovalTestCheckInformation,
-        DesigneeTypeEnum.DPE,
-        model.preApprovalRequest?.categoryId ?? 0
-      );
-
-    const fg = DmsFunctionCodeSelectionComponent.buildForm(
-      functionCodeSelection,
-      true,
-      options.isDisabled,
-      DesigneeTypeEnum.DPE
-    );
-
-    const functionCode = fg.value ? fg.value.functionCode : null;
-
-    const isSmtfSelected = Group2PostActivityComponent.isSmtfSelection(
-      model.preApprovalRequest?.testCheckInformation as PreApprovalTestCheckInformation,
-      functionCode
-    );
-
-    form.addControl(
-      'afsGroup2PostActivityFormGroup',
-      Group2PostActivityComponent.buildForm(
-        model.afsPostActivityGroup2,
-        model.preApprovalRequest?.testCheckInformation?.practicalOralTestId ?? 0,
-        false,
-        false,
-        true,
-        options.isDisabled,
-        false,
-        false, // isProficiencyCheck
-        isTempCertificateIssue,
-        model.preApprovalRequest?.testCheckInformation?.isMultipleApplicants as boolean,
-        true,
-        isLetterOfDiscontinue,
-        isSmtfSelected
-      )
-    );
-
-    return form;
-  }
-
-  public static override buildModel(
-    form: FormGroup | AbstractControl | undefined | null,
-    model: AfsGroupsPostActivityViewModel | undefined | null
-  ) {
-    if (!form || !model) return;
-    AfsGroup2PostActivityBaseComponent.buildModel(form, model);
-    if(model.preApprovalRequest?.testInformation) {
-        model.preApprovalRequest.testInformation.practicalOralTestId = model.preApprovalRequest.testCheckInformation?.practicalOralTestId;
-    }
-    // model.preApprovalRequest.testInformation.practicalOralTestId =
-    //   model.preApprovalRequest.testCheckInformation.practicalOralTestId =
-        Group2PostActivityComponent.buildModel(
-          form.get('afsGroup2PostActivityFormGroup') as FormGroup,
-          model.afsPostActivityGroup2,
-          false,
-          false, false, false, false
-        );
-  }
-
-  getModel() {
-    if(this.form) AdminpeIndexComponent.buildModel(this.form, this.data);
-    return this.data;
-  }
-
-  ngOnInit() {
-    super.initialize();
-    this.isRedirectionFromCorrectiveAction =
-      this.route.snapshot.params['cAction'] === 'true';
-    this.form = AdminpeIndexComponent.buildForm(this.data, {
-      designeeTypeId: this.designeeTypeId,
-      isDisabled: this.isDisabled,
-      categoryId: this.categoryId,
-      isEditPostActivity: this.isEditPostActivity,
-      isAttachmentNotRequired: true,
-      isAdmin: this.isAdministrativePreapproval
-    });
-  }
+ngOnInit() {
+  super.initialize();
+  this.designeeTypeId = this.data?.preApprovalRequest?.designeeTypeId ?? DesigneeTypeEnum.ADMINPE;
+  this.isRedirectionFromCorrectiveAction =
+    this.route.snapshot.params['cAction'] === 'true';
+  this.form = AdminpeIndexComponent.buildForm(this.data, {
+    designeeTypeId: this.designeeTypeId,
+    isDisabled: this.isDisabled,
+    categoryId: this.categoryId,
+    isEditPostActivity: this.isEditPostActivity,
+    isAttachmentNotRequired: true,
+    isAdmin: this.isAdministrativePreapproval
+  });
 }
