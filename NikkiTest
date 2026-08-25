@@ -1,7 +1,3 @@
-SELECT *
-FROM SNOWFLAKE.ACCOUNT_USAGE.TABLES
-WHERE table_name = 'RAD_DATAVANT_CHASE_PREMATCH'
-  AND table_schema = 'RAA_RAWZ'
-ORDER BY created DESC;
-
-SHOW TABLES LIKE 'RAD_DATAVANT_CHASE_PREMATCH' IN SCHEMA DDL_REPOSITORY_01.RAA_RAWZ;
+Can you please check did we received below file in location: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG. If its available can you please move to this /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND location andi.
+ 
+ANTHEM_INV_ProviderAttribution_20260825102721.txt
