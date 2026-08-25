@@ -1,3 +1,11 @@
 For APDs and TCEs, there is no such thing as an “admin only user.” That applies to DPEs. By policy, any APD or TCE can perform certain administrative functions and complete administrative preapprovals at any time. This functionality should apply to every APD and TCE, regardless of authorization. 
 
 As we mentioned, submission of administrative preapprovals has increased over time, making the requirement for the MS to approve each preapproval to become an unnecessary burden.
+
+
+Hi Dave and Jennie,
+
+We have reviewed and analyzed the issue that you both reported.
+
+Based on the meeting that Obai and Nikhitha from the GET team had with Jennie and you on 7/21, our understanding was that the automated Pre-Approval process should apply to Admin users only, while all other non-Admin users would need to go through the FAA authorization process.
+If our understanding is incorrect, could you please clarify the intended process? Once confirmed, we will make the necessary code changes to ensure the functionality works as expected.
