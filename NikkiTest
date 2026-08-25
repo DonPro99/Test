@@ -1,30 +1,14 @@
-Please see response from David below about the 8269 ticket.
+3)Please see response from David below about the 8269 ticket.
 
-From: Kempfer, David (FAA) <David.Kempfer@faa.gov> 
-Sent: Tuesday, August 25, 2026 12:53 PM
-To: Sharma, Sudipta K-CTR (FAA) <Sudipta.K-CTR.Sharma@faa.gov>; Coffey, Jennie (FAA) <Jennie.Coffey@faa.gov>
-Cc: Bonfond, Nicole (FAA) <Nicole.Bonfond@faa.gov>; Quiah, Dominic (FAA) <dominic.quiah@faa.gov>; Hutchens, Judy (FAA) <Judy.Hutchens@faa.gov>
-Subject: RE: DMS release 8.5 - UAT: TCE
 
+David replied: 
 For APDs and TCEs, there is no such thing as an “admin only user.” That applies to DPEs. By policy, any APD or TCE can perform certain administrative functions and complete administrative preapprovals at any time. This functionality should apply to every APD and TCE, regardless of authorization. 
 
 As we mentioned, submission of administrative preapprovals has increased over time, making the requirement for the MS to approve each preapproval to become an unnecessary burden.
 
-Regards,
+==========
 
-David S. Kempfer
-Aviation Safety Inspector, Air Carrier Operations
-Operations Delegation Section, AFS-850
-General Aviation and Commercial Division, AFS-800
-(720) 910-7912
-
- 
-
-From: Sharma, Sudipta K-CTR (FAA) <Sudipta.K-CTR.Sharma@faa.gov> 
-Sent: Tuesday, August 25, 2026 10:35 AM
-To: Kempfer, David (FAA) <David.Kempfer@faa.gov>; Coffey, Jennie (FAA) <Jennie.Coffey@faa.gov>
-Cc: Bonfond, Nicole (FAA) <Nicole.Bonfond@faa.gov>; Quiah, Dominic (FAA) <dominic.quiah@faa.gov>; Hutchens, Judy (FAA) <Judy.Hutchens@faa.gov>
-Subject: RE: DMS release 8.5 - UAT: TCE
+2) From Sudip:
 
 Hi Dave and Jennie,
 
@@ -35,13 +19,9 @@ If our understanding is incorrect, could you please clarify the intended process
 
 Regards,
 Sudip
-The Jira ticket confirms the toggle applies to the administrative category as a whole and it doesn't specify behavior for mixed admin/non-admin function codes on a single request… that part was my technical interpretation, not something explicitly confirmed by David and Jennie.
 
-From: Komandla, Nikhitha CTR (FAA) 
-Sent: Tuesday, August 25, 2026 12:11 PM
-To: Sharma, Sudipta K-CTR (FAA) <Sudipta.K-CTR.Sharma@faa.gov>; Velagapudi, Indusekhar CTR (FAA) <Indusekhar.CTR.Velagapudi@faa.gov>
-Cc: Islam, Md Obaidul CTR (FAA) <Md.Obaidul.CTR.Islam@faa.gov>
-Subject: RE: DMS-8269 : Admin Pre-Approval Scope Confirmation (7/21 Stakeholder Call)
+============
+1) From: me
 
 Hi Sudip,
 
@@ -54,8 +34,6 @@ NOTE:
 (our technical implementation, not something explicitly stated on the call):
 Based on how the system is built, function codes are tagged with a CategoryId, and the ones marked Administrative are what the toggle applies to. If a request includes even one non-administrative function code alongside admin ones, it falls back to the existing manual review process rather than auto-approving. This is consistent with the category-based scope David and Jennie confirmed, but I want to be clear this specific mechanic is our team's implementation detail rather than something they stated word-for-word.
 
-Thanks,
-Nikhitha.
 
 
 
