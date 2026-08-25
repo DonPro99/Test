@@ -1,3 +1,4 @@
-Can you please check did we received below file in location: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG. If its available can you please move to this /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND location andi.
- 
-ANTHEM_INV_ProviderAttribution_20260825102721.txt
+ls -la /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ANTHEM_INV_ProviderAttribution_20260825102721.txt
+
+mv /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ANTHEM_INV_ProviderAttribution_20260825102721.txt \
+   /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/
