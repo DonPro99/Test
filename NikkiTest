@@ -1,8 +1,1 @@
-grep -n "DMS-8269" "path/to/ReduceAuthorityService.cs"
-grep -n "DMS-8269" "path/to/ApdPreApprovalRequestService.cs"
-grep -n "DMS-8269" "path/to/TcePreApprovalRequestService.cs"
-
-
-grep -n "isAutoPreapproval" "path/to/afs-authorization.component.ts"
-grep -n "id_afsauth_chk_isAutoPreapproval" "path/to/afs-authorization.component.html"
-grep -n "isAutoPreapproval" "path/to/manufacturingauthorizationviewmodel.ts"
+RAA_RAWZ.RAD_DATAVANT_CHASE_PREMATCH does not exist in DDL_REPOSITORY_01;
