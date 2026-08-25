@@ -1,1 +1,1 @@
-/hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh ACA "ANTHEM_INV_ProviderAttribution_*"
+/hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh ACA "ANTHEM_INV_ProviderAttribution_20260825102721.txt"
