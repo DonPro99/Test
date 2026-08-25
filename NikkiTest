@@ -1,4 +1,4 @@
-ls -la /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ANTHEM_INV_ProviderAttribution_20260825102721.txt
-
-mv /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ANTHEM_INV_ProviderAttribution_20260825102721.txt \
-   /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/
+you need to decrypt that file andi once decrypted you will find it in below location. /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND
+ 
+once you moved to that location you need to move again to /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND location andi.
+ 
