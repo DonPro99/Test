@@ -1,3 +1,180 @@
-pgp_decrypt_and_archive.sh
+ Usage:
+# 1. Process ACA files (default):
+#    ./pgp_decrypt_and_archive.sh ACA
+#
+# 2. Process MRA files (default):
+#    ./pgp_decrypt_and_archive.sh MRA
+#
+# 3. Process specific pattern for ACA or MRA:
+#    ./pgp_decrypt_and_archive.sh ACA "Anthem_INV_CHASES_*"
+#
+# 4. Process files based on LOB, Pattern, and custom output directory:
+#    ./pgp_decrypt_and_archive.sh ACA "Anthem_INV_CHASES_*" /custom/output/
+#
+# 5. Process Lookups files for ACA:
+#    ./pgp_decrypt_and_archive.sh ACA "ad_patient_encounter_all_lob*"
+#
+# 6. Process Lookups files for MRA:
+#    ./pgp_decrypt_and_archive.sh MRA "rad_patient_encounter_all_lobmra*"
+# ==================================================================================================
 
-/hcaaapck/backup/IT/PROD/scripts
+INPUT_DIR="/hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG"
+ARCHIVE_DIR="/hcaaapck/backup/ProdEnvironment/SAS_Repository/DrConnect_PGP_Archive"
+LOG_DIR="/hcaaapck/backup/ProdEnvironment/PGP_Decrypt"
+LOG_FILE="$LOG_DIR/decrypt_debug.log"
+
+OUTPUT_DIR_ACA="/hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND"
+OUTPUT_DIR_MRA="/raa1/backup/prodenvironment/sas_repository/outbound"
+LOOKUP_DIR_ACA="/hcaaapck/backup/ProdEnvironment/Lookups"
+LOOKUP_DIR_MRA="/raa1/backup/prodenvironment/lookups"
+LOOKUP_DIR_MRA1="/raa1/backup/prodenvironment/hedis"
+
+mkdir -p "$LOG_DIR"
+chmod 777 "$LOG_DIR"
+touch "$LOG_FILE"
+chmod 666 "$LOG_FILE"
+
+log_message() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> "$LOG_FILE"
+}
+
+decrypt_file() {
+    local input_file="$1"
+    local output_dir="$2"
+    mkdir -p "$output_dir"
+    chmod 777 "$output_dir"
+
+    local filename=$(basename "$input_file" .pgp)
+    local output_file="$output_dir/$filename"
+
+    log_message "Processing: $input_file"
+    log_message "Decrypting to: $output_file (Overwrite enabled)"
+
+    gpg --yes --output "$output_file" --decrypt "$input_file" 2>>"$LOG_FILE"
+
+    if [[ $? -eq 0 ]]; then
+        log_message "Successfully decrypted: $output_file"
+        archive_file "$input_file" "$output_dir"
+    else
+        log_message "Failed to decrypt: $input_file"
+    fi
+}
+
+archive_file() {
+    local input_file="$1"
+    local output_dir="$2"
+    local month_year=$(date '+%b%Y' | tr '[:lower:]' '[:upper:]')
+    local archive_subdir="$ARCHIVE_DIR/$month_year"
+
+    mkdir -p "$archive_subdir"
+    chmod 777 "$archive_subdir"
+
+    if [[ "$input_file" =~ Anthem_CIOX_.* || "$input_file" =~ Anthem_FOO_.* || "$output_dir" =~ ACA ]]; then
+        mkdir -p "$archive_subdir/ACA"
+        chmod 777 "$archive_subdir/ACA"
+        mv "$input_file" "$archive_subdir/ACA/"
+        log_message "Archived to: $archive_subdir/ACA/"
+    elif [[ "$input_file" =~ MRA_.* || "$output_dir" =~ MRA ]]; then
+        mkdir -p "$archive_subdir/MRA"
+        chmod 777 "$archive_subdir/MRA"
+        mv "$input_file" "$archive_subdir/MRA/"
+        log_message "Archived to: $archive_subdir/MRA/"
+    else
+        mv "$input_file" "$archive_subdir/"
+        log_message "Archived to: $archive_subdir/"
+    fi
+}
+
+
+process_single_file() {
+    local file="$1"
+    local pattern="$2"
+    local output_dir="$3"
+
+    if [[ -n "$pattern" && ! "$file" =~ $pattern ]]; then
+        log_message "Skipping: $file (No match for pattern '$pattern')"
+        return
+    fi
+
+    if [[ "$file" =~ rad_patient_encounter_all_lobmra.* ]]; then
+        decrypt_file "$file" "$LOOKUP_DIR_MRA"
+    elif [[ "$file" =~ ad_patient_encounter_all_lob.* ]]; then
+        decrypt_file "$file" "$LOOKUP_DIR_ACA"
+         # NEW: ACA epic_hyperspace*.txt -> ACA lookup dir
+    elif [[ "$file" =~ epic_hyperspace.*\.txt\.pgp$ ]]; then
+        decrypt_file "$file" "$LOOKUP_DIR_ACA"
+    elif [[ "$file" =~ mra_hedis_supp.*\.txt\.pgp$ ]]; then
+        decrypt_file "$file" "$LOOKUP_DIR_MRA1"
+    elif [[ "$file" =~ Anthem_CIOX_.* || "$file" =~ Anthem_FOO_.* ]]; then
+        decrypt_file "$file" "$OUTPUT_DIR_ACA"
+    elif [[ "$file" =~ MRA_.* ]]; then
+        decrypt_file "$file" "$OUTPUT_DIR_MRA"
+    elif [[ "$file" =~ mcd_hos_fnf_rpt.*\.txt$ ]]; then
+        decrypt_file "$file" "$LOOKUP_DIR_MRA"
+    elif [[ -n "$output_dir" ]]; then
+        decrypt_file "$file" "$output_dir"
+    else
+        log_message "Error: Unable to determine output directory for $file"
+    fi
+}
+
+
+
+process_directory() {
+    local dir="$1"
+    local pattern="$2"
+    local output_dir="$3"
+    local file_count=0
+
+    for file in "$dir"/*.pgp; do
+        [[ -f "$file" ]] || continue
+        process_single_file "$file" "$pattern" "$output_dir"
+        ((file_count++))
+    done
+
+    if [[ $file_count -eq 0 ]]; then
+        log_message "No files matching the pattern '$pattern' in directory '$dir'"
+        echo "No files matching the pattern '$pattern' found in directory '$dir'"
+    fi
+}
+
+main() {
+    local lob="$1"
+    local pattern="$2"
+    local output_dir="${3:-}"
+
+    if [[ -z "$lob" || ! "$lob" =~ ^(ACA|MRA)$ ]]; then
+        log_message "Error: Invalid LOB. Please specify 'ACA' or 'MRA'."
+        exit 1
+    fi
+
+    if [[ -z "$pattern" ]]; then
+        if [[ "$lob" == "ACA" ]]; then
+            pattern="Anthem_INV_P*|ANTHEM_INV_*|Anthem_MROCP_CHASES_*|Anthem_CIOX_CHASES_*|ChartData_ANT_*|Anthem_SHRCR_CHASES_*|ELV_VRSMA_*|ANTHEM_INV_RISKGAP_*|ANTHEM_INV_RISKGAP_PCV_*|ANTHEM_INV_INTERVENTION_*|ANTHEM_INV_INTERVENTION_PCV_*|REQUESTNEWACCT*|^.*_CRA_.*(_\d{14})?\.\w+\.\w+$|ad_patient_encounter_all_lob.*|ELV_VRTX_*|ACA_CENTAURI_*|INV_PHONE_*|epic_hyperspace.*|ANTHEM_MTRX_*"
+        elif [[ "$lob" == "MRA" ]]; then
+            pattern="ELV_CENT_*MRA_*|ELV_CTVI_*MRA_*|ELV_SHCR_*MRA_*|ELV_DTVNT_*MRA_*|ELV_DTVNT_MBR_*MRA_*|ELV_DTVNT_R1_*MRA_*|ELV_MRO_*MRA_*|ELV_SHCR_*MRA_*|ELV_EPI_*MRA_*|^.*_MRA_.*(_\d{14})?\.\w+\.\w+$|rad_patient_encounter_all_lobmra.*|TRG_1_MR_*|mra_hedis_supp.*"
+        fi
+    fi
+
+    log_message "Starting PGP Decryption Process..."
+    log_message "Processing LOB: $lob"
+    log_message "Pattern: $pattern"
+    log_message "Custom Output Directory: $output_dir"
+
+    if [[ -z "$output_dir" ]]; then
+        output_dir="$([ "$lob" == "ACA" ] && echo "$OUTPUT_DIR_ACA" || echo "$OUTPUT_DIR_MRA")"
+    fi
+
+    if [[ -d "$INPUT_DIR" ]]; then
+        log_message "Processing directory: $INPUT_DIR"
+        process_directory "$INPUT_DIR" "$pattern" "$output_dir"
+    else
+        log_message "Invalid input: '$INPUT_DIR'"
+        exit 1
+    fi
+
+    log_message "PGP Decryption Process Completed."
+}
+
+main "$@"
