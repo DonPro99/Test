@@ -1,1 +1,3 @@
-ls -la /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND/ | grep ProviderAttribution
+cp /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND/ANTHEM_INV_ProviderAttribution_20260825102721.txt /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/
+
+ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/ | grep ProviderAttribution
