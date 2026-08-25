@@ -1,1 +1,44 @@
 open the real ApdPreApprovalRequestService.cs and TcePreApprovalRequestService.cs directly, and edit the existing IsAutoPreApproval() method in place (don't paste a whole file over it) — same lesson from earlier tonight.
+
+
+// UPDATE for ApdPreApprovalRequestService.cs and TcePreApprovalRequestService.cs
+// (identical change in both files)
+//
+// Per stakeholder clarification (email thread with Dave Kempfer/Jennie Coffey,
+// responding to Sudip's question): there is no "admin only" designee concept
+// for APD/TCE (unlike DPE). The standalone toggle should apply to ANY
+// administrative preapproval submitted by an APD/TCE designee - including
+// "Other administrative activity" - regardless of which specific
+// authorization/function codes are involved.
+//
+// Previously, "Other administrative activity" requests fell through to the
+// old per-function-code logic (which always excluded them from
+// auto-approval, toggle or not). This update brings them under the new
+// toggle instead.
+
+protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
+{
+    // DMS-8269: administrative pre-approvals use a single standalone
+    // designee-level toggle (Cloa.IsAutoPreApproval), independent of
+    // any individual function code's own auto-preapproval setting.
+    //
+    // Per stakeholder clarification, this covers:
+    //   (a) requests where every selected function code is Administrative
+    //       category, OR
+    //   (b) "Other administrative activity" requests
+    // - regardless of the designee's specific authorization holdings.
+    var isAdminRequest = (model.TestCheckInformation.SelectedRequestAuthorizations != null
+            && model.TestCheckInformation.SelectedRequestAuthorizations.Any()
+            && model.TestCheckInformation.SelectedRequestAuthorizations.All(fc => fc.CategoryId == (int)CategoryEnum.Administrative))
+        || model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault();
+
+    if (isAdminRequest)
+    {
+        return _context.PreApprovalRequests
+            .Where(par => par.Id == model.Id)
+            .Select(par => par.Cloa.IsAutoPreApproval)
+            .FirstOrDefault();
+    }
+
+    return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
+}
