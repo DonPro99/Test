@@ -1,3 +1,8 @@
 /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ANTHEM_INV_ProviderAttribution_20260825102721.txt.pgp
 
 find /hcaaapck/backup/ProdEnvironment -iname "*decrypt*" -o -iname "*pgp*" 2>/dev/null
+
+
+find /hcaaapck -iname "pgp_decrypt_and_archive*" 2>/dev/null
+
+cat /hcaaapck/backup/<path-found-above>/pgp_decrypt_and_archive.sh | head -30
