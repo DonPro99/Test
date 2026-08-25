@@ -1,32 +1,7 @@
-CREATE TABLE IF NOT EXISTS D01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_PREMATCH (
+SELECT *
+FROM SNOWFLAKE.ACCOUNT_USAGE.TABLES
+WHERE table_name = 'RAD_DATAVANT_CHASE_PREMATCH'
+  AND table_schema = 'RAA_RAWZ'
+ORDER BY created DESC;
 
-    -- Standard RAA_RAWZ audit columns
-    EDL_LOAD_DTM              TIMESTAMP_NTZ(9)  DEFAULT CAST('8888-12-31 00:00:00' AS TIMESTAMP_NTZ(9)),
-    EDL_RUN_ID                VARCHAR(255)      DEFAULT 'NA',
-    EDL_SCRTY_LVL_CD          VARCHAR(10)       DEFAULT 'UNK',
-    EDL_LOB_CD                VARCHAR(10)       DEFAULT 'NA',
-    EDL_EXTRNL_LOAD_CD        VARCHAR(10)       DEFAULT 'NA',
-    EDL_SOR_CD                VARCHAR(10)       DEFAULT 'NA',
-    KF_TMS                    TIMESTAMP_NTZ(9),
-    EDL_CREAT_DTM             TIMESTAMP_NTZ(9)  DEFAULT CURRENT_TIMESTAMP(),
-    EDL_INCRMNTL_LOAD_DTM     TIMESTAMP_NTZ(9)  DEFAULT CAST('8888-12-31 00:00:00' AS TIMESTAMP_NTZ(9)),
-    FILENAME                  VARCHAR(500),
-    INSERT_DT                 DATE,
-    BATCH_ID                  NUMBER(10,0),
-
-    -- Business columns (per finalized Datavant Pre-Match mapping doc)
-    ADDRESSLINE1              VARCHAR(100),
-    ADDRESSLINE2              VARCHAR(100),
-    CITY                      VARCHAR(50),
-    STATE                     VARCHAR(2),
-    ZIPCODE                   VARCHAR(5),
-    FACILITYTYPE              VARCHAR(100),
-    FACILITYNPI               VARCHAR(10),
-    FACILITYTIN               VARCHAR(9),
-    PRACTICIONERNPI           VARCHAR(10),
-    PROVIDERPHONE             VARCHAR(15),
-    PROVIDERFAX               VARCHAR(15),
-    MEMBERZIP                 VARCHAR(5),
-    MEMBERINSURANCEID         VARCHAR(15),
-    CLAIMID                   VARCHAR(50)
-);
+SHOW TABLES LIKE 'RAD_DATAVANT_CHASE_PREMATCH' IN SCHEMA DDL_REPOSITORY_01.RAA_RAWZ;
