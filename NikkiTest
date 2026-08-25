@@ -1,44 +1,61 @@
-open the real ApdPreApprovalRequestService.cs and TcePreApprovalRequestService.cs directly, and edit the existing IsAutoPreApproval() method in place (don't paste a whole file over it) — same lesson from earlier tonight.
+Please see response from David below about the 8269 ticket.
+
+From: Kempfer, David (FAA) <David.Kempfer@faa.gov> 
+Sent: Tuesday, August 25, 2026 12:53 PM
+To: Sharma, Sudipta K-CTR (FAA) <Sudipta.K-CTR.Sharma@faa.gov>; Coffey, Jennie (FAA) <Jennie.Coffey@faa.gov>
+Cc: Bonfond, Nicole (FAA) <Nicole.Bonfond@faa.gov>; Quiah, Dominic (FAA) <dominic.quiah@faa.gov>; Hutchens, Judy (FAA) <Judy.Hutchens@faa.gov>
+Subject: RE: DMS release 8.5 - UAT: TCE
+
+For APDs and TCEs, there is no such thing as an “admin only user.” That applies to DPEs. By policy, any APD or TCE can perform certain administrative functions and complete administrative preapprovals at any time. This functionality should apply to every APD and TCE, regardless of authorization. 
+
+As we mentioned, submission of administrative preapprovals has increased over time, making the requirement for the MS to approve each preapproval to become an unnecessary burden.
+
+Regards,
+
+David S. Kempfer
+Aviation Safety Inspector, Air Carrier Operations
+Operations Delegation Section, AFS-850
+General Aviation and Commercial Division, AFS-800
+(720) 910-7912
+
+ 
+
+From: Sharma, Sudipta K-CTR (FAA) <Sudipta.K-CTR.Sharma@faa.gov> 
+Sent: Tuesday, August 25, 2026 10:35 AM
+To: Kempfer, David (FAA) <David.Kempfer@faa.gov>; Coffey, Jennie (FAA) <Jennie.Coffey@faa.gov>
+Cc: Bonfond, Nicole (FAA) <Nicole.Bonfond@faa.gov>; Quiah, Dominic (FAA) <dominic.quiah@faa.gov>; Hutchens, Judy (FAA) <Judy.Hutchens@faa.gov>
+Subject: RE: DMS release 8.5 - UAT: TCE
+
+Hi Dave and Jennie,
+
+We have reviewed and analyzed the issue that you both reported.
+
+Based on the meeting that Obai and Nikhitha from the GET team had with Jennie and you on 7/21, our understanding was that the automated Pre-Approval process should apply to Admin users only, while all other non-Admin users would need to go through the FAA authorization process.
+If our understanding is incorrect, could you please clarify the intended process? Once confirmed, we will make the necessary code changes to ensure the functionality works as expected.
+
+Regards,
+Sudip
+The Jira ticket confirms the toggle applies to the administrative category as a whole and it doesn't specify behavior for mixed admin/non-admin function codes on a single request… that part was my technical interpretation, not something explicitly confirmed by David and Jennie.
+
+From: Komandla, Nikhitha CTR (FAA) 
+Sent: Tuesday, August 25, 2026 12:11 PM
+To: Sharma, Sudipta K-CTR (FAA) <Sudipta.K-CTR.Sharma@faa.gov>; Velagapudi, Indusekhar CTR (FAA) <Indusekhar.CTR.Velagapudi@faa.gov>
+Cc: Islam, Md Obaidul CTR (FAA) <Md.Obaidul.CTR.Islam@faa.gov>
+Subject: RE: DMS-8269 : Admin Pre-Approval Scope Confirmation (7/21 Stakeholder Call)
+
+Hi Sudip,
+
+As Wanted to give you an update on DMS-8269 (APD/TCE administrative pre-approval toggle) and confirm the scope based on the 7/21 call with David Kempfer and Jennie Coffey.
+
+Confirmed from the stakeholder call:
+The auto-approval toggle applies only to administrative function codes as a category, not to all function codes. A designee can hold multiple admin function codes, but there's a single on/off switch covering "administrative" as a category, it's not tied to any individual function code. This was explicitly discussed and confirmed with David and Jennie.
+
+NOTE:
+(our technical implementation, not something explicitly stated on the call):
+Based on how the system is built, function codes are tagged with a CategoryId, and the ones marked Administrative are what the toggle applies to. If a request includes even one non-administrative function code alongside admin ones, it falls back to the existing manual review process rather than auto-approving. This is consistent with the category-based scope David and Jennie confirmed, but I want to be clear this specific mechanic is our team's implementation detail rather than something they stated word-for-word.
+
+Thanks,
+Nikhitha.
 
 
-// UPDATE for ApdPreApprovalRequestService.cs and TcePreApprovalRequestService.cs
-// (identical change in both files)
-//
-// Per stakeholder clarification (email thread with Dave Kempfer/Jennie Coffey,
-// responding to Sudip's question): there is no "admin only" designee concept
-// for APD/TCE (unlike DPE). The standalone toggle should apply to ANY
-// administrative preapproval submitted by an APD/TCE designee - including
-// "Other administrative activity" - regardless of which specific
-// authorization/function codes are involved.
-//
-// Previously, "Other administrative activity" requests fell through to the
-// old per-function-code logic (which always excluded them from
-// auto-approval, toggle or not). This update brings them under the new
-// toggle instead.
 
-protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
-{
-    // DMS-8269: administrative pre-approvals use a single standalone
-    // designee-level toggle (Cloa.IsAutoPreApproval), independent of
-    // any individual function code's own auto-preapproval setting.
-    //
-    // Per stakeholder clarification, this covers:
-    //   (a) requests where every selected function code is Administrative
-    //       category, OR
-    //   (b) "Other administrative activity" requests
-    // - regardless of the designee's specific authorization holdings.
-    var isAdminRequest = (model.TestCheckInformation.SelectedRequestAuthorizations != null
-            && model.TestCheckInformation.SelectedRequestAuthorizations.Any()
-            && model.TestCheckInformation.SelectedRequestAuthorizations.All(fc => fc.CategoryId == (int)CategoryEnum.Administrative))
-        || model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault();
-
-    if (isAdminRequest)
-    {
-        return _context.PreApprovalRequests
-            .Where(par => par.Id == model.Id)
-            .Select(par => par.Cloa.IsAutoPreApproval)
-            .FirstOrDefault();
-    }
-
-    return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
-}
