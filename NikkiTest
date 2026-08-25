@@ -1,16 +1,5 @@
-Subject: DMS-8269 - Admin Pre-Approval Scope Confirmation (7/21 Stakeholder Call)
-
-Hi [Manager],
-
-Wanted to give you an update on DMS-8269 (APD/TCE administrative pre-approval toggle) and confirm the scope based on the 7/21 call with David Kempfer and Jennie Coffey.
-
-Confirmed from the stakeholder call:
-The auto-approval toggle applies only to administrative function codes as a category, not to all function codes. A designee can hold multiple admin function codes, but there's a single on/off switch covering "administrative" as a category - it's not tied to any individual function code. This was explicitly discussed and confirmed with David and Jennie.
-
-Additional detail (our technical implementation, not something explicitly stated on the call):
-Based on how the system is built, function codes are tagged with a CategoryId, and the ones marked Administrative are what the toggle applies to. If a request includes even one non-administrative function code alongside admin ones, it falls back to the existing manual review process rather than auto-approving. This is consistent with the category-based scope David and Jennie confirmed, but I want to be clear this specific mechanic is our team's implementation detail rather than something they stated word-for-word.
-
-Let me know if you'd like me to pull in David/Jennie to verify the implementation-level detail directly, or if the confirmed scope above is sufficient for now.
-
-Thanks,
-[Your name]
+Based on our discussion with David Kempfer and Jennie Coffey during the 7/21/2026 meeting, the scope for this user story has been updated as follows:
+Toggle Configuration: Administrative pre-approval is a single standalone toggle. This is not tied to any individual authorization/function code. A designee may hold multiple admin function codes, but there's one on/off switch covering "administrative" as a category.
+Access Control: Managing Specialist role only. Confirmed via a live demo: the Management Information Links tab shows only 3 links under the ASI role, versus the full set (including approvals) under the MS role. this toggle follows that same existing role restriction.
+Automation Behavior: Fully automatic and final. Once submitted, the system approves it and no manual review or reject step remains for that request.
+Default State: Unchecked by default. For both newly appointed designees and existing designees already in the system. No retroactive "turn on" behavior. 
