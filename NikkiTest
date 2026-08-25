@@ -1,3 +1,16 @@
-cp /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND/ANTHEM_INV_ProviderAttribution_20260825102721.txt /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/
+Subject: DMS-8269 - Admin Pre-Approval Scope Confirmation (7/21 Stakeholder Call)
 
-ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/ | grep ProviderAttribution
+Hi [Manager],
+
+Wanted to give you an update on DMS-8269 (APD/TCE administrative pre-approval toggle) and confirm the scope based on the 7/21 call with David Kempfer and Jennie Coffey.
+
+Confirmed from the stakeholder call:
+The auto-approval toggle applies only to administrative function codes as a category, not to all function codes. A designee can hold multiple admin function codes, but there's a single on/off switch covering "administrative" as a category - it's not tied to any individual function code. This was explicitly discussed and confirmed with David and Jennie.
+
+Additional detail (our technical implementation, not something explicitly stated on the call):
+Based on how the system is built, function codes are tagged with a CategoryId, and the ones marked Administrative are what the toggle applies to. If a request includes even one non-administrative function code alongside admin ones, it falls back to the existing manual review process rather than auto-approving. This is consistent with the category-based scope David and Jennie confirmed, but I want to be clear this specific mechanic is our team's implementation detail rather than something they stated word-for-word.
+
+Let me know if you'd like me to pull in David/Jennie to verify the implementation-level detail directly, or if the confirmed scope above is sufficient for now.
+
+Thanks,
+[Your name]
