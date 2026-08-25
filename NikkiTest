@@ -1,48 +1,11 @@
-3)Please see response from David below about the 8269 ticket.
+protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
+{
+    return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
+}
+(\dms_api\Dms.Services\Implementation\PreApprovalRequest\ApdPreApprovalRequestService.cs)
 
-
-David replied: 
-For APDs and TCEs, there is no such thing as an “admin only user.” That applies to DPEs. By policy, any APD or TCE can perform certain administrative functions and complete administrative preapprovals at any time. This functionality should apply to every APD and TCE, regardless of authorization. 
-
-As we mentioned, submission of administrative preapprovals has increased over time, making the requirement for the MS to approve each preapproval to become an unnecessary burden.
-
-==========
-
-2) From Sudip:
-
-Hi Dave and Jennie,
-
-We have reviewed and analyzed the issue that you both reported.
-
-Based on the meeting that Obai and Nikhitha from the GET team had with Jennie and you on 7/21, our understanding was that the automated Pre-Approval process should apply to Admin users only, while all other non-Admin users would need to go through the FAA authorization process.
-If our understanding is incorrect, could you please clarify the intended process? Once confirmed, we will make the necessary code changes to ensure the functionality works as expected.
-
-Regards,
-Sudip
-
-============
-1) From: me
-
-Hi Sudip,
-
-As Wanted to give you an update on DMS-8269 (APD/TCE administrative pre-approval toggle) and confirm the scope based on the 7/21 call with David Kempfer and Jennie Coffey.
-
-Confirmed from the stakeholder call:
-The auto-approval toggle applies only to administrative function codes as a category, not to all function codes. A designee can hold multiple admin function codes, but there's a single on/off switch covering "administrative" as a category, it's not tied to any individual function code. This was explicitly discussed and confirmed with David and Jennie.
-
-NOTE:
-(our technical implementation, not something explicitly stated on the call):
-Based on how the system is built, function codes are tagged with a CategoryId, and the ones marked Administrative are what the toggle applies to. If a request includes even one non-administrative function code alongside admin ones, it falls back to the existing manual review process rather than auto-approving. This is consistent with the category-based scope David and Jennie confirmed, but I want to be clear this specific mechanic is our team's implementation detail rather than something they stated word-for-word.
-
-
-FYI: my jira
-Based on our discussion with David Kempfer and Jennie Coffey during the 7/21/2026 meeting, the following requirements were clarified for this feature. (Note: This represents an expanded scope beyond the original ticket description):
-
-Toggle Configuration: Administrative pre-approval is a single standalone toggle. This is not tied to any individual authorization/function code. A designee may hold multiple admin function codes, but there's one on/off switch covering "administrative" as a category.
-
-Access Control: Managing Specialist role only. Confirmed via a live demo: the Management Information Links tab shows only 3 links under the ASI role, versus the full set (including approvals) under the MS role. This toggle follows that same existing role restriction.
-
-Automation Behavior: Fully automatic and final. Once submitted, the system approves it and no manual review or reject step remains for that request.
-
-Default State: Unchecked by default. For both newly appointed designees and existing designees already in the system. No retroactive "turn on" behavior.
-
+ protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
+ {
+     return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
+ }
+\dms_api\Dms.Services\Implementation\PreApprovalRequest\TcePreApprovalRequestService.cs
