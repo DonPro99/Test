@@ -1,6 +1,6 @@
 bash /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
-
-find /hcaaapck/backup/IT/SIT/scripts/ -iname "*copy_to_s3*"S
+$ find /hcaaapck/backup/IT/SIT/scripts/ -iname "*chasefiles*" 
+/hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh
 
 
 grep -n "s3://" /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
