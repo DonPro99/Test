@@ -1,14 +1,1 @@
-FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|
-EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|
-OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|
-MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|
-UserDefinedText4
-
-ProjectId|ProjectName|ClientRequestid|MemberLastName|MemberFirstName|MemberMI|
-MemberId|MemberDOB|ProviderGroupName|ProviderGroupTIN|ProviderNPI|ProviderId|
-ProviderLastName|ProviderFirstName|ProviderAddress1|ProviderAddress2|
-ProviderCity|ProviderState|ProviderZip|ProviderPhone|ProviderFax|
-ProviderContactName|CentralContactName|CentralContactPhone|CentralContactFax|
-MemberZip|ClaimNumber|RecordRank|SSN|MemberAddress1|MemberAddress2|MemberCity|
-MemberState|HomePhone|MobilePhone|InsuranceID|ClaimID|Gender|BeginDOS|EndDOS|
-ReturnFileName|BusinessUnit|LOB|RecordType|ContractNumber|...(a few more not captured)
+sed -i '1s/MemberId/MBRID/; 1s/MemberFirstName/MBRFNAME/; 1s/MemberLastName/MBRLNAME/; 1s/MemberDOB/MBRDOB/' "${OUTFILE}"
