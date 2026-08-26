@@ -1,16 +1,6 @@
-cp /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh.bak2
+vi /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
 
-sed -i '1s/MemberId/MBRID/' "${OUTFILE}"
+Type /MBRID
 
-sed -i "s|sed -i '1s/MemberId/MBRID/' \"\${OUTFILE}\"|sed -i '1s/MemberId/MBRID/; 1s/MemberFirstName/MBRFNAME/; 1s/MemberLastName/MBRLNAME/; 1s/MemberDOB/MBRDOB/' \"\${OUTFILE}\"|" /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+               sed -i '1s/MemberId/MBRID/; 1s/MemberFirstName/MBRFNAME/; 1s/MemberLastName/MBRLNAME/; 1s/MemberDOB/MBRDOB/' "${OUTFILE}"
 
-diff /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh.bak2 /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
-
-cat > /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_WVQ32026_Chase_C_$(date +%m%d%Y%H%M%S).txt << 'EOF'
-FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
-TestFile|900099999|E2ETEST|E2ELAST|01/01/1980||||TestProject|TESTCHASE002||Y|M|ProvLast|ProvFirst|1234567890||ProvID001||||
-EOF
-
-bash /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
-
-head -1 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_CAID_Virtix_Chase_WV_$(date +%Y%m%d).txt
