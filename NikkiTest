@@ -1,1 +1,23 @@
-hi Sudip, one of my neighbors son just passed away unexpectedly. I'd like to go over and be with them for a little while. I'll need to take an hour break and i'll be back in an hour. Thanks for understanding
+Subject: Virtix _S File Mapping - Decision Needed on Target Layout (RBICA-13935)
+
+Hi Tagore,
+
+Wanted to flag a decision point on the Virtix _S file mapping (RBICA-13935) before we move forward with the story.
+
+Background: The _C and _M files share a 22-column layout, which our pipeline already loads correctly. The _S file has a completely different, richer 54-column layout. James (Virtix business contact) already confirmed a full mapping of the _S columns down to the 22-column target - that mapping is done and in the email trace.
+
+The open question: should the 22-column layout stay the standard target (original plan, confirmed with James), or should we instead make the 54-column _S layout the standard, and map the 22 _C/_M columns up into it - with the remaining ~32 columns populated as null/empty for _C/_M-sourced records?
+
+Reasons to consider the second option:
+- It preserves all _S data instead of dropping ~32 columns
+- If those extra fields become useful downstream later, we would not need to re-engineer the pipeline
+
+Trade-offs to weigh:
+- This changes the target table schema (54 columns instead of 22)
+- Any downstream consumers of the current 22-column output would need to handle the wider schema
+- It is a different direction than what was originally discussed with James, so we would need to loop him back in if we go this way
+
+Can we get some time to discuss and land on a direction? Once we decide, I will draft the story accordingly, and if needed we can loop James in to confirm the updated mapping.
+
+Thanks,
+Nikhitha
