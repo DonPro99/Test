@@ -1,5 +1,1 @@
-vi /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
-
-Type /MBRID
-
-               sed -i '1s/MemberId/MBRID/; 1s/MemberFirstName/MBRFNAME/; 1s/MemberLastName/MBRLNAME/; 1s/MemberDOB/MBRDOB/' "${OUTFILE}"
+ls -l /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
