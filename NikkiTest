@@ -1,5 +1,8 @@
 bash /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
 
+find /hcaaapck/backup/IT/SIT/scripts/ -iname "*copy_to_s3*"S
+
+
 grep -n "s3://" /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
 
 aws s3 cp s3://<bucket>/<path>/ChartData_CAID_Virtix_Chase_WV_$(date +%Y%m%d).txt - | head -5
