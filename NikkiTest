@@ -1,1 +1,3 @@
-bash /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh
+grep -rln "I_ELV_CFX_PLT001" /hcaaapck/backup/IT/ 2>/dev/null
+
+grep -rn "sftp\|destination" /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
