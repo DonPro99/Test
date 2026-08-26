@@ -1,1 +1,2 @@
-head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_*.txt
+==> /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_WV_20260818.txt <==
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
