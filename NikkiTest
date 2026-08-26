@@ -1,3 +1,4 @@
-$ grep -n "sed -i '1s/MemberId/MBRID/'" /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
-251:            sed -i '1s/MemberId/MBRID/' "${OUTFILE}"
-$ 
+sed -i "251s|.*|            sed -i '1s/MemberId/MBRID/; 1s/MemberFirstName/MBRFNAME/; 1s/MemberLastName/MBRLNAME/; 1s/MemberDOB/MBRDOB/' \"\${OUTFILE}\"|" /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+
+sed -n '251p' /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+
