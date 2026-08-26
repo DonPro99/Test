@@ -1,47 +1,5 @@
-$ cat > /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_WVQ32026_Chase_C_$(date +%m%d%Y%H%M%S).txt << 'EOF'
-> equestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4                                             <
-> TestFile|900099999|E2ETEST|E2ELAST|01/01/1980||||TestProject|TESTCHASE003||Y|M|ProvLast|ProvFirst|1234567890||ProvID001||||
-> EOF
-$ bash /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
-2026-08-26 17:24:53 : ====================================================
-2026-08-26 17:24:53 : Virtix Chase Merge Job Started
-2026-08-26 17:24:53 : Environment      : SIT
-2026-08-26 17:24:53 : Input Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles
-2026-08-26 17:24:53 : Output Directory : /raa2/backup/sitenvironment/rev_opt/chasefiles
-2026-08-26 17:24:53 : Archive Directory: /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260826
-2026-08-26 17:24:53 : ====================================================
-2026-08-26 17:24:53 : States Identified : WV
-2026-08-26 17:24:53 : ------------------------------------------------------
-2026-08-26 17:24:53 : Processing State : WV
-2026-08-26 17:24:53 : Existing output file found.
-2026-08-26 17:24:53 : Input Files
-2026-08-26 17:24:53 :    Anthem_VirtixHealth_WVQ32026_Chase_C_08262026132348.txt
-2026-08-26 17:24:53 :    Anthem_VirtixHealth_WVQ32026_Chase_C_08262026172447.txt
-2026-08-26 17:24:53 : Starting Merge Process
-2026-08-26 17:24:53 : Reading File : Anthem_VirtixHealth_WVQ32026_Chase_C_08262026132348.txt
-2026-08-26 17:24:53 : Copying header and data.
-2026-08-26 17:24:53 : Renaming MemberId header field to MBRID to match Episource layout.
-2026-08-26 17:24:53 : Reading File : Anthem_VirtixHealth_WVQ32026_Chase_C_08262026172447.txt
-2026-08-26 17:24:53 : Appending data without header.
-2026-08-26 17:24:53 : Number of Files Processed : 2
-2026-08-26 17:24:53 : Input Records            : 2
-2026-08-26 17:24:53 : Output Records           : 2
-2026-08-26 17:24:53 : Record Count Validation Successful.
-2026-08-26 17:24:53 : Copying source files to archive.
-2026-08-26 17:24:53 : Archived : Anthem_VirtixHealth_WVQ32026_Chase_C_08262026132348.txt
-2026-08-26 17:24:53 : Archived : Anthem_VirtixHealth_WVQ32026_Chase_C_08262026172447.txt
-2026-08-26 17:24:53 : Merged File Name : ChartData_CAID_Virtix_Chase_WV_20260826.txt
-2026-08-26 17:24:53 : Merged File Size : 512
-2026-08-26 17:24:53 : State WV processed successfully.
-2026-08-26 17:24:53 : ------------------------------------------------------
-2026-08-26 17:24:53 : 
-2026-08-26 17:24:53 : ====================================================
-2026-08-26 17:24:53 : Virtix Chase Merge Job Completed Successfully.
-2026-08-26 17:24:53 : Environment        : SIT
-2026-08-26 17:24:53 : Processing Date    : 20260826
-2026-08-26 17:24:53 : Output Directory   : /raa2/backup/sitenvironment/rev_opt/chasefiles
-2026-08-26 17:24:53 : Archive Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260826
-2026-08-26 17:24:53 : Output Files Created : 1
-2026-08-26 17:24:53 : ====================================================
-$ head -1 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_CAID_Virtix_Chase_WV_$(date +%Y%m%d).txt
-FileName|MBRID|MBRFNAME|MBRLNAME|MBRDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+bash /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
+
+grep -n "s3://" /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
+
+aws s3 cp s3://<bucket>/<path>/ChartData_CAID_Virtix_Chase_WV_$(date +%Y%m%d).txt - | head -5
