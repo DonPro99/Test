@@ -1,9 +1,1 @@
-the vendor files land on SAS at:
-/raa2/backup/prodenvironment/rev_opt/chasefiles/
-
-
-That's where the raw Anthem_VirtixHealth_*_Chase_*.txt files come in before merging. The MCAID outbound location (post-merge output) is:
-/raa2/backup/prodenvironment/sas_repository/outbound
-
-Once you're in SAS, try:
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep -i episource
+head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_*.txt
