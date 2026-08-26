@@ -1,11 +1,2 @@
-cp /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh.bak
-
-sed -i '/LOG_MESG "Failed creating merged file."/,/fi/{
-/^            fi$/a\
-\
-            LOG_MESG "Renaming MemberId header field to MBRID to match Episource layout."\
-\
-            sed -i '"'"'1s/MemberId/MBRID/'"'"' "${OUTFILE}"
-}' /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
-
-diff /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh.bak /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+whoami
+ls /raa2/backup/sitenvironment/rev_opt/chasefiles/ | grep Anthem_VirtixHealth
