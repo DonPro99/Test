@@ -1,5 +1,3 @@
-$ cat /hcaaapck/backup/IT/PROD/conf/raa-mcaid-chasefiles-mgft.conf
-sftp.connection.host=mgft.wellpoint.com
-sftp.connection.port=4028
-sftp.connection.user=appchasesftp001
-sftp.destination.dir=/appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/prod/RAA
+sed 's|prod/RAA|sit/RAA|' /hcaaapck/backup/IT/PROD/conf/raa-mcaid-chasefiles-mgft.conf > /hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
+
+cat /hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
