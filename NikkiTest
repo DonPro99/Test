@@ -1,4 +1,1 @@
-
-$ 
-$ ls -la /hcaaapck/backup/IT/PROD/conf/raa-mcaid-chasefiles-mgft.conf
--rw-r--r-- 1 srcradcoolbthpr ahpck 177 Dec 15  2025 /hcaaapck/backup/IT/PROD/conf/raa-mcaid-chasefiles-mgft.conf
+cat /hcaaapck/backup/IT/PROD/conf/raa-mcaid-chasefiles-mgft.conf
