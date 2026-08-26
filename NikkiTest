@@ -1,5 +1,1 @@
-MemberInsuranceId|MemberFirstName|MemberLastName|MemberDOB
-9A2B3C4D5|John|Doe|01/01/1980
-7X8Y9Z1A2|Jane|Smith|03/15/1975
-3M4N5P6Q7|Robert|Johnson|11/22/1990
-1K2L3M4N5|Mary|Williams|07/08/1965
+Hi Akhil, could you help submit a Protegrity ticket for RBICA-14070? I've attached a sample file — field to detokenize is MemberInsuranceId (maps to HC_ID at source), direction is Outbound, operation is Unprotect, pipe-delimited, field type Other ID, column size <2K. Let me know if you need the APMID/Application Name — figured you might already have that from the earlier Datavant tickets."
