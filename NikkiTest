@@ -1,3 +1,27 @@
-head: cannot open '/raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_WV_20260826.txt' for reading: No such file or directory
-$ head -1 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_CAID_Virtix_Chase_WV_20260826.txt
-FileName|MBRID|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+Subject: RBICA-14159 - Member ID Header Fix Tested in SIT
+
+Hi Pranaya,
+
+Wanted to give you an update on RBICA-14159 (Member ID field not matching the Episource layout).
+
+I made the fix and tested it in SIT - it's working as expected now.
+
+What I changed:
+The script that merges the Virtix chase files (merge_virtix_chase_files.sh) now renames the Member ID column header from "MemberId" to "MBRID" in the final merged file, so it matches the Episource layout.
+
+Where I tested it:
+SIT environment, folder: /raa2/backup/sitenvironment/rev_opt/chasefiles/
+
+Test file used:
+Anthem_VirtixHealth_WVQ32026_Chase_C_08262026132348.txt
+
+Output file after merge:
+ChartData_CAID_Virtix_Chase_WV_20260826.txt
+
+Result:
+Before the fix, the header showed "MemberId". After running the merge, it now correctly shows "MBRID" - matching Episource. Everything else in the file stayed the same, and the record count matched with no data loss.
+
+I'll clean up the test files once we've confirmed this looks good. Let me know if you'd like to take a look yourself, or if this is enough to move forward.
+
+Thanks,
+Nikhitha
