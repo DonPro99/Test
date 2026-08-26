@@ -1,1 +1,14 @@
-Hi Akhil, could you help submit a Protegrity ticket for RBICA-14070? I've attached a sample file — field to detokenize is MemberInsuranceId (maps to HC_ID at source), direction is Outbound, operation is Unprotect, pipe-delimited, field type Other ID, column size <2K. Let me know if you need the APMID/Application Name — figured you might already have that from the earlier Datavant tickets."
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|
+EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|
+OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|
+MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|
+UserDefinedText4
+
+ProjectId|ProjectName|ClientRequestid|MemberLastName|MemberFirstName|MemberMI|
+MemberId|MemberDOB|ProviderGroupName|ProviderGroupTIN|ProviderNPI|ProviderId|
+ProviderLastName|ProviderFirstName|ProviderAddress1|ProviderAddress2|
+ProviderCity|ProviderState|ProviderZip|ProviderPhone|ProviderFax|
+ProviderContactName|CentralContactName|CentralContactPhone|CentralContactFax|
+MemberZip|ClaimNumber|RecordRank|SSN|MemberAddress1|MemberAddress2|MemberCity|
+MemberState|HomePhone|MobilePhone|InsuranceID|ClaimID|Gender|BeginDOS|EndDOS|
+ReturnFileName|BusinessUnit|LOB|RecordType|ContractNumber|...(a few more not captured)
