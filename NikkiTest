@@ -15,4 +15,22 @@ CLIENTCHASEID|MBRID|MBRFNAME|MBRMI|MBRLNAME|MBRGender|HLTHPLN|MBRDOB|HICN|PRVID|
 ================
 
 head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_*_C_*.txt
+==> /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt <==
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+
+==> /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt <==
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+
 head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_*_M_*.txt
+
+======
+
+
+
+
+[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_*_M_*.txt
+==> /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt <==
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+
+==> /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt <==
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
