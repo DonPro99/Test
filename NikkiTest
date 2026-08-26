@@ -1,24 +1,2 @@
-// DMS-8269: standalone Administrative Pre-Approval toggle (Cloa.IsAutoPreApproval).
-// Per stakeholder clarification (David Kempfer), this applies to every APD/TCE
-// designee regardless of which function codes are on the request - when the
-// toggle is on, the request is always auto-approved. When the toggle is off,
-// behavior falls back unchanged to the pre-existing per-function-code logic.
-// DMS-8269: standalone Administrative Pre-Approval toggle (Cloa.IsAutoPreApproval).
-// Per stakeholder clarification (David Kempfer), this applies to every APD/TCE
-// designee regardless of which function codes are on the request - when the
-// toggle is on, the request is always auto-approved. When the toggle is off,
-// behavior falls back unchanged to the pre-existing per-function-code logic.
-protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
-{
-    var cloaAutoPreApproval = _context.PreApprovalRequests
-        .Where(par => par.Id == model.Id)
-        .Select(par => par.Cloa.IsAutoPreApproval)
-        .FirstOrDefault();
-
-    if (cloaAutoPreApproval)
-    {
-        return true;
-    }
-
-    return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
-}
+ if (this.managementInfoLinksModel?.managementLinks &&
+      this.designeeInfo?.type?.id === DesigneeTypeEnum.ADMINPE) {
