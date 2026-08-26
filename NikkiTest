@@ -4,6 +4,13 @@ TestFile|900099999|E2ETEST|E2ELAST|01/01/1980||||TestProject|TESTCHASE001||Y|M|P
 EOF
 
 
-ls /raa2/backup/sitenvironment/rev_opt/chasefiles/ | grep Anthem_VirtixHealth
+Hi Nazir,
 
-"Hi Akhil, I'm logged into SIT (srcradcoolbthts) trying to test a change to merge_virtix_chase_files.sh, but I get a permission denied error creating a test file in /raa2/backup/sitenvironment/rev_opt/chasefiles/. Checked the directory — it's owned by srcradcoolbthpr (PROD account) with drwxr-xr-x, so SIT doesn't have write access. Is there a different writable location for dropping SIT test files, or should permissions be updated on this folder? Trying to validate a small header-rename fix for RBICA-14159 before it goes to PROD."
+I made a small change to merge_virtix_chase_files.sh (updated both PROD and SIT copies) for RBICA-14159 - added a line right after the header gets copied to rename the MemberId field to MBRID in the merged output, so it matches the Episource layout.
+
+I wanted to test it in SIT before it runs in PROD, but I'm getting a permission denied error when trying to create a test file in /raa2/backup/sitenvironment/rev_opt/chasefiles/. Looked into it - the folder is owned by srcradcoolbthpr, so my SIT login (srcradcoolbthts) doesn't have write access to it.
+
+Since you set up this script originally, wanted to check with you - is there another place I should be dropping test files in SIT, or does this folder need permission changes? Just want to validate the change works before it goes live in PROD.
+
+Thanks,
+Nikhitha
