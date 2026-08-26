@@ -5,3 +5,8 @@ EOF
 
 
 ls /raa2/backup/sitenvironment/rev_opt/chasefiles/ | grep Anthem_VirtixHealth
+
+
+ls -ld /raa2/backup/sitenvironment/rev_opt/chasefiles/
+
+touch /tmp/test_write_check.txt && echo "write works in /tmp"
