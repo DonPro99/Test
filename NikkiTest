@@ -1,3 +1,3 @@
-ls -l /hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
+ls -la /hcaaapck/backup/IT/SIT/conf/
 
-ls -lt /hcaaapck/backup/IT/SIT/log/ | head -5
+ls -la /hcaaapck/backup/IT/PROD/conf/raa-mcaid-chasefiles-mgft.conf
