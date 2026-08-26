@@ -1,1 +1,1 @@
-find . -iname "merge*.sh"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
