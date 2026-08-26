@@ -1,1 +1,1 @@
-ksh -n /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_<STATE>_$(date +%Y%m%d).txt
