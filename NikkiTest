@@ -1,1 +1,372 @@
-/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+#!/usr/bin/ksh
+###############################################################################
+#
+# Script Name : merge_virtix_chase_files.sh
+#
+# Description:
+# ------------
+# This script merges Anthem Virtix Chase inbound files by State into a single
+# outbound file while preserving only one header row.
+#
+# Input File Pattern:
+#   Anthem_VirtixHealth_<STATE>Q<YEAR>_Chase_<PART>_<TIMESTAMP>.txt
+#
+# Example:
+#   Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+#   Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
+#   Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
+#
+# Output File:
+#   ChartData_ANT_Virtix_Chase_<STATE>_YYYYMMDD.txt
+#
+# Processing Steps:
+#
+#   1. Detect execution environment based on service id.
+#   2. Set inbound/output/archive/log locations.
+#   3. Scan inbound directory.
+#   4. Identify all available states.
+#   5. Merge all files belonging to each state.
+#   6. Preserve only one header row.
+#   7. Validate record counts.
+#   8. Copy source files to archive.
+#   9. Log processing details.
+#
+# Usage:
+#
+#   ./merge_virtix_chase_files.sh
+#
+###############################################################################
+
+PROD_DOMAIN="US.AD.WELLPOINT.COM"
+DEV_DOMAIN="DEVAD.WELLPOINT.COM"
+
+umask 002
+
+###############################################################################
+# Determine Environment
+###############################################################################
+
+SERVICE_USER=$USER
+
+if [[ "$SERVICE_USER" == "srcradcoolbthpr" ]]
+then
+
+    ENVIRONMENT="pr"
+    ENV_NAME="PROD"
+
+    INPUT_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles"
+    OUTPUT_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles"
+    LOG_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles/logs"
+
+elif [[ "$SERVICE_USER" == "srcradcoolbthts" ]]
+then
+
+    ENVIRONMENT="ts"
+    ENV_NAME="SIT"
+
+    INPUT_DIR="/raa2/backup/sitenvironment/rev_opt/chasefiles"
+    OUTPUT_DIR="/raa2/backup/sitenvironment/rev_opt/chasefiles"
+    LOG_DIR="/raa2/backup/sitenvironment/rev_opt/chasefiles/logs"
+
+else
+
+    echo "Unknown Service ID : ${SERVICE_USER}"
+    exit 1
+
+fi
+
+PROCESS_DATE=$(date +%Y%m%d)
+
+ARCHIVE_DIR="${INPUT_DIR}/archive/${PROCESS_DATE}"
+
+LOG_FILE="merge_virtix_chase_${PROCESS_DATE}_$(date +%H%M%S).log"
+
+###############################################################################
+# Create Log Directory
+###############################################################################
+
+if [ ! -d "${LOG_DIR}" ]
+then
+    mkdir -p "${LOG_DIR}"
+fi
+
+###############################################################################
+# Create Archive Directory
+###############################################################################
+
+if [ ! -d "${ARCHIVE_DIR}" ]
+then
+    mkdir -p "${ARCHIVE_DIR}"
+fi
+
+###############################################################################
+# Logging Function
+###############################################################################
+
+LOG_MESG()
+{
+    echo "$(date '+%Y-%m-%d %H:%M:%S') : $1"
+
+    echo "$(date '+%Y-%m-%d %H:%M:%S') : $1" \
+        >> "${LOG_DIR}/${LOG_FILE}"
+}
+
+###############################################################################
+# Validate Input Directory
+###############################################################################
+
+if [ ! -d "${INPUT_DIR}" ]
+then
+
+    LOG_MESG "Input directory does not exist."
+
+    LOG_MESG "${INPUT_DIR}"
+
+    exit 1
+
+fi
+
+LOG_MESG "===================================================="
+
+LOG_MESG "Virtix Chase Merge Job Started"
+
+LOG_MESG "Environment      : ${ENV_NAME}"
+
+LOG_MESG "Input Directory  : ${INPUT_DIR}"
+
+LOG_MESG "Output Directory : ${OUTPUT_DIR}"
+
+LOG_MESG "Archive Directory: ${ARCHIVE_DIR}"
+
+LOG_MESG "===================================================="
+###############################################################################
+# Discover Available States
+###############################################################################
+
+STATE_LIST=$(find "${INPUT_DIR}" -maxdepth 1 -type f \
+-name "Anthem_VirtixHealth_*_Chase_*.txt" \
+| awk -F'/' '{print $NF}' \
+| awk -F'_' '{print substr($3,1,2)}' \
+| sort -u)
+
+if [ -z "${STATE_LIST}" ]
+then
+    LOG_MESG "No Anthem Virtix Chase files found."
+
+    exit 0
+fi
+
+LOG_MESG "States Identified : ${STATE_LIST}"
+
+###############################################################################
+# Process Each State
+###############################################################################
+
+for STATE in ${STATE_LIST}
+do
+
+    LOG_MESG "------------------------------------------------------"
+    LOG_MESG "Processing State : ${STATE}"
+
+    OUTFILE="${OUTPUT_DIR}/ChartData_ANT_Virtix_Chase_${STATE}_${PROCESS_DATE}.txt"
+
+    if [ -f "${OUTFILE}" ]
+    then
+        LOG_MESG "Existing output file found."
+
+        rm -f "${OUTFILE}"
+
+        if [ $? -ne 0 ]
+        then
+            LOG_MESG "Unable to remove existing output file."
+
+            exit 1
+        fi
+    fi
+
+    HEADER_FLAG=1
+
+    INPUT_RECORDS=0
+
+    FILE_COUNT=0
+
+    FILE_LIST=$(find "${INPUT_DIR}" -maxdepth 1 -type f \
+    -name "Anthem_VirtixHealth_${STATE}*_Chase_*.txt" \
+    -newermt "$(date +%Y-%m-%d)" \
+    | sort)
+
+    if [ -z "${FILE_LIST}" ]
+    then
+
+        LOG_MESG "No files found for state ${STATE}"
+
+        continue
+
+    fi
+
+    LOG_MESG "Input Files"
+
+    for FILE in ${FILE_LIST}
+    do
+
+        LOG_MESG "   $(basename ${FILE})"
+
+    done
+
+    LOG_MESG "Starting Merge Process"
+
+###############################################################################
+# Merge Files
+###############################################################################
+
+    for FILE in ${FILE_LIST}
+    do
+
+        FILE_COUNT=$((FILE_COUNT+1))
+
+        LOG_MESG "Reading File : $(basename ${FILE})"
+
+        RECORDS=$(($(wc -l < "${FILE}")-1))
+
+        INPUT_RECORDS=$((INPUT_RECORDS+RECORDS))
+
+        if [ ${HEADER_FLAG} -eq 1 ]
+        then
+
+            LOG_MESG "Copying header and data."
+
+            cat "${FILE}" > "${OUTFILE}"
+
+            if [ $? -ne 0 ]
+            then
+
+                LOG_MESG "Failed creating merged file."
+
+                exit 1
+
+            fi
+
+            HEADER_FLAG=0
+
+        else
+
+            LOG_MESG "Appending data without header."
+
+            tail -n +2 "${FILE}" >> "${OUTFILE}"
+
+            if [ $? -ne 0 ]
+            then
+
+                LOG_MESG "Failed appending ${FILE}"
+
+                exit 1
+
+            fi
+
+        fi
+
+    done
+
+###############################################################################
+# Record Validation
+###############################################################################
+
+    OUTPUT_RECORDS=$(($(wc -l < "${OUTFILE}")-1))
+
+    LOG_MESG "Number of Files Processed : ${FILE_COUNT}"
+
+    LOG_MESG "Input Records            : ${INPUT_RECORDS}"
+
+    LOG_MESG "Output Records           : ${OUTPUT_RECORDS}"
+
+    if [ "${INPUT_RECORDS}" -ne "${OUTPUT_RECORDS}" ]
+    then
+
+        LOG_MESG "Record Count Validation Failed."
+
+        LOG_MESG "Expected : ${INPUT_RECORDS}"
+
+        LOG_MESG "Actual   : ${OUTPUT_RECORDS}"
+
+        exit 1
+
+    fi
+
+    LOG_MESG "Record Count Validation Successful."
+
+###############################################################################
+# Copy Processed Files to Archive
+###############################################################################
+
+    LOG_MESG "Copying source files to archive."
+
+    for FILE in ${FILE_LIST}
+    do
+
+        cp -p "${FILE}" "${ARCHIVE_DIR}/"
+
+        if [ $? -ne 0 ]
+        then
+
+            LOG_MESG "Failed to archive file : $(basename ${FILE})"
+
+            exit 1
+
+        fi
+
+        LOG_MESG "Archived : $(basename ${FILE})"
+
+    done
+
+###############################################################################
+# Validate Output File
+###############################################################################
+
+    if [ ! -f "${OUTFILE}" ]
+    then
+
+        LOG_MESG "Merged output file was not created."
+
+        exit 1
+
+    fi
+
+    FILE_SIZE=$(du -h "${OUTFILE}" | awk '{print $1}')
+
+    LOG_MESG "Merged File Name : $(basename ${OUTFILE})"
+
+    LOG_MESG "Merged File Size : ${FILE_SIZE}"
+
+    LOG_MESG "State ${STATE} processed successfully."
+
+    LOG_MESG "------------------------------------------------------"
+
+done
+
+###############################################################################
+# Final Summary
+###############################################################################
+
+TOTAL_OUTPUT_FILES=$(find "${OUTPUT_DIR}" -maxdepth 1 \
+-type f \
+-name "ChartData_ANT_Virtix_Chase_*_${PROCESS_DATE}.txt" | wc -l)
+
+LOG_MESG ""
+
+LOG_MESG "===================================================="
+
+LOG_MESG "Virtix Chase Merge Job Completed Successfully."
+
+LOG_MESG "Environment        : ${ENV_NAME}"
+
+LOG_MESG "Processing Date    : ${PROCESS_DATE}"
+
+LOG_MESG "Output Directory   : ${OUTPUT_DIR}"
+
+LOG_MESG "Archive Directory  : ${ARCHIVE_DIR}"
+
+LOG_MESG "Output Files Created : ${TOTAL_OUTPUT_FILES}"
+
+LOG_MESG "===================================================="
+
+exit 0
