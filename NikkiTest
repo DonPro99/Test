@@ -1,4 +1,27 @@
-cp /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh.bak2 /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
 
-ls -l /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
-cat /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh | head -20
+$ ls -l /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+-rw-r--r-- 1 srcradcoolbthts ahpck 0 Aug 26 17:18 /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+$ cp /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh.bak2 /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+$ ls -l /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+-rw-r--r-- 1 srcradcoolbthts ahpck 9138 Aug 26 17:20 /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+$ cat /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh | head -20
+#!/usr/bin/ksh
+###############################################################################
+#
+# Script Name : merge_virtix_chase_files.sh
+#
+# Description:
+# ------------
+# This script merges Anthem Virtix Chase inbound files by State into a single
+# outbound file while preserving only one header row.
+#
+# Input File Pattern:
+#   Anthem_VirtixHealth_<STATE>Q<YEAR>_Chase_<PART>_<TIMESTAMP>.txt
+#
+# Example:
+#   Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+#   Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
+#   Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
+#
+# Output File:
+#   ChartData_CAID_Virtix_Chase_<STATE>_YYYYMMDD.txt
