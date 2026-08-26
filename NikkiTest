@@ -4,4 +4,5 @@ TestFile|900099999|E2ETEST|E2ELAST|01/01/1980||||TestProject|TESTCHASE001||Y|M|P
 EOF
 
 
-head -1 /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_WVQ32026_Chase_C_08262026132348.txt
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>head -1 /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_WVQ32026_Chase_C_08262026132348.txt
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
