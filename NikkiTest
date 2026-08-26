@@ -1,1 +1,3 @@
-grep -n "sed -i '1s/MemberId/MBRID/'" /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+$ grep -n "sed -i '1s/MemberId/MBRID/'" /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+251:            sed -i '1s/MemberId/MBRID/' "${OUTFILE}"
+$ 
