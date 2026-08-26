@@ -4,10 +4,11 @@ TestFile|900099999|E2ETEST|E2ELAST|01/01/1980||||TestProject|TESTCHASE001||Y|M|P
 EOF
 
 
-ls -ld /raa2/backup/sitenvironment/rev_opt/chasefiles/
-cat > /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_WVQ32026_Chase_C_$(date +%m%d%Y%H%M%S).txt << 'EOF'
-FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
-TestFile|900099999|E2ETEST|E2ELAST|01/01/1980||||TestProject|TESTCHASE001||Y|M|ProvLast|ProvFirst|1234567890||ProvID001||||
-EOF
-
-ls /raa2/backup/sitenvironment/rev_opt/chasefiles/ | grep Anthem_VirtixHealth
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls -ld /raa2/backup/sitenvironment/rev_opt/chasefiles/
+drwxrwxrwx 2 srcradcoolbthpr ahpck 4096 Aug  3 13:32 /raa2/backup/sitenvironment/rev_opt/chasefiles/
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>cat > /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_WVQ32026_Chase_C_$(date +%m%d%Y%H%M%S).txt << 'EOF'
+> Name|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4                                                                                                                            <
+> TestFile|900099999|E2ETEST|E2ELAST|01/01/1980||||TestProject|TESTCHASE001||Y|M|ProvLast|ProvFirst|1234567890||ProvID001||||
+> EOF
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls /raa2/backup/sitenvironment/rev_opt/chasefiles/ | grep Anthem_VirtixHealth
+Anthem_VirtixHealth_WVQ32026_Chase_C_08262026132348.txt
