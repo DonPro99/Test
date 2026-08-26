@@ -7,6 +7,7 @@ EOF
 ls /raa2/backup/sitenvironment/rev_opt/chasefiles/ | grep Anthem_VirtixHealth
 
 
-ls -ld /raa2/backup/sitenvironment/rev_opt/chasefiles/
-
-touch /tmp/test_write_check.txt && echo "write works in /tmp"
+$ ls -ld /raa2/backup/sitenvironment/rev_opt/chasefiles/
+drwxr-xr-x 2 srcradcoolbthpr ahpck 4096 Aug  3 13:32 /raa2/backup/sitenvironment/rev_opt/chasefiles/
+$ touch /tmp/test_write_check.txt && echo "write works in /tmp"
+write works in /tmp
