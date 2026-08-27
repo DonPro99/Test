@@ -1,1 +1,1 @@
-aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ --recursive | grep -i "chase" | grep -i "epi\|ant"
+2026-08-27 20:54:25   10744783 inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260827.txt
