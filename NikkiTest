@@ -1,1 +1,9 @@
-ping -c 3 dc04plpsas104
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ping -c 3 dc04plpsas104
+PING dc04plpsas104.wellpoint.com (10.155.1.68) 56(84) bytes of data.
+64 bytes from dc04plpsas104.wellpoint.com (10.155.1.68): icmp_seq=1 ttl=64 time=0.023 ms
+64 bytes from dc04plpsas104.wellpoint.com (10.155.1.68): icmp_seq=2 ttl=64 time=0.024 ms
+64 bytes from dc04plpsas104.wellpoint.com (10.155.1.68): icmp_seq=3 ttl=64 time=0.023 ms
+
+--- dc04plpsas104.wellpoint.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2036ms
+rtt min/avg/max/mdev = 0.023/0.023/0.024/0.004 ms
