@@ -1,4 +1,4 @@
-touch /hcaaapck/backup/IT/SIT/trigger/test_write_check.txt
+ls -la /hcaaapck/backup/IT/SIT/trigger/test_write_check.txt
 
-df -h /hcaaapck/backup/IT/SIT/trigger/
-getfacl /hcaaapck/backup/IT/SIT/trigger/ 2>/dev/null
+touch /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+ls -la /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
