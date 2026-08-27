@@ -1,2 +1,3 @@
-whoami
-bash /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh
+Virtix Chase merge completed successfully.
+ChartData_*.txt MCAID ChaseFiles is older than the trigger process file - /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg.
+Copying process not initiated for ChartData_*.txt MCAID CHASEFILES- /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_*.txt.
