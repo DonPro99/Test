@@ -1,7 +1,6 @@
-grep -n "MBRID" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+cp /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh.bak3
 
+sed -i "251s|.*|            sed -i '1s/MemberId/MBRID/; 1s/MemberFirstName/MBRFNAME/; 1s/MemberLastName/MBRLNAME/; 1s/MemberDOB/MBRDOB/' \\\"\\${OUTFILE}\\\"|" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
 
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -n "MBRID" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh                                                                                                                 
-249:            LOG_MESG "Renaming MemberId header field to MBRID to match Episource layout."
-251:            sed -i '1s/MemberId/MBRID/' "${OUTFILE}"
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep Anthem_VirtixHealth
+sed -n '251p' /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+
