@@ -1,16 +1,5 @@
-sed -n '251p' /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh | cat -A | head -5
+cp /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh.bak3 /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
 
 ksh -n /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh: warning: line 257: " quote may be missing
-/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh: warning: line 284: " quote may be missing
-/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh: warning: line 305: " quote may be missing
-/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh: warning: line 321: " quote may be missing
-/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh: warning: line 344: " quote may be missing
-/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh: warning: line 354: " quote may be missing
-/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh: warning: line 358: " quote may be missing
-/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh: warning: line 372: " quote may be missing
-/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh: syntax error at line 374: `"' unmatched
 
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>sed -n '251p' /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh | cat -A | head -5
-            sed -i '1s/MemberId/MBRID/; 1s/MemberFirstName/MBRFNAME/; 1s/MemberLastName/MBRLNAME/; 1s/MemberDOB/MBRDOB/' "\"$
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>
+sed -n '251p' /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
