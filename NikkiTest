@@ -1,3 +1,2 @@
-Header fix validated in PROD (IN: 57,372 records, VA: 33,811 — no data loss). File pushed to vendor via SFTP successfully, no errors.
-
-Only thing left: can't confirm tokenization in S3 myself — no AWS/S3 access from this session. Need access or someone to check on their end.
+Still need to confirm tokenization landed correctly in S3 — I don't have AWS/S3 access to check that myself. Can someone verify, or point me to access?
+merge completed clean, but SFTP step prompted for password before it went through.)
