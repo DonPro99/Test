@@ -1,6 +1,2 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>aaapck/backup/IT/SIT/conf/common-sftp-sas-mgft.conf /hcaaapck/backup/IT/SIT/conf/mra-sftp-sas-mgft.conf                                                                                     <
-/hcaaapck/backup/IT/SIT/conf/charts-sftp-sas-mgft.conf:sftp.destination.dir=/tpraasftp001/I_ELV_CFX_GLD011/to_elvhlth/uat/raa/
-/hcaaapck/backup/IT/SIT/conf/new-common-sftp-sas-mgft.conf:sftp.destination.dir=/appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/prod/RAA
-/hcaaapck/backup/IT/SIT/conf/common-sftp-sas-mgft.conf:sftp.destination.dir=/hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa
-/hcaaapck/backup/IT/SIT/conf/mra-sftp-sas-mgft.conf:sftp.destination.dir=/tpraasftp001/I_ELV_CFX_GLD011/to_elvhlth/uat/raa
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>
+sed -i 's|sit/RAA|uat/RAA|' /hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
+cat /hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
