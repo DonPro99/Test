@@ -1,2 +1,36 @@
-find /export/home/srcradcoolbthpr/ -iname "*sit*" 2>/dev/null
-find / -maxdepth 4 -iname "*sit*" -type d 2>/dev/null
+
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>find /export/home/srcradcoolbthpr/ -iname "*sit*" 2>/dev/null
+/export/home/srcradcoolbthpr/myvenv/lib/python3.6/site-packages
+/export/home/srcradcoolbthpr/myvenv/lib/python3.6/site-packages/pip/_vendor/colorama/ansitowin32.py
+/export/home/srcradcoolbthpr/myvenv/lib/python3.6/site-packages/pip/_vendor/colorama/__pycache__/ansitowin32.cpython-36.pyc
+/export/home/srcradcoolbthpr/myvenv/lib/python3.6/site-packages/pytz/zoneinfo/America/Sitka
+/export/home/srcradcoolbthpr/myenv/lib/python3.6/site-packages
+/export/home/srcradcoolbthpr/myenv/lib/python3.6/site-packages/pip/_vendor/colorama/ansitowin32.py
+/export/home/srcradcoolbthpr/myenv/lib/python3.6/site-packages/pip/_vendor/colorama/__pycache__/ansitowin32.cpython-36.pyc
+/export/home/srcradcoolbthpr/myenv/lib/python3.6/site-packages/setuptools/site-patch.py
+/export/home/srcradcoolbthpr/myenv/lib/python3.6/site-packages/setuptools/__pycache__/site-patch.cpython-36.pyc
+/export/home/srcradcoolbthpr/.local/lib/python3.6/site-packages
+/export/home/srcradcoolbthpr/raa1_sas_repository_CFX_STG
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>find / -maxdepth 4 -iname "*sit*" -type d 2>/dev/null
+/etc/dconf/db/site.d
+/etc/groff/site-font
+/etc/groff/site-tmac
+/usr/lib/firmware/ositech
+/usr/lib/python3.6/site-packages
+/usr/lib64/girepository-1.0
+/usr/lib64/python3.6/site-packages
+/usr/lib64/gjs/girepository-1.0
+/usr/lib64/gedit/girepository-1.0
+/usr/lib64/eog/girepository-1.0
+/usr/lib64/org.gnome.Characters/girepository-1.0
+/usr/share/doc/libXcomposite
+/usr/share/locale/sit
+/usr/share/emacs/site-lisp
+/usr/share/zsh/site-functions
+/sasbin/sasmeta/SASVersionedJarRepository
+/sasbin/sasmid/SASVersionedJarRepository
+/sasbin/sascompute/SASVersionedJarRepository
+/userdata/MMMCodes/Others/Weekly_Load_Transition_extracted
+/hcaaapck-rw/hcaaapck_rw_fs/backup/SitEnvironment
+/raa2-rw/raa2_rw_fs/backup/sitenvironment
+/altlogs-rw/altlogs_rw_fs/PRODSiteXMLs
