@@ -1,8 +1,1 @@
-CFX still isn't auto-delivering, so I manually pushed the file to S3 (SAS → EMR → crln-raa-prod-sf-dataz-gbd-phi-useast1/.../mcaid/) to check tokenization directly.
-
-Header fix looks great — validated on real PROD data (IN/VA), no issues there.
-
-
-But the file isn't tokenized — Member ID, First Name, Last Name, DOB are all still plain text. Also noticed other vendor files in that same bucket are encrypted zips, not plain .txt like ours, so not sure this is even the right spot for tokenization to kick in.
-
-Tagore — can you help clarify where/how this is supposed to trigger? Want to make sure I'm not missing something.
+Header rename is confirmed correct (MBRID|MBRFNAME|MBRLNAME|MBRDOB), validated on real PROD data today. But the file isn't tokenizing once it lands in S3.
