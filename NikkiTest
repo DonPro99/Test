@@ -1,9 +1,6 @@
-Wanted to give some context since I've been stuck on this for a while and messaging everyone together.
+sudo su
+cp /root/viewgen_new_tables.csv /home/$(logname)/
+chown $(logname) /home/$(logname)/viewgen_new_tables.csv
+exit
 
-I'm trying to test the RBICA-14159 fix (Member ID and other header renames) end-to-end in SIT - running the merge + copy to S3 script (raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh) to push a test file through SFTP.
-
-A few things I've run into:
-
-When I run this while logged into PROD, it just processes the real PROD folder directly - there's no separate SIT area accessible from there, so I can't safely test from PROD.
-Logged into SIT properly (srcradcoolbthts), I hit a permission issue updating the trigger file at /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg - managed to work around part of this.
-For the actual SFTP transfer, I created a config file for SIT (since one didn't exist before) pointing to /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/RAA (based on the pattern from other existing SIT conf files). But when I try the test service ID password given to me, I keep getting "too many bad authentication attempts" or "idle connection" disconnects - tried both copy-paste and typing it manually, same result each time.
+ls -la ~/viewgen_new_tables.csvs
