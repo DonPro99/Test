@@ -1,9 +1,3 @@
-Hi Akhil,
-
-Sorry, I sent the wrong file earlier - please disregard that one.
-
-Attached is the correct sample - it has all the columns we actually send to the vendor, not just 4. Only MemberInsuranceId is the tokenized field, and I've made sure it shows as alphanumeric (tokenized-style) values in the sample, not plain text.
-
 ProjectID|AddressLine1|AddressLine2|City|State|Zipcode|FacilityType|FacilityNPI|FacilityTIN|PracticionerNPI|ProviderPhone|ProviderFax|MemberZip|MemberInsuranceId|ClaimId
 PRJ4X9K2|4B7Q9P2XZ1|A3M8|K9WQXZ|VA|22030|Outpatient||987654321|1234567890|5551234567|5551234568|22030|9F3K7B2M1X8|CL7X2M9Q4
 PRJ7Y2M5|9K3X7Q1BZ4|C8N2|M4RTYU|WV|25301|Inpatient||123456789|9876543210|5559876543|5559876544|25301|3M8Q1X7K9B2|CL4B7N2X8
