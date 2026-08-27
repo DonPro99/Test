@@ -1,5 +1,1 @@
-2026-08-27 00:27:22    1279843 inbound/raa/chartsprocess/mcaid/EPI_ANTH_IN_A_S_Image_Delivery_Crosswalk_20260826_Final.txt
-2026-08-27 12:03:51     136712 inbound/raa/chartsprocess/mcaid/archive/VIRTIX_ANTH_VA_S_extract_20260826.txt
-2026-08-27 12:03:51     981819 inbound/raa/chartsprocess/mcaid/archive/VIRTIX_ANTH_VA_C_extract_20260826.txt
-2026-08-27 12:03:51    2034701 inbound/raa/chartsprocess/mcaid/archive/VIRTIX_ANTH_VA_M_extract_20260826.txt
-2026-08-27 12:30:23   44993975 inbound/raa/chartsprocess/mcaid/archive/EPI_ANTH_IN_A_S_extract_20260826_Final.csv
+aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ --recursive | grep "20260827"
