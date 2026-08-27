@@ -1,6 +1,2 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>touch /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>chmod 666 /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
--rw-rw-rw- 1 srcradcoolbthts ahpck 0 Aug 27 11:49 /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>whoami
-srcradcoolbthpr
+whoami
+bash /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh
