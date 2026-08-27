@@ -1,8 +1,1 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep Anthem_VirtixHealth
--rw-rw-r--  1 ad67688         ahpck  5264323 Jun  9 09:29 Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
--rw-rw-r--  1 ad67688         ahpck  5480789 Jun  9 09:29 Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
--rw-rw-r--  1 ad67688         ahpck      709 Jun  9 09:28 Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
--rw-rw-r--  1 ad67688         ahpck  4778135 Jul 15 11:14 Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
--rw-r--r--  1 srcradcoolbthpr ahpck      437 Aug 17 14:04 Anthem_VirtixHealth_VAQ32026_Chase_CFXTEST_1.txt
--rw-rw-r--  1 ad67688         ahpck  1561744 Jul 15 11:14 Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
--rw-rw-r--  1 ad67688         ahpck 15620738 Jul 15 11:14 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep ChartData_CAID_Virtix_Chase
