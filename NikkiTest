@@ -1,3 +1,1 @@
- LOG_MESG "Renaming MemberId header field to MBRID to match Episource layout."
-
-            sed -i '1s/MemberId/MBRID/' "${OUTFILE}"
+            sed -i '1s/MemberId/MBRID/; 1s/MemberFirstName/MBRFNAME/; 1s/MemberLastName/MBRLNAME/; 1s/MemberDOB/MBRDOB/' "${OUTFILE}"
