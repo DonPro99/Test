@@ -1,13 +1,1 @@
-Hi Nazir,
-
-There's no config file for this in SIT, so I copied the PROD one and just changed "prod" to "sit" in the destination path to test with.
-
-Config file: /hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
-Destination path I used: /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/sit/RAA
-
-When I ran the script, it asked for an SFTP password - I tried my SIT login but it didn't work.
-
-Do you know the right password, or if this "sit" path is even correct to use here?
-
-Thanks,
-Nikhitha
+Thanks! Could you share the test service ID and password to use for this?
