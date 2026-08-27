@@ -1,2 +1,3 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>sed -n '251p' /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-            sed -i '1s/MemberId/MBRID/; 1s/MemberFirstName/MBRFNAME/; 1s/MemberLastName/MBRLNAME/; 1s/MemberDOB/MBRDOB/' "\"
+sed -n '251p' /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh | cat -A | head -5
+
+ksh -n /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
