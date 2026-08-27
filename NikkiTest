@@ -1,9 +1,8 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>find /hcaaapck/backup/IT/PROD/ -iname "*sit*"
-/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages
-/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/botocore/data/iotsitewise
-/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/pip/_vendor/colorama/ansitowin32.py
-/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/pip/_vendor/colorama/__pycache__/ansitowin32.cpython-36.pyc
-/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/setuptools/site-patch.py
-/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/setuptools/__pycache__/site-patch.cpython-36.pyc
-/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/jmespath/visitor.py
-/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/jmespath/__pycache__/visitor.cpython-36.pyc
+rm /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+
+cat > /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_WVQ32026_Chase_C_$(date +%m%d%Y%H%M%S).txt << 'EOF'
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+TestFile|900099999|E2ETEST|E2ELAST|01/01/1980||||TestProject|TESTCHASE005||Y|M|ProvLast|ProvFirst|1234567890||ProvID001||||
+EOF
+
+bash /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh
