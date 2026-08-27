@@ -1,1 +1,3 @@
-find / -iname "rad_mcaid_chase_all_lob_s3_to_snflk_load.properties" 2>/dev/null
+Header fix validated in PROD (IN: 57,372 records, VA: 33,811 — no data loss). File pushed to vendor via SFTP successfully, no errors.
+
+Only thing left: can't confirm tokenization in S3 myself — no AWS/S3 access from this session. Need access or someone to check on their end.
