@@ -1,1 +1,2 @@
-rm /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+whoami
+find /hcaaapck/backup/IT/PROD/ -iname "*sit*"
