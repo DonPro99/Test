@@ -1,4 +1,11 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>scp srcradcoolbthpr@10.155.1.68:/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_IN_20260827.txt ~/
+[hadoop@ip-10-197-212-103 ~]$ scp srcradcoolbthpr@10.155.1.68:/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_IN_20260827.txt ~/
+hostkeys_find_by_key_hostfile: hostkeys_foreach failed for /etc/ssh/ssh_known_hosts: Permission denied
+The authenticity of host '10.155.1.68 (10.155.1.68)' can't be established.
+ED25519 key fingerprint is SHA256:SCxg4xqyjyXyP8ciKEmhVPlsYvi0/r9fKBZo0p1ZnVM.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? y
+Please type 'yes', 'no' or the fingerprint: yes
+Warning: Permanently added '10.155.1.68' (ED25519) to the list of known hosts.
 ############################################################################
 #                                                                          #
 # This is a restricted computer system and is for authorized use only      #
@@ -9,5 +16,5 @@
 # inspection and disclosure of all activity for security purposes.         #
 #                                                                          #
 ############################################################################
-Enter Active Directory (US) Password:
-ChartData_ANT_Virtix_Chase_IN_20260827.txt   
+(srcradcoolbthpr@10.155.1.68) Enter Active Directory (US) Password:
+ChartData_ANT_Virtix_Chase_IN_20260827.txt  
