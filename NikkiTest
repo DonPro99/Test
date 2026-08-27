@@ -1,5 +1,6 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>cat /hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
-sftp.connection.host=mgft.wellpoint.com
-sftp.connection.port=4028
-sftp.connection.user=appchasesftp001
-sftp.destination.dir=/appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/RAA
+cat > /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_WVQ32026_Chase_C_$(date +%m%d%Y%H%M%S).txt << 'EOF'
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+TestFile|900099999|E2ETEST|E2ELAST|01/01/1980||||TestProject|TESTCHASE006||Y|M|ProvLast|ProvFirst|1234567890||ProvID001||||
+EOF
+
+bash /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh
