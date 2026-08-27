@@ -1,2 +1,1 @@
-[hadoop@ip-10-197-212-103 ~]$ ls -la ~/ChartData_ANT_Virtix_Chase_IN_20260827.txt
--rw-rw-r--. 1 hadoop hadoop 10744783 Aug 27 20:52 /home/hadoop/ChartData_ANT_Virtix_Chase_IN_20260827.txt
+aws s3 cp ~/ChartData_ANT_Virtix_Chase_IN_20260827.txt s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
