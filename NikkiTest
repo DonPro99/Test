@@ -1,1 +1,4 @@
-ksh -n /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+vi /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+
+/MBRID
+
