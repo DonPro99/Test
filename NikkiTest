@@ -1,1 +1,1 @@
-grep -n "s3://\|bucket" /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
+cat /hcaaapck/backup/IT/PROD/conf/raa-mcaid-chasefiles-mgft.conf
