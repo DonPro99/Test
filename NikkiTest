@@ -1,1 +1,1 @@
-aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/ --recursive | grep -i virtix
+aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep -i virtix
