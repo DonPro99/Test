@@ -1,11 +1,1 @@
-[hadoop@ip-10-197-212-103 ~]$ ping -c 3 dc04plpsas104
-ping: dc04plpsas104: Name or service not known
-[hadoop@ip-10-197-212-103 ~]$ ping -c 3 10.155.1.68
-PING 10.155.1.68 (10.155.1.68) 56(84) bytes of data.
-64 bytes from 10.155.1.68: icmp_seq=1 ttl=52 time=3.66 ms
-64 bytes from 10.155.1.68: icmp_seq=2 ttl=52 time=3.02 ms
-64 bytes from 10.155.1.68: icmp_seq=3 ttl=52 time=2.98 ms
-
---- 10.155.1.68 ping statistics ---
-3 packets transmitted, 3 received, 0% packet loss, time 2003ms
-rtt min/avg/max/mdev = 2.978/3.219/3.663/0.313 ms
+scp srcradcoolbthpr@10.155.1.68:/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_IN_20260827.txt ~/
