@@ -1,7 +1,63 @@
--rw-rw-r--  1 ad67688         ahpck  5264323 Aug 27 15:35 Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
--rw-rw-r--  1 ad67688         ahpck  5480789 Aug 27 15:35 Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
--rw-rw-r--  1 ad67688         ahpck      709 Jun  9 09:28 Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
--rw-rw-r--  1 ad67688         ahpck  4778135 Aug 27 15:35 Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
--rw-r--r--  1 srcradcoolbthpr ahpck      437 Aug 17 14:04 Anthem_VirtixHealth_VAQ32026_Chase_CFXTEST_1.txt
--rw-rw-r--  1 ad67688         ahpck  1561744 Aug 27 15:35 Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
--rw-rw-r--  1 ad67688         ahpck 15620738 Jul 15 11:14 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>bash /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh                                                            
+2026-08-27 15:36:43 : ====================================================
+2026-08-27 15:36:43 : Virtix Chase Merge Job Started
+2026-08-27 15:36:43 : Environment      : PROD
+2026-08-27 15:36:43 : Input Directory  : /raa2/backup/prodenvironment/rev_opt/chasefiles
+2026-08-27 15:36:43 : Output Directory : /raa2/backup/prodenvironment/rev_opt/chasefiles
+2026-08-27 15:36:43 : Archive Directory: /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260827
+2026-08-27 15:36:43 : ====================================================
+2026-08-27 15:36:43 : States Identified : IN
+VA
+2026-08-27 15:36:43 : ------------------------------------------------------
+2026-08-27 15:36:43 : Processing State : IN
+2026-08-27 15:36:43 : Input Files
+2026-08-27 15:36:43 :    Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
+2026-08-27 15:36:43 :    Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
+2026-08-27 15:36:43 : Starting Merge Process
+2026-08-27 15:36:43 : Reading File : Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
+2026-08-27 15:36:43 : Copying header and data.
+2026-08-27 15:36:43 : Renaming MemberId header field to MBRID to match Episource layout.
+2026-08-27 15:36:43 : Reading File : Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
+2026-08-27 15:36:43 : Appending data without header.
+2026-08-27 15:36:43 : Number of Files Processed : 2
+2026-08-27 15:36:43 : Input Records            : 57372
+2026-08-27 15:36:43 : Output Records           : 57372
+2026-08-27 15:36:43 : Record Count Validation Successful.
+2026-08-27 15:36:43 : Copying source files to archive.
+2026-08-27 15:36:43 : Archived : Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
+2026-08-27 15:36:43 : Archived : Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
+2026-08-27 15:36:43 : Merged File Name : ChartData_ANT_Virtix_Chase_IN_20260827.txt
+2026-08-27 15:36:43 : Merged File Size : 6.0M
+2026-08-27 15:36:43 : State IN processed successfully.
+2026-08-27 15:36:43 : ------------------------------------------------------
+2026-08-27 15:36:43 : ------------------------------------------------------
+2026-08-27 15:36:43 : Processing State : VA
+2026-08-27 15:36:43 : Input Files
+2026-08-27 15:36:43 :    Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+2026-08-27 15:36:43 :    Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+2026-08-27 15:36:43 : Starting Merge Process
+2026-08-27 15:36:43 : Reading File : Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+2026-08-27 15:36:43 : Copying header and data.
+2026-08-27 15:36:43 : Renaming MemberId header field to MBRID to match Episource layout.
+2026-08-27 15:36:44 : Reading File : Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+2026-08-27 15:36:44 : Appending data without header.
+2026-08-27 15:36:44 : Number of Files Processed : 2
+2026-08-27 15:36:44 : Input Records            : 33811
+2026-08-27 15:36:44 : Output Records           : 33811
+2026-08-27 15:36:44 : Record Count Validation Successful.
+2026-08-27 15:36:44 : Copying source files to archive.
+2026-08-27 15:36:44 : Archived : Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+2026-08-27 15:36:44 : Archived : Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+2026-08-27 15:36:44 : Merged File Name : ChartData_ANT_Virtix_Chase_VA_20260827.txt
+2026-08-27 15:36:44 : Merged File Size : 5.0M
+2026-08-27 15:36:44 : State VA processed successfully.
+2026-08-27 15:36:44 : ------------------------------------------------------
+2026-08-27 15:36:44 : 
+2026-08-27 15:36:44 : ====================================================
+2026-08-27 15:36:44 : Virtix Chase Merge Job Completed Successfully.
+2026-08-27 15:36:44 : Environment        : PROD
+2026-08-27 15:36:44 : Processing Date    : 20260827
+2026-08-27 15:36:44 : Output Directory   : /raa2/backup/prodenvironment/rev_opt/chasefiles
+2026-08-27 15:36:44 : Archive Directory  : /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260827
+2026-08-27 15:36:44 : Output Files Created : 2
+2026-08-27 15:36:44 : ====================================================
