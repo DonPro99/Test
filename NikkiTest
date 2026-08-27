@@ -1,6 +1,36 @@
-mv /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles_1.trg
+-rw-r--r-- 1 srcradcoolbthpr ahpck 0 Aug  3 16:24 /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+$ whoami
+srcradcoolbthts
+$ mv /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles_1.trg
 
-bash /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh
-
-mv /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles_original_backup.trg
-mv /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles_1.trg /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+$ 
+$ bash /hcaaapck/backup/IT/SIT/scripts/raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh
+SIT
+/hcaaapck/backup/IT/SIT/log
+Running Virtix Chase merge script: /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+2026-08-27 11:36:11 : ====================================================
+2026-08-27 11:36:11 : Virtix Chase Merge Job Started
+2026-08-27 11:36:11 : Environment      : SIT
+2026-08-27 11:36:11 : Input Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-08-27 11:36:11 : Output Directory : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-08-27 11:36:11 : Archive Directory: /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260827
+2026-08-27 11:36:11 : ====================================================
+2026-08-27 11:36:11 : States Identified : WV
+2026-08-27 11:36:11 : ------------------------------------------------------
+2026-08-27 11:36:11 : Processing State : WV
+2026-08-27 11:36:11 : No files found for state WV
+2026-08-27 11:36:11 : 
+2026-08-27 11:36:11 : ====================================================
+2026-08-27 11:36:11 : Virtix Chase Merge Job Completed Successfully.
+2026-08-27 11:36:11 : Environment        : SIT
+2026-08-27 11:36:11 : Processing Date    : 20260827
+2026-08-27 11:36:11 : Output Directory   : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-08-27 11:36:11 : Archive Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260827
+2026-08-27 11:36:11 : Output Files Created : 0
+2026-08-27 11:36:11 : ====================================================
+Virtix Chase merge completed successfully.
+The trigger process file does not exist - /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+$ mv /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles_original_backup.trg
+mv: cannot stat '/hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg': No such file or directory
+$ mv /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles_1.trg /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+$ 
