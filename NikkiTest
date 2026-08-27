@@ -7,6 +7,4 @@ FileName|MBRID|MBRFNAME|MBRLNAME|MBRDOB|EnrollmentDate|EnrollmentEndDate|ESRDInd
 bash /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh
 ls -la /hcaaapck/backup/IT/PROD/scripts/ | grep -i "copy_to_s3\|chasefiles"
 
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /hcaaapck/backup/IT/PROD/scripts/ | grep -i "copy_to_s3\|chasefiles"
--rw-r--r--  1 srcradcoolbthpr ahpck     5777 Aug  7 18:06 raa_mcaid_chasefiles_copy_to_s3.sh
--rwxrwxrwx  1 srcradcoolbthpr ahpck     4762 Dec 15  2025 start_chasefiles_copy_to_s3.sh
+bash /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
