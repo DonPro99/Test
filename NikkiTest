@@ -1,1 +1,4 @@
 ls /raa2/backup/prodenvironment/rev_opt/chasefiles/ 2>&1
+
+
+aws s3 cp <local_file> s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
