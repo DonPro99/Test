@@ -1,5 +1,1 @@
-[hadoop@ip-10-197-212-103 ~]$ aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/EPI_ANTH_IN_A_S_Image_Delivery_Crosswalk_20260826_Final.txt - | head -3
-Phase,PROVIDERNUM,BRAND,SRCID,ORIGFAXNUM,RTRNREASONNOTE,TRANSACTIONID,Member DOB,USERID,STATUS_CODE,SCANDATE,NPI,LASTNAME,FIRSTNAME,TRACKINGNUM,DOCUMENTTYPE,SECUREDOC,SERVICEDATE,BATCHTYPE,CLAIMTYPE,CLAIMNUM,ORIGRCPTDATE,GRPID,SYSID,CUSTOMERID,LOCATIONCODE,FRMTYPE,DCN,BATCHNUM,MEMBERCERTNUM,ROUTECODE,EDIDCN,Inq_Sub_Type,CERTMAILNUM,VENDORID,RETURNCODE,MimeType,DocumentTitle,Filler1,Filler2,Filler3,LOB,Chart ID,
-STD,24609289,-,-,-,-,-,4/25/1997,730828662,-,-,1083251763,FARRIS,TONYA,-,medrec,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,Episource,-,PDF,IN_26Q2_20250101_20251231_730828662_1083251763_1.pdf,-,-,-,M,C-QM6MG8,
-STD,24609289,-,-,-,-,-,11/17/2000,730972475,-,-,1083251763,FARRIS,TONYA,-,medrec,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,Episource,-,PDF,IN_26Q2_20250101_20251231_730972475_1083251763_1.pdf,-,-,-,M,C-QM6MG9,
-download failed: s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/EPI_ANTH_IN_A_S_Image_Delivery_Crosswalk_20260826_Final.txt to - [Errno 32] Broken pipe
+aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ --recursive | grep -i "chase" | grep -i "epi\|ant"
