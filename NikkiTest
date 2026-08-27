@@ -2,3 +2,10 @@ sftp -P 4028 appchasesftp001@mgft.wellpoint.com
 
 cd /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/RAA
 ls -la
+
+
+cd /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/raa
+ls -la
+
+cd /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/
+ls -la
