@@ -1,4 +1,7 @@
-ls -la /hcaaapck/backup/IT/SIT/trigger/test_write_check.txt
-
-touch /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
-ls -la /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+$ touch /hcaaapck/backup/IT/SIT/trigger/test_write_check.txt
+$ ls -la /hcaaapck/backup/IT/SIT/trigger/test_write_check.txt
+-rw-r--r-- 1 srcradcoolbthts ahpck 0 Aug 27 11:06 /hcaaapck/backup/IT/SIT/trigger/test_write_check.txt
+$ touch /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+touch: cannot touch '/hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg': Permission denied
+$ ls -la /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+-rw-r--r-- 1 srcradcoolbthpr ahpck 0 Aug  3 16:24 /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
