@@ -1,1 +1,6 @@
 aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ --recursive | grep "20260827"
+
+
+aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/ --recursive | grep -i "virtix" | grep "20260827"
+
+aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/ --recursive | grep "20260827" | grep -i "chase\|virtix\|pgp"
