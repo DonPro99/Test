@@ -1,10 +1,1 @@
-Welcome to the Gateway Interchange SSH server.   
-Password:
-Received disconnect from 10.155.129.207 port 4028:11: Idle connection
-Disconnected from 10.155.129.207 port 4028
-Connection closed
-SUCCESS: Copying completed for ChartData_CAID_Virtix_Chase_WV_20260826.txt CHASE FILE.
-Copying successful for CHASEFILES: ChartData_CAID_Virtix_Chase_WV_20260826.txt
-Updating the trigger file - /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
-touch: cannot touch '/hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg': Permission denied
-Failure encountered while updating the trigger file - /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+ls -ld /hcaaapck/backup/IT/SIT/trigger/
