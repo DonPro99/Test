@@ -1,4 +1,3 @@
-vi /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+ LOG_MESG "Renaming MemberId header field to MBRID to match Episource layout."
 
-/MBRID
-
+            sed -i '1s/MemberId/MBRID/' "${OUTFILE}"
