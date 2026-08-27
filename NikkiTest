@@ -1,1 +1,5 @@
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep ChartData_CAID_Virtix_Chase
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep ChartData_CAID_Virtix_Chase
+-rw-rw-r--  1 srcradcoolbthpr ahpck      434 Aug  5 00:32 ChartData_CAID_Virtix_Chase_VA_20260805.txt
+-rw-rw-r--  1 srcradcoolbthpr ahpck      458 Aug  7 16:59 ChartData_CAID_Virtix_Chase_VA_20260807.txt
+-rw-rw-r--  1 srcradcoolbthpr ahpck      441 Aug  6 09:59 ChartData_CAID_Virtix_Chase_WV_20260806.txt
+-rw-rw-r--  1 srcradcoolbthpr ahpck 10598636 Aug 14 13:05 ChartData_CAID_Virtix_Chase_WV_20260814.txt
