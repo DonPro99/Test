@@ -5,3 +5,4 @@ FileName|MBRID|MBRFNAME|MBRLNAME|MBRDOB|EnrollmentDate|EnrollmentEndDate|ESRDInd
 
 
 bash /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3_MODIFIED.sh
+ls -la /hcaaapck/backup/IT/PROD/scripts/ | grep -i "copy_to_s3\|chasefiles"
