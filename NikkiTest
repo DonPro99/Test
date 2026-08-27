@@ -1,5 +1,20 @@
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/ | grep -i "IN\|VA"
-
-grep -n "find\|ls.*Anthem_VirtixHealth\|FILE_PATTERN" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh | head -20
-
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep Anthem_VirtixHealth
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/ | grep -i "IN\|VA"
+-rw-rw-r--  1 ad67688         ahpck 21542661 Jul 28  2025 ANT_INV_MRRVAQ22018_20180612121306 - Copy.txt
+-rw-rw-r--  1 ad67688         ahpck 22707820 Jul 28  2025 ChartData_ANT_IN_Q32020_18MAY20 - Copy.txt
+-rw-rw-r--  1 ad67688         ahpck 24446839 Jul 28  2025 ChartData_ANT_IN_Q32021_26APR21 - Copy.txt
+-rw-rw-r--  1 ad67688         ahpck 23473698 Jul 28  2025 ChartData_WLP_VA_Q12020_06NOV19 - Copy.txt
+-rw-rw-r--  1 ad67688         ahpck 13077356 Jul 28  2025 ChartData_WLP_VA_Q12021_29OCT20 - Copy.txt
+-rw-rw-r--  1 ad67688         ahpck  2896998 Jul 28  2025 MCAID_CR_VA_JUN18JUN19_ANT_CCC - Copy.txt
+-rw-rw-r--  1 ad67688         ahpck 11542323 Jul 28  2025 MCAID_CR_VA_JUN18JUN19_ANT_MED - Copy.txt
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -n "find\|ls.*Anthem_VirtixHealth\|FILE_PATTERN" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh | head -20
+146:STATE_LIST=$(find "${INPUT_DIR}" -maxdepth 1 -type f \
+193:    FILE_LIST=$(find "${INPUT_DIR}" -maxdepth 1 -type f \
+354:TOTAL_OUTPUT_FILES=$(find "${OUTPUT_DIR}" -maxdepth 1 \
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep Anthem_VirtixHealth
+-rw-rw-r--  1 ad67688         ahpck  5264323 Jun  9 09:29 Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
+-rw-rw-r--  1 ad67688         ahpck  5480789 Jun  9 09:29 Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
+-rw-rw-r--  1 ad67688         ahpck      709 Jun  9 09:28 Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+-rw-rw-r--  1 ad67688         ahpck  4778135 Jul 15 11:14 Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+-rw-r--r--  1 srcradcoolbthpr ahpck      437 Aug 17 14:04 Anthem_VirtixHealth_VAQ32026_Chase_CFXTEST_1.txt
+-rw-rw-r--  1 ad67688         ahpck  1561744 Jul 15 11:14 Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+-rw-rw-r--  1 ad67688         ahpck 15620738 Jul 15 11:14 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
