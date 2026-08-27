@@ -1,3 +1,1 @@
-[hadoop@ip-10-197-212-103 ~]$
-[hadoop@ip-10-197-212-103 ~]$ ls /raa2/backup/prodenvironment/rev_opt/chasefiles/ 2>&1
-ls: cannot access '/raa2/backup/prodenvironment/rev_opt/chasefiles/': No such file or directory
+ping -c 3 dc04plpsas104
