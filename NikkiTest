@@ -1,1 +1,5 @@
+ls -la /hcaaapck/backup/IT/SIT/trigger/
+
+touch /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
 chmod 666 /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
+ls -la /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
