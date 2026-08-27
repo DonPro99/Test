@@ -1,1 +1,1 @@
-ls -la /hcaaapck/backup/IT/SIT/conf/
+grep -l "sftp.destination.dir" /hcaaapck/backup/IT/SIT/conf/*.conf
