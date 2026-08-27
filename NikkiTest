@@ -1,2 +1,1 @@
-[hadoop@ip-10-197-212-103 ~]$ aws s3 cp ~/ChartData_ANT_Virtix_Chase_IN_20260827.txt s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-upload: ./ChartData_ANT_Virtix_Chase_IN_20260827.txt to s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260827.txt
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260827.txt - | head -3
