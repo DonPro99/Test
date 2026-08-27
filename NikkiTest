@@ -1,7 +1,4 @@
-drwxrws--- 2 srcradcoolbthts ahpck 4096 Aug  3 16:24 /hcaaapck/backup/IT/SIT/trigger/
-$ whoami
-srcradcoolbthts
-$ ls -ld
-drwxr-xr-x 12 srcradcoolbthts ahpck 4096 Aug 26 17:19 .
-$ groups
-ahpck users SASGridUser hcaaa ahpckphi ahpckshare ahpcksharephi ahecra staff
+touch /hcaaapck/backup/IT/SIT/trigger/test_write_check.txt
+
+df -h /hcaaapck/backup/IT/SIT/trigger/
+getfacl /hcaaapck/backup/IT/SIT/trigger/ 2>/dev/null
