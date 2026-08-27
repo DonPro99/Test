@@ -1,1 +1,4 @@
-aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/ --recursive | grep -i "ChartData_ANT" | grep -v "Virtix" | grep -v "\.zip" | tail -10
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/EPI_ANTH_JES.zip ~/
+
+unzip ~/EPI_ANTH_JES.zip -d ~/epi_check/
+ls -la ~/epi_check/
