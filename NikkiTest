@@ -1,5 +1,1 @@
-[hadoop@ip-10-197-212-103 ~]$ aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260827.txt - | head -3
-FileName|MBRID|MBRFNAME|MBRLNAME|MBRDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
-IN_26Q2_20250101_20251231_000A65504_1952629644_1.pdf|000A65504|NGUN|LUAI|03/01/1962||||ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000A65504P1952629644||Y|M|MCMILLEN|BROCK|1952629644||||||
-IN_26Q2_20250101_20251231_000M63589_1922075084_1.pdf|000M63589|DESMOND|BRADLEY|06/08/1986||||ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000M63589P1922075084||Y|F|RINGWALD|KAREN|1922075084||||||
-download failed: s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260827.txt to - [Errno 32] Broken pipe
+aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/ --recursive | grep -i "ChartData_ANT" | grep -v "Virtix" | grep -v "\.zip" | tail -10
