@@ -1,5 +1,1 @@
-Hi Tagore — looked for the Episource file to compare headers/field positions, but couldn't find one that matches our chase-file layout.
-
-Checked the same S3 bucket — Episource crosswalk files there are plain text but a totally different structure, and the actual Episource zips only contain PDFs (chart images), not a pipe-delimited chase file. So there's no direct comparison file available in this location.
-
-Let me know if there's a different file/location I should be checking.
+aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/ --recursive | grep -i "ChartData_ANT" | grep -v "Virtix" | grep -v "\.zip" | tail -10
