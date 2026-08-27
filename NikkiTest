@@ -1,1 +1,1 @@
-I checked in the crln-raa-prod-sf-dataz-gbd-phi-useast1 bucket, under inbound/raa/chartsprocess/mcaid/, but I'm not finding today's file there. Is that the correct bucket/path, or is there a different one I should be looking in?"
+ls /raa2/backup/prodenvironment/rev_opt/chasefiles/ 2>&1
