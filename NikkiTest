@@ -1,12 +1,1 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2-rw/raa2_rw_fs/backup/sitenvironment/rev_opt/chasefiles/
-total 5
-drwxrwxrwx 4 srcradcoolbthpr ahpck 4096 Aug 27 11:54 .
-drwxr-xr-x 3 srcradcoolbthpr ahpck 4096 Aug  3 12:25 ..
--rw-r--r-- 1 srcradcoolbthpr ahpck  434 Aug 26 13:23 Anthem_VirtixHealth_WVQ32026_Chase_C_08262026132348.txt
--rw-r--r-- 1 srcradcoolbthts ahpck  434 Aug 26 17:24 Anthem_VirtixHealth_WVQ32026_Chase_C_08262026172447.txt
--rw-r--r-- 1 srcradcoolbthts ahpck  434 Aug 27 11:38 Anthem_VirtixHealth_WVQ32026_Chase_C_08272026113805.txt
--rw-r--r-- 1 srcradcoolbthpr ahpck  434 Aug 27 11:46 Anthem_VirtixHealth_WVQ32026_Chase_C_08272026114601.txt
-drwxrwxr-x 4 srcradcoolbthts ahpck 4096 Aug 27 09:31 archive
--rw-rw-r-- 1 srcradcoolbthts ahpck  539 Aug 26 17:46 ChartData_CAID_Virtix_Chase_WV_20260826.txt
--rw-rw-r-- 1 srcradcoolbthts ahpck  539 Aug 27 11:54 ChartData_CAID_Virtix_Chase_WV_20260827.txt
-drwxrwxr-x 2 srcradcoolbthts ahpck 4096 Aug 27 11:54 logs
+ls -la /hcaaapck/backup/IT/SIT/conf/
