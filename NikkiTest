@@ -1,1 +1,46 @@
-sed -n '185,230p' /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>sed -n '185,230p' /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+    fi
+
+    HEADER_FLAG=1
+
+    INPUT_RECORDS=0
+
+    FILE_COUNT=0
+
+    FILE_LIST=$(find "${INPUT_DIR}" -maxdepth 1 -type f \
+    -name "Anthem_VirtixHealth_${STATE}*_Chase_*.txt" \
+    -newermt "$(date +%Y-%m-%d)" \
+    | sort)
+
+    if [ -z "${FILE_LIST}" ]
+    then
+
+        LOG_MESG "No files found for state ${STATE}"
+
+        continue
+
+    fi
+
+    LOG_MESG "Input Files"
+
+    for FILE in ${FILE_LIST}
+    do
+
+        LOG_MESG "   $(basename ${FILE})"
+
+    done
+
+    LOG_MESG "Starting Merge Process"
+
+###############################################################################
+# Merge Files
+###############################################################################
+
+    for FILE in ${FILE_LIST}
+    do
+
+        FILE_COUNT=$((FILE_COUNT+1))
+
+        LOG_MESG "Reading File : $(basename ${FILE})"
+
+        RECORDS=$(($(wc -l < "${FILE}")-1))
