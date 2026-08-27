@@ -1,2 +1,1 @@
-Still need to confirm tokenization landed correctly in S3 — I don't have AWS/S3 access to check that myself. Can someone verify, or point me to access?
-merge completed clean, but SFTP step prompted for password before it went through.)
+aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/ --recursive | grep -i virtix
