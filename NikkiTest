@@ -1,1 +1,1 @@
-Header rename is confirmed correct (MBRID|MBRFNAME|MBRLNAME|MBRDOB), validated on real PROD data today. But the file isn't tokenizing once it lands in S3.
+can you find episource file header that was there on s3? and also field position of it
