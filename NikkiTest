@@ -1,2 +1,9 @@
-whoami
-find /hcaaapck/backup/IT/PROD/ -iname "*sit*"
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>find /hcaaapck/backup/IT/PROD/ -iname "*sit*"
+/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages
+/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/botocore/data/iotsitewise
+/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/pip/_vendor/colorama/ansitowin32.py
+/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/pip/_vendor/colorama/__pycache__/ansitowin32.cpython-36.pyc
+/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/setuptools/site-patch.py
+/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/setuptools/__pycache__/site-patch.cpython-36.pyc
+/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/jmespath/visitor.py
+/hcaaapck/backup/IT/PROD/scripts/myenv/lib/python3.6/site-packages/jmespath/__pycache__/visitor.cpython-36.pyc
