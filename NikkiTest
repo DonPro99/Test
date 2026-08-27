@@ -1,7 +1,1 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -l "sftp.destination.dir" /hcaaapck/backup/IT/SIT/conf/*.conf
-/hcaaapck/backup/IT/SIT/conf/charts-sftp-sas-mgft.conf
-/hcaaapck/backup/IT/SIT/conf/new-common-sftp-sas-mgft.conf
-/hcaaapck/backup/IT/SIT/conf/common-sftp-sas-mgft.conf
-/hcaaapck/backup/IT/SIT/conf/mra-sftp-sas-mgft.conf
-/hcaaapck/backup/IT/SIT/conf/new-common-sftp-sas-mgft.conf
-/hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
+grep "sftp.destination.dir" /hcaaapck/backup/IT/SIT/conf/charts-sftp-sas-mgft.conf /hcaaapck/backup/IT/SIT/conf/new-common-sftp-sas-mgft.conf /hcaaapck/backup/IT/SIT/conf/common-sftp-sas-mgft.conf /hcaaapck/backup/IT/SIT/conf/mra-sftp-sas-mgft.conf
