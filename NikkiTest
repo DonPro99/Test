@@ -1,4 +1,8 @@
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/EPI_ANTH_JES.zip ~/
-
-unzip ~/EPI_ANTH_JES.zip -d ~/epi_check/
-ls -la ~/epi_check/
+Archive:  /home/hadoop/EPI_ANTH_JES.zip
+  inflating: /home/hadoop/epi_check/HN_26Q1_20250101_20251231_732911653_1790459253_1.pdf
+  inflating: /home/hadoop/epi_check/HN_26Q1_20250101_20251231_735724079_1396355095_1.pdf
+total 7948
+drwxrwxr-x.  2 hadoop hadoop     126 Aug 27 22:47 .
+drwxr-xr-x. 15 hadoop hadoop   16384 Aug 27 22:47 ..
+-rw-r--r--.  1 hadoop hadoop 6845304 Apr 16 21:02 HN_26Q1_20250101_20251231_732911653_1790459253_1.pdf
+-rw-r--r--.  1 hadoop hadoop 1270836 Apr 16 21:02 HN_26Q1_20250101_20251231_735724079_1396355095_1.pdf
