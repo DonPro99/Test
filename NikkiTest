@@ -11,4 +11,6 @@ wget https://repo1.maven.org/maven2/net/snowflake/spark-snowflake_2.12/2.12.0-sp
 aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260831.txt s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
 
 
-aws s3 cp s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260831.txt -
+[hadoop@ip-10-127-204-102 ~]$ aws s3 cp s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260831.txt -
+FileName|MBRID|MBRFNAME|MBRLNAME|MBRDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+TestFile|ZXJ98MH68|0QRV1OU|FP4HCQC|07/18/1980||||TestProject|TESTCFXDEMO001||Y|M|ProvLast|ProvFirst|1234567890||ProvID001||||
