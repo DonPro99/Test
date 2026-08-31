@@ -1,3 +1,6 @@
-SELECT Id, UserName, EmailAddress, StatusId, CreatedDate
-FROM [DMS_Mimic].[dbo].[User]
-WHERE Id BETWEEN 212060 AND 212070;
+SELECT s.name AS SchemaName, t.name AS TableName
+FROM sys.tables t
+JOIN sys.schemas s ON t.schema_id = s.schema_id
+WHERE t.name LIKE '%AppointingOfficial%'
+   OR t.name LIKE '%Official%'
+ORDER BY TableName;
