@@ -1,3 +1,2 @@
-SELECT * FROM [DMS_Mimic].[dbo].[CloaHistory]
-WHERE Id = 147168
-ORDER BY SysStartDate;
+Id	ApplicationId	OfficeId	AppointmentDate	ExpirationDate	CloaStatusId	ManagingSpecialistId	AppointingOfficialId	AuthorityGrantedDate	IsAutoPreApproval	DesigneeClassTypeId	CertificateNumber	CertificateIssuedDate	TerminationDate	Ftn	IsAutoPostActivity	DesignatorName	DesignatorId	DisciplineTypeId	ProfileVersionId	AovCompanyTypeId	MedicalCertificationDate	CreatedBy	CreatedDate	UpdatedBy	UpdatedDate	AuditPrimaryLogId	SysStartDate	SysEndDate
+147168	20896	171	1991-11-01	2026-11-30	1	7129	108936	2018-08-22	0	1	NULL	NULL	NULL	NULL	0	NULL	NULL	NULL	17267	NULL	NULL	20138	2025-11-19 17:10:34.027	NULL	NULL	NULL	2025-11-19 23:10:34.0208709	2026-04-22 18:35:55.2870825
