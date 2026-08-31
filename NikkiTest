@@ -4,18 +4,16 @@ FROM [DMS_Mimic].[dbo].[Activity]
 WHERE DesignatorName LIKE '%Anorga%'
 ORDER BY CreatedDate DESC;
 
-SELECT TOP (1000) [Id]
-      ,[ActivityId]
-      ,[Response]
-      ,[QuestionAnswerId]
-      ,[CreatedBy]
-      ,[CreatedDate]
-      ,[UpdatedBy]
-      ,[UpdatedDate]
-      ,[AuditPrimaryLogId]
-      ,[SysStartDate]
-      ,[SysEndDate]
-  FROM [DMS_Mimic].[dbo].[ActivityResponse]
+=======
+SELECT * FROM [DMS_Mimic].[dbo].[Activity]
+WHERE Comments LIKE '%Anorga%';
+
+
+SELECT * FROM sys.tables WHERE name LIKE '%Designee%' OR name LIKE '%Application%';
+
+SELECT TOP 20 Id, DesignatorName, DesignatorId, ActivityTypeId, CreatedDate
+FROM [DMS_Mimic].[dbo].[Activity]
+ORDER BY CreatedDate DESC;
 
 
 
