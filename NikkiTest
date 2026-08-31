@@ -1,1 +1,10 @@
-aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/ --recursive | grep -i "ChartData_ANT" | grep -v "Virtix" | grep -v "\.zip" | tail -10
+Add them to the bootstrap that you are using and copy them to emr.
+ 
+# Download Snowflake JDBC JAR
+wget https://repo1.maven.org/maven2/net/snowflake/snowflake-jdbc/3.14.4/snowflake-jdbc-3.14.4.jar
+ 
+# Download Snowflake Spark Connector JAR
+wget https://repo1.maven.org/maven2/net/snowflake/spark-snowflake_2.12/2.12.0-spark_3.4/spark-snowflake_2.12-2.12.0-spark_3.4.jar
+ 
+ 
+ 
