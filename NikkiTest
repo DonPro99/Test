@@ -4,6 +4,33 @@ FROM DMS_mimic.dbo.Activity
 WHERE DesignatorName LIKE '%Anorga%'
 ORDER BY CreatedDate DESC;
 
+SELECT TOP (1000) [Id]
+      ,[ApplicationVersionId]
+      ,[ModuleId]
+      ,[StatusId]
+      ,[RequestDate]
+      ,[DueDate]
+      ,[OversightActivityDueDate]
+      ,[CloaId]
+      ,[NewCloaId]
+      ,[Comments]
+      ,[TrackingNumber]
+      ,[ActivityTypeId]
+      ,[IsReviewed]
+      ,[FormData]
+      ,[ReviewedComments]
+      ,[CreatedBy]
+      ,[CreatedDate]
+      ,[UpdatedBy]
+      ,[UpdatedDate]
+      ,[AuditPrimaryLogId]
+      ,[DesignatorName]
+      ,[DesignatorId]
+      ,[SysStartDate]
+      ,[SysEndDate]
+  FROM [DMS_Mimic].[dbo].[Activity]
+
+
 
 -- Full activity row detail
 SELECT * FROM DMS_mimic.dbo.Activity WHERE Id = <ActivityId>;
