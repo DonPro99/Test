@@ -1,27 +1,7 @@
-Id	ApplicationId	OfficeId	AppointmentDate	ExpirationDate	CloaStatusId	ManagingSpecialistId	AppointingOfficialId	AuthorityGrantedDate	IsAutoPreApproval	DesigneeClassTypeId	CertificateNumber	CertificateIssuedDate	TerminationDate	Ftn	IsAutoPostActivity	DesignatorName	DesignatorId	DisciplineTypeId	ProfileVersionId	AovCompanyTypeId	MedicalCertificationDate	CreatedBy	CreatedDate	UpdatedBy	UpdatedDate	AuditPrimaryLogId
-53741	20896	171	1991-11-01	2021-11-30	5	2261	5950	2018-08-22	0	1	NULL	NULL	NULL	NULL	0	NULL	NULL	NULL	17267	NULL	NULL	47995	2020-02-06 10:41:35.710	47757	2020-08-10 13:59:21.483	318
-64386	20896	171	1991-11-01	2021-11-30	5	2261	108936	2018-08-22	0	1	NULL	NULL	NULL	NULL	0	NULL	NULL	NULL	17267	NULL	NULL	47756	2021-02-12 13:14:58.263	20138	2021-12-02 13:35:47.940	NULL
-77689	20896	171	1991-11-01	2022-11-30	5	2261	108936	2018-08-22	0	1	NULL	NULL	NULL	NULL	0	NULL	NULL	NULL	17267	NULL	NULL	20138	2021-12-02 13:35:47.940	20138	2022-10-03 10:58:21.110	NULL
-96442	20896	171	1991-11-01	2023-11-30	5	2261	108936	2018-08-22	0	1	NULL	NULL	NULL	NULL	0	NULL	NULL	NULL	17267	NULL	NULL	20138	2022-10-03 10:58:21.110	20138	2023-11-20 13:14:41.067	NULL
-116043	20896	171	1991-11-01	2024-11-30	5	2261	108936	2018-08-22	0	1	NULL	NULL	NULL	NULL	0	NULL	NULL	NULL	17267	NULL	NULL	20138	2023-11-20 13:14:41.067	20138	2024-12-02 11:38:23.507	NULL
-132802	20896	171	1991-11-01	2025-11-30	5	7129	108936	2018-08-22	0	1	NULL	NULL	NULL	NULL	0	NULL	NULL	NULL	17267	NULL	NULL	20138	2024-12-02 11:38:23.507	20138	2025-11-19 17:10:34.027	NULL
-147168	20896	171	1991-11-01	2026-11-30	1	7129	212065	2018-08-22	0	1	NULL	NULL	NULL	NULL	0	NULL	NULL	NULL	17267	NULL	NULL	20138	2025-11-19 17:10:34.027	47756	2026-04-22 13:35:55.267	NULL
+-- Confirm what status 1 vs 5 actually represents
+SELECT * FROM [DMS_Mimic].[dbo].[CloaStatus];
 
-SchemaName	TableName
-dbo	Cloa
-dbo	CloaAdjunct
-dbo	CloaAdjunctHistory
-dbo	CloaDerFunctionCode
-dbo	CloaDisciplineFarPart
-dbo	CloaDisciplineFarPartAuthorizeCategory
-dbo	CloaDueDates
-dbo	CloaDueDatesHistory
-dbo	CloaFunctionCode
-dbo	CloaFunctionCodeHistory
-dbo	CloaFunctionCodeMakeModel
-dbo	CloaFunctionCodeMakeModelHistory
-dbo	CloaFunctionCodeTypeRating
-dbo	CloaFunctionCodeTypeRatingHistory
-dbo	CloaHistory
-dbo	CloaJobLog
-dbo	CloaStatus
+-- Check if this "new" AO is legitimate/active, compare to the old one
+SELECT Id, UserName, EmailAddress, StatusId, CreatedDate
+FROM [DMS_Mimic].[dbo].[User]
+WHERE Id IN (108936, 212065);
