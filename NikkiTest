@@ -10,11 +10,12 @@ wget https://repo1.maven.org/maven2/net/snowflake/spark-snowflake_2.12/2.12.0-sp
  
 aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260831.txt s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
 
-
-{
-  "job_id": "790009519",
-  "retry": "N",
-  "etl_stp_nbr_lst": "1",
-  "etl_run_id": "<your-run-id>",
-  "etl_sfn_parms": "{}"
-}
+Can you please move file from uat to prod andi.
+ 
+Uat:
+aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/inovalon-prsp-etl/inovalon_provider_attribution_etl/31082026_122840/ANTHEM_INV_ProviderAttribution_20260831122840.txt s3://crln-raa-uat-sf-dataz-nogbd-phi-useast1/outbound/raa/inovalon-prsp-etl/inovalon_provider_attribution_etl/31082026_122840/ANTHEM_INV_ProviderAttribution_20260831122840.txt
+ 
+aws s3 cp s3://crln-raa-uat-sf-dataz-nogbd-phi-useast1/outbound/raa/inovalon-prsp-etl/inovalon_provider_attribution_etl/31082026_122840/ANTHEM_INV_ProviderAttribution_20260831122840.txt s3://crln-raa-prod-sf-dataz-nogbd-phi-useast1/outbound/raa/inovalon-prsp-etl/inovalon_provider_attribution_etl/31082026_122840/ANTHEM_INV_ProviderAttribution_20260831122840.txt
+ 
+Prod:
+aws s3 cp s3://crln-raa-prod-sf-dataz-nogbd-phi-useast1/outbound/raa/inovalon-prsp-etl/inovalon_provider_attribution_etl/31082026_122840/ANTHEM_INV_ProviderAttribution_20260831122840.txt s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/inovalon-prsp-etl/inovalon_provider_attribution_etl/31082026_122840/ANTHEM_INV_ProviderAttribution_20260831122840.txt
