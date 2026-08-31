@@ -1,15 +1,2 @@
-SELECT Id, OktaCid, UserName, EmailAddress, StatusId, CreatedDate
-FROM [DMS_Mimic].[dbo].[User]
-WHERE UserName LIKE '%Anorga%' 
-   OR EmailAddress LIKE '%Anorga%';
-
-SELECT app.Id AS ApplicationId, app.DesigneeTypeId, app.StatusId, app.CreatedDate, app.SubmissionDate
-FROM [DMS_Mimic].[dbo].[Application] app
-WHERE app.UserId = <Id from User search>;
-
-SELECT t.name AS TableName, c.name AS ColumnName
-FROM sys.columns c
-JOIN sys.tables t ON c.object_id = t.object_id
-WHERE t.name LIKE '%Designee%'
-  AND (c.name LIKE '%Name%' OR c.name LIKE '%Number%')
-ORDER BY t.name, c.name;
+Id	OktaCid	UserName	EmailAddress	StatusId	CreatedDate
+20138	00u58414ofF7unPdA4h7	AME_EANORGA16168	eanorga@protonmail.com	1	2015-11-18 15:09:23.577
