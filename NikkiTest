@@ -1,2 +1,7 @@
-SELECT * FROM [DMS_Mimic].[dbo].[ActivityType]
-WHERE Name LIKE '%Location%' OR Description LIKE '%Location%';
+SELECT c.name AS ColumnName, ty.name AS DataType
+FROM sys.columns c
+JOIN sys.types ty ON c.user_type_id = ty.user_type_id
+WHERE c.object_id = OBJECT_ID('dbo.ActivityType')
+ORDER BY c.column_id;
+
+SELECT * FROM [DMS_Mimic].[dbo].[ActivityType];
