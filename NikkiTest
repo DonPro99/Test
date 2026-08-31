@@ -6,5 +6,12 @@ WHERE t.name LIKE '%AuthorizedLocation%'
    OR t.name LIKE '%LocationChange%'
 ORDER BY TableName;
 
--- If a table like AuthorizedLocation or DesignationLocationRequest exists, try this once we know its name:
-SELECT * FROM [DMS_Mimic].[dbo].[AuthorizedLocation] WHERE Id = 148495;  -- adjust table name once found
+SELECT * FROM [DMS_Mimic].[dbo].[Cloa]
+WHERE Id IN (147168, 132802, 116043, 96442, 77689, 64386, 53741);
+
+SELECT s.name AS SchemaName, t.name AS TableName
+FROM sys.tables t
+JOIN sys.schemas s ON t.schema_id = s.schema_id
+WHERE t.name = 'Cloa'
+   OR t.name LIKE 'Cloa%'
+ORDER BY TableName;
