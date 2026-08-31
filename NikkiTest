@@ -1,3 +1,2 @@
-SELECT Id, UserName, EmailAddress, StatusId
-FROM [DMS_Mimic].[dbo].[User]
-WHERE Id = 47756;
+Id	UserName	EmailAddress	StatusId
+47756	FAA\Leah Olson	Leah.Olson@faa.gov	1
