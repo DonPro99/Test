@@ -1,6 +1,6 @@
 SELECT Id, DesignatorName, DesignatorId, ActivityTypeId, StatusId, 
        CloaId, NewCloaId, CreatedDate, UpdatedDate, TrackingNumber
-FROM DMS_mimic.dbo.Activity
+FROM [DMS_Mimic].[dbo].[Activity]
 WHERE DesignatorName LIKE '%Anorga%'
 ORDER BY CreatedDate DESC;
 
