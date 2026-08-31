@@ -11,4 +11,4 @@ wget https://repo1.maven.org/maven2/net/snowflake/spark-snowflake_2.12/2.12.0-sp
 aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260831.txt s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
 
 
-aws s3 ls s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260831
+aws s3 cp s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260831.txt -
