@@ -8,3 +8,4 @@ wget https://repo1.maven.org/maven2/net/snowflake/spark-snowflake_2.12/2.12.0-sp
  
  
  
+s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
