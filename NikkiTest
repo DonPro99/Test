@@ -1,4 +1,21 @@
-SELECT name AS DatabaseName, create_date, state_desc
-FROM sys.databases
-WHERE name LIKE '%Mimic%'
-ORDER BY name;
+SELECT Id, DesignatorName, DesignatorId, ActivityTypeId, StatusId, 
+       CloaId, NewCloaId, CreatedDate, UpdatedDate, TrackingNumber
+FROM DMS_mimic.dbo.Activity
+WHERE DesignatorName LIKE '%Anorga%'
+ORDER BY CreatedDate DESC;
+
+
+-- Full activity row detail
+SELECT * FROM DMS_mimic.dbo.Activity WHERE Id = <ActivityId>;
+
+-- All his Designation Location activities, to also check the multi-location theory
+SELECT Id, ActivityTypeId, StatusId, CloaId, NewCloaId, CreatedDate
+FROM DMS_mimic.dbo.Activity
+WHERE DesignatorName LIKE '%Anorga%'
+ORDER BY CreatedDate DESC;
+
+-- Response/form data tied to his specific activity
+SELECT QuestionAnswerId, Response, CreatedDate, UpdatedDate, SysStartDate, SysEndDate
+FROM DMS_mimic.dbo.ActivityResponse
+WHERE ActivityId = <ActivityId>
+ORDER BY QuestionAnswerId, SysStartDate;
