@@ -9,4 +9,17 @@ wget https://repo1.maven.org/maven2/net/snowflake/spark-snowflake_2.12/2.12.0-sp
  
  
 aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260831.txt s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-feature/RBICA-14070-datavant-prematch
+[hadoop@ip-10-197-212-116 ~]$ aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep ChartData*
+2026-08-31 14:38:37   10744783 ChartData_ANT_Virtix_Chase_IN_20260827.txt
+2026-08-31 14:11:33        417 ChartData_ANT_Virtix_Chase_IN_20260831.txt
+2024-12-28 16:01:44    2014226 ChartData_CIX_KY_Q22024_10APR24.txt
+2024-12-28 16:00:47     610939 ChartData_CIX_NV_Q42024_09OCT24.txt
+2024-12-28 16:01:44    1255121 ChartData_CIX_TN_Q42024_09OCT24.txt
+2024-12-28 16:01:18    2551233 ChartData_CIX_WI_Q42024_09DEC24.txt
+2024-12-28 16:01:18    2133753 ChartData_WLP_KY_Q22024_OEC_10APR24.txt
+2024-12-28 16:01:16    1761830 ChartData_WLP_NV_Q42024_OEC_09OCT24.txt
+2024-12-28 16:01:14    2651594 ChartData_WLP_WI_Q42024_OEC_09DEC24.txt
+2025-12-15 18:40:56    4312128 ChartData_WLP_WI_Q42025_MBR_11NOV25.txt
+2025-12-15 18:40:36    3822750 ChartData_WLP_WI_Q42025_PROV_11NOV25.txt
+[hadoop@ip-10-197-212-116 ~]$ aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260831.txt s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
+copy failed: s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260831.txt to s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260831.txt An error occurred (AccessDenied) when calling the CopyObject operation: User: arn:aws:sts::163391535226:assumed-role/CRLN-RAA-prod-EC2EMR-Role/i-0722fe7fe35ebc9e2 is not authorized to perform: kms:GenerateDataKey on this resource because the resource does not exist in this Region, no resource-based policies allow access, or a resource-based policy explicitly denies access
