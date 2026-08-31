@@ -1,3 +1,1 @@
-I traced it down to the root cause. His current location record (Cloa) is active in the system, but the Appointing Official assigned to it — ID 212065 — doesn't actually exist as a user anywhere in the system. So when the AO's queue tries to pull up his record, it's looking for an AO that isn't real, and the record just silently disappears from view. That's why it shows up fine in the database but never shows up on anyone's screen.
-
-I also found exactly when this happened. Up until April 22nd, his AO was correctly set to Richard Mejia, a valid active user. Then on April 22nd, it got changed to this invalid ID, 212065. I checked who made that change, and it was Leah Olson, FAA staff, active account — so this was a manual update, not something automated.
+Next step is figuring out which screen/feature she used to make that change, so we can see how an invalid AO ID was able to get saved in the first place.
