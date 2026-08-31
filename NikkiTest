@@ -1,2 +1,14 @@
-Id	OktaCid	UserName	EmailAddress	StatusId	CreatedDate
-20138	00u58414ofF7unPdA4h7	AME_EANORGA16168	eanorga@protonmail.com	1	2015-11-18 15:09:23.577
+-- Step 1: Find his Application record(s)
+SELECT * FROM [DMS_Mimic].[dbo].[Application]
+WHERE UserId = 20138;
+
+-- Step 2: Find his ApplicationVersion(s)
+SELECT * FROM [DMS_Mimic].[dbo].[ApplicationVersion]
+WHERE ApplicationId = <ApplicationId from Step 1>;
+
+-- Step 3: Find his Activity/Activities — this is what we've been trying to reach all along
+SELECT Id, ActivityTypeId, StatusId, CloaId, NewCloaId, RequestDate, DueDate, 
+       Comments, TrackingNumber, CreatedDate, UpdatedDate
+FROM [DMS_Mimic].[dbo].[Activity]
+WHERE ApplicationVersionId = <ApplicationVersionId from Step 2>
+ORDER BY CreatedDate DESC;
