@@ -1,13 +1,19 @@
-Id	ApplicationDate	DesigneeTypeId	IsMinRequireMet	SubmissionDate	StatusId	StateId	UserId	OfficeId	IsActive	IsReviewed	Comments	CreatedBy	UpdatedBy	CreatedDate	UpdatedDate	IsDeployed	AuditPrimaryLogId
-2	2014-06-16 12:55:42.723	12	1	NULL	3	4	4	24	1	NULL	NULL	1	NULL	2014-06-16 12:55:42.723	NULL	0	NULL
-3	2014-06-16 12:55:42.723	11	1	2014-06-16 12:55:42.723	2	11	15	24	1	NULL	NULL	1	NULL	2014-06-16 12:55:42.723	NULL	0	NULL
-4	2014-06-16 12:55:42.723	11	1	2014-06-16 12:55:42.723	2	11	44	24	1	NULL	NULL	1	69294	2014-06-16 12:55:42.723	2025-10-24 11:10:05.133	0	NULL
-5	2014-06-16 12:55:42.723	12	1	2014-06-16 12:55:42.723	2	17	60	24	1	NULL	NULL	1	NULL	2014-06-16 12:55:42.723	NULL	0	NULL
-6	2014-06-16 12:55:42.723	11	1	2014-06-16 12:55:42.723	2	11	14	24	1	NULL	NULL	1	47661	2014-06-16 12:55:42.723	2022-05-25 11:34:52.903	0	NULL
+-- Find the User table and its columns
+SELECT c.name AS ColumnName, ty.name AS DataType
+FROM sys.columns c
+JOIN sys.types ty ON c.user_type_id = ty.user_type_id
+WHERE c.object_id = OBJECT_ID('dbo.[User]')
+ORDER BY c.column_id;
 
-Id	ApplicationId	VersionId	StatusId	CreatedBy	UpdatedBy	CreatedDate	UpdatedDate	AuditPrimaryLogId	DesignatorName	DesignatorId	DisciplineTypeId	OfficeId	SubmissionDate	ProfileVersionId	IsDeployed	AovCompanyTypeId
-2	37	1	4	1	NULL	2014-06-16 15:11:55.463	2014-06-16 15:11:55.463	NULL	NULL	NULL	NULL	24	NULL	45	NULL	NULL
-3	54	1	4	1	NULL	2014-06-16 15:13:06.660	2014-06-16 15:13:06.660	NULL	NULL	NULL	NULL	24	NULL	37	NULL	NULL
-4	7	1	4	1	NULL	2014-06-16 15:18:43.770	2014-06-16 15:18:43.770	NULL	NULL	NULL	NULL	24	NULL	15	NULL	NULL
-5	56	1	4	1	NULL	2014-06-16 15:22:37.627	2014-06-16 15:22:37.627	NULL	NULL	NULL	NULL	24	NULL	48	NULL	NULL
-6	36	1	4	1	NULL	2014-06-16 15:25:39.783	2014-06-16 15:25:39.783	NULL	NULL	NULL	NULL	24	NULL	39	NULL	NULL
+SELECT u.*, app.Id AS ApplicationId, app.DesigneeTypeId, app.StatusId AS AppStatusId
+FROM [DMS_Mimic].[dbo].[User] u
+JOIN [DMS_Mimic].[dbo].[Application] app ON app.UserId = u.Id
+WHERE u.FirstName LIKE '%Anorga%' OR u.LastName LIKE '%Anorga%'  -- adjust column names once confirmed
+
+SELECT t.name AS TableName, c.name AS ColumnName
+FROM sys.columns c
+JOIN sys.tables t ON c.object_id = t.object_id
+WHERE c.name LIKE '%FirstName%' 
+   OR c.name LIKE '%LastName%'
+   OR c.name LIKE '%DesigneeNumber%'
+ORDER BY t.name;
