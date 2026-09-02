@@ -1,0 +1,330 @@
+﻿﻿using System;
+using System.Collections.Generic;
+using Dms.Core.EntityFramework.Data;
+using Dms.Core.EntityFramework.Model.Activity;
+using Dms.Core.Extensions;
+using Dms.Core.Utils;
+using Dms.Services.Interface.Activity;
+using Dms.Services.Interface.Lookup;
+using Dms.Services.Interface.Message;
+using Dms.Services.Interface.Shared;
+using Dms.Services.Interface.Task;
+using Dms.Services.ViewModel;
+using Dms.Services.ViewModel.Activity;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Dms.Services.Interface.Security;
+using Dms.Services.Assembler;
+
+namespace Dms.Services.Implementation.Activity
+{
+    public class DpePreApprovalRequestService : AfsGroupTwoPreApprovalRequestService
+    {
+        public DpePreApprovalRequestService(DmsContext context, ITaskService taskService, IDocumentService documentService, IActivityService activityService, IMessageService messageService, ISharedService sharedService, ILookupService lookUpService, IUserService userService)
+        : base(context, taskService, documentService, activityService, messageService, sharedService, lookUpService, userService)
+        {
+        }
+        public override bool Cancel(ActivityPaperWorkViewModel model)
+        {
+            return base.Cancel(model);
+        }
+        public override void CreateTask(PreApprovalRequestViewModel model)
+        {
+            base.CreateTask(model);
+        }
+        public override PreApprovalRequestViewModel GetNew(int applicationId)
+        {
+            base.GetNew(applicationId);
+            _preApprovalRequestViewModel.DesigneeFunctionCodes = _cloa.DesigneeFunctionCodes;
+            _preApprovalRequestViewModel.IsAfsType = true;
+            _preApprovalRequestViewModel.PreApprovalDateWiseCount = GetPreApprovalDateWiseCount(_cloa.DesigneeInformation.ApplicationId);
+            return _preApprovalRequestViewModel;
+        }
+        public override PreApprovalRequestViewModel Get(int preApprovalRequestId, bool loadPreapprovalModifiedData, int postActivityId, int? cloaId = null)
+        {
+            base.Get(preApprovalRequestId, loadPreapprovalModifiedData, postActivityId, cloaId);
+            if (loadPreapprovalModifiedData && _preApprovalRequestViewModel?.AfsPostActivity?.AfsPostActivityModifiedPreApprovalViewModel != null && _context.PostActivities.Where(e => e.PreApprovalRequestId == preApprovalRequestId).Any())
+            {
+                LoadPreApprovalModifiedData(_preApprovalRequestViewModel, _preApprovalRequestViewModel.AfsPostActivity, _cloa.DesigneeInfo.TypeId, _preApprovalRequestViewModel.ModifiedPreapprovalControls);
+            }
+            GetHelper(_preApprovalRequestViewModel);
+            return _preApprovalRequestViewModel;
+        }
+        public override int ReInitiate(int preApprovalRequestId)
+        {
+            var newPreapprovalRequest = Get(preApprovalRequestId, false, 0);
+            CancelHelper(preApprovalRequestId);
+            newPreapprovalRequest.Id = 0;
+            newPreapprovalRequest.isSubmit = false;
+            newPreapprovalRequest.RequestInfo.ControlNumber = _activityService.GenerateTrackingNumber(newPreapprovalRequest.DesigneeInfo.CloaId, (int)ProcessTypeEnum.PreApproval);
+            newPreapprovalRequest.IsAfsType = true;
+            newPreapprovalRequest.IsCancel = true;
+            newPreapprovalRequest = Save(newPreapprovalRequest);
+            return newPreapprovalRequest.Id;
+        }
+        public override PreApprovalRequestViewModel Save(PreApprovalRequestViewModel model)
+        {
+            base.Save(model);
+            model = _preApprovalRequestViewModel;
+            SaveDpeSaeFunctionCodes(model, _preApprovalRequest);
+            SaveCertificateRatingsGroup2(model, _preApprovalRequest);
+            if (model.Id != 0)
+            {
+                if (model.PlannedActivity != null && model.PlannedActivity.Products != null && model.PlannedActivity.Products.Any())
+                {
+                    _context.PreApprovalRequestProducts.RemoveRange(_preApprovalRequest.PreApprovalRequestProducts);
+                }
+                UpdateAfsData(model, _preApprovalRequest);
+
+
+            }
+            else
+            {
+
+                InsertAfsData(model, _preApprovalRequest);
+                InsertAfsDataHelper(model, _preApprovalRequest);
+                _context.PreApprovalRequests.Add(_preApprovalRequest);
+            }
+            SaveHelper(model);
+            CompleteOrCreateTask(model, IsAutoPreApproval(model));
+            return _preApprovalRequestViewModel;
+        }
+        public override PreApprovalRequestViewModel SavePostActivityEvaluation(PreApprovalRequestViewModel adminModel)
+        {
+            return base.SavePostActivityEvaluation(adminModel);
+        }
+        public override bool SaveMsDecision(PreApprovalRequestViewModel model)
+        {
+            var preApprovalRequest = _context.PreApprovalRequests.Include(p => p.AfsPreApprovalRequest)
+            .Include(p => p.PreApprovalRequestFunctionCodes).Include(p => p.PostActivities).FirstOrDefault(p => p.Id == model.Id);
+
+            if (preApprovalRequest != null)
+            {
+                preApprovalRequest.IsPossibleDirectObservation = model.IsPossibleDirectObservation;
+                preApprovalRequest.IsApproved = model.IsApproved;
+                preApprovalRequest.ApproverComments = model.ApproverComment;
+
+                if (model.IsApproved.HasValue && model.IsApproved.Value && model.DesigneeInfo.TypeId != (int)DesigneeTypeEnum.DPE && model.DesigneeInfo.TypeId != (int)DesigneeTypeEnum.ADMINPE && model.DesigneeInfo.TypeId != (int)DesigneeTypeEnum.SAE
+                    && model.IsGeographicExpansionAvailable && model.GeographicExpansionUserOfficeRoleIds.Any())
+                {
+                        CreateTaskForGeographicExpansionRequest(model);
+                }
+
+                preApprovalRequest.IsApproved = model.IsApproved;
+                preApprovalRequest.ApproverComments = model.ApproverComment;
+                preApprovalRequest.ApproverJustification = model.ApproverJusitification;
+                preApprovalRequest.ApproverOfficeRoleId = model.ApprovedBy;
+
+                if (model.IsApproved == true)
+                {
+                    preApprovalRequest.IsPreApprovalOnHold = false;
+                    preApprovalRequest.StatusId = (int)PreApprovalRequestStatusEnum.Approved;
+                    if (preApprovalRequest.PostActivities.Count == 0)
+                    {
+                        preApprovalRequest.PostActivities = new List<PostActivity>
+                        {
+                            new PostActivity
+                            {
+                                StatusId = (int)PreApprovalRequestStatusEnum.Initiated,
+                                TrackingNumber = model.TrackingNumber.Replace("PR", "PO"),
+                                ApprovalDate = DateTime.Now,
+                                FormData = CloaPreApprovalRequestViewModelMapper.SerializePreApproval(model)
+                            }
+                        };
+                    }
+                    //Send approved notification.
+                    SendPreapprovalDecisionNotification(model.TrackingNumber, model.DesigneeInfo.Name, model.DesigneeInfo.Id, "PREAPR");
+                }
+                else
+                {
+                    preApprovalRequest.StatusId = (int)PreApprovalRequestStatusEnum.Rejected;
+                    //send denied notification.
+                    SendPreapprovalDecisionNotification(model.TrackingNumber, model.DesigneeInfo.Name, model.DesigneeInfo.Id, "PRERJT");
+                }
+
+
+                //Complete the Task Status.
+                var task = _context.Tasks.FirstOrDefault(it => it.ActionId == preApprovalRequest.Id && it.StatusId == (int)TaskStatusEnum.Pending && (it.SubTypeId == (int)TaskSubTypeEnum.PreApprovalRequest || it.SubTypeId == (int)TaskSubTypeEnum.GeographicExpansionRequest));
+                if (task != null)
+                {
+                    task.StatusId = (int)TaskStatusEnum.Completed;
+                    _context.SaveChanges();
+                }
+                _context.SaveChanges();
+                return true;
+            }
+            else
+                return false;
+
+        }
+
+
+        public static bool FindModifiedDataForDpe(PreApprovalRequestViewModel model, PreApprovalRequest preApprovalRequest, AfsPostActivityModifiedPreApprovalViewModel afsPostActivityModifiedPreApprovalViewModel, bool triggerCorrectiveActiveTrigger)
+        {
+            if (model.TestInformation.PracticalOralTestId != preApprovalRequest.AfsPreApprovalRequest.PracticalOralTestId)
+            {
+                afsPostActivityModifiedPreApprovalViewModel.PracticalOralTestId = model.TestInformation.PracticalOralTestId;
+                triggerCorrectiveActiveTrigger = true;
+            }
+            if (model.TestInformation.ProposeStartDate != preApprovalRequest.ProposeStartDate.DateToString())
+            {
+                afsPostActivityModifiedPreApprovalViewModel.ProposeStartDate = model.TestInformation.ProposeStartDate;
+                triggerCorrectiveActiveTrigger = true;
+            }
+            if (model.TestCheckInformation.IsAircraftNotRequired != preApprovalRequest.AfsPreApprovalRequest.IsAircraftNotRequired)
+            {
+                afsPostActivityModifiedPreApprovalViewModel.IsAircraftNotRequired = model.TestCheckInformation.IsAircraftNotRequired;
+                triggerCorrectiveActiveTrigger = true;
+            }
+            if (model.TestCheckInformation.ReasonforAuthorization != preApprovalRequest.AfsPreApprovalRequest.TemporaryAuthorizationReason)
+            {
+                afsPostActivityModifiedPreApprovalViewModel.TemporaryAuthorizationReason = model.TestCheckInformation.ReasonforAuthorization;
+                triggerCorrectiveActiveTrigger = true;
+            }
+
+            if (model.TestCheckInformation.AircraftMakeModelId?.Id != preApprovalRequest.AfsPreApprovalRequest.AircraftMakeModelId)
+            {
+                afsPostActivityModifiedPreApprovalViewModel.AircraftMakeModelId = model.TestCheckInformation.AircraftMakeModelId?.Id;
+            }
+
+            if (model.ActivityLocation.Airport?.Id != preApprovalRequest.AfsPreApprovalRequest.AirportId)
+            {
+                afsPostActivityModifiedPreApprovalViewModel.NearestAirportId = model.ActivityLocation?.Airport?.Id;
+                triggerCorrectiveActiveTrigger = true;
+            }
+            triggerCorrectiveActiveTrigger = CheckForAddress(model, preApprovalRequest, afsPostActivityModifiedPreApprovalViewModel, triggerCorrectiveActiveTrigger) || triggerCorrectiveActiveTrigger;
+
+            return triggerCorrectiveActiveTrigger;
+        }
+        protected override IEnumerable<PreApprovalDateWiseCountViewModel> GetPreApprovalDateWiseCount(int applicationId)
+        {
+
+            return base.GetPreApprovalDateWiseCount(applicationId);
+        }
+        
+        //new code 
+    
+        public override AfsGroupsPostActivityViewModel Get(int postActivityId, bool createDocumentVersion = false)
+        {
+            base.Get(postActivityId, createDocumentVersion);
+
+            _afsGroupsPostActivityViewModel.GeneralComments = _postActivity.GeneralComments;
+
+            _afsGroupsPostActivityViewModel.LocationDirections = _postActivity.LocationDirections;
+            _afsGroupsPostActivityViewModel.PointOfContactName = _postActivity.PointOfContactName;
+            _afsGroupsPostActivityViewModel.PointOfContactPhone = _postActivity.PointOfContactPhone;
+
+            return _afsGroupsPostActivityViewModel;
+        }
+         public override AfsGroupsPostActivityViewModel SaveAfsPostActivity(AfsGroupsPostActivityViewModel model)
+        {
+            SaveAfsPostActivityHelper(model);
+            base.SaveAfsPostActivity(model);
+
+            if (!model.IsSubmit || model.StatusId == (int)PreApprovalRequestStatusEnum.Completed){
+                _postActivity.FormData = CloaPreApprovalRequestViewModelMapper.SerializePreApproval(model.PreApprovalRequest);
+            }
+            
+            _context.Entry(_postActivity).State = _postActivity.Id > 0 ? EntityState.Modified : EntityState.Added;
+            _context.Entry(_postActivity.PreApprovalRequest).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            if (model.StatusId == (int)PreApprovalRequestStatusEnum.Completed)
+            {
+                 CreateReviewPostActivityTask(model.PreApprovalRequest.ApplicationId, _postActivity.Id); 
+            }               
+            else if (model.IsSubmit)
+            {
+                CheckPreApprovalModifiedData(model); 
+                _postActivity.FormData = CloaPreApprovalRequestViewModelMapper.SerializePreApproval(model.PreApprovalRequest);         
+                _context.Entry(_postActivity).State = _postActivity.Id > 0 ? EntityState.Modified : EntityState.Added;
+                _context.Entry(_postActivity.PreApprovalRequest).State = EntityState.Modified;
+            }
+            _context.SaveChanges();
+            model.Id = _postActivity.Id;
+
+            return model;
+        }
+
+        private void CheckPreApprovalModifiedData(AfsGroupsPostActivityViewModel model)
+        {
+            model.PreApprovalRequest.ModifiedPreapprovalControls = new  Dictionary<string, List<ModifiedControlViewModel>>();
+
+            var preApprovalRequest = base.GetOriginalPreApprovalData(model.PreApprovalRequestId);
+            bool caTrigger = false;
+            base.CheckForPreApprovalModifiedData(model, preApprovalRequest, ref caTrigger,
+                model.PreApprovalRequest.ModifiedPreapprovalControls);
+          
+            if (model.PreApprovalRequest.TestCheckInformation.ReasonforAuthorization != preApprovalRequest.AfsPreApprovalRequest.TemporaryAuthorizationReason)
+            {
+                AddItemToModifiedPreapprovals("TestCheckInformation", new ModifiedControlViewModel {Control = "reasonforAuthorization"}, model.PreApprovalRequest.ModifiedPreapprovalControls);
+                caTrigger = true;
+            }
+                
+            if (model.PreApprovalRequest.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() !=
+                preApprovalRequest.AfsPreApprovalRequest.IsOtherAdminActivity)
+            {
+                AddItemToModifiedPreapprovals("TestCheckInformation", new ModifiedControlViewModel {Control = "isOtherAdminActivity"}, model.PreApprovalRequest.ModifiedPreapprovalControls);
+                caTrigger = true;
+            }
+            
+            if (model.PreApprovalRequest.ActivityLocation.Airport?.Id != preApprovalRequest.AfsPreApprovalRequest.AirportId)
+            {
+                AddItemToModifiedPreapprovals("ActivityLocation", new ModifiedControlViewModel { Control = "airport" }, model.PreApprovalRequest.ModifiedPreapprovalControls);
+                caTrigger = true;
+            }
+
+            var dateTriggerCorrectiveActionTrigger = false;
+            var proposedStartDate = preApprovalRequest.ProposeStartDate.Value;
+            var proposedEndDate = preApprovalRequest.ProposeEndDate.Value;
+            if (model.AfsPostActivityGroup2 != null &&
+                !string.IsNullOrEmpty(model.AfsPostActivityGroup2.ActualStartDate))
+            {
+                var actualStartDate = DateTime.Parse(model.AfsPostActivityGroup2.ActualStartDate);
+                dateTriggerCorrectiveActionTrigger = !(actualStartDate.Date >= proposedStartDate.Date &&
+                                                       actualStartDate.Date <= proposedEndDate);
+                if (dateTriggerCorrectiveActionTrigger)
+                {
+                    AddItemToModifiedPreapprovals("TestInformation",
+                        new ModifiedControlViewModel { Control = "proposeStartDate" },
+                        model.PreApprovalRequest.ModifiedPreapprovalControls);
+                }
+            }
+
+            caTrigger = dateTriggerCorrectiveActionTrigger || caTrigger;
+
+            if (caTrigger)
+            {
+                CreateCorrectiveAction(
+                    preApprovalRequest.CloaId,
+                    model.PreApprovalRequest.ApplicationId.GetValueOrDefault(),
+                    model.PreApprovalRequest.ManagingSpecialist
+                );
+            }
+        }
+
+        public override IList<AfsGroupsPostActivityViewModel> GetPostActivityVersions(int postActivityId)
+        {
+            var preApprovalRequest = _context.PostActivities.Where(p => p.Id == postActivityId).SelectMany(s => s.PreApprovalRequest.PostActivities.Select(p => new
+            {
+                PreApprovalRequestId = p.PreApprovalRequestId,
+                PostActivityId = p.Id
+            })).AsEnumerable()
+            .GroupBy(p => p.PreApprovalRequestId).Select(p => new
+            {
+                PreApprovalRequestId = p.Key,
+                CurrentVersionPostActivityId = postActivityId,
+                PreviousVersionPostActivityId = p.OrderByDescending(po => po.PostActivityId).First(po => po.PostActivityId < postActivityId).PostActivityId
+            }).First();
+            var currentPostActivty = Get(preApprovalRequest.CurrentVersionPostActivityId).GetClone();
+            var prevPostActivity = Get(preApprovalRequest.PreviousVersionPostActivityId);
+            var model = new List<AfsGroupsPostActivityViewModel>()
+            {
+                currentPostActivty,
+                prevPostActivity
+            };
+
+            return model;
+        }
+    }
+}
