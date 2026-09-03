@@ -10,5 +10,77 @@ protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
         return true;
     }
 
-    return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
+    if (model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault())
+    {
+        return false;
+    }
+
+    var preApprovalRequest = _context.PreApprovalRequests
+        .Include(par => par.PreApprovalRequestFunctionCodes)
+        .ThenInclude(pt => pt.PreApprovalRequestFunctionCodeTypeRatings)
+        .Include(par => par.PreApprovalRequestFunctionCodes)
+        .ThenInclude(pt => pt.PreApprovalRequestFunctionCodeMakeModels)
+        .Include(par => par.PreApprovalRequestFunctionCodes)
+        .ThenInclude(fc => fc.FunctionCode)
+        .Where(par => par.Id == model.Id).FirstOrDefault();
+
+    if (preApprovalRequest == null) return false;
+
+    var cloaFunctionCodes = _context.CloaFunctionCodes
+        .Where(c => c.Cloa.ApplicationId == preApprovalRequest.ApplicationId && c.Cloa.CloaStatusId == (int)CloaStatusEnum.Active)
+        .Include(c => c.FunctionCode)
+        .Include(c => c.CloaFunctionCodeTypeRatings)
+        .Include(c => c.CloaFunctionCodeMakeModels)
+        .ToArray();
+
+    // Flatten CLOA function codes the same way base does, keeping IsAutoPreApproval per entry
+    var flatCloaFunctionCodes = cloaFunctionCodes
+        .SelectMany(c => c.FunctionCode.HasTypeRating
+            ? c.CloaFunctionCodeTypeRatings != null && c.CloaFunctionCodeTypeRatings.Any()
+                ? c.CloaFunctionCodeTypeRatings.Select(t => new FunctionCodeViewModel
+                {
+                    FunctionCodeId = c.FunctionCodeId,
+                    HasTypeRating = c.FunctionCode.HasTypeRating,
+                    SelectedTypeRatings = new List<int> { t.TypeRatingId },
+                    IsAutomaticPreapproval = t.IsAutoPreApproval
+                }).ToArray()
+                : new List<FunctionCodeViewModel>().ToArray()
+            : new List<FunctionCodeViewModel>
+            {
+                new FunctionCodeViewModel
+                {
+                    FunctionCodeId = c.FunctionCodeId,
+                    HasTypeRating = false,
+                    IsAutomaticPreapproval = c.IsAutoPreApproval
+                }
+            }.ToArray()
+        ).ToArray();
+
+    var preApprovalFunctionCodes = preApprovalRequest.PreApprovalRequestFunctionCodes
+        .SelectMany(p => p.FunctionCode.HasTypeRating
+            ? p.PreApprovalRequestFunctionCodeTypeRatings != null && p.PreApprovalRequestFunctionCodeTypeRatings.Any()
+                ? p.PreApprovalRequestFunctionCodeTypeRatings.Select(pt => new FunctionCodeViewModel
+                {
+                    FunctionCodeId = p.FunctionCodeId,
+                    HasTypeRating = p.FunctionCode.HasTypeRating,
+                    SelectedTypeRatings = new List<int> { pt.TypeRatingId }
+                }).ToArray()
+                : new List<FunctionCodeViewModel>().ToArray()
+            : new List<FunctionCodeViewModel>
+            {
+                new FunctionCodeViewModel
+                {
+                    FunctionCodeId = p.FunctionCodeId,
+                    HasTypeRating = false
+                }
+            }.ToArray()
+        ).ToArray();
+
+    // Every submitted function code must positively match a CLOA function code flagged auto-preapproval
+    bool allSubmittedAreAutoApproved = preApprovalFunctionCodes.All(p =>
+        flatCloaFunctionCodes.Any(c => c.FunctionCodeId == p.FunctionCodeId
+            && c.IsAutomaticPreapproval.GetValueOrDefault()
+            && (!c.HasTypeRating || !p.HasTypeRating || p.SelectedTypeRatings.All(pt => c.SelectedTypeRatings.Contains(pt)))));
+
+    return allSubmittedAreAutoApproved;
 }
