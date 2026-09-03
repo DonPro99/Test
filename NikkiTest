@@ -1,200 +1,241 @@
-import {
-  ActivityRequestStatusEnum,
-  BaseComponent,
-  DesigneeTypeEnum,
-  DmsActivityLocationComponent,
-  Document,
-  FunctionCode,
-  LookupService,
-  PreApprovalRequestInfoModel,
-  PreApprovalRequestStatusEnum,
-  PreApprovalTabEnum,
-  PreApprovalTabInfo,
-  UploadControlComponent,
-  cloneAbstractControl,
-  showError
-} from 'dms-web-shared';
-import { Directive, EventEmitter, Injectable, Input, Output, ViewChild } from '@angular/core';
-import { SelectItem } from 'primeng/api';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { Tabs } from 'primeng/tabs';
-
-@Directive()
-@Injectable()
-export class PreApprovalBaseComponent extends BaseComponent {
-  @Input() activeIndex: number = 0;
-  @Input() pr?: PreApprovalRequestInfoModel;
-  @Input() userId?: number = 0;
-  @Input() isDisabled = false;
-  @Input() copyPreApprovalRequestId?: number = 0;
-
-  @Output() getConfig: EventEmitter<any>;
-  @Output() tabChange: EventEmitter<any>;
-  @Output() emitChange: EventEmitter<boolean>;
-
-  public designeeTypeEnum: typeof DesigneeTypeEnum = DesigneeTypeEnum;
-  public showError: typeof showError = showError;
-  public form?: FormGroup | undefined | null;
-  public isPreApprovalApproved = false;
-  public isCancel?: boolean = false;
-  public cancelReasons: SelectItem[] = [];
-  private selectedTabName = PreApprovalTabEnum.preApprovalTab;
-  public props: any;
-  public summaryForm?: FormGroup | undefined | null;
-  public isAdministrativePreapproval = false;
-  @ViewChild('uploadControl') uploadControl?: UploadControlComponent;
-  @ViewChild('tv') tabView?: Tabs;
-
-  constructor(public lookupService: LookupService) {
-    super();
-    this.activeIndex = -1;
-    this.getConfig = new EventEmitter<any>();
-    this.tabChange = new EventEmitter<number>();
-    this.emitChange = new EventEmitter<boolean>();
-  }
-
-  public static buildForm(
-    model: PreApprovalRequestInfoModel,
-    options: any
-  ): FormGroup {
-    const fb = new FormBuilder();
-    const form = fb.group({
-      activityLocation: DmsActivityLocationComponent.buildForm(
-        model.activityLocation!,
-        model.categoryId || 0,
-        options.designeeTypeId,
-        options.isDisabled
-      ),
-      comments: [{ value: model.comments, disabled: options.isDisabled }, 
-        model.testCheckInformation && model.testCheckInformation.selectedRequestAuthorizations && model.testCheckInformation.selectedRequestAuthorizations.find(a => a.functionCode!.endsWith('-BAE'))? [Validators.required] :  []],
-      uploadId: [
-        {
-          value:
-            model.documentReference && model.documentReference.uploadedFiles
-              ? model.documentReference.uploadedFiles.map((uf) => uf.documentId)
-              : '',
-          disabled: options.isDisabled,
-        },
-      ],
-    });
-    return form;
-  }
-
-  public static buildModel(
-    form: FormGroup,
-    model: PreApprovalRequestInfoModel
-  ) {
-    if (form.get('activityLocation')) {
-      DmsActivityLocationComponent.buildModel(
-        form.get('activityLocation') as FormGroup,
-        model.activityLocation!
-      );
-    }
-    model.comments = form.get('comments')?.value;
-  }
-
-  setTabError(index: any) {
-    return this.form && showError(this.form, this.props.formGroupMap[+index]) && index !== this.activeIndex
-      ? 'highlighTab': '';
-  }
-
-  public setTabsInfo(tabsInfo: PreApprovalTabInfo) {
-    if (this.pr) this.pr.tabInfo = tabsInfo;
-  }
-
-  public async setBaseConfig(pr: PreApprovalRequestInfoModel) {
-    this.selectedTabName = PreApprovalTabEnum.preApprovalTab;
-    pr.tabInfo = this.createTabInfo();
-
-    this.isPreApprovalApproved =
-      pr.requestInfo?.activityStatus?.id === ActivityRequestStatusEnum.Approved;
-    this.isCancel = pr.statusId === PreApprovalRequestStatusEnum.Cancelled;
-    if (this.isCancel) {
-      this.cancelReasons = this.lookupService.getPreApprovalCancelReasons();
-    }
-    await this.lookupService.populateLookupData();
-  }
-
-  filterFunctionCodes(categoryId: number): void {
-    if (this.pr)
-    this.pr.authFunctionCodes = this.pr.authFunctionCodes.filter(
-      (it) => it.categoryId === categoryId
-    );
-  }
-
-  filterInitialFunctionCodes(categoryId: number): void {
-    if (this.pr && this.pr.initialFunctionCodes) {
-      this.pr.initialFunctionCodes = this.pr.initialFunctionCodes.filter(
-        (it) => it.categoryId === categoryId
-      );
-    }
-  }
-
-  uploadedFiles(event: Document[]) {
-    if(this.pr) this.pr.documentReference!.uploadedFiles = event;
-  }
-
-  onSelectedFunctionCodesUpdate(event: number[]) {
-    if(this.pr) this.pr.selectedFunctionCodes = event;
-  }
-
-  createTabInfo() {
-    const tabInfo = new PreApprovalTabInfo();
-    tabInfo.canPrint = false;
-    return tabInfo;
-  }
-
-  onTabChange($event: any) {
-    this.tabChange.emit({
-      index: $event,
-      isSummaryTab: +$event === (+this.props.tabCount)
-    });
-  }
-
-  public setSummaryTab() {
-    this.summaryForm = cloneAbstractControl(this.form as AbstractControl) as FormGroup;
-    this.summaryForm.addControl('reasonDropdown',
-        new FormControl(this.pr?.cancellationTypeId, [] ) );
-    this.summaryForm.disable({ emitEvent: false });
-  }
-
-  emitFieldChange($event: boolean) {
-    this.emitChange.emit($event);
-  }
-
-  emitFuncionCodeChange() {
-    if (this.form && this.pr && this.form.get('comments') && this.isAdministrativePreapproval) {
-      const testchkinfo = this.form.get('testCheckInformation');
-      const funcCodeSel = testchkinfo?.get('functionCodeSelection');
-      if (!testchkinfo?.get('isOtherAdminActivity')?.value && funcCodeSel && funcCodeSel.get('functionCode') &&
-        this.pr.authFunctionCodes?.find(f => f.id === funcCodeSel?.get('functionCode')?.value)?.functionCode!.endsWith('-BAE')) {
-        this.form.get('comments')?.setValidators([Validators.required]);
-      } else {
-        this.form.get('comments')?.setValidators([]);
-      }
-      this.form.get('comments')?.updateValueAndValidity();
-    }
-  }
-
-  get isCommentsRequired() {   
-      const validator = this.form?.get('comments')?.validator;
-      if (validator) {
-        const err = validator({} as AbstractControl);
-        return err && err['required'];
-      }
-      return null;
-  }
-
-  public canAutoApprove(selectedFcs: number[], fcs: FunctionCode[]): boolean {
-    let canAutoApprove = false;
-    for (const element of selectedFcs) {
-      canAutoApprove = fcs.some(
-        (it) => it.id === element && it.isAutomaticPreapproval
-      );
-      if (!canAutoApprove) {
-        break;
-      }
-    }
-    return canAutoApprove;
-  }
-}
+{id: 0, designeeTypeId: 31, applicationId: 97748, categoryId: 0, managingSpecialist: 40245,…}
+activityLocation
+: 
+{facilityonRecord: true,…}
+afsPostActivity
+: 
+null
+airCraftInformation
+: 
+null
+airCraftOperatorInformation
+: 
+null
+airCraftOwnerInformation
+: 
+null
+applicantInformation
+: 
+{name: null, phone: null, email: null, certificateNumber: null, medicalExpirationDate: null,…}
+applicationId
+: 
+97748
+applicationInformation
+: 
+{certificateRatingTypeId: null, experienceTypeId: null, designatorName: "",…}
+approvedBy
+: 
+null
+approverComment
+: 
+null
+approverJusitification
+: 
+null
+authFunctionCodes
+: 
+[{id: 1665, functionCodeId: 0, functionCode: "Admin-PE-GEN-FPE", functionCodeDescription: null,…},…]
+cancellationTypeId
+: 
+null
+categoryId
+: 
+0
+certificationBasis
+: 
+null
+comments
+: 
+null
+dateFieldsEditableForDmirDarf
+: 
+false
+decisionTaskUserOfficeRoleIds
+: 
+null
+designeeFunctionCodes
+: 
+[{id: 1665, functionCodeId: 0, functionCode: "Admin-PE-GEN-FPE", functionCodeDescription: null,…},…]
+designeeInfo
+: 
+{id: 112866, name: "WAYNE KALER", printName: null, number: "105902045", type: "Admin-PE-GEN",…}
+designeeTypeId
+: 
+31
+documentReference
+: 
+{documentReferenceId: 0, referenceId: 0, secondaryReferenceId: null, documentReferenceEnum: 5,…}
+dpreFunctionCodes
+: 
+null
+facilityInformation
+: 
+null
+geoAoIsApprove
+: 
+null
+geoExpansionDecision
+: 
+null
+geoExpansionJustification
+: 
+null
+geoExpansionSelectedApproverId
+: 
+null
+geoExpansionSelectedOfficeId
+: 
+null
+geoMsIsApprove
+: 
+null
+geoMsJustification
+: 
+null
+geographicExpansionUserOfficeRoleIds
+: 
+null
+id
+: 
+0
+initialFunctionCodes
+: 
+null
+isAcknowledge
+: 
+false
+isAfsType
+: 
+true
+isAovType
+: 
+false
+isApproved
+: 
+null
+isCancel
+: 
+false
+isCtopGraduate
+: 
+null
+isEdit
+: 
+false
+isEnhancedCTI
+: 
+null
+isGeographicExpansionAvailable
+: 
+false
+isLessThan24Hours
+: 
+false
+isMsDecisionPending
+: 
+false
+isMsReviewedAutoPreApproval
+: 
+false
+isOutSideActivityMessage
+: 
+false
+isPerformanceResultReadOnly
+: 
+false
+isPossibleDirectObservation
+: 
+null
+isPostActivityCurrentVersion
+: 
+true
+isPostActivityReadOnly
+: 
+false
+isPreApprovalMsDecisionReadOnly
+: 
+false
+isPreApprovalReadOnly
+: 
+false
+isSubmit
+: 
+false
+issuedDomesticApprovalQuantity
+: 
+null
+issuedExportApprovalQuantity
+: 
+null
+justificationForCancellation
+: 
+null
+managingOffice
+: 
+null
+managingSpecialist
+: 
+40245
+managingSpecialistName
+: 
+null
+medicalExpirationDate
+: 
+null
+model
+: 
+{id: 0, designeeTypeId: 31, applicationId: 97748, categoryId: 0, managingSpecialist: 40245,…}
+modifiedPostActivityControls
+: 
+null
+modifiedPreapprovalControls
+: 
+{}
+msDecisiondocumentReference
+: 
+null
+otherPreApprovalRequest
+: 
+null
+plannedActivity
+: 
+{issuedExportApprovalQuantity: null, issuedDomesticApprovalQuantity: null, products: []}
+poApplicationInformation
+: 
+null
+postActivity
+: 
+null
+preApprovalDateWiseCount
+: 
+[{preApprovalDate: "09/03/2026", count: 3}, {preApprovalDate: "09/04/2026", count: 17},…]
+reasonForCancellationType
+: 
+null
+requestInfo
+: 
+{id: 0, controlNumber: "PR-105902045-2026-0033", submittedDate: "", revisedDate: null,…}
+selectedFunctionCodes
+: 
+[]
+selectedOtherFunctionCodes
+: 
+null
+statusId
+: 
+null
+tabInfo
+: 
+{canPrint: false}
+testCheckInformation
+: 
+{,…}
+testInformation
+: 
+{practicalOralTestId: null, proposeStartDate: null, proposeEndDate: null, proposedStartTime: "06:00",…}
+trackingNumber
+: 
+null
+userId
+: 
+112866
