@@ -1,305 +1,1527 @@
+import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import {
+  ActionButton, ActivityRequestStatusEnum,
+  BaseComponent,
+  ButtonActionsEnum,
+  CategoryEnum,
+  CryptoService,
+  DesigneeTypeEnum,
+  LookupService,
+  PreApprovalRequestInfoModel,
+  PreApprovalRequestService,
+  PreApprovalTabEnum,
+  UtilityService
+} from 'dms-web-shared';
+import { Title } from '@angular/platform-browser';
+import { ApdIndexComponent } from './apd-index.component';
+import { DadeIndexComponent } from './dade-index.component';
+import { TceIndexComponent } from './tce-index.component';
+import { MessageService as ToastService } from 'primeng/api';
+import { AuthenticationService } from '../../services/authentication.service';
+import { Observable, Subscriber } from 'rxjs';
+import { ConfirmationService } from 'primeng/api';
+import { takeUntil } from 'rxjs/operators';
 
-using System;
-using System.Threading.Tasks;
-using Dms.Core.Utils;
-using Dms.Services.Interface;
-using Dms.Services.Interface.Activity;
-using Dms.Services.Interface.Shared;
-using Dms.Services.ViewModel;
-using Dms.Services.ViewModel.Activity;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using DesigneeTypeEnum = Dms.Core.Utils.DesigneeTypeEnum;
+@Component({
+    selector: "pr-index",
+    templateUrl: "./index.component.html",
+    styleUrls: ["./index.component.scss"],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
+})
+export class IndexComponent extends BaseComponent implements OnInit {
+  designeeTypeId: number = 0;
+  data: PreApprovalRequestInfoModel | undefined | null;
+  activeIndex: number = 0;
+  props: any;
+  isAdmin: boolean = false;
+  isAutoPreApproval: boolean = false;
 
-namespace Dms.Api.Designee.Controllers
-{
-    [Produces("application/json")]
-    [Route("api/PreApprovalRequest")]
-    [Authorize]
-    public class PreApprovalRequestController(ISharedService sharedService, Func<DesigneeTypeEnum, IPreApprovalRequestService> preApprovalRequestService, IIacraService iacraService) : Controller
-    {
-        private readonly IIacraService _iacraService = iacraService;
-        private readonly Func<DesigneeTypeEnum, IPreApprovalRequestService> _preApprovalRequestServiceDelegate = preApprovalRequestService;
-        private readonly ISharedService _sharedService = sharedService;
+  @ViewChild("active") index:
+    | ApdIndexComponent
+    | DadeIndexComponent
+    | TceIndexComponent | undefined | null;
 
-        [HttpGet()]
-        [Route("{id}/{loadPreapprovalModifiedData:bool?}/{postActivityId:int?}")]
-        public IActionResult Get(int id, bool loadPreapprovalModifiedData = false, int postActivityId = 0)
-        {
-            if (!ModelState.IsValid)
-                return new BadRequestResult();
-            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeIdByPreApprovalRequestId(id);
-            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-            return new OkObjectResult(_preApprovalRequestService.Get(id, loadPreapprovalModifiedData, postActivityId));
-        }
+  get isDisabled() {
+    return (
+      this.data!.requestInfo?.activityStatus?.id ===
+        ActivityRequestStatusEnum.Completed ||
+      this.data!.requestInfo?.activityStatus?.id ===
+        ActivityRequestStatusEnum.Canceled ||
+      this.data!.requestInfo?.activityStatus?.id ===
+        ActivityRequestStatusEnum.Denied
+    );
+  }
 
-        [HttpGet()]
-        [Route("postactivity/{postActivityId:int}/{createDocumentVersion:bool}")]
-        public IActionResult GetPostActivity(int postActivityId, bool createDocumentVersion = false)
-        {
-            if (!ModelState.IsValid)
-                return new BadRequestResult();
-            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeIdByPostActivityId(postActivityId);
-            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-            return new OkObjectResult(_preApprovalRequestService.Get(postActivityId, createDocumentVersion));
-        }
+  get canPrint() {
+    return this.activeIndex === this.props.tabCount - 1; // should be the last tab
+  }
 
-        [HttpGet()]
-        [Route("new/{applicationId}")]
-        public IActionResult New(int applicationId)
-        {
-            if (!ModelState.IsValid)
-                return new BadRequestResult();
-            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.Get(applicationId).TypeId;
-            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-            return new OkObjectResult(_preApprovalRequestService.GetNew(applicationId));
-        }
-
-        [HttpPost]
-        public IActionResult Post([FromBody]PreApprovalRequestViewModel model)
-        {
-
-            if (ModelState.IsValid && model != null)
-            {
-                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
-                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-                return new OkObjectResult(_preApprovalRequestService.Save(model));
-            }
-            return new BadRequestObjectResult(model);
-        }
-        [HttpPost]
-        [Route("afs")]
-        public IActionResult AfsPost([FromBody]PreApprovalRequestViewModel model)
-        {
-            // Custom logic for AFS post, e.g., add a log or validation
-            if (ModelState.IsValid && model != null)
-            {
-
-                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
-                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-                return new OkObjectResult(_preApprovalRequestService.Save(model));
-
-            }
-            return new BadRequestObjectResult(model);
-        }
-        [HttpPost]
-        [Route("aov")]
-        public IActionResult AovPost([FromBody]PreApprovalRequestViewModel model)
-        {
-
-            if (ModelState.IsValid && model != null)
-            {
-
-                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
-                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-                return new OkObjectResult(_preApprovalRequestService.Save(model));
-
-            }
-            return new BadRequestObjectResult(model);
-        }
-                
-        [HttpPost]
-        [Route("checkAutoPreapproval")]
-        public IActionResult CheckAutoPreapproval([FromBody] PreApprovalRequestViewModel model)
-        {
-            if (ModelState.IsValid && model != null)
-            {
-
-                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
-                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-                return new OkObjectResult(_preApprovalRequestService.CheckIsAutoPreApproval(model));
-            }
-            return new BadRequestObjectResult(model);
-        }
-
-
-        [HttpPut()]
-        [Route("afs/{id}")]
-        public IActionResult afsPut(int id, [FromBody]PreApprovalRequestViewModel model)
-        {
-
-
-            if (ModelState.IsValid && model != null)
-            {
-                model.Id = id;
-                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
-                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-                return new OkObjectResult(_preApprovalRequestService.Save(model));
-            }
-            return new BadRequestObjectResult(model);
-        }
-
-        [HttpPut()]
-        [Route("aov/{id}")]
-        public IActionResult aovPut(int id, [FromBody]PreApprovalRequestViewModel model)
-        {
-
-
-            if (ModelState.IsValid && model != null)
-            {
-                model.Id = id;
-                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
-                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-                return new OkObjectResult(_preApprovalRequestService.Save(model));
-            }
-            return new BadRequestObjectResult(model);
-        }
-
-        [HttpPut()]
-        [Route("reinitiate/new/{id}")]
-        public IActionResult ReInitiate(int id)
-        {
-            if (!ModelState.IsValid)
-                return new BadRequestResult();
-            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeIdByPreApprovalRequestId(id);
-           var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-            return new OkObjectResult(_preApprovalRequestService.ReInitiate(id));
-        }
-
-        [HttpGet()]
-        [Route("copy/{id}")]
-        public IActionResult Copy(int id)
-        {
-            if (!ModelState.IsValid)
-                return new BadRequestResult();
-            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeIdByPreApprovalRequestId(id);
-            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-            return new OkObjectResult(_preApprovalRequestService.Copy(id));
-        }
-
-        [HttpGet("PostActivities/Pending/{applicationId}")]
-        public IActionResult CheckPendingPostActivitiesExists(int applicationId)
-        {
-            if (!ModelState.IsValid)
-                return new BadRequestResult();
-            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.Get(applicationId).TypeId;
-            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-            return new OkObjectResult(_preApprovalRequestService.CheckPendingPostActivitiesExists(applicationId));
-        }
-
-        [HttpPut]
-        [Route("{id}")]
-        public IActionResult Put(int id, [FromBody]PreApprovalRequestViewModel model)
-        {
-
-            if (ModelState.IsValid && model != null)
-            {
-                model.Id = id;
-                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
-                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-                return new OkObjectResult(_preApprovalRequestService.Save(model));
-            }
-            return new BadRequestObjectResult(model);
-        }
-
-        [HttpPut("PostActivity/submit/{id}")]
-        public IActionResult PostActivityPut(int id, [FromBody]PreApprovalRequestViewModel model)
-        {
-
-            if (ModelState.IsValid && model != null)
-            {
-                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
-                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-                if (model.IsAfsType)
-                {
-                    model.AfsPostActivity.Id = id;
-                }
-                else
-                {
-                    model.PostActivity.Id = id;
-                }
-
-                return new OkObjectResult(_preApprovalRequestService.SavePostActivityEvaluation(model));
-            }
-            return new BadRequestObjectResult(model);
-        }
-
-        [HttpPut("PostActivity/afs/submit/{id}")]
-        public IActionResult PostActivityAfsPut(int id, [FromBody]AfsGroupsPostActivityViewModel model)
-        {
-            if (!ModelState.IsValid || model == null)
-                return new BadRequestObjectResult(model);
-
-            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeInfo.TypeId;
-            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-            var latestPostActivity = _preApprovalRequestService.GetLatestPostActivityVersion(model.PreApprovalRequestId);
-            if (latestPostActivity.postActivityId != id || (latestPostActivity.statusId != model.StatusId && latestPostActivity.statusId == (int)PreApprovalRequestStatusEnum.Completed))
-            {
-                ModelState.AddModelError("Id", "Please reload the page with latest postactivity and then save/submit.");
-                model.Id = latestPostActivity.postActivityId;
-                model.StatusId = latestPostActivity.statusId;
-                return new BadRequestObjectResult(model);
-            }
-
-            return new OkObjectResult(_preApprovalRequestService.SaveAfsPostActivity(model));
-        }
-
-        [HttpPut("PostActivity/aov/submit/{id}")]
-        public IActionResult AovPostActivityPut(int id, [FromBody]AfsGroupsPostActivityViewModel model)
-        {
-            if (!ModelState.IsValid || model == null)
-                return new BadRequestObjectResult(model);
-
-            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeInfo.TypeId;
-            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-            var latestPostActivity = _preApprovalRequestService.GetLatestPostActivityVersion(model.PreApprovalRequestId);
-            if (latestPostActivity.postActivityId != id || (latestPostActivity.statusId != model.StatusId && latestPostActivity.statusId == (int)PreApprovalRequestStatusEnum.Completed))
-            {
-                ModelState.AddModelError("Id", "Please reload the page with latest postactivity and then save/submit.");
-                model.Id = latestPostActivity.postActivityId;
-                model.StatusId = latestPostActivity.statusId;
-                return new BadRequestObjectResult(model);
-            }
-            return new OkObjectResult(_preApprovalRequestService.SaveAfsPostActivity(model));
-        }
-
-        [HttpPost("Cancel")]
-        public IActionResult Cancel([FromBody] ActivityPaperWorkViewModel model)
-        {
-            if (ModelState.IsValid && model.Id != 0)
-            {
-                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeIdByPreApprovalRequestId(model.Id);
-                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-                return new OkObjectResult(_preApprovalRequestService.Cancel(model));
-            }
-            return new BadRequestObjectResult(model.Id);
-        }
-
-        [HttpGet()]
-        [Route("Iacra/{applicationId}/{ftn}/{postActivityId}/{userId}")]
-        public async Task<IActionResult> GetIacraData(int applicationId, string ftn, int postActivityId, int userId)
-        {
-            if (!ModelState.IsValid)
-                return new BadRequestResult();
-            return Ok(await _iacraService.Get(applicationId, ftn, postActivityId, userId));
-        }
-
-        [HttpPost("list")]
-        public IActionResult GetPreApprovalList([FromBody]RequestListModel model)
-        {
-            if (!ModelState.IsValid || model == null)
-            {
-                return new BadRequestObjectResult(model);
-            }
-            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeId(model.ApplicationId);
-            model.DesigneeType = designeeType;
-            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-            var result = _preApprovalRequestService.GetPreApprovalList(model);
-            return new OkObjectResult(result);
-        }
-
-        [HttpPost("postactivity/list")]
-        public IActionResult GetPostActivityList([FromBody] RequestListModel model)
-        {
-            if (!ModelState.IsValid || model == null)
-            {
-                return new BadRequestObjectResult(model);
-            }
-            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeId(model.ApplicationId);
-            model.DesigneeType = designeeType;
-            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
-            var result = _preApprovalRequestService.GetPostActivityList(model);
-            return new OkObjectResult(result);
-        }
+  get canCopy() {
+    const isPreApproval = !!this.data!.requestInfo?.activityStatus?.id;
+    if (this.data!.requestInfo?.submittedDate) {
+      let tmpSubmittedDate = this.data!.requestInfo.submittedDate.replace(
+        "AM",
+        ""
+      );
+      tmpSubmittedDate = tmpSubmittedDate.replace("PM", "");
+      const submittedDate = new Date(tmpSubmittedDate);
+      const year = submittedDate.getFullYear() + 1;
+      const submittedDateWithYr = new Date(
+        year,
+        submittedDate.getMonth(),
+        submittedDate.getDate()
+      );
+      const isWithinYear = submittedDateWithYr > new Date();
+      return isPreApproval && isWithinYear;
+    } else {
+      return isPreApproval;
     }
+  }
+
+  isAutoPreapproval(model: any): Observable<boolean> {
+      return new Observable((observer) => {
+      if (model.id === 0) {
+        const prevIsSubmit = model.isSubmit;
+        model.isSubmit = false;
+
+        this.service.saveAfsPreApprovalRequest(model).pipe(takeUntil(this.destroying$)).subscribe(
+          (result) => {
+            model.id = result.id;
+            model.isSubmit = prevIsSubmit;
+            this.service.checkAutoPreapproval(model).pipe(takeUntil(this.destroying$)).subscribe((r) => {
+              observer.next(r);
+              observer.complete();
+            });
+        })
+      } else {
+        this.service.checkAutoPreapproval(model).pipe(takeUntil(this.destroying$)).subscribe((r) => {
+          observer.next(r);
+          observer.complete();
+        });
+      }
+    });
+  }
+
+  constructor(
+    private titleService: Title,
+    private lookupService: LookupService,
+    private service: PreApprovalRequestService,
+    private authenticationService: AuthenticationService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private util: UtilityService,
+    private ref: ChangeDetectorRef,
+    private confirmationService: ConfirmationService,
+    private toastService: ToastService,
+    private location: Location,
+    private cryptoService: CryptoService
+  ) {
+    super();
+    this.props = {
+      title: "Pre Approval Request",
+      tabCount: 0,
+      buttons: [],
+      acceptLabel: "Yes",
+      acceptVisible: true,
+      rejectLabel: "No",
+      rejectVisible: true,
+    };
+    this.activeIndex = -1;
+    this.titleService.setTitle(this.props.title);
+    this.isAdmin = false;
+  }
+
+  async ngOnInit() {
+    this.designeeTypeId = +this.route.snapshot.data['designeeTypeId'];
+    
+    this.isAdmin = this.util.toBoolean(
+      await this.cryptoService.decrypt(this.route.snapshot.queryParams["isAdmin"])
+    );
+    await this.lookupService.populateLookupData();
+
+    const preApprovalRequest$ = this.route.snapshot.data['preApprovalRequest'];
+    
+    preApprovalRequest$.pipe(takeUntil(this.destroying$)).subscribe(async (data: any) => {
+      this.data = data;
+      this.configure();
+    });
+  }
+
+  setConfig($event:any) {
+    this.props.title = $event.title;
+    this.titleService.setTitle(this.props.title);
+    this.activeIndex = 0; // reset to first tab
+    this.props.tabCount = $event.tabCount;
+    this.ref.detectChanges(); // angular doesn't like resetting values in ngOnInit from child components
+  }
+
+  getActionButtons(): ActionButton[] {
+    const buttons = this.lookupService.getActionButtons();
+    buttons.splice(
+      2,
+      0,
+      new ActionButton("Print", "Print", "print", true, false, 5, "fa fa-print")
+    );
+    buttons.splice(
+      3,
+      0,
+      new ActionButton("Copy", "Copy", "copy", true, false, 6, "fa fa-copy")
+    );
+    buttons.splice(
+      3,
+      0,
+      new ActionButton(
+        "Continue",
+        "Continue",
+        "continue",
+        true,
+        false,
+        7,
+        "fa fa-arrow-right"
+      )
+    );
+    return buttons;
+  }
+
+  configure() {
+    this.props.buttons = [].concat((this.getActionButtons() as any));
+    this.activeIndex = 0;
+    this.setActionButtons();
+    if (this.isDisabled) {
+      this.index!.form!.disable();
+    }
+  }
+
+  buttonClick(eventKey: string) {
+    const saveData = this.updateModel();
+    switch (eventKey) {
+      case ButtonActionsEnum.Save:
+        const handle = this.saveRequest(saveData).subscribe();
+        break;
+      case ButtonActionsEnum.Print:
+        window.print();
+        break;
+      case ButtonActionsEnum.Copy:
+        this.copyPreApproval();
+        break;
+      case ButtonActionsEnum.Continue:
+        this.index!.showTabError(this.activeIndex);
+        this.saveRequest(saveData).pipe(takeUntil(this.destroying$)).subscribe(() => {
+          // goto next tab
+          const nextTabIndex =
+            this.activeIndex !== this.props.tabCount // if it is not the last tab
+              ? this.activeIndex + 1 // move to next
+              : this.activeIndex; // stay at current index
+          this.setActiveIndex(nextTabIndex);
+        });
+        break;
+      case ButtonActionsEnum.Submit:
+        this.activeIndex = this.props.tabCount - 1;
+        this.index!.showTabError(this.props.tabCount - 2);
+        this.util.markFormGroupTouched(this.index!.form!);
+        if (this.index!.form!.invalid) {
+          return;
+        }
+
+        // submit routine
+        saveData.isSubmit = true;
+        if (!saveData.isApproved) {
+          this.isAutoPreapproval(saveData).pipe(takeUntil(this.destroying$)).subscribe(v => {
+          if (v) {
+            this.saveRequest(saveData).pipe(takeUntil(this.destroying$)).subscribe();
+          } else {
+            this.confirmationService.confirm({
+              key: 'dms',
+              icon: undefined,
+              header: "Pre-Approval Submit Message",
+              acceptVisible: true,
+              rejectVisible: true,
+              acceptLabel: "Continue",
+              rejectLabel: "Cancel",
+              rejectIcon: 'fa fa-times',
+              acceptIcon: 'fa fa-check',
+              message:
+                "This Pre-Approval will require FAA authorization before proceeding. You will receive a message after Pre-Approval request is reviewed.",
+              accept: () => {
+                this.saveRequest(saveData).pipe(takeUntil(this.destroying$)).subscribe();
+              },
+            });
+          }
+                      
+        });
+        } else {
+          this.saveRequest(saveData).pipe(takeUntil(this.destroying$)).subscribe();
+        }
+        break;
+      case ButtonActionsEnum.Cancel:
+        this.goToHomePage();
+        break;
+      case ButtonActionsEnum.Back:
+        this.goToActionsPage();
+        break;
+    }
+  }
+
+  setActiveIndex($event: number) {
+    this.activeIndex = $event;
+    this.setActionButtons();
+    // To make sure pre-approval request is available before using upload functionality
+    if (this.index?.props?.headers[this.activeIndex] === PreApprovalTabEnum.uploadTab 
+        && !this.index!.pr!.id ) {
+      const saveData = this.updateModel();
+      this.saveRequest(saveData).pipe(takeUntil(this.destroying$)).subscribe();
+    }
+  }
+
+  onPreApprovalChange() {
+    this.confirmationService.confirm({
+      key: 'dms',
+      icon: undefined,
+      header: "New PreApproval Message",
+      acceptVisible: true,
+      rejectVisible: true,
+      acceptLabel: "Continue",
+      rejectLabel: "Cancel",
+      rejectIcon: 'fa fa-times',
+      acceptIcon: 'fa fa-check',
+      message:
+        "This Pre-Approval was already authorized by the Managing Specialist. You are about to make an update to a field that will require a new Pre-Approval. If you continue, your current Pre-Approval will be cancelled and all information will be transferred to a new Pre-Approval that will need to be submitted again. Continue?",
+      accept: () => {
+        this.service.reinitiateNew(this.data!.id!).pipe(takeUntil(this.destroying$)).subscribe(async (requestId) => {
+          let url = `/preapproval/reinitiate/afs/group3?requestId=${(await this.cryptoService.encrypt(requestId))}`;
+          if (this.isAdmin) {
+            url += `&isAdmin=${(await this.cryptoService.encrypt(this.isAdmin))}`;
+          }
+          this.navigate(url);
+        });
+      },
+    });
+  }
+
+  onIsAutoPreApprovalChanged(event:any) {
+    this.isAutoPreApproval = event;
+  }
+
+  private navigate(url: string) {
+    const index = url.indexOf("?");
+    const navigateUrl = index === -1 ? url : url.slice(0, index);
+    const navigationExtras: NavigationExtras = {
+      queryParams: this.util.getQueryParams(url),
+    };
+    this.router.navigate([navigateUrl], navigationExtras);
+  }
+
+  private getCategoryId(designeeTypeId: number, isAdmin: boolean) {
+    if (designeeTypeId === DesigneeTypeEnum.APD && isAdmin) {
+      return CategoryEnum.AdminApd;
+    }
+    if (designeeTypeId === DesigneeTypeEnum.TCE && isAdmin) {
+      return CategoryEnum.AdminTce;
+    }
+    return null;
+  }
+
+  private saveRequest(saveData: PreApprovalRequestInfoModel): Observable<any> {
+    const saveMessage = "Pre-Approval request has been saved successfully.";
+    const updateMessage = saveData.isSubmit
+      ? "Pre-Approval request has been submitted successfully."
+      : "Pre-Approval request has been updated successfully.";
+
+    if (saveData.id === 0) {
+      return new Observable((observer) => {
+        saveData.categoryId = this.getCategoryId(
+          this.designeeTypeId,
+          this.isAdmin
+        ) as any;
+          this.service.saveAfsPreApprovalRequest(saveData).pipe(takeUntil(this.destroying$)).subscribe(
+          (result) => {
+            this.data = result;
+            this.uploadDocuments(saveMessage, saveData, observer, true);
+          },
+          () => {
+            this.toastService.add({
+              key: "dms",
+              severity: "error",
+              summary: "Error Message",
+              detail: "Request failed.",
+            });
+          }
+        );
+      });
+    }
+    return new Observable((observer) => {
+        this.service.updateAfsPreApprovalRequest(saveData)
+        .pipe(takeUntil(this.destroying$))
+        .subscribe({
+          next: (result) => {
+            this.data = result;
+            this.uploadDocuments(updateMessage, saveData, observer, false);
+          },
+          error: () => {
+            this.toastService.add({
+              key: "dms",
+              severity: "error",
+              summary: "Error Message",
+              detail: "Request failed.",
+            });
+          }
+        });
+    });
+  }
+
+  private uploadDocuments(message: string, saveData: PreApprovalRequestInfoModel, observer: Subscriber<any>, navigateHome: boolean) {
+    this.index!.uploadControl!.fileUpload(this.data!.documentReference!.referenceId!)
+      .pipe(takeUntil(this.destroying$))
+      .subscribe({
+        next: async () => {
+          this.toastService.add({ key: 'dms', severity: 'success', summary: 'Success Message', detail: message });
+          if (saveData.isSubmit) {
+            this.goToActivityPage();
+          } else if(navigateHome) {
+            const navigationExtras: NavigationExtras = {
+              queryParams: {
+                requestId: await this.cryptoService.encrypt(saveData.id),
+                isAdmin: await this.cryptoService.encrypt(this.isAdmin),
+              },
+              relativeTo: this.route,
+              replaceUrl: true, // navigate while replacing the current state. Solves the problem of having two routes in history.
+            };
+            this.router.navigate([], navigationExtras);
+          }
+          observer.next();
+          observer.complete();
+        },
+        error: () => {
+          this.toastService.add({
+            key: 'dms',
+            severity: 'error',
+            summary: 'Error Message',
+            detail: 'Upload Document failed.'
+          });
+        }
+      });
+  }
+
+  private goToActionsPage() {
+    this.location.back();
+  }
+
+  private goToActivityPage() {
+    this.router.navigate(["/activity"]);
+  }
+
+  private goToHomePage() {
+    this.router.navigate(["/home"]);
+  }
+
+  private updateModel() {
+    const model = this.index!.getModel();
+    return Object.assign({}, this.data, {
+      id: this.data!.id,
+      designeeTypeId: this.designeeTypeId,
+      ...model,
+    });
+  }
+
+  private setActionButtons() {
+    this.props.buttons.forEach((a:any) => {
+      switch (a.eventKey) {
+        case ButtonActionsEnum.Save:
+          a.isDisplay = !this.isDisabled && !this.canPrint;
+          break;
+        case ButtonActionsEnum.Print:
+          a.isDisplay = this.canPrint;
+          break;
+        case ButtonActionsEnum.Continue:
+          a.isDisplay = !this.canPrint;
+          a.displayOrder = 3;
+          break;
+        case ButtonActionsEnum.Copy:
+          a.isDisplay = this.canCopy && this.canPrint;
+          break;
+        case ButtonActionsEnum.Submit:
+          a.isDisplay = !this.isDisabled;
+          break;
+      }
+    });
+  }
+
+  private copyPreApproval() {
+    // Check for any pending post activities for designee before proceding copy show warning if any pending post activities.
+    this.service
+      .checkPendingPostActivitiesExists(this.data!.designeeInfo!.applicationId!)
+      .pipe(takeUntil(this.destroying$))
+      .subscribe(async data => {
+        const isPendingPostActivities = data;
+        if (isPendingPostActivities) {
+          this.confirmationService.confirm({
+            key: 'dms',
+            icon: undefined,
+            header: "Pending Post Activity",
+            acceptVisible: true,           
+            acceptLabel: "Ok",
+            acceptIcon: 'fa fa-check',
+            rejectVisible: false,
+            message:
+              "You must submit all overdue Post-Activity reports in order to initiate new Pre-Approval.",
+          });
+        } else {
+          const url = `/preapproval/clone/afs/group3/${(await this.cryptoService.encrypt(this.data!.id))}?isAdmin=${(await this.cryptoService.encrypt(this.isAdmin))}`;
+          this.navigate(url);
+        }
+      });
+  }
 }
+
+
+================
+
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing';
+import { IndexComponent } from './index.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActionButton, ActionButtonComponent, ButtonActionsEnum, CryptoService,
+         DesigneeTypeEnum, LookupService, PageTitleComponent, PreApprovalRequestService,
+         PreApprovalTabEnum, UploadControlComponent, 
+         UtilityService} from 'dms-web-shared';
+import { ChangeDetectorRef, DebugElement } from '@angular/core';
+import { By, Title } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MockComponent } from 'ng-mocks';
+import { TableModule } from 'primeng/table';
+import { MenubarComponent } from '../../shared/menubar.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { AuthenticationService } from '../../services/authentication.service';
+import { ConfirmationService, MessageService as ToastService } from 'primeng/api';
+import { ApdIndexComponent } from './apd-index.component';
+import { TceIndexComponent } from './tce-index.component';
+import { DadeIndexComponent } from './dade-index.component';
+import { of } from 'rxjs';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { TabsModule } from 'primeng/tabs';
+import { MessageModule } from 'primeng/message';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
+import { PanelModule } from 'primeng/panel';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SelectModule } from 'primeng/select';
+import { DialogModule } from 'primeng/dialog';
+import { DmsAutoComplete, DmsCalendar, DmsCheckBoxGroup, DmsDropdown, DmsInputText, DmsInputTextArea, DmsRadioButton } from 'dms-sdk';
+
+class Page {
+  constructor(private fixture: ComponentFixture<IndexComponent>) {
+  }
+  get component(): IndexComponent {
+    return this.fixture.componentInstance;
+  }
+  get apdComponent() {
+    return this.query('dms-pr-apd-index');
+  }
+  get tceComponent() {
+    return this.query('dms-pr-tce-index');
+  }
+  get dadeComponent() {
+    return this.query('dms-pr-dade-index');
+  }
+  get userguideComponent() {
+    return this.query('dms-user-guide');
+  }
+  get buttons() {
+    return this.query('actionbutton');
+  }
+  private query(className: string): DebugElement {
+    return this.fixture.debugElement.query(By.css(className));
+  }
+  get confimationAcceptButton() {
+    return this.fixture.debugElement.query(By.css('#id_afspreapprovalrequest_pdialog button'));
+  }
+  get apdIndexComponent() {
+    return this.query('dms-pr-apd-index').componentInstance as ApdIndexComponent;
+  }
+  get dadeIndexComponent() {
+    return this.fixture.debugElement.query(By.directive(DadeIndexComponent)).componentInstance as DadeIndexComponent;
+  }
+}
+
+class SetUp {
+  static getSpy(key: string) {
+    switch (key) {
+      case 'LookupService':
+        return jasmine.createSpyObj(key, ['populateLookupData', 'getActionButtons']);
+      case 'PreApprovalRequestService':
+        return jasmine.createSpyObj(key, ['reinitiateNew', 'saveAfsPreApprovalRequest', 'updateAfsPreApprovalRequest', 'checkPendingPostActivitiesExists', 'checkAutoPreapproval']);
+      case 'AuthenticationService':
+        return jasmine.createSpyObj(key, ['getActiveUser']);
+      case 'Router':
+        return jasmine.createSpyObj(key, ['navigate']);
+      case 'UtilityService':
+        return jasmine.createSpyObj(key, ['toBoolean', 'markFormGroupTouched', 'getQueryParams']);
+      case 'ConfirmationService':
+        return jasmine.createSpyObj(key, ['confirm']);
+      case 'ToastService':
+        return jasmine.createSpyObj(key, ['add']);
+      case 'Location':
+        return jasmine.createSpyObj(key, ['back']);
+      case 'Title':
+        return jasmine.createSpyObj(key, ['setTitle']);    
+      case 'uploadControl':
+        return jasmine.createSpyObj(key, ['fileUpload']);
+      case 'cryptoService':
+        return jasmine.createSpyObj(key, ['encrypt', 'decrypt']); 
+    }
+  }
+
+  static getActionButtons(): ActionButton[] {
+    const buttons: ActionButton[] = [];
+    buttons.push(new ActionButton('Back', 'Back','back', true, false, 1, 'fa fa-arrow-left'));
+    buttons.push(new ActionButton('Save', 'Save', 'save', true, false, 2, 'fa fa-floppy-o'));
+    buttons.push(new ActionButton('Submit', 'Submit', 'submit', true, false, 3, 'fa fa-floppy-o',null, 'submit'));
+    buttons.push(new ActionButton('Print', 'Print', 'print', true, false, 6, 'fa fa-print'));
+    buttons.push(new ActionButton('Copy', 'Copy', 'copy', true, false, 5, 'fa fa-copy'));
+    buttons.push(new ActionButton('Continue', 'Cancel', 'continue', true, false, 4, 'fa fa-floppy-o'));
+    buttons.push(new ActionButton('Cancel', 'Cancel', ButtonActionsEnum.Cancel, true, false, 7, 'fa fa-home'));
+    return buttons;
+  }
+
+  static getMockUpData() {
+    return {
+      preApprovalrequestData: 
+      {
+        tabInfo:null,
+        preApprovalRequestExperimentalCategoryTypeId:null,
+        dpreSelectedFunctionCodes:[],
+        activityLocation: 
+        {
+          airport: {id: 14135, name: "WASHINGTON DULLES INTL/ IAD", isActive: false},
+          facilityAddress: {address1: "123 Boeing Way", address2: null, addressFullName: null, addressType: null, city: "Alabama City",
+          country: {id: 184, name: "United States", isActive: false},
+          county: null, faxNumber: null,id: 795598, name: "Boeing",phoneNumber: "3432222222", pointOfContact: null,state: {id: 2, name: "Alabama", isActive: false}, zipCode: "34323"},
+          facilityAddresses: [{address1: "123 Boeing Way", address2: null, addressFullName: null, addressType: null, city: "Alabama City",
+          country: {id: 184, name: "United States", isActive: false}, county: null, faxNumber: null, id: 795598, name: "Boeing", phoneNumber: "3432222222", pointOfContact: null,state: {id: 2, name: "Alabama", isActive: false},zipCode: "34323"}],
+          facilityonRecord: true,
+          isActivityOutsideUsa: null,
+          isLineCheck: false,
+          isOutsideOfficeDistrict: null,
+          locationAddress: 
+          {
+            address1: "123 Boeing Way",
+            address2: null,
+            addressFullName: null,
+            addressType: null,
+            city: "Alabama City",
+            country: {id: 184, name: "United States", isActive: false},
+            county: null,
+            faxNumber: null,
+            id: 795598,
+            name: "Boeing",
+            phoneNumber: "3432222222",
+            pointOfContact: null,
+            state: {id: 2, name: "Alabama", isActive: false},
+            zipCode: "34323"
+          },
+          officeId: null,
+          otherAddress: 
+          {
+            address1: null,
+            address2: null,
+            addressFullName: null,
+            addressType: null,
+            city: null,
+            country: null,
+            county: null,
+            faxNumber: null,
+            id: 0,
+            name: null,
+            phoneNumber: null,
+            pointOfContact: null,
+            state: null,
+            zipCode: null
+          },
+          selectedLocationAddressId: null
+        },
+        afsPostActivity: null,
+        airCraftInformation: null,
+        airCraftOperatorInformation: null,
+        airCraftOwnerInformation: null,
+        applicantInformation: {name: null, phone: null, email: null, certificateNumber: null},
+        applicationId: 54350,
+        applicationInformation: 
+        {
+          airCarrierId: null,
+          authorizedTestOfficeId: 12,
+          certificateRatingTypeId: 2,
+          cfrSectionSchoolId: null,
+          designatorName: "BOEING US TRAINING AND FLIGHT SERVICES LLC",
+          dispatcherCertificationCourse: 'test',
+          dispatcherCertificationCourseLocation: null,
+          experienceTypeId: 2,
+          graduatedFromCurriculum: null,
+          isCfrSectionTest: null,
+          isCivilExperience: null,
+          isMilitaryExperience: null,
+          nameOfApprovedTrainingProgram: "test",
+          pilotLicenseCountry: null,
+          preApprovalCertificateRatingType: {id: 1, name: "Completion of Test or Activity", isActive: false},
+          schoolId: null,
+          selectedCertificateRatingTypeIds: []
+        },
+        appointingOfficials: [{name: "Judith Hutchens", officeId: 3, userOfficeRoleId: 12478}, {name: "Judith Hutchens", officeId: 15, userOfficeRoleId: 12499}],
+        approvedBy: null,
+        approverComment: null,
+        approverJusitification: null,
+        authFunctionCodes: [
+        {
+          makeModels: null,
+          authorizationName: null,
+          category: {code: null, id: 1, name: "Airplane", isActive: false},
+          categoryId: 1,
+          comments: null,
+          decisionId: null,
+          designeeTypeId: null,
+          functionCode: "APD-CE-ASES",
+          functionCodeDecisions: null,
+          functionCodeDescription: null,
+          functionCodeId: 0,
+          functionCodeTypeId: 1,
+          hasTypeRating: false,
+          id: 1550,
+          isAuthorized: true,
+          isAutoPostActivity: true,
+          isAutomaticPreapproval: true,
+          isDisable: false,
+          limitation: null,
+          maxSelectableTypeRatingCount: null,
+          modifiedBy: null,
+          modifiedDate: null,
+          selectedTypeRatings: null,
+          sortOrder: 3,
+          typeId: null,
+          typeRating: null,
+          typeRatings: null
+        },
+        {
+          makeModels: null,
+          addressReferenceId: null,
+          authorizationName: null,
+          category: {code: null, id: 1, name: "Airplane", isActive: false},
+          categoryId: 1,
+          comments: null,
+          decisionId: null,
+          designeeTypeId: null,
+          functionCode: "APD-FEE-TJET",
+          functionCodeDecisions: null,
+          functionCodeDescription: null,
+          functionCodeId: 0,
+          functionCodeTypeId: 1,
+          hasTypeRating: false,
+          id: 1558,
+          isAuthorized: null,
+          isAutoPostActivity: true,
+          isAutomaticPreapproval: true,
+          isDisable: false,
+          limitation: null,
+          maxSelectableTypeRatingCount: null,
+          modifiedBy: null,
+          modifiedDate: null,
+          selectedTypeRatings: null,
+          sortOrder: 11,
+          typeId: null,
+          typeRating: null,
+          typeRatings: null
+        }],
+        initialFunctionCodes: [
+          {
+            makeModels: null,
+            authorizationName: null,
+            category: {code: null, id: 1, name: "Airplane", isActive: false},
+            categoryId: 1,
+            comments: null,
+            decisionId: null,
+            designeeTypeId: null,
+            functionCode: "APD-CE-ASES",
+            functionCodeDecisions: null,
+            functionCodeDescription: null,
+            functionCodeId: 0,
+            functionCodeTypeId: 1,
+            hasTypeRating: false,
+            id: 1550,
+            isAuthorized: true,
+            isAutoPostActivity: true,
+            isAutomaticPreapproval: true,
+            isDisable: false,
+            limitation: null,
+            maxSelectableTypeRatingCount: null,
+            modifiedBy: null,
+            modifiedDate: null,
+            selectedTypeRatings: null,
+            sortOrder: 3,
+            typeId: null,
+            typeRating: null,
+            typeRatings: null
+          },
+          {
+            makeModels: null,
+            addressReferenceId: null,
+            authorizationName: null,
+            category: {code: null, id: 1, name: "Airplane", isActive: false},
+            categoryId: 1,
+            comments: null,
+            decisionId: null,
+            designeeTypeId: null,
+            functionCode: "APD-FEE-TJET",
+            functionCodeDecisions: null,
+            functionCodeDescription: null,
+            functionCodeId: 0,
+            functionCodeTypeId: 1,
+            hasTypeRating: false,
+            id: 1558,
+            isAuthorized: null,
+            isAutoPostActivity: true,
+            isAutomaticPreapproval: true,
+            isDisable: false,
+            limitation: null,
+            maxSelectableTypeRatingCount: null,
+            modifiedBy: null,
+            modifiedDate: null,
+            selectedTypeRatings: null,
+            sortOrder: 11,
+            typeId: null,
+            typeRating: null,
+            typeRatings: null
+          }],
+        cancellationTypeId: null,
+        categoryId: 1,
+        certificationBasis: null,
+        comments: "jkkj",
+        dateFieldsEditableForDmirDarf: false,
+        designeeFunctionCodes: null,
+        designeeInfo: 
+        {
+          aoId: null,
+          aoUserId: null,
+          applicationId: 54350,
+          appointmentDate: "0001-01-01T00:00:00",
+          cloaId: 64810,
+          code: "F7NX",
+          company: null,
+          currentMsId: null,
+          designatorCode: null,
+          designeeUserOfficeRoleId: 0,
+          expirationDate: "2/28/2022",
+          id: 60946,
+          isAutoPostActivity: null,
+          managingSpecialistId: 11917,
+          managingSpecialistUserId: null,
+          name: "Gamora Green",
+          number: "999997711",
+          officeId: 0,
+          officeName: null,
+          performedByName: null,
+          pointOfContact: null,
+          pointOfContactPhone: null,
+          status: "Active",
+          statusId: 1,
+          type: "APD",
+          typeId: 28
+        },
+        designeeTypeId: 28,
+        documentReference: 
+        {
+          createdBy: 0,
+          documentReferenceEnum: 5,
+          documentReferenceId: 0,
+          referenceId: 489700,
+          secondaryReferenceId: null,
+          uploadedFiles: [
+            {
+              createdBy: 0,
+              file: null,
+              documentId: 245310,
+              documentReferenceId: 257947,
+              mimeType: null,
+              fileName: "Test.docx",
+              fileSize: 12,
+            }]
+        },
+        dpreFunctionCodes: null,
+        facilityInformation: null,
+        geoAoIsApprove: null,
+        geoExpansionDecision: null,
+        geoExpansionJustification: null,
+        geoExpansionSelectedApproverId: null,
+        geoExpansionSelectedOfficeId: null,
+        geoMsIsApprove: null,
+        geoMsJustification: null,
+        geographicExpansionUserOfficeRoleIds: null,
+        id: 489700,
+        isAfsType: true,
+        isApproved: null,
+        isCancel: false,
+        isEdit: false,
+        isGeographicExpansionAvailable: false,
+        isMsDecisionPending: false,
+        isMsReviewedAutoPreApproval: false,
+        isPerformanceResultReadOnly: false,
+        isPossibleDirectObservation: null,
+        isPostActivityCurrentVersion: true,
+        isPostActivityReadOnly: false,
+        isPreApprovalMsDecisionReadOnly: false,
+        isPreApprovalReadOnly: false,
+        isSubmit: false,
+        issuedDomesticApprovalQuantity: null,
+        issuedExportApprovalQuantity: null,
+        justificationForCancellation: null,
+        managingOffice: {id: 178, name: "ALABAMA AND NORTHWEST FLORIDA FSDO SO-09 / BHM FSDO", isActive: false},
+        managingSpecialist: 11917,
+        managingSpecialistName: "Rebecca Christie",
+        modifiedPreapprovalControls: {},
+        otherPreApprovalRequest: null,
+        plannedActivity: null,
+        poApplicationInformation: null,
+        postActivity: null,
+        preApprovalDateWiseCount: [{preApprovalDate: "02/05/2021", count: 1}, {preApprovalDate: "02/10/2021", count: 1}, {preApprovalDate: "02/15/2021", count: 1}],
+        reasonForCancellationType: null,
+        requestInfo: 
+        {
+          activityStatus: {id: 1, name: "Saved", isActive: true},
+          controlNumber: "PR-999997711-2021-0011",
+          decisionBy: "",
+          decisionDate: "",
+          id: 0,
+          isApproved: false,
+          revisedDate: "",
+          submittedDate: "03/22/2021 10:00 AM"
+        },
+        selectedFunctionCodes: null,
+        selectedOtherFunctionCodes: null,
+        statusId: 1,
+        testCheckInformation: 
+        {
+          preApprovalTestInformation: {practicalOralTestId: 1, proposeStartDate: "02/22/2021", proposeEndDate: "02/22/2021", proposedStartTime: "23:00", timeZoneId: 5},
+          preApprovalApplicantInfo: null,
+          adminDpeSaeFunctionCodes: [],
+          aircraftCategoryId: null,
+          aircraftClassId: null,
+          aircraftMakeModelId: 4,
+          aircraftRegistrationNumber: '1234',
+          airlineFlightNumber: '334455',
+          gradeCertificateId: null,
+          isAircraftNotRequired: true,
+          isAircraftTestCheck: null,
+          isFlightPortionOnly: null,
+          isMultipleApplicants: false,
+          isOtherAdminActivity: false,
+          isRecommendingInstructorNotAvailable: null,
+          isTemporaryFunctionCode: true,
+          isTrainingDeviceTestCheck: true,
+          observationId: null,
+          practicalOralTestId: 1,
+          reasonforAuthorization: null,
+          recommendingInstructor: null,
+          recommendingInstructorCertificateNumber: null,
+          requestedAuthorizations: [
+            {
+            makeModels: null,
+            authorizationName: null,
+            category: {code: null, id: 1, name: "Airplane", isActive: false},
+            categoryId: 1,
+            comments: null,
+            decisionId: null,
+            designeeTypeId: null,
+            functionCode: "APD-CE-ASES",
+            functionCodeDecisions: null,
+            functionCodeDescription: null,
+            functionCodeId: 0,
+            functionCodeTypeId: 1,
+            hasTypeRating: false,
+            id: 1550,
+            isAuthorized: null,
+            isAutoPostActivity: true,
+            isAutomaticPreapproval: true,
+            isDisable: false,
+            limitation: null,
+            maxSelectableTypeRatingCount: null,
+            modifiedBy: null,
+            modifiedDate: null,
+            selectedTypeRatings: null,
+            sortOrder: 3,
+            typeId: null,
+            typeRating: null,
+            typeRatings: null},
+            {
+              makeModels:null,
+              authorizationName: null,
+              category: {code: null, id: 1, name: "Airplane", isActive: false},
+              categoryId: 1,
+              comments: null,
+              decisionId: null,
+              designeeTypeId: null,
+              functionCode: "APD-FEE-TJET",
+              functionCodeDecisions: null,
+              functionCodeDescription: null,
+              functionCodeId: 0,
+              functionCodeTypeId: 1,
+              hasTypeRating: false,
+              id: 1558,
+              isAuthorized: null,
+              isAutoPostActivity: true,
+              isAutomaticPreapproval: true,
+              isDisable: false,
+              limitation: null,
+              maxSelectableTypeRatingCount: null,
+              modifiedBy: null,
+              modifiedDate: null,
+              selectedTypeRatings: null,
+              sortOrder: 11,
+              typeId: null,
+              typeRating: null,
+              typeRatings: null
+            }
+          ],
+          selectedRequestAuthorizations: [
+            {
+              makeModels: null,
+              authorizationName: null,
+              category: {code: null, id: 1, name: "Airplane", isActive: false},
+              categoryId: 1,
+              comments: null,
+              decisionId: null,
+              designeeTypeId: 28,
+              functionCode: "APD-CE-ASES",
+              functionCodeDecisions: null,
+              functionCodeDescription: null,
+              functionCodeId: 0,
+              functionCodeTypeId: null,
+              hasTypeRating: null,
+              id: 1550,
+              isAuthorized: null,
+              isAutoPostActivity: true,
+              isAutomaticPreapproval: true,
+              isDisable: false,
+              limitation: null,
+              maxSelectableTypeRatingCount: null,
+              modifiedBy: null,
+              modifiedDate: null,
+              selectedTypeRatings: null,
+              sortOrder: null,
+              typeId: null,
+              typeRating: null,
+              typeRatings: null
+            },
+            {
+              makeModels: null,
+              authorizationName: null,
+              category: {code: null, id: 1, name: "Airplane", isActive: false},
+              categoryId: 1,
+              comments: null,
+              decisionId: null,
+              designeeTypeId: null,
+              functionCode: "APD-FEE-TJET",
+              functionCodeDecisions: null,
+              functionCodeDescription: null,
+              functionCodeId: 0,
+              functionCodeTypeId: 0,
+              hasTypeRating: false,
+              id: 1558,
+              isAuthorized: null,
+              isAutoPostActivity: true,
+              isAutomaticPreapproval: true,
+              isDisable: false,
+              limitation: null,
+              maxSelectableTypeRatingCount: null,
+              modifiedBy: null,
+              modifiedDate: null,
+              selectedTypeRatings: [],
+              sortOrder: null,
+              typeId: null,
+              typeRating: null,
+              typeRatings: null
+            }
+          ],
+          selectedTemporaryAuthorizations: [],
+          simulatorId: {id: 608, name: "(1284) AS-332-L1", isActive: false},
+          temporaryAuthorizations: [
+            {
+              makeModels: null,
+              authorizationName: null,
+              category: {code: null, id: 1, name: "Airplane", isActive: false},
+              categoryId: 1,
+              comments: null,
+              decisionId: null,
+              designeeTypeId: 28,
+              functionCode: "APD-CE-ASEL",
+              functionCodeDecisions: null,
+              functionCodeDescription: null,
+              functionCodeId: 0,
+              functionCodeTypeId: 0,
+              hasTypeRating: false,
+              id: 1548,
+              isAuthorized: null,
+              isAutoPostActivity: true,
+              isAutomaticPreapproval: true,
+              isDisable: false,
+              limitation: null,
+              maxSelectableTypeRatingCount: null,
+              modifiedBy: null,
+              modifiedDate: null,
+              selectedTypeRatings: null,
+              sortOrder: null,
+              typeId: null,
+              typeRating: null,
+              typeRatings: null
+            },
+            {
+              makeModels: null,
+              authorizationName: null,
+              category: {code: null, id: 1, name: "Airplane", isActive: false},
+              categoryId: 1,
+              comments: null,
+              decisionId: null,
+              designeeTypeId: 28,
+              functionCode: "APD-CE-AMEL",
+              functionCodeDecisions: null,
+              functionCodeDescription: null,
+              functionCodeId: 0,
+              functionCodeTypeId: 0,
+              hasTypeRating: false,
+              id: 1549,
+              isAuthorized: null,
+              isAutoPostActivity: true,
+              isAutomaticPreapproval: true,
+              isDisable: false,
+              limitation: null,
+              maxSelectableTypeRatingCount: null,
+              modifiedBy: null,
+              modifiedDate: null,
+              selectedTypeRatings: null,
+              sortOrder: null,
+              typeId: null,
+              typeRating: null,
+              typeRatings: null
+          }],
+          typeOfCheck: null
+        },
+        testInformation: {practicalOralTestId: 1, proposeStartDate: "03/22/2021", proposeEndDate: "03/22/2021", proposedStartTime: "23:00", timeZoneId: 5},
+        trackingNumber: "PR-999997711-2021-0011",
+        userId: 60946
+      },
+    };
+  }
+}
+
+const existingRoute: any = {
+  snapshot: {
+    data: {
+      preApprovalRequest: of(SetUp.getMockUpData().preApprovalrequestData),
+      designeeTypeId: DesigneeTypeEnum.APD
+    },
+    queryParams: {
+      isAdmin: false
+    }
+  }
+};
+
+describe('preapprovalrequest.afsgroup3.IndexComponent', () => {
+  let component: IndexComponent;
+  let fixture: ComponentFixture<IndexComponent>;
+  const spies: any[] = [];
+  let page: Page;
+
+  function createSpy() {
+    spies.length = 0;
+    spies.push(SetUp.getSpy('LookupService'));
+    spies.push(SetUp.getSpy('PreApprovalRequestService'));
+    spies.push(SetUp.getSpy('AuthenticationService'));
+    spies.push(SetUp.getSpy('Router'));
+    spies.push(SetUp.getSpy('UtilityService'));
+    spies.push(SetUp.getSpy('ConfirmationService'));
+    spies.push(SetUp.getSpy('ToastService'));
+    spies.push(SetUp.getSpy('Location'));
+    spies.push(SetUp.getSpy('Title'));
+    spies.push(SetUp.getSpy('uploadControl'));
+    spies.push(SetUp.getSpy('cryptoService'));
+
+    spies[0].getActionButtons.and.returnValue(SetUp.getActionButtons());
+    spies[2].getActiveUser.and.returnValue({ userId: 1 });
+    spies[1].checkAutoPreapproval.and.returnValue(of(true));
+    spies[9].fileUpload.and.returnValue(of(true));
+  }
+
+  async function createComponent() {
+    fixture = TestBed.createComponent(IndexComponent);
+    page = new Page(fixture);
+    component = page.component;
+    fixture.detectChanges();
+    await fixture.whenStable();
+  }
+
+  beforeEach(waitForAsync(() => {
+    createSpy();
+    TestBed.configureTestingModule({
+      declarations: [
+        IndexComponent,
+        MockComponent(ApdIndexComponent),
+        MockComponent(TceIndexComponent),
+        MockComponent(DadeIndexComponent),
+        MockComponent(MenubarComponent),
+        MockComponent(ActionButtonComponent),
+        MockComponent(ConfirmDialog),
+        MockComponent(PageTitleComponent),
+        MockComponent(UploadControlComponent)
+      ],
+      imports: [TabsModule, MessageModule, CheckboxModule, DatePickerModule, TableModule, PanelModule, AutoCompleteModule, RadioButtonModule, SelectModule, DialogModule, 
+                FormsModule, ReactiveFormsModule, BrowserAnimationsModule, DmsRadioButton, DmsDropdown, DmsCheckBoxGroup, DmsInputTextArea, 
+                DmsAutoComplete, DmsCalendar],
+      providers: [
+        { provide: LookupService, useValue: spies[0] },
+        { provide: PreApprovalRequestService, useValue: spies[1] },
+        { provide: AuthenticationService, useValue: spies[2] },
+        { provide: ActivatedRoute, useValue: existingRoute },
+        { provide: Router, useValue: spies[3] },
+        { provide: UtilityService, useValue: spies[4] },
+        { provide: ConfirmationService, useValue: spies[5] },
+        { provide: ToastService, useValue: spies[6] },
+        { provide: Location, useValue: spies[7] },
+        { provide: Title, useValue: spies[8] },
+        { provide: CryptoService, useValue: spies[10] },
+        ChangeDetectorRef
+      ]
+    })
+      .compileComponents();
+    createComponent();
+  }));
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should show buttons', () => {
+    fixture.detectChanges(false);
+    expect(page.buttons).not.toBeNull();
+  });
+
+  it('should show APD component', () => {
+    fixture.detectChanges(false);
+    expect(page.apdComponent).not.toBeNull();
+    expect(page.tceComponent).toBeNull();
+    expect(page.dadeComponent).toBeNull();
+  });
+
+  it('should show TCE component', () => {
+    component.designeeTypeId = DesigneeTypeEnum.TCE;
+    fixture.detectChanges(false);
+    expect(page.apdComponent).toBeNull();
+    expect(page.tceComponent).not.toBeNull();
+    expect(page.dadeComponent).toBeNull();
+  });
+
+  it('should show DADE component', () => {
+    component.designeeTypeId = DesigneeTypeEnum.DADE;
+    fixture.detectChanges(false);
+    expect(page.apdComponent).toBeNull();
+    expect(page.tceComponent).toBeNull();
+    expect(page.dadeComponent).not.toBeNull();
+  });
+  it('should call buttonClick on back button', () => {
+    fixture.detectChanges(false);
+    spyOn(component.index, 'getModel');
+    component.buttonClick(ButtonActionsEnum.Back);
+    expect(component.index.getModel).toHaveBeenCalled();
+  });
+  it('should call buttonClick on cancel button', () => {
+    fixture.detectChanges(false);
+    spyOn(component.index, 'getModel');
+    component.buttonClick(ButtonActionsEnum.Cancel);
+    expect(component.index.getModel).toHaveBeenCalled();
+  });
+  it('should call buttonClick on submit button  when isAutomaticPreapproval is true', async() => {
+    fixture.detectChanges(false);
+    fixture.whenStable();
+    component.designeeTypeId = DesigneeTypeEnum.DADE;
+    const data = SetUp.getMockUpData().preApprovalrequestData as any;
+    data.testInformation = {practicalOralTestId: 1, proposeStartDate: (new Date()).toLocaleDateString('en-US'), proposeEndDate: (new Date()).toLocaleDateString('en-US') , proposedStartTime: "23:00", timeZoneId: 5};
+    data.id = 0;
+    component.index.form =DadeIndexComponent.buildForm(data);
+    spyOn(component.index, 'getModel').and.returnValue(data);
+    spies[1].saveAfsPreApprovalRequest.and.returnValue(of(data));
+    spies[1].checkAutoPreapproval.and.returnValue(of(true));
+    page.component.data = data;
+    component.index.uploadControl = spies[9];
+    component.buttonClick(ButtonActionsEnum.Submit);
+    fixture.whenStable();
+    expect(component.index.getModel).toHaveBeenCalled();
+    expect(spies[1].saveAfsPreApprovalRequest).toHaveBeenCalled();
+    fixture.detectChanges(false);
+    fixture.whenStable();
+    expect(spies[6].add).toHaveBeenCalled();
+  });
+  it('should call buttonClick on submit button when isAutomaticPreapproval is true and designee type is APD', async () => {
+    fixture.detectChanges(false);
+    fixture.whenStable();
+    component.designeeTypeId = DesigneeTypeEnum.APD;
+    const data = SetUp.getMockUpData().preApprovalrequestData as any;
+    data.testInformation = {practicalOralTestId: 1, proposeStartDate: (new Date()).toLocaleDateString('en-US'), proposeEndDate: (new Date()).toLocaleDateString('en-US') , proposedStartTime: "23:00", timeZoneId: 5};
+    data.id = 0;
+    component.index.form =DadeIndexComponent.buildForm(data);    
+    spyOn(component.index, 'getModel').and.returnValue(data);
+    spies[1].saveAfsPreApprovalRequest.and.returnValue(of(data));
+    spies[1].checkAutoPreapproval.and.returnValue(of(true));
+    page.component.data = data;
+    component.index.uploadControl = spies[9];
+    component.buttonClick(ButtonActionsEnum.Submit);
+    fixture.whenStable();
+    expect(component.index.getModel).toHaveBeenCalled();
+    expect(spies[1].saveAfsPreApprovalRequest).toHaveBeenCalled();
+    fixture.detectChanges(false);
+    fixture.whenStable();
+    expect(spies[6].add).toHaveBeenCalled();
+  });
+
+  it('should call buttonClick on submit button when and designee type is APD and no authorizations', () => {
+    fixture.detectChanges(false);
+    component.designeeTypeId = DesigneeTypeEnum.APD;
+    const data = SetUp.getMockUpData().preApprovalrequestData as any;
+    data.id = 0;
+    data.testCheckInformation.selectedRequestAuthorizations = null;
+    component.index.form = DadeIndexComponent.buildForm(data);
+    spyOn(component.index, 'getModel').and.returnValue(data);
+    spies[1].saveAfsPreApprovalRequest.and.returnValue(of(data));
+    page.component.data = data;
+    component.index.uploadControl = spies[9];
+    component.buttonClick(ButtonActionsEnum.Submit);
+    expect(component.index.getModel).toHaveBeenCalled();
+  });
+  it('Should call print when print button is clicked', () => {
+    fixture.detectChanges(false);
+    component.index.form = DadeIndexComponent.buildForm(SetUp.getMockUpData().preApprovalrequestData as any);
+    spyOn(component.index, 'getModel');
+    spyOn(window, 'print');
+    component.buttonClick(ButtonActionsEnum.Print);
+    expect(window.print).toHaveBeenCalled();
+    expect(component.index.getModel).toHaveBeenCalled();
+  });
+  it('Should call copyPreApproval when Copy button is clicked', () => {
+    fixture.detectChanges(false);
+    component.activeIndex = 6;
+    component.index.form = DadeIndexComponent.buildForm(SetUp.getMockUpData().preApprovalrequestData as any);
+    spyOn(component.index, 'getModel');
+    page.component.data = SetUp.getMockUpData().preApprovalrequestData as any;
+    spies[1].checkPendingPostActivitiesExists.and.returnValue(of(true));
+    component.buttonClick(ButtonActionsEnum.Copy);
+    expect(component.index.getModel).toHaveBeenCalled();
+    expect(page.component.props.acceptLabel).toEqual('Yes');
+    expect(page.component.props.rejectVisible).toEqual(true);
+  });
+  it('Should call copyPreApproval when Copy button is clicked and should call router navigate', fakeAsync(() => {
+    fixture.detectChanges(false);
+    component.activeIndex = 6;
+    component.index.form = DadeIndexComponent.buildForm(SetUp.getMockUpData().preApprovalrequestData as any);
+    spyOn(component.index, 'getModel');
+    page.component.data = SetUp.getMockUpData().preApprovalrequestData as any;
+    page.component.isAdmin = false;
+    spies[1].checkPendingPostActivitiesExists.and.returnValue(of(false));
+    spies[4].getQueryParams.and.returnValue(existingRoute.snapshot.queryParams);
+    component.buttonClick(ButtonActionsEnum.Copy);
+    tick(300);
+    expect(component.index.getModel).toHaveBeenCalled();
+    expect(spies[3].navigate).toHaveBeenCalled();
+  }));
+  it('should call buttonClick on submit button  and expect form is invalid', () => {
+    fixture.detectChanges(false);
+    component.designeeTypeId = DesigneeTypeEnum.DADE;
+    const data = SetUp.getMockUpData().preApprovalrequestData as any;
+    data.testInformation = {practicalOralTestId: 1, proposeStartDate: "02/22/2021", proposeEndDate: "02/22/2021", proposedStartTime: "23:00", timeZoneId: 5};
+    component.index.form = DadeIndexComponent.buildForm(data);
+    spyOn(component.index, 'getModel').and.returnValue(data);
+    page.component.data = data;
+    component.index.uploadControl = spies[9];
+    component.buttonClick(ButtonActionsEnum.Submit);
+    expect(component.index.getModel).toHaveBeenCalled();
+    expect(page.component.index.form.invalid).toBeTrue();
+  });
+  it('should call buttonClick on submit button and expect router navigation is called', () => {
+    fixture.detectChanges(false);
+    component.designeeTypeId = DesigneeTypeEnum.DADE;
+    const data = SetUp.getMockUpData().preApprovalrequestData as any;
+    data.isApproved = true;    
+    data.testInformation = {practicalOralTestId: 1, proposeStartDate: "12/22/2021", proposeEndDate: "12/22/2021", proposedStartTime: "23:00", timeZoneId: 5};
+    component.index.form = DadeIndexComponent.buildForm(data);
+    component.index.form.get('testCheckInfoGroup').get('testInfoGroup').clearValidators();
+    component.index.form.get('testCheckInfoGroup').get('testInfoGroup').updateValueAndValidity();
+    page.component.data = data;
+    spies[1].updateAfsPreApprovalRequest.and.returnValue(of(data));
+    component.index.uploadControl = spies[9];
+    component.buttonClick(ButtonActionsEnum.Submit);
+    expect(spies[1].updateAfsPreApprovalRequest).toHaveBeenCalled();
+    expect(spies[3].navigate).toHaveBeenCalledWith(['/activity']);
+  });
+  it('should call buttonClick on Continue button', () => {
+    fixture.detectChanges(false);
+    component.designeeTypeId = DesigneeTypeEnum.DADE;
+    const data = SetUp.getMockUpData().preApprovalrequestData as any;
+    component.activeIndex = 3;
+    component.index.form = DadeIndexComponent.buildForm(data);
+    component.index.props = {
+      title: 'Pre Approval Request for DADE',
+      headers: [
+        PreApprovalTabEnum.preApprovalTab,
+        PreApprovalTabEnum.testTab,
+        PreApprovalTabEnum.locationTab,
+        PreApprovalTabEnum.applicantTab,
+        PreApprovalTabEnum.uploadTab,
+        PreApprovalTabEnum.summaryTab
+      ],
+      uploadRefMessage: []
+    };
+    component.index.pr.id = 0;
+    spyOn(component.index, 'getModel').and.returnValue(data);
+    spyOn(component, 'setActiveIndex').and.callThrough();
+    spies[1].updateAfsPreApprovalRequest.and.returnValue(of(data));
+    page.component.data = data;
+    component.index.uploadControl = spies[9];
+    component.buttonClick(ButtonActionsEnum.Continue);
+    expect(component.index.getModel).toHaveBeenCalled();
+    expect(spies[1].updateAfsPreApprovalRequest).toHaveBeenCalled();
+    expect(component.setActiveIndex).toHaveBeenCalled();
+  });
+  it('Should call onPreApprovalChange function', fakeAsync(() => {
+    fixture.detectChanges(false);
+    component.designeeTypeId = DesigneeTypeEnum.DADE;
+    const data = SetUp.getMockUpData().preApprovalrequestData as any;
+    component.index.form = DadeIndexComponent.buildForm(data);
+    page.component.data = data;
+    spyOn(component, 'onPreApprovalChange').and.callThrough();
+    fixture.detectChanges();
+    component.onPreApprovalChange();
+    expect(page.component.onPreApprovalChange).toHaveBeenCalled();
+    expect(page.component.props.acceptLabel).toEqual('Yes');
+    expect(page.component.props.rejectLabel).toEqual('No');
+  }));
+  it('Should call setConfig Function when getConfig is emitted from Dade Index component', () => {
+    fixture.detectChanges(false);
+    component.designeeTypeId = DesigneeTypeEnum.APD;
+    const data = SetUp.getMockUpData().preApprovalrequestData as any;
+    component.index.form = DadeIndexComponent.buildForm(data);
+    spyOn(component.index, 'getModel').and.returnValue(data);
+    page.component.data = data;
+
+    spyOn(page.component, 'setConfig').and.callThrough();
+    const model =  { title: 'Pre Approval Request', tabCount: 0};
+    page.apdIndexComponent.getConfig.emit(model);
+    expect(page.component.setConfig).toHaveBeenCalled();
+  });
+  it('Should call onIsAutoPreApprovalChanged Function when isAutoPreApprovalChanged is emitted from Dade Index component', () => {
+    fixture.detectChanges(false);
+    component.designeeTypeId = DesigneeTypeEnum.APD;
+    const data = SetUp.getMockUpData().preApprovalrequestData as any;
+    component.index.form = ApdIndexComponent.buildForm(data, false);
+    spyOn(component.index, 'getModel').and.returnValue(data);
+    page.component.data = data;
+
+    spyOn(page.component, 'onIsAutoPreApprovalChanged').and.callThrough();
+    page.apdIndexComponent.isAutoPreApprovalChanged.emit(true);
+    expect(page.component.onIsAutoPreApprovalChanged).toHaveBeenCalled();
+  });
+});
+
+
+==========
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ActivityPaperWork, AfsGroupsPostActivityViewModel, PreApprovalRequest, PreApprovalRequestInfoModel, RequestListModel } from '../models/exportparams.model';
+import { HttpTokenService } from '../services/httptoken.service';
+
+@Injectable()
+export class PreApprovalRequestService {
+    constructor(private httpservice: HttpTokenService) { }
+    // This is The Read only page one so keeping it as it is
+    // TODO - It will be renamed when we visit read only page
+    getPreApprovalInformation(preApprovalRequestId: number): Observable<PreApprovalRequest> {
+        return this.httpservice.get('PreApproval/GetPreApprovalInformation/' + preApprovalRequestId);
+    }
+    getNewPreApprovalRequest(applicationId: number): Observable<PreApprovalRequestInfoModel> {
+        return this.httpservice.get('PreApprovalRequest/new/' + applicationId);
+    }
+    getPreApprovalRequest(preApprovalRequestId: number, loadPreApprovalModifiedData: boolean = false, postActivityId: number = 0): Observable<PreApprovalRequestInfoModel> {
+        return this.httpservice.get('PreApprovalRequest/' + preApprovalRequestId + '/' + loadPreApprovalModifiedData + '/' + postActivityId);
+    }
+    getPostActivityRequest(postActivityId: number = 0): Observable<AfsGroupsPostActivityViewModel> {
+        return this.httpservice.get('PreApprovalRequest/' + postActivityId);
+    }
+    saveOtherPreApprovalRequest(preApprovalRequest: PreApprovalRequestInfoModel): Observable<PreApprovalRequestInfoModel> {
+        return this.httpservice.post('PreApprovalRequest/', preApprovalRequest);
+    }
+    updateOtherPreApprovalRequest(id: number, preApprovalRequest: PreApprovalRequestInfoModel): Observable<PreApprovalRequestInfoModel> {
+        return this.httpservice.put('PreApprovalRequest/' + id, preApprovalRequest);
+    }
+    saveAfsPreApprovalRequest(preApprovalRequest: PreApprovalRequestInfoModel): Observable<PreApprovalRequestInfoModel> {
+        return this.httpservice.post('PreApprovalRequest/afs', preApprovalRequest);
+    }
+    saveAovPreApprovalRequest(preApprovalRequest: PreApprovalRequestInfoModel): Observable<PreApprovalRequestInfoModel> {
+        return this.httpservice.post('PreApprovalRequest/aov', preApprovalRequest);
+    }
+    submitPostActivity(id: number, preApprovalRequest: PreApprovalRequestInfoModel): Observable<PreApprovalRequestInfoModel> {
+        return this.httpservice.put('PreApprovalRequest/PostActivity/submit/' + id, preApprovalRequest);
+    }
+    updateAfsPreApprovalRequest(preApprovalRequest: PreApprovalRequestInfoModel): Observable<PreApprovalRequestInfoModel> {
+        return this.httpservice.put('PreApprovalRequest/afs/' + preApprovalRequest.id, preApprovalRequest);
+    }
+    updateAovPreApprovalRequest(preApprovalRequest: PreApprovalRequestInfoModel): Observable<PreApprovalRequestInfoModel> {
+        return this.httpservice.put('PreApprovalRequest/aov/' + preApprovalRequest.id, preApprovalRequest);
+    }
+    reinitiateNew(preApprovalRequestId: number): Observable<number> {
+        return this.httpservice.put('PreApprovalRequest/reinitiate/new/' + preApprovalRequestId, '');
+    }
+    copyPreApprovalRequest(preApprovalRequestId: number): Observable<PreApprovalRequestInfoModel> {
+        return this.httpservice.get('PreApprovalRequest/copy/' + preApprovalRequestId);
+    }
+    checkPendingPostActivitiesExists(applicationId: number) {
+        const url = 'PreApprovalRequest/PostActivities/Pending/' + applicationId;
+        return this.httpservice.get(url);
+    }
+    getList(cloaid: number, oneYearData: boolean): Observable<any> {
+        return this.httpservice.get(`PreApprovalRequest/list/${cloaid}/${oneYearData}` );
+    }
+    cancel(model: ActivityPaperWork) {
+        return this.httpservice.post('PreApprovalRequest/Cancel/', model);
+    }
+    getIacraData(applicationId: number, ftn: string, postActivityId: number, userId: number): Observable<any> {
+       return this.httpservice.get('PreApprovalRequest/Iacra/' + applicationId + '/' + ftn + '/' + postActivityId + '/' + userId);
+    }
+    getPostActivity(postActivityId: number, createDocumentVersion: boolean = false) {
+      return this.httpservice.get(`PreApprovalRequest/postactivity/${postActivityId}/${createDocumentVersion}`);
+    }
+    savePostActivity(data: AfsGroupsPostActivityViewModel) {
+      return this.httpservice.put(`PreApprovalRequest/PostActivity/afs/submit/${data.id}`, data);
+    }
+    checkAutoPreapproval(preApprovalRequest: PreApprovalRequestInfoModel): Observable<any> {
+        return this.httpservice.post('PreApprovalRequest/checkAutoPreapproval', preApprovalRequest);
+    }
+    saveAovPostActivity(data: AfsGroupsPostActivityViewModel) {
+        return this.httpservice.put(`PreApprovalRequest/PostActivity/aov/submit/${data.id}`, data);
+    }
+    /**
+   * 
+   * @param model Get the list of Pre-Approvals with filters and page.
+   * @returns 
+   */
+    getPreApprovalList(model: RequestListModel): Observable<any>  {
+        return this.httpservice.post(`preApprovalRequest/list`, model);
+    }
+
+    /**
+     * 
+     * @param model Get the list of Post-Activites with filters and page.
+     * @returns 
+     */
+    getPostActivityList(model: RequestListModel): Observable<any>  {
+        return this.httpservice.post(`preApprovalRequest/postactivity/list`, model);
+    }
+
+}
+
