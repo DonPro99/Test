@@ -1,14 +1,290 @@
-protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
-{
-    var cloaAutoPreApproval = _context.PreApprovalRequests
-        .Where(par => par.Id == model.Id)
-        .Select(par => par.Cloa.IsAutoPreApproval)
-        .FirstOrDefault();
+dms_8.5\dms\dms_ui\dms-web-shared\src\app\modules\preapprovalrequestshared\postactivity\afsgroups\adminpe-index.component.ts
+import { Component, OnInit, Input } from '@angular/core';
+import { AbstractControl, FormGroup } from '@angular/forms';
+import { AfsGroup2PostActivityBaseComponent } from './afs-group2-post-activity-base-component';
+import { LookupService } from '../../../../services/lookup.service';
+import {
+  AfsGroupsPostActivityViewModel,
+  DesigneeTypeEnum,
+  PreApprovalTestCheckInformation,
+} from '../../../../models/exportparams.model';
+import { Group2PostActivityComponent } from '../group2postactivity.component';
+import { ActivatedRoute } from '@angular/router';
+import { DmsTestCheckInformationComponent } from '../../afs/dms-test-check-information.component';
+import { DmsFunctionCodeSelectionComponent } from '../../../functionocode/functioncodeselection/dms-functioncode-selection.component';
+import { CryptoService } from '../../../../services/crypto.service';
 
-    if (cloaAutoPreApproval)
-    {
-        return true;
+@Component({
+    selector: 'po-adminpe-index',
+    templateUrl: './adminpe-index.component.html',
+    styleUrls: ['adminpe-index.component.scss'],
+    standalone: false
+})
+export class AdminpeIndexComponent
+  extends AfsGroup2PostActivityBaseComponent
+  implements OnInit
+{
+  @Input() isExternal: boolean = false;
+  constructor(
+    private route: ActivatedRoute,
+    public override lookupService: LookupService,
+    public override cryptoService: CryptoService
+  ) {
+    super(lookupService, cryptoService);
+    this.designeeTypeId = DesigneeTypeEnum.ADMINPE;
+  }
+
+  isRedirectionFromCorrectiveAction = false;
+
+  public static override buildForm(
+    model: AfsGroupsPostActivityViewModel | undefined | null,
+    options: any
+  ): FormGroup | null {
+    if(!model) return null;
+    const form = AfsGroup2PostActivityBaseComponent.buildForm(model, options);
+
+    if(!form) return null;
+
+    const isTempCertificateIssue = [26, 30].includes(
+      model?.afsPostActivityGroup2?.postActivityResultTypeId??0
+    );
+    const isLetterOfDiscontinue = [28, 32].includes(
+      model.afsPostActivityGroup2?.postActivityResultTypeId??0
+    );
+
+    const functionCodeSelection =
+      DmsTestCheckInformationComponent.selectAuthorizations(
+        model.preApprovalRequest?.testCheckInformation as PreApprovalTestCheckInformation,
+        DesigneeTypeEnum.DPE,
+        model.preApprovalRequest?.categoryId ?? 0
+      );
+
+    const fg = DmsFunctionCodeSelectionComponent.buildForm(
+      functionCodeSelection,
+      true,
+      options.isDisabled,
+      DesigneeTypeEnum.DPE
+    );
+
+    const functionCode = fg.value ? fg.value.functionCode : null;
+
+    const isSmtfSelected = Group2PostActivityComponent.isSmtfSelection(
+      model.preApprovalRequest?.testCheckInformation as PreApprovalTestCheckInformation,
+      functionCode
+    );
+
+    form.addControl(
+      'afsGroup2PostActivityFormGroup',
+      Group2PostActivityComponent.buildForm(
+        model.afsPostActivityGroup2,
+        model.preApprovalRequest?.testCheckInformation?.practicalOralTestId ?? 0,
+        false,
+        false,
+        true,
+        options.isDisabled,
+        false,
+        false, // isProficiencyCheck
+        isTempCertificateIssue,
+        model.preApprovalRequest?.testCheckInformation?.isMultipleApplicants as boolean,
+        true,
+        isLetterOfDiscontinue,
+        isSmtfSelected
+      )
+    );
+
+    return form;
+  }
+
+  public static override buildModel(
+    form: FormGroup | AbstractControl | undefined | null,
+    model: AfsGroupsPostActivityViewModel | undefined | null
+  ) {
+    if (!form || !model) return;
+    AfsGroup2PostActivityBaseComponent.buildModel(form, model);
+    if(model.preApprovalRequest?.testInformation) {
+        model.preApprovalRequest.testInformation.practicalOralTestId = model.preApprovalRequest.testCheckInformation?.practicalOralTestId;
+    }
+    // model.preApprovalRequest.testInformation.practicalOralTestId =
+    //   model.preApprovalRequest.testCheckInformation.practicalOralTestId =
+        Group2PostActivityComponent.buildModel(
+          form.get('afsGroup2PostActivityFormGroup') as FormGroup,
+          model.afsPostActivityGroup2,
+          false,
+          false, false, false, false
+        );
+  }
+
+  getModel() {
+    if(this.form) AdminpeIndexComponent.buildModel(this.form, this.data);
+    return this.data;
+  }
+
+  ngOnInit() {
+    super.initialize();
+     this.designeeTypeId = this.data?.preApprovalRequest?.designeeTypeId ?? DesigneeTypeEnum.ADMINPE;
+    this.isRedirectionFromCorrectiveAction =
+      this.route.snapshot.params['cAction'] === 'true';
+    this.form = AdminpeIndexComponent.buildForm(this.data, {
+      designeeTypeId: this.designeeTypeId,
+      isDisabled: this.isDisabled,
+      categoryId: this.categoryId,
+      isEditPostActivity: this.isEditPostActivity,
+      isAttachmentNotRequired: true,
+      isAdmin: this.isAdministrativePreapproval
+    });
+  }
+}
+
+
+===========
+\dms\dms_ui\dms_web_designee\src\app\preapprovalrequest\afsgroups\adminpe-index.component.ts
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { SelectItem } from 'primeng/api';
+import {
+  ActivityRequestStatusEnum,
+  DesigneeTypeEnum,
+  DmsApplicationInformationComponent,
+  DmsTestCheckInformationComponent,
+  LookupService,
+  PreApprovalRequestInfoModel,
+  PreApprovalTabEnum,
+} from 'dms-web-shared';
+import { PreApprovalBaseComponent } from './pre-approval-base.component';
+
+@Component({
+    selector: 'dms-pr-adminpe-index',
+    templateUrl: './adminpe-index.component.html',
+    standalone: false
+})
+export class AdminpeIndexComponent
+  extends PreApprovalBaseComponent
+  implements OnInit {
+  activityRequestStatusEnum = ActivityRequestStatusEnum;
+  practicalTypes: SelectItem[] = [];
+
+  constructor(public override lookupService: LookupService) {
+    super(lookupService);
+    this.props = {
+      title: 'Administrative Activity Pre-Approval Request',
+      userguideComponent: 'PreAppvAdmin',
+      headers: [
+        PreApprovalTabEnum.preApprovalTab,
+        PreApprovalTabEnum.testCheckTab,
+        PreApprovalTabEnum.locationTab,
+        PreApprovalTabEnum.applicantTab,
+        PreApprovalTabEnum.uploadTab,
+        PreApprovalTabEnum.summaryTab,
+      ],
+      uploadRefMessage: [],
+      formGroupMap: {
+        1: ['testCheckInformation'],
+        2: ['activityLocation'],
+        3: ['applicationInformation'],
+        4: ['comments', 'uploadId'],
+      },
+    };
+    this.practicalTypes = [];
+  }
+
+  public static override buildForm(
+    model: PreApprovalRequestInfoModel,
+    options: any
+  ): FormGroup {
+    options.categoryId = 0;
+    const form = PreApprovalBaseComponent.buildForm(model, options);
+    // Using the application's actual designee type (e.g. Admin-PE-GEN, id 31) rather than hardcoding Admin-PE, 
+    // so this shared component correctly reflects which designee type is being processed.
+    const designeeTypeId = model.designeeInfo?.typeId ?? DesigneeTypeEnum.ADMINPE;
+
+    form.addControl(
+      'testCheckInformation',
+      DmsTestCheckInformationComponent.buildForm(
+        model.testCheckInformation!,
+        model.testInformation!,
+        model.applicantInformation!,
+        {
+          designeeTypeId,
+          categoryId: options.categoryId,
+          isDisabled: options.isDisabled,
+        }
+      )
+    );
+
+    form.addControl(
+      'applicationInformation',
+      DmsApplicationInformationComponent.buildForm(
+        model.applicationInformation!,
+        {
+          designeeTypeId,
+          categoryId: options.categoryId,
+          isDisabled: options.isDisabled,
+        }
+      )
+    );
+
+    return form;
+  }
+
+  public static override buildModel(
+    form: FormGroup,
+    model: PreApprovalRequestInfoModel
+  ) {
+    PreApprovalBaseComponent.buildModel(form, model);
+    DmsApplicationInformationComponent.buildModel(
+      form.get('applicationInformation') as FormGroup,
+      model.applicationInformation!
+    );
+    DmsTestCheckInformationComponent.buildModel(
+      form.get('testCheckInformation') as FormGroup,
+      model.testCheckInformation!,
+      model.testInformation!,
+      model.applicantInformation!,
+      model.designeeTypeId!,
+      model.categoryId || 0
+    );
+  }
+
+  async ngOnInit() {
+    await super.setBaseConfig(this.pr!);
+    this.props.tabCount = this.props.headers.length - 1;
+    this.getConfig.emit(this.props);
+
+    this.form = AdminpeIndexComponent.buildForm(this.pr!, {
+      isDisabled: this.isDisabled,
+    });
+  }
+
+  override onTabChange($event: any) {
+    AdminpeIndexComponent.buildModel(this.form!, this.pr!);
+    super.onTabChange($event);
+  }
+
+    getModel() {
+    AdminpeIndexComponent.buildModel(this.form!, this.pr!);
+    return this.pr;
+  }
+
+  get isAutoPreApproval() {
+    if (this.pr!.testCheckInformation?.isOtherAdminActivity) {
+      return true;
     }
 
-    return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
+    const selectedAuthorizations = this.pr!.testCheckInformation?.selectedRequestAuthorizations ?? [];
+    const selectedFcs = selectedAuthorizations.map((item) => item.id);
+    const requestedAuthorizations = this.pr!.testCheckInformation?.requestedAuthorizations ?? [];
+    return (
+      !this.pr!.activityLocation?.isOutsideOfficeDistrict &&
+      super.canAutoApprove(
+        selectedFcs,
+        requestedAuthorizations
+      )
+    );
+  }
 }
+
+
+============
+
+
+
