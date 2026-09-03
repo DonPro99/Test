@@ -1,86 +1,305 @@
-protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
+
+using System;
+using System.Threading.Tasks;
+using Dms.Core.Utils;
+using Dms.Services.Interface;
+using Dms.Services.Interface.Activity;
+using Dms.Services.Interface.Shared;
+using Dms.Services.ViewModel;
+using Dms.Services.ViewModel.Activity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using DesigneeTypeEnum = Dms.Core.Utils.DesigneeTypeEnum;
+
+namespace Dms.Api.Designee.Controllers
 {
-    var cloaAutoPreApproval = _context.PreApprovalRequests
-        .Where(par => par.Id == model.Id)
-        .Select(par => par.Cloa.IsAutoPreApproval)
-        .FirstOrDefault();
-
-    if (cloaAutoPreApproval)
+    [Produces("application/json")]
+    [Route("api/PreApprovalRequest")]
+    [Authorize]
+    public class PreApprovalRequestController(ISharedService sharedService, Func<DesigneeTypeEnum, IPreApprovalRequestService> preApprovalRequestService, IIacraService iacraService) : Controller
     {
-        return true;
-    }
+        private readonly IIacraService _iacraService = iacraService;
+        private readonly Func<DesigneeTypeEnum, IPreApprovalRequestService> _preApprovalRequestServiceDelegate = preApprovalRequestService;
+        private readonly ISharedService _sharedService = sharedService;
 
-    if (model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault())
-    {
-        return false;
-    }
+        [HttpGet()]
+        [Route("{id}/{loadPreapprovalModifiedData:bool?}/{postActivityId:int?}")]
+        public IActionResult Get(int id, bool loadPreapprovalModifiedData = false, int postActivityId = 0)
+        {
+            if (!ModelState.IsValid)
+                return new BadRequestResult();
+            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeIdByPreApprovalRequestId(id);
+            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+            return new OkObjectResult(_preApprovalRequestService.Get(id, loadPreapprovalModifiedData, postActivityId));
+        }
 
-    var preApprovalRequest = _context.PreApprovalRequests
-        .Include(par => par.PreApprovalRequestFunctionCodes)
-        .ThenInclude(pt => pt.PreApprovalRequestFunctionCodeTypeRatings)
-        .Include(par => par.PreApprovalRequestFunctionCodes)
-        .ThenInclude(pt => pt.PreApprovalRequestFunctionCodeMakeModels)
-        .Include(par => par.PreApprovalRequestFunctionCodes)
-        .ThenInclude(fc => fc.FunctionCode)
-        .Where(par => par.Id == model.Id).FirstOrDefault();
+        [HttpGet()]
+        [Route("postactivity/{postActivityId:int}/{createDocumentVersion:bool}")]
+        public IActionResult GetPostActivity(int postActivityId, bool createDocumentVersion = false)
+        {
+            if (!ModelState.IsValid)
+                return new BadRequestResult();
+            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeIdByPostActivityId(postActivityId);
+            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+            return new OkObjectResult(_preApprovalRequestService.Get(postActivityId, createDocumentVersion));
+        }
 
-    if (preApprovalRequest == null) return false;
+        [HttpGet()]
+        [Route("new/{applicationId}")]
+        public IActionResult New(int applicationId)
+        {
+            if (!ModelState.IsValid)
+                return new BadRequestResult();
+            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.Get(applicationId).TypeId;
+            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+            return new OkObjectResult(_preApprovalRequestService.GetNew(applicationId));
+        }
 
-    var cloaFunctionCodes = _context.CloaFunctionCodes
-        .Where(c => c.Cloa.ApplicationId == preApprovalRequest.ApplicationId && c.Cloa.CloaStatusId == (int)CloaStatusEnum.Active)
-        .Include(c => c.FunctionCode)
-        .Include(c => c.CloaFunctionCodeTypeRatings)
-        .Include(c => c.CloaFunctionCodeMakeModels)
-        .ToArray();
+        [HttpPost]
+        public IActionResult Post([FromBody]PreApprovalRequestViewModel model)
+        {
 
-    // Flatten CLOA function codes the same way base does, keeping IsAutoPreApproval per entry
-    var flatCloaFunctionCodes = cloaFunctionCodes
-        .SelectMany(c => c.FunctionCode.HasTypeRating
-            ? c.CloaFunctionCodeTypeRatings != null && c.CloaFunctionCodeTypeRatings.Any()
-                ? c.CloaFunctionCodeTypeRatings.Select(t => new FunctionCodeViewModel
-                {
-                    FunctionCodeId = c.FunctionCodeId,
-                    HasTypeRating = c.FunctionCode.HasTypeRating,
-                    SelectedTypeRatings = new List<int> { t.TypeRatingId },
-                    IsAutomaticPreapproval = t.IsAutoPreApproval
-                }).ToArray()
-                : new List<FunctionCodeViewModel>().ToArray()
-            : new List<FunctionCodeViewModel>
+            if (ModelState.IsValid && model != null)
             {
-                new FunctionCodeViewModel
-                {
-                    FunctionCodeId = c.FunctionCodeId,
-                    HasTypeRating = false,
-                    IsAutomaticPreapproval = c.IsAutoPreApproval
-                }
-            }.ToArray()
-        ).ToArray();
-
-    var preApprovalFunctionCodes = preApprovalRequest.PreApprovalRequestFunctionCodes
-        .SelectMany(p => p.FunctionCode.HasTypeRating
-            ? p.PreApprovalRequestFunctionCodeTypeRatings != null && p.PreApprovalRequestFunctionCodeTypeRatings.Any()
-                ? p.PreApprovalRequestFunctionCodeTypeRatings.Select(pt => new FunctionCodeViewModel
-                {
-                    FunctionCodeId = p.FunctionCodeId,
-                    HasTypeRating = p.FunctionCode.HasTypeRating,
-                    SelectedTypeRatings = new List<int> { pt.TypeRatingId }
-                }).ToArray()
-                : new List<FunctionCodeViewModel>().ToArray()
-            : new List<FunctionCodeViewModel>
+                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
+                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+                return new OkObjectResult(_preApprovalRequestService.Save(model));
+            }
+            return new BadRequestObjectResult(model);
+        }
+        [HttpPost]
+        [Route("afs")]
+        public IActionResult AfsPost([FromBody]PreApprovalRequestViewModel model)
+        {
+            // Custom logic for AFS post, e.g., add a log or validation
+            if (ModelState.IsValid && model != null)
             {
-                new FunctionCodeViewModel
+
+                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
+                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+                return new OkObjectResult(_preApprovalRequestService.Save(model));
+
+            }
+            return new BadRequestObjectResult(model);
+        }
+        [HttpPost]
+        [Route("aov")]
+        public IActionResult AovPost([FromBody]PreApprovalRequestViewModel model)
+        {
+
+            if (ModelState.IsValid && model != null)
+            {
+
+                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
+                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+                return new OkObjectResult(_preApprovalRequestService.Save(model));
+
+            }
+            return new BadRequestObjectResult(model);
+        }
+                
+        [HttpPost]
+        [Route("checkAutoPreapproval")]
+        public IActionResult CheckAutoPreapproval([FromBody] PreApprovalRequestViewModel model)
+        {
+            if (ModelState.IsValid && model != null)
+            {
+
+                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
+                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+                return new OkObjectResult(_preApprovalRequestService.CheckIsAutoPreApproval(model));
+            }
+            return new BadRequestObjectResult(model);
+        }
+
+
+        [HttpPut()]
+        [Route("afs/{id}")]
+        public IActionResult afsPut(int id, [FromBody]PreApprovalRequestViewModel model)
+        {
+
+
+            if (ModelState.IsValid && model != null)
+            {
+                model.Id = id;
+                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
+                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+                return new OkObjectResult(_preApprovalRequestService.Save(model));
+            }
+            return new BadRequestObjectResult(model);
+        }
+
+        [HttpPut()]
+        [Route("aov/{id}")]
+        public IActionResult aovPut(int id, [FromBody]PreApprovalRequestViewModel model)
+        {
+
+
+            if (ModelState.IsValid && model != null)
+            {
+                model.Id = id;
+                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
+                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+                return new OkObjectResult(_preApprovalRequestService.Save(model));
+            }
+            return new BadRequestObjectResult(model);
+        }
+
+        [HttpPut()]
+        [Route("reinitiate/new/{id}")]
+        public IActionResult ReInitiate(int id)
+        {
+            if (!ModelState.IsValid)
+                return new BadRequestResult();
+            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeIdByPreApprovalRequestId(id);
+           var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+            return new OkObjectResult(_preApprovalRequestService.ReInitiate(id));
+        }
+
+        [HttpGet()]
+        [Route("copy/{id}")]
+        public IActionResult Copy(int id)
+        {
+            if (!ModelState.IsValid)
+                return new BadRequestResult();
+            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeIdByPreApprovalRequestId(id);
+            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+            return new OkObjectResult(_preApprovalRequestService.Copy(id));
+        }
+
+        [HttpGet("PostActivities/Pending/{applicationId}")]
+        public IActionResult CheckPendingPostActivitiesExists(int applicationId)
+        {
+            if (!ModelState.IsValid)
+                return new BadRequestResult();
+            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.Get(applicationId).TypeId;
+            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+            return new OkObjectResult(_preApprovalRequestService.CheckPendingPostActivitiesExists(applicationId));
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Put(int id, [FromBody]PreApprovalRequestViewModel model)
+        {
+
+            if (ModelState.IsValid && model != null)
+            {
+                model.Id = id;
+                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
+                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+                return new OkObjectResult(_preApprovalRequestService.Save(model));
+            }
+            return new BadRequestObjectResult(model);
+        }
+
+        [HttpPut("PostActivity/submit/{id}")]
+        public IActionResult PostActivityPut(int id, [FromBody]PreApprovalRequestViewModel model)
+        {
+
+            if (ModelState.IsValid && model != null)
+            {
+                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeTypeId;
+                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+                if (model.IsAfsType)
                 {
-                    FunctionCodeId = p.FunctionCodeId,
-                    HasTypeRating = false
+                    model.AfsPostActivity.Id = id;
                 }
-            }.ToArray()
-        ).ToArray();
+                else
+                {
+                    model.PostActivity.Id = id;
+                }
 
-    // Every submitted function code must positively match a CLOA function code flagged auto-preapproval
-    bool allSubmittedAreAutoApproved = preApprovalFunctionCodes.All(p =>
-        flatCloaFunctionCodes.Any(c => c.FunctionCodeId == p.FunctionCodeId
-            && c.IsAutomaticPreapproval.GetValueOrDefault()
-            && (!c.HasTypeRating || !p.HasTypeRating || p.SelectedTypeRatings.All(pt => c.SelectedTypeRatings.Contains(pt)))));
+                return new OkObjectResult(_preApprovalRequestService.SavePostActivityEvaluation(model));
+            }
+            return new BadRequestObjectResult(model);
+        }
 
-    return allSubmittedAreAutoApproved;
+        [HttpPut("PostActivity/afs/submit/{id}")]
+        public IActionResult PostActivityAfsPut(int id, [FromBody]AfsGroupsPostActivityViewModel model)
+        {
+            if (!ModelState.IsValid || model == null)
+                return new BadRequestObjectResult(model);
+
+            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeInfo.TypeId;
+            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+            var latestPostActivity = _preApprovalRequestService.GetLatestPostActivityVersion(model.PreApprovalRequestId);
+            if (latestPostActivity.postActivityId != id || (latestPostActivity.statusId != model.StatusId && latestPostActivity.statusId == (int)PreApprovalRequestStatusEnum.Completed))
+            {
+                ModelState.AddModelError("Id", "Please reload the page with latest postactivity and then save/submit.");
+                model.Id = latestPostActivity.postActivityId;
+                model.StatusId = latestPostActivity.statusId;
+                return new BadRequestObjectResult(model);
+            }
+
+            return new OkObjectResult(_preApprovalRequestService.SaveAfsPostActivity(model));
+        }
+
+        [HttpPut("PostActivity/aov/submit/{id}")]
+        public IActionResult AovPostActivityPut(int id, [FromBody]AfsGroupsPostActivityViewModel model)
+        {
+            if (!ModelState.IsValid || model == null)
+                return new BadRequestObjectResult(model);
+
+            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)model.DesigneeInfo.TypeId;
+            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+            var latestPostActivity = _preApprovalRequestService.GetLatestPostActivityVersion(model.PreApprovalRequestId);
+            if (latestPostActivity.postActivityId != id || (latestPostActivity.statusId != model.StatusId && latestPostActivity.statusId == (int)PreApprovalRequestStatusEnum.Completed))
+            {
+                ModelState.AddModelError("Id", "Please reload the page with latest postactivity and then save/submit.");
+                model.Id = latestPostActivity.postActivityId;
+                model.StatusId = latestPostActivity.statusId;
+                return new BadRequestObjectResult(model);
+            }
+            return new OkObjectResult(_preApprovalRequestService.SaveAfsPostActivity(model));
+        }
+
+        [HttpPost("Cancel")]
+        public IActionResult Cancel([FromBody] ActivityPaperWorkViewModel model)
+        {
+            if (ModelState.IsValid && model.Id != 0)
+            {
+                DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeIdByPreApprovalRequestId(model.Id);
+                var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+                return new OkObjectResult(_preApprovalRequestService.Cancel(model));
+            }
+            return new BadRequestObjectResult(model.Id);
+        }
+
+        [HttpGet()]
+        [Route("Iacra/{applicationId}/{ftn}/{postActivityId}/{userId}")]
+        public async Task<IActionResult> GetIacraData(int applicationId, string ftn, int postActivityId, int userId)
+        {
+            if (!ModelState.IsValid)
+                return new BadRequestResult();
+            return Ok(await _iacraService.Get(applicationId, ftn, postActivityId, userId));
+        }
+
+        [HttpPost("list")]
+        public IActionResult GetPreApprovalList([FromBody]RequestListModel model)
+        {
+            if (!ModelState.IsValid || model == null)
+            {
+                return new BadRequestObjectResult(model);
+            }
+            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeId(model.ApplicationId);
+            model.DesigneeType = designeeType;
+            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+            var result = _preApprovalRequestService.GetPreApprovalList(model);
+            return new OkObjectResult(result);
+        }
+
+        [HttpPost("postactivity/list")]
+        public IActionResult GetPostActivityList([FromBody] RequestListModel model)
+        {
+            if (!ModelState.IsValid || model == null)
+            {
+                return new BadRequestObjectResult(model);
+            }
+            DesigneeTypeEnum designeeType = (DesigneeTypeEnum)_sharedService.GetDesigneeTypeId(model.ApplicationId);
+            model.DesigneeType = designeeType;
+            var _preApprovalRequestService = _preApprovalRequestServiceDelegate(designeeType);
+            var result = _preApprovalRequestService.GetPostActivityList(model);
+            return new OkObjectResult(result);
+        }
+    }
 }
