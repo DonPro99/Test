@@ -1,19 +1,14 @@
-public class AdminPeGenPreApprovalRequestService : AdminPePreApprovalRequestService
+protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
 {
-    public AdminPeGenPreApprovalRequestService(DmsContext context, ITaskService taskService,
-        IDocumentService documentService, IActivityService activityService, IMessageService messageService,
-        ISharedService sharedService, ILookupService lookupService, IUserService userService)
-        : base(context, taskService, documentService, activityService, messageService, sharedService, lookupService,
-            userService)
+    var cloaAutoPreApproval = _context.PreApprovalRequests
+        .Where(par => par.Id == model.Id)
+        .Select(par => par.Cloa.IsAutoPreApproval)
+        .FirstOrDefault();
+
+    if (cloaAutoPreApproval)
     {
-        _designeeType = (int)DesigneeTypeEnum.ADMINPEGEN;
+        return true;
     }
 
-    protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
-    {
-        return _context.PreApprovalRequests
-            .Where(par => par.Id == model.Id)
-            .Select(par => par.Cloa.IsAutoPreApproval)
-            .FirstOrDefault();
-    }
+    return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
 }
