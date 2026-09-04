@@ -1,24 +1,4 @@
-# Undo the commit but keep all changes staged (soft reset)
-git reset --soft HEAD~1
-
-# Unstage the files you don't want
-git restore --staged dms_api/Dms.Api.Designee/Program.cs
-git restore --staged dms_api/Dms.Api.Designee/Properties/launchSettings.json
-git restore --staged dms_api/Dms.Api.Designee/appsettings.json
-git restore --staged dms_api/Dms.Api.Faa/Program.cs
-git restore --staged dms_api/Dms.Api.Faa/Properties/launchSettings.json
-git restore --staged dms_api/Dms.Api.Faa/appsettings.json
-git restore --staged dms_api/Dms.Api.Faa/web.config
-git restore --staged dms_ui/dms_web_designee/web.config
-
-# Now discard those changes in your working directory too (revert them to match origin)
-git checkout -- dms_api/Dms.Api.Designee/Program.cs
-git checkout -- dms_api/Dms.Api.Designee/Properties/launchSettings.json
-git checkout -- dms_api/Dms.Api.Designee/appsettings.json
-git checkout -- dms_api/Dms.Api.Faa/Program.cs
-git checkout -- dms_api/Dms.Api.Faa/Properties/launchSettings.json
-git checkout -- dms_api/Dms.Api.Faa/appsettings.json
-git checkout -- dms_api/Dms.Api.Faa/web.config
-
-# The deleted web.config needs to be restored (since it was deleted, checkout brings it back)
-git checkout -- dms_ui/dms_web_designee/web.config
+git checkout release/8.5
+git pull origin release/8.5
+git checkout feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes
+git merge release/8.5
