@@ -1,52 +1,30 @@
-using Dms.Core.EntityFramework.Data;
-using Dms.Core.Utils;
-using Dms.Services.Interface.Activity;
-using Dms.Services.Interface.Lookup;
-using Dms.Services.Interface.Message;
-using Dms.Services.Interface.Security;
-using Dms.Services.Interface.Shared;
-using Dms.Services.Interface.Task;
-using Dms.Services.ViewModel.Activity;
-using System;
-using System.Linq;
+Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
+$ git status
+On branch feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes
+Your branch is up to date with 'origin/feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes'.
 
-namespace Dms.Services.Implementation.Activity
-{
-    // Admin-PE-GEN reuses the same Pre-Approval / Post Activity process as Admin-PE 
-    // This class only overrides the designee type; all other behavior(Save, Get, SaveAfsPostActivity, etc.) is inherited unchanged.
-    public class AdminPeGenPreApprovalRequestService : AdminPePreApprovalRequestService
-    {
-        public AdminPeGenPreApprovalRequestService(DmsContext context, ITaskService taskService,
-            IDocumentService documentService, IActivityService activityService, IMessageService messageService,
-            ISharedService sharedService, ILookupService lookupService, IUserService userService)
-            : base(context, taskService, documentService, activityService, messageService, sharedService, lookupService,
-                userService)
-        {
-            _designeeType = (int)DesigneeTypeEnum.ADMINPEGEN;
-        }
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   dms_api/Dms.Api.Designee/Program.cs
+        modified:   dms_api/Dms.Api.Designee/Properties/launchSettings.json
+        modified:   dms_api/Dms.Api.Designee/appsettings.json
+        modified:   dms_api/Dms.Api.Faa/Program.cs
+        modified:   dms_api/Dms.Api.Faa/Properties/launchSettings.json
+        modified:   dms_api/Dms.Api.Faa/appsettings.json
+        modified:   dms_api/Dms.Api.Faa/web.config
+        modified:   dms_api/Dms.Services/Assembler/CloaPreApprovalRequestViewModelMapper.cs
+        modified:   dms_api/Dms.Services/Implementation/PreApprovalRequest/AdminPeGenPreApprovalRequestService.cs
+        modified:   dms_api/Dms.Services/Implementation/PreApprovalRequest/AfsPreApprovalRequestService.cs
+        modified:   dms_api/Dms.Services/ViewModel/Designee/DesigneeViewModel.cs
+        modified:   dms_ui/dms-web-shared/src/app/models/exportparams.model.ts
+        modified:   dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
+        modified:   dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/adminpe-index.component.ts
+        modified:   dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/index.component.ts
+        deleted:    dms_ui/dms_web_designee/web.config
 
-        protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
-        {
-            var cloaAutoPreApproval = _context.PreApprovalRequests
-                .Where(par => par.Id == model.Id)
-                .Select(par => par.Cloa.IsAutoPreApproval)
-                .FirstOrDefault();
 
-            if (cloaAutoPreApproval)
-            {
-                return true;
-            }
-
-            bool nothingSelected =
-                (model.TestCheckInformation.SelectedRequestAuthorizations == null || model.TestCheckInformation.SelectedRequestAuthorizations.Count == 0) &&
-                (model.TestCheckInformation.SelectedTemporaryAuthorizations == null || model.TestCheckInformation.SelectedTemporaryAuthorizations.Count == 0);
-
-            if (nothingSelected)
-            {
-                return false;
-            }
-
-            return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
-        }
-    }
-}
+Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
+$ git commit -m "fix for preapproal for ADMINPEGEN toggle ON"
+[feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes 64908da] fix for preapproal for ADMINPEGEN toggle ON
+ 16 files changed, 375 insertions(+), 130 deletions(-)
+ delete mode 100644 dms_ui/dms_web_designee/web.config
