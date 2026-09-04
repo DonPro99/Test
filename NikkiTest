@@ -1,3 +1,4 @@
-$ git log --oneline -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/index.component.ts
-23a2141 fix for preapproal for ADMINPEGEN toggle ON
-0e9923b (origin/Rama_8.4) DMS 8.4 Release code seperated from DMS project to DMSNEW Project
+git show 23a2141 -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/index.component.ts
+
+
+git diff origin/release/8.5 23a2141 -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/index.component.ts
