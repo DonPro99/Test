@@ -110,3 +110,43 @@ sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/s
 
 #EOF
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Around lines 108 or so
+
+# Download Snowflake JDBC and Spark Connector JARs for RBICA-13935 (Virtix chase file load)
+sudo wget -O /home/hadoop/jars/snowflake-jdbc-3.14.4.jar https://repo1.maven.org/maven2/net/snowflake/snowflake-jdbc/3.14.4/snowflake-jdbc-3.14.4.jar
+sudo wget -O /home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar https://repo1.maven.org/maven2/net/snowflake/spark-snowflake_2.12/2.12.0-spark_3.4/spark-snowflake_2.12-2.12.0-spark_3.4.jar
+sudo chmod 777 /home/hadoop/jars/snowflake-jdbc-3.14.4.jar
+sudo chmod 777 /home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar
+
+# Verify Snowflake jars downloaded successfully - fail bootstrap loudly if not
+if [ ! -s /home/hadoop/jars/snowflake-jdbc-3.14.4.jar ]; then
+  echo "ERROR: snowflake-jdbc-3.14.4.jar failed to download or is empty" >&2
+  exit 1
+fi
+if [ ! -s /home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar ]; then
+  echo "ERROR: spark-snowflake_2.12-2.12.0-spark_3.4.jar failed to download or is empty" >&2
+  exit 1
+fi
+
+around line 31:
+
+# RBICA-13935: rad_mcaid_chase_all_lob_s3_to_snflk_load.properties uses .properties extension and not .conf, so it is silently skipped by the "uat.conf" filter above. So, copy it explicitly.
+sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
+sudo chmod 777 /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+
