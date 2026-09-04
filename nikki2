@@ -1,0 +1,127 @@
+#Start
+sudo systemctl enable amazon-ssm-agent
+sudo systemctl start amazon-ssm-agent
+
+sudo mkdir -p /home/hadoop/config
+sudo chmod -R 777 /home/hadoop/config
+
+sudo mkdir -p /home/hadoop/scripts
+sudo chmod -R 777 /home/hadoop/scripts
+
+sudo mkdir -p /home/hadoop/jars
+sudo chmod -R 777 /home/hadoop/jars
+
+sudo mkdir -p /home/hadoop/logs
+sudo chmod -R 777 /home/hadoop/logs
+
+# Copying .properties files from snowpark config to local config
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/ /home/hadoop/config/ --exclude "*" --include "*prod.properties" --recursive
+sudo chmod -R 777 /home/hadoop/config/*
+
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/external_prod.properties /home/hadoop/config/external.properties
+sudo chmod -R 777 /home/hadoop/config/external.properties
+
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/db.properties /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/db.properties
+
+# Copying json config for transact load
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/chartextraction/conf/cra_transact_config.json /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/cra_transact_config.json
+
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/Common-transact-load/config/Transact_config.json /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/Transact_config.json
+
+#coying json config for Matrix aca load
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/mtrx-prsp-etl/config/mtrx-prsp.json /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/mtrx-prsp.json
+ 
+#coying json config for verisma aca load
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/verisma-aca-etl/config/vrsmart-aca.json /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/vrsmart-aca.json
+
+# Copying all jar files from libs to local jars t
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ /home/hadoop/jars/ --exclude "*" --include "*dependencies.jar" --recursive
+sudo chmod -R 777 /home/hadoop/jars/*
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/risk-adjustment-adl-etl-1.0-jar-with-dependencies.jar s3://crln-163391535226-ssm-prod-filetransfer/inbound/raa/
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/common-ingestion-1.0.0-jar-with-dependencies.jar s3://crln-163391535226-ssm-prod-filetransfer/inbound/raa/
+
+# Recursively copying prod.properties files from all etl dir to local config
+sudo aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep 'prod.properties' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/{} /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/*
+
+# Recursively copying prod.conf files from all etl dir to local config
+sudo aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep 'prod.conf' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/{} /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/*
+
+# Recursively copying config.conf files from etl dir to local config
+sudo aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep 'config.conf' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/{} /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/*
+
+# Recursively copying .sh files from all bin dir to local scripts
+sudo aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep '\.sh' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/{} /home/hadoop/scripts/
+sudo chmod -R 777 /home/hadoop/scripts/*
+
+# Recursively copying .py files from all bin dir to local scripts
+sudo aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep '\.py' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/{} /home/hadoop/scripts/
+sudo chmod -R 777 /home/hadoop/scripts/*
+
+# Charts Extraction email conf
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/chartextraction/conf/emailNotification.msg /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/*
+
+# Common util for session creation, email, and load log
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/AnthemRaUtil/ /home/hadoop/AnthemRaUtil --recursive
+sudo chmod -R 777 /home/hadoop/AnthemRaUtil/
+
+# Copy the MCAID config JSON
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/chartextraction/conf/mcaid_transact_config.json /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/mcaid_transact_config.json
+
+#coying json config for Centuari MbrProv aca load
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/Centauri-aca-etl/config/Centauri-aca-prov.json /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/Centauri-aca-prov.json
+
+# --- Normalize CRLF to LF for scripts and configs (prevents $'in\r' parse errors) ---
+# Clean shell and python scripts
+sudo find /home/hadoop/scripts -type f \( -name "*.sh" -o -name "*.py" \) -exec sed -i $'s/\r$//' {} +
+# Clean common config files
+sudo find /home/hadoop/config  -type f \( -name "*.json" -o -name "*.properties" -o -name "*.conf" -o -name "*.txt" \) -exec sed -i $'s/\r$//' {} +
+# Optional: ensure shell scripts are executable (already chmod 777; harmless redundancy)
+sudo find /home/hadoop/scripts -type f -name "*.sh" -exec chmod +x {} +
+# Focus check for the runner (if present)
+if sudo test -f /home/hadoop/scripts/mcaid_transact_runner.sh; then
+  sudo sed -i $'s/\r$//' /home/hadoop/scripts/mcaid_transact_runner.sh
+fi
+
+# Install Python packages
+#sudo python3.8 -m pip install 'boto3>=1.34.47'
+sudo python3.11 -m pip install logging
+sudo python3.11 -m pip install pyyaml
+sudo python3.11 -m pip install snowflake-connector-python
+sudo python3.11 -m pip install snowflake-snowpark-python
+sudo python3.11 -m pip install pyspark
+sudo python3.11 -m pip install lxml
+sudo python3.11 -m pip install smart_open[s3]
+sudo python3.11 -m pip install openpyxl
+sudo dnf reinstall -y python3-urllib3 awscli
+
+
+# ===============================
+# RRR IMPLEMENTATION ADDITIONS tst
+# ===============================
+sudo python3.11 -m pip uninstall -y certifi
+sudo python3.11 -m pip install certifi==2025.1.31
+
+sudo aws s3 cp s3://crln-163391535226-edl-prod-codez-nogbd-nophi-useast1/common/gluelibs/shared/ReduceReuseRecycle-1.5-py3-none-any.whl /home/hadoop/scripts/
+sudo python3.11 -m pip install /home/hadoop/scripts/ReduceReuseRecycle-1.5-py3-none-any.whl
+
+# ===============================
+# RRR SCALA JAR PROD(runtime classpath)
+# ===============================
+sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/rrr_spark/reduce_reuse_recycle-0.1-SNAPSHOT.jar /home/hadoop/jars/
+sudo chmod 777 /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar
+
+# Secondary boot execution
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/secondary_boot.sh /home/hadoop/scripts && sudo bash /home/hadoop/scripts/secondary_boot.sh & sleep 180 && exit 0
+
+#EOF
