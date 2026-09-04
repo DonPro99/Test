@@ -1,14 +1,32 @@
-if (this.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN) {
-  // Temporary: skip the unreliable pre-check for Admin-PE-Gen; let the real save decide.
-  this.saveRequest(saveData).pipe(takeUntil(this.destroying$)).subscribe();
-} else if (!saveData.isApproved) {
-  this.isAutoPreapproval(saveData).pipe(takeUntil(this.destroying$)).subscribe(v => {
-    if (v) {
-      this.saveRequest(saveData)...
+case ButtonActionsEnum.Submit:
+  ...
+  saveData.isSubmit = true;
+  if (!saveData.isApproved) {
+    if (this.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN) {
+      // Save first, then decide the message based on the REAL outcome
+      this.saveRequest(saveData).pipe(takeUntil(this.destroying$)).subscribe(() => {
+        if (!this.data?.isApproved) {
+          this.confirmationService.confirm({
+            key: 'dms',
+            header: "Pre-Approval Submit Message",
+            acceptVisible: true,
+            rejectVisible: false,
+            acceptLabel: "OK",
+            message: "This Pre-Approval will require FAA authorization before proceeding. You will receive a message after Pre-Approval request is reviewed.",
+            accept: () => {},
+          });
+        }
+      });
     } else {
-      this.confirmationService.confirm({...});
+      this.isAutoPreapproval(saveData).pipe(takeUntil(this.destroying$)).subscribe(v => {
+        if (v) {
+          this.saveRequest(saveData)...
+        } else {
+          this.confirmationService.confirm({...});
+        }
+      });
     }
-  });
-} else {
-  this.saveRequest(saveData)...
-}
+  } else {
+    this.saveRequest(saveData)...
+  }
+  break;
