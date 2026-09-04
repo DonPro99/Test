@@ -1,28 +1,4 @@
--- Just look at Admin-PE-Gen's function codes and their auto-preapproval flag
-SELECT
-    Id,
-    Name,
-    FunctionCodeTypeId,
-    CategoryId,
-    IsAutomaticPreapproval,
-    HasTypeRating
-FROM FunctionCodes
-WHERE DesigneeTypeId = 31
-ORDER BY Name;
-
-
--- Compare IsAutomaticPreapproval flag between Admin-PE-Gen (31) and Admin-PE
--- for function codes that look like the "same" code across both types
-SELECT
-    genFc.Id                      AS AdminPeGen_FunctionCodeId,
-    genFc.Name                    AS AdminPeGen_FunctionCode,
-    genFc.IsAutomaticPreapproval  AS AdminPeGen_IsAutoPreApproval,
-    peFc.Id                       AS AdminPe_FunctionCodeId,
-    peFc.Name                     AS AdminPe_FunctionCode,
-    peFc.IsAutomaticPreapproval   AS AdminPe_IsAutoPreApproval
-FROM FunctionCodes genFc
-LEFT JOIN FunctionCodes peFc
-    ON peFc.DesigneeTypeId = <ADMINPE_ID>          -- replace with actual ADMINPE enum int value
-   AND peFc.Name = genFc.Name                       -- adjust join key if codes are named differently between types
-WHERE genFc.DesigneeTypeId = 31                      -- ADMINPEGEN
-ORDER BY genFc.Name;
+adminpe-index.component.ts (frontend) — the isAutoPreApproval getter. Toggle ON is fixed; toggle OFF falls through to super.canAutoApprove(...).
+pre-approval-base.component.ts (frontend) — canAutoApprove() method. Loops selected function codes, checks each has isAutomaticPreapproval === true. Logic itself looks correct.
+CloaPreApprovalRequestViewModelMapper.cs (backend) — DeSerializePreApprovalFormData(). This is where RequestedAuthorizations gets its IsAutomaticPreapproval flag, sourced from a DB query: context.FunctionCodes.Where(x => x.DesigneeTypeId == model.DesigneeTypeId).
+FunctionCodes table (DB) — suspected root cause. If rows where DesigneeTypeId = 31 (ADMINPEGEN) have IsAutomaticPreapproval = false/null while the equivalent Admin-PE codes have it true, that's the actual bug — a data/config gap, not application code.
