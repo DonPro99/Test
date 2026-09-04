@@ -1,29 +1,6 @@
-Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
-$ git restore --staged dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
+git reset --soft HEAD~1
+git restore --staged dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
+git checkout -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
+git commit -m "fix for preapproval for ADMINPEGEN toggle ON"
 
-Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
-$ git checkout -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
-
-Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
-$ git commit -m "removed debug loggers"
-[feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes 26fd6fa] removed debug loggers
- 1 file changed, 10 deletions(-)
-
-Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
-$ git status
-On branch feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes
-Your branch and 'origin/feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes' have diverged,
-and have 1 and 1 different commits each, respectively.
-  (use "git pull" if you want to integrate the remote branch with yours)
-
-nothing to commit, working tree clean
-
-Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
-$ git push
-To https://git.faa.gov/scm/dmsnew/dms.git
- ! [rejected]        feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes -> feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes (non-fast-forward)
-error: failed to push some refs to 'https://git.faa.gov/scm/dmsnew/dms.git'
-hint: Updates were rejected because the tip of your current branch is behind
-hint: its remote counterpart. If you want to integrate the remote changes,
-hint: use 'git pull' before pushing again.
-hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+git push --force-with-lease
