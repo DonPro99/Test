@@ -1,1 +1,2 @@
-The popup decision (frontend) and the actual approval decision (backend) are computed independently — the frontend checks locally-loaded function-code flags, the backend re-checks the same thing against the database at save time — and these two calculations aren't guaranteed to agree for the per-function-code case. The toggle-based scenarios were fixed by exposing the toggle value directly to the frontend; the per-function-code case needs the same treatment, or a shared source of truth between the two.
+aws s3 cp snowflake-jdbc-3.14.4.jar s3://<his-jars-bucket-path>/
+aws s3 cp spark-snowflake_2.12-2.12.0-spark_3.4.jar s3://<his-jars-bucket-path>/
