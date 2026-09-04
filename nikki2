@@ -1,1 +1,10 @@
+[schema_epi] :-  file_pattern=ChartData_ANT_*.txt
+[schema_cent_m360] :- file_pattern=ChartData_WLP_*_M360_*.txt
+[schema_cent_prov] :- file_pattern=ChartData_WLP_*_PROV_*.txt
+[schema_cent_mbr] :- file_pattern=ChartData_WLP_*_MBR_*.txt
+[schema_cent_oec] :- file_pattern=ChartData_WLP_*_OEC_*.txt
+[schema_IH_InternalCoding] :- file_pattern=IH_MCD_*
+[schema_virtix] :- file_pattern=ChartData_CAID_Virtix_Chase_*.txt///
+
+james replied 
 [schema_virtix] :- file_pattern= Anthem_VirtixHealth_ *.txt
