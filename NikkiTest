@@ -1,4 +1,69 @@
-adminpe-index.component.ts (frontend) — the isAutoPreApproval getter. Toggle ON is fixed; toggle OFF falls through to super.canAutoApprove(...).
-pre-approval-base.component.ts (frontend) — canAutoApprove() method. Loops selected function codes, checks each has isAutomaticPreapproval === true. Logic itself looks correct.
-CloaPreApprovalRequestViewModelMapper.cs (backend) — DeSerializePreApprovalFormData(). This is where RequestedAuthorizations gets its IsAutomaticPreapproval flag, sourced from a DB query: context.FunctionCodes.Where(x => x.DesigneeTypeId == model.DesigneeTypeId).
-FunctionCodes table (DB) — suspected root cause. If rows where DesigneeTypeId = 31 (ADMINPEGEN) have IsAutomaticPreapproval = false/null while the equivalent Admin-PE codes have it true, that's the actual bug — a data/config gap, not application code.
+using Dms.Core.EntityFramework.Data;
+using Dms.Core.Utils;
+using Dms.Services.Interface.Activity;
+using Dms.Services.Interface.Lookup;
+using Dms.Services.Interface.Message;
+using Dms.Services.Interface.Security;
+using Dms.Services.Interface.Shared;
+using Dms.Services.Interface.Task;
+<<<<<<< Updated upstream
+=======
+using Dms.Services.ViewModel.Activity;
+using System;
+using System.Linq;
+>>>>>>> Stashed changes
+
+namespace Dms.Services.Implementation.Activity
+{
+    // Admin-PE-GEN reuses the same Pre-Approval / Post Activity process as Admin-PE 
+    // This class only overrides the designee type; all other behavior(Save, Get, SaveAfsPostActivity, etc.) is inherited unchanged.
+    public class AdminPeGenPreApprovalRequestService : AdminPePreApprovalRequestService
+    {
+        public AdminPeGenPreApprovalRequestService(DmsContext context, ITaskService taskService,
+            IDocumentService documentService, IActivityService activityService, IMessageService messageService,
+            ISharedService sharedService, ILookupService lookupService, IUserService userService)
+            : base(context, taskService, documentService, activityService, messageService, sharedService, lookupService,
+                userService)
+        {
+            _designeeType = (int)DesigneeTypeEnum.ADMINPEGEN;
+        }
+<<<<<<< Updated upstream
+=======
+
+        protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
+        {
+            Console.WriteLine($"[DEBUG] IsAutoPreApproval called. model.Id={model.Id}, isSubmit={model.isSubmit}");
+
+            var cloaAutoPreApproval = _context.PreApprovalRequests
+                .Where(par => par.Id == model.Id)
+                .Select(par => par.Cloa.IsAutoPreApproval)
+                .FirstOrDefault();
+
+            Console.WriteLine($"[DEBUG] cloaAutoPreApproval={cloaAutoPreApproval}");
+
+            if (cloaAutoPreApproval)
+            {
+                Console.WriteLine("[DEBUG] Returning TRUE from toggle check");
+                return true;
+            }
+
+            bool nothingSelected =
+                (model.TestCheckInformation.SelectedRequestAuthorizations == null || model.TestCheckInformation.SelectedRequestAuthorizations.Count == 0) &&
+                (model.TestCheckInformation.SelectedTemporaryAuthorizations == null || model.TestCheckInformation.SelectedTemporaryAuthorizations.Count == 0);
+
+            Console.WriteLine($"[DEBUG] SelectedRequestAuthorizations count={model.TestCheckInformation.SelectedRequestAuthorizations?.Count ?? -1}, SelectedTemporaryAuthorizations count={model.TestCheckInformation.SelectedTemporaryAuthorizations?.Count ?? -1}, nothingSelected={nothingSelected}");
+
+            if (nothingSelected)
+            {
+                Console.WriteLine("[DEBUG] Returning FALSE - nothing selected");
+                return false;
+            }
+
+            var result = !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
+            Console.WriteLine($"[DEBUG] Returning {result} from base fallback");
+            return result;
+        }
+>>>>>>> Stashed changes
+    }
+
+    }
