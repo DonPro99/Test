@@ -1,13 +1,17 @@
- public canAutoApprove(selectedFcs: number[], fcs: FunctionCode[]): boolean {
-    let canAutoApprove = false;
-    for (const element of selectedFcs) {
-      canAutoApprove = fcs.some(
-        (it) => it.id === element && it.isAutomaticPreapproval
-      );
-      if (!canAutoApprove) {
-        break;
-      }
-    }
-    return canAutoApprove;
-  }
-}
+ protected void GetAdminDpeSaeAuthorizations(PreApprovalRequestViewModel preApprovalRequestViewModel, List<FunctionCodeViewModel> cloaFunctionCodes)
+ {
+     preApprovalRequestViewModel.TestCheckInformation.AdminDpeSaeFunctionCodes = cloaFunctionCodes.Where(x => x.FunctionCodeTypeId == (int)FunctionCodeTypeEnum.Admin || (x.CategoryId == (int) CategoryEnum.Other && x.FunctionCode.EndsWith("-SMFT"))).Select(c => new FunctionCodeViewModel
+     {
+         Id = c.Id,
+         FunctionCode = c.FunctionCode,
+         DesigneeTypeId = c.DesigneeTypeId,
+         CategoryId = c.CategoryId ?? 0,
+         IsAutomaticPreapproval = c.IsAutomaticPreapproval,
+         Category = c.Category != null ? new CategoryViewModel
+         {
+             Id = c.Category.Id,
+             Name = c.Category.Name
+         } : null,
+         HasTypeRating = c.HasTypeRating,
+     }).ToList();
+ }
