@@ -1,6 +1,14 @@
-const cloaToggleOn = this.data?.designeeInfo?.isAutoPreApproval; // or wherever this field actually lives on your model
-if (v || cloaToggleOn) {
-  this.saveRequest(saveData)...
+if (this.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN) {
+  // Temporary: skip the unreliable pre-check for Admin-PE-Gen; let the real save decide.
+  this.saveRequest(saveData).pipe(takeUntil(this.destroying$)).subscribe();
+} else if (!saveData.isApproved) {
+  this.isAutoPreapproval(saveData).pipe(takeUntil(this.destroying$)).subscribe(v => {
+    if (v) {
+      this.saveRequest(saveData)...
+    } else {
+      this.confirmationService.confirm({...});
+    }
+  });
 } else {
-  this.confirmationService.confirm({ ... });
+  this.saveRequest(saveData)...
 }
