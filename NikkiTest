@@ -1,31 +1,25 @@
-protected static void SaveDpeSaeFunctionCodes(PreApprovalRequestViewModel model, PreApprovalRequest preApprovalRequest)
+protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
 {
-    if (model.TestCheckInformation.SelectedRequestAuthorizations != null && model.TestCheckInformation.SelectedRequestAuthorizations.Count > 0)
+    var cloaAutoPreApproval = _context.PreApprovalRequests
+        .Where(par => par.Id == model.Id)
+        .Select(par => par.Cloa.IsAutoPreApproval)
+        .FirstOrDefault();
+
+    if (cloaAutoPreApproval)
     {
-        preApprovalRequest.PreApprovalRequestFunctionCodes = model.TestCheckInformation.SelectedRequestAuthorizations.Select(f => new PreApprovalRequestFunctionCode
-        {
-            FunctionCodeId = f.Id,
-            IsCloaFunctionCode = true,
-            PreApprovalRequestFunctionCodeTypeRatings = f.SelectedTypeRatings != null && f.SelectedTypeRatings.Any() ? f.SelectedTypeRatings.Select(sf => new PreApprovalRequestFunctionCodeTypeRating
-            {
-                TypeRatingId = sf
-            }).ToArray() : null
-        }).ToList();
+        return true;
     }
-    else if (model.TestCheckInformation.SelectedTemporaryAuthorizations != null && model.TestCheckInformation.SelectedTemporaryAuthorizations.Count > 0)
+
+    // Fix for AdminPeGen: if nothing is currently selected, treat it as no function codes
+    // (the shared SaveDpeSaeFunctionCodes doesn't clear stale codes when both lists are empty)
+    bool nothingSelected =
+        (model.TestCheckInformation.SelectedRequestAuthorizations == null || model.TestCheckInformation.SelectedRequestAuthorizations.Count == 0) &&
+        (model.TestCheckInformation.SelectedTemporaryAuthorizations == null || model.TestCheckInformation.SelectedTemporaryAuthorizations.Count == 0);
+
+    if (nothingSelected)
     {
-        preApprovalRequest.PreApprovalRequestFunctionCodes = model.TestCheckInformation.SelectedTemporaryAuthorizations.Select(f => new PreApprovalRequestFunctionCode
-        {
-            FunctionCodeId = f.Id,
-            IsCloaFunctionCode = false,
-            PreApprovalRequestFunctionCodeTypeRatings = f.SelectedTypeRatings != null && f.SelectedTypeRatings.Any() ? f.SelectedTypeRatings.Select(sf => new PreApprovalRequestFunctionCodeTypeRating
-            {
-                TypeRatingId = sf
-            }).ToArray() : null
-        }).ToList();
+        return false;
     }
-    else
-    {
-        preApprovalRequest.PreApprovalRequestFunctionCodes = new List<PreApprovalRequestFunctionCode>();
-    }
+
+    return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
 }
