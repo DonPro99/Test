@@ -1,4 +1,5 @@
-git show 23a2141 -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/index.component.ts
+cat dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
 
 
-git diff origin/release/8.5 23a2141 -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/index.component.ts
+git fetch origin
+git show origin/feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes:dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
