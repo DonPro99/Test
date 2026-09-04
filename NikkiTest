@@ -1,7 +1,1 @@
-Main toggle ON, option selected from internal list → auto-approved, no notification popup. ✅
-Main toggle ON, option NOT in internal list → auto-approved, no notification popup. ✅
-
-Still not working:
-
-Main toggle OFF, individual function codes flagged for auto-preapproval (e.g., A and B flagged, C not), external user selects a flagged option (A) → should auto-approve, but still shows Pending with the notification popup. ❌
-Main toggle OFF, option not in list at all → correctly shows Pending with notification. ✅ (working as expected)
+The popup decision (frontend) and the actual approval decision (backend) are computed independently — the frontend checks locally-loaded function-code flags, the backend re-checks the same thing against the database at save time — and these two calculations aren't guaranteed to agree for the per-function-code case. The toggle-based scenarios were fixed by exposing the toggle value directly to the frontend; the per-function-code case needs the same treatment, or a shared source of truth between the two.
