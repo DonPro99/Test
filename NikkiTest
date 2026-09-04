@@ -1,4 +1,4 @@
-﻿using Dms.Core.EntityFramework.Data;
+using Dms.Core.EntityFramework.Data;
 using Dms.Core.Utils;
 using Dms.Services.Interface.Activity;
 using Dms.Services.Interface.Lookup;
@@ -7,10 +7,6 @@ using Dms.Services.Interface.Security;
 using Dms.Services.Interface.Shared;
 using Dms.Services.Interface.Task;
 using Dms.Services.ViewModel.Activity;
-<<<<<<< HEAD
-using System;
-=======
->>>>>>> c7b5aa1eeace94ed2818b8991c98b163760436c9
 using System.Linq;
 
 namespace Dms.Services.Implementation.Activity
@@ -28,7 +24,6 @@ namespace Dms.Services.Implementation.Activity
             _designeeType = (int)DesigneeTypeEnum.ADMINPEGEN;
         }
 
-<<<<<<< HEAD
         protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
         {
             var cloaAutoPreApproval = _context.PreApprovalRequests
@@ -39,6 +34,8 @@ namespace Dms.Services.Implementation.Activity
             if (cloaAutoPreApproval)
             {
                 return true;
+            }
+
             bool nothingSelected =
                 (model.TestCheckInformation.SelectedRequestAuthorizations == null || model.TestCheckInformation.SelectedRequestAuthorizations.Count == 0) &&
                 (model.TestCheckInformation.SelectedTemporaryAuthorizations == null || model.TestCheckInformation.SelectedTemporaryAuthorizations.Count == 0);
@@ -49,11 +46,6 @@ namespace Dms.Services.Implementation.Activity
             }
 
             return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
-=======
-    protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
-        {
-            return _context.PreApprovalRequests.Where(par => par.Id == model.Id).Select(par => par.Cloa.IsAutoPreApproval).FirstOrDefault();
->>>>>>> c7b5aa1eeace94ed2818b8991c98b163760436c9
         }
     }
 }
