@@ -1,17 +1,56 @@
- protected void GetAdminDpeSaeAuthorizations(PreApprovalRequestViewModel preApprovalRequestViewModel, List<FunctionCodeViewModel> cloaFunctionCodes)
- {
-     preApprovalRequestViewModel.TestCheckInformation.AdminDpeSaeFunctionCodes = cloaFunctionCodes.Where(x => x.FunctionCodeTypeId == (int)FunctionCodeTypeEnum.Admin || (x.CategoryId == (int) CategoryEnum.Other && x.FunctionCode.EndsWith("-SMFT"))).Select(c => new FunctionCodeViewModel
-     {
-         Id = c.Id,
-         FunctionCode = c.FunctionCode,
-         DesigneeTypeId = c.DesigneeTypeId,
-         CategoryId = c.CategoryId ?? 0,
-         IsAutomaticPreapproval = c.IsAutomaticPreapproval,
-         Category = c.Category != null ? new CategoryViewModel
-         {
-             Id = c.Category.Id,
-             Name = c.Category.Name
-         } : null,
-         HasTypeRating = c.HasTypeRating,
-     }).ToList();
- }
+public static PreApprovalRequestViewModel DeSerializePreApprovalFormData(DmsContext context, string formData, int cloaId)
+{
+    if (string.IsNullOrWhiteSpace(formData))
+    {
+        return null;
+    }
+    
+    var model = JsonConvert.DeserializeObject<PreApprovalRequestViewModel>(formData);
+
+    var designeeFunctionCodes = context.FunctionCodes.Where(x => x.DesigneeTypeId == model.DesigneeTypeId)
+                                             .Select(fc => new DesigneeTypeFunctionCodeViewModel()
+                                             {
+                                                 DesigneeTypeId = fc.DesigneeType.Id,
+                                                 FunctionCodeId = fc.Id,
+                                                 FunctionCode = fc.Name,
+                                                 FunctionCodeDescription = fc.Description,
+                                                 HasTypeRating = fc.HasTypeRating,
+                                                 Category = fc.Category != null ? new CategoryViewModel
+                                                 {
+                                                     Id = fc.Category.Id,
+                                                     Name = fc.Category.Name
+                                                 }
+                                                 : null,
+                                                 CategoryId = fc.CategoryId ?? 0,
+                                                 FunctionCodeTypeId = fc.FunctionCodeTypeId,
+                                                 SortOrder = fc.SortOrder
+                                             }).ToArray();
+    // "AuthFunctionCodes"
+    model.AuthFunctionCodes = FillFunctionCodes(model.AuthFunctionCodes, designeeFunctionCodes);
+    // "DesigneeFunctionCodes"
+    model.DesigneeFunctionCodes = FillFunctionCodes(model.DesigneeFunctionCodes, designeeFunctionCodes);
+    // "SelectedOtherFunctionCodes"
+    model.SelectedOtherFunctionCodes = FillFunctionCodes(model.SelectedOtherFunctionCodes, designeeFunctionCodes);
+    // "InitialFunctionCodes"
+    model.InitialFunctionCodes = FillFunctionCodes(model.InitialFunctionCodes, designeeFunctionCodes);
+    if (model.TestCheckInformation != null)
+    {
+        // "RequestedAuthorizations"
+        var cloaTypeRatings = GetCloaTypeRatings(context, cloaId);
+        model.TestCheckInformation.RequestedAuthorizations = FillFunctionCodes(model.TestCheckInformation.RequestedAuthorizations, designeeFunctionCodes, cloaTypeRatings);
+        // "TemporaryAuthorizations"
+        model.TestCheckInformation.TemporaryAuthorizations = FillFunctionCodes(model.TestCheckInformation.TemporaryAuthorizations, designeeFunctionCodes);
+        if (model.DesigneeTypeId == (int)DesigneeTypeEnum.DPE || model.DesigneeTypeId == (int)DesigneeTypeEnum.SAE)
+        {
+            model.TestCheckInformation.TemporaryAuthorizations = FillTemporaryAuthTypeRatings(model.TestCheckInformation.TemporaryAuthorizations, (int)model.DesigneeTypeId, cloaTypeRatings);
+        }
+        // "SelectedRequestAuthorizations"
+        model.TestCheckInformation.SelectedRequestAuthorizations = FillFunctionCodes(model.TestCheckInformation.SelectedRequestAuthorizations, designeeFunctionCodes);
+        // "SelectedTemporaryAuthorizations"
+        model.TestCheckInformation.SelectedTemporaryAuthorizations = FillFunctionCodes(model.TestCheckInformation.SelectedTemporaryAuthorizations, designeeFunctionCodes);
+        // "AdminDpeSaeFunctionCodes"
+        model.TestCheckInformation.AdminDpeSaeFunctionCodes = FillFunctionCodes(model.TestCheckInformation.AdminDpeSaeFunctionCodes, designeeFunctionCodes);
+    }
+
+    return model;
+}
