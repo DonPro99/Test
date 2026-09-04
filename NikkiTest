@@ -1,72 +1,31 @@
-@if (form && pr) {
-  <form [formGroup]="form">
-  <p-tabs #tv [value]="activeIndex" (valueChange)="onTabChange($event)">
-    <p-tablist>
-      @for (header of props.headers; track $index) {
-        <p-tab [value]="$index" [ngClass]="setTabError($index)">
-          <i class="fa fa-book"></i>
-          <span>{{header}}</span>
-        </p-tab>
-      }
-    </p-tablist>
-    <p-tabpanels>
-      @for (header of props.headers; track $index) {
-        <p-tabpanel [value]="$index">
-          @switch ($index) {
-            @case (0) {
-              <designeesummary-page [designeeInformation]="pr.designeeInfo!" [showPersonPerformed]="false">
-              </designeesummary-page>
-              <requestinfo-page [requestInfo]="pr.requestInfo"></requestinfo-page>
-            }
-            @case (1) {
-              <dms-test-check-information #testcheckinfoComponent [testCheckInformation]="pr.testCheckInformation"
-                [designeeTypeId]="pr.designeeInfo?.typeId" [form]="$any(form.get('testCheckInformation'))"
-                [triggerFieldChangeEvent]="isPreApprovalApproved" (OnTriggerFieldChange)="emitFieldChange($event)">
-              </dms-test-check-information>
-            }
-            @case (2) {
-              <dms-activity-location [location]="pr.activityLocation" [designeeTypeId]="pr.designeeInfo?.typeId"
-                [isDisabled]="isDisabled" [form]="$any(form.get('activityLocation'))"
-                [triggerFieldChangeEvent]="isPreApprovalApproved" (OnTriggerFieldChange)="emitFieldChange($event)">
-              </dms-activity-location>
-            }
-            @case (3) {
-              <dms-application-information [designeeTypeId]="pr.designeeInfo?.typeId"
-                [form]="$any(form.get('applicationInformation'))" [isDisabled]="isDisabled"
-                [triggerFieldChangeEvent]="isPreApprovalApproved">
-              </dms-application-information>
-            }
-            @case (4) {
-              <div class="grid">
-                <dms-input-text-area identity="id_preapprqst_textarea_comments" formControlName="comments" label="Comments"
-                  controlSize="large" [showLegendLength]="true" layout="grid" [rows]="6" [cols]="100" [maxlength]="4000">
-                </dms-input-text-area>
-                <div class="col-12">
-                  @if (pr.documentReference) {
-                    <dms-uploadcontrol #uploadControl [uploadFormGroup]="form" formControlName="uploadId"
-                      [documentReference]="pr.documentReference" (uploadedFiles)="uploadedFiles($event)">
-                    </dms-uploadcontrol>
-                  }
-                </div>
-              </div>
-            }
-            @case (5) {
-              @if (summaryForm) {
-                <preapprovalrequest-summary
-                  [isAfsGroup2]="true"
-                  [isCancel]="$any(isCancel)"
-                  [preApprovalRequestData]="pr"
-                  [form]="summaryForm"
-                  [showDecision]="!copyPreApprovalRequestId"
-                  [cancelReasons] ="cancelReasons"
-                  id="summary">
-                </preapprovalrequest-summary>
-              }
-            }
-          }
-        </p-tabpanel>
-      }
-    </p-tabpanels>
-  </p-tabs>
-</form>
+protected static void SaveDpeSaeFunctionCodes(PreApprovalRequestViewModel model, PreApprovalRequest preApprovalRequest)
+{
+    if (model.TestCheckInformation.SelectedRequestAuthorizations != null && model.TestCheckInformation.SelectedRequestAuthorizations.Count > 0)
+    {
+        preApprovalRequest.PreApprovalRequestFunctionCodes = model.TestCheckInformation.SelectedRequestAuthorizations.Select(f => new PreApprovalRequestFunctionCode
+        {
+            FunctionCodeId = f.Id,
+            IsCloaFunctionCode = true,
+            PreApprovalRequestFunctionCodeTypeRatings = f.SelectedTypeRatings != null && f.SelectedTypeRatings.Any() ? f.SelectedTypeRatings.Select(sf => new PreApprovalRequestFunctionCodeTypeRating
+            {
+                TypeRatingId = sf
+            }).ToArray() : null
+        }).ToList();
+    }
+    else if (model.TestCheckInformation.SelectedTemporaryAuthorizations != null && model.TestCheckInformation.SelectedTemporaryAuthorizations.Count > 0)
+    {
+        preApprovalRequest.PreApprovalRequestFunctionCodes = model.TestCheckInformation.SelectedTemporaryAuthorizations.Select(f => new PreApprovalRequestFunctionCode
+        {
+            FunctionCodeId = f.Id,
+            IsCloaFunctionCode = false,
+            PreApprovalRequestFunctionCodeTypeRatings = f.SelectedTypeRatings != null && f.SelectedTypeRatings.Any() ? f.SelectedTypeRatings.Select(sf => new PreApprovalRequestFunctionCodeTypeRating
+            {
+                TypeRatingId = sf
+            }).ToArray() : null
+        }).ToList();
+    }
+    else
+    {
+        preApprovalRequest.PreApprovalRequestFunctionCodes = new List<PreApprovalRequestFunctionCode>();
+    }
 }
