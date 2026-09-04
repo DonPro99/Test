@@ -1,4 +1,11 @@
-$ git log --oneline -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
-23a2141 fix for preapproal for ADMINPEGEN toggle ON
-0e9923b (origin/Rama_8.4) DMS 8.4 Release code seperated from DMS project to DMSNEW Project
-
+Switch to the jarfix branch
+Run: git checkout feature/RBICA-13935-jarfix-09012026 Then: git pull origin feature/RBICA-13935-jarfix-09012026 This switches you to the branch you actually want your changes on, and makes sure it's up to date with what's on Bitbucket before you add anything to it.
+3
+Copy your commit onto jarfix
+Run: git cherry-pick <commit-hash> (Use the hash you copied in step 1.) Cherry-pick copies just that one commit's changes onto your current branch (jarfix) without touching conflict-fix at all. Your original commit stays exactly where it was, as a backup.
+4
+Verify the changes landed
+Run: git status This should show your bootstrap file changes staged/committed on jarfix now. Then run: git log --oneline -3 again — you should see your commit message appear here too.
+5
+Push jarfix to Bitbucket
+Run: git push origin feature/RBICA-13935-jarfix-09012026 Once this succeeds, refresh Bitbucket and check the branch there — your commit should now show up. Leave conflict-fix alone for now (don't delete it) until you've confirmed everything looks right on jarfix.
