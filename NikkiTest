@@ -1,2 +1,1 @@
-git fetch origin
-git checkout origin/release/8.5 -- <path-to-file>
+git log --oneline -- <path-to-file>
