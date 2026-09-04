@@ -1,2 +1,7 @@
-Console.WriteLine($"[DEBUG] base.IsAutoPreApproval called. Selected={string.Join(",", model.TestCheckInformation?.SelectedRequestAuthorizations?.Select(f => f.Id) ?? new List<int>())}");
-    if (model.IsAfsType)
+Main toggle ON, option selected from internal list → auto-approved, no notification popup. ✅
+Main toggle ON, option NOT in internal list → auto-approved, no notification popup. ✅
+
+Still not working:
+
+Main toggle OFF, individual function codes flagged for auto-preapproval (e.g., A and B flagged, C not), external user selects a flagged option (A) → should auto-approve, but still shows Pending with the notification popup. ❌
+Main toggle OFF, option not in list at all → correctly shows Pending with notification. ✅ (working as expected)
