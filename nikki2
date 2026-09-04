@@ -1,1 +1,4 @@
-ChartData_WLP_*_OEC_*.txt ==> Centauri chase file: confirmation of it from Jim.
+GBD *	Filename *	File Business Name	File Format Description *	Project/App Contact *	Environment *	AWS Account Num. *	AWS Account/KMS key owner name *	Workstream (Domain)	Application Name *	Direction *	KMS Key *	Destination S3 Bucket *	IAM Role *	Origin Path		PHI/PII Data (Y/N) *	Protegrity RITM *	JSON Filename	PGP encrypted (Y/N) *	Compressed *	Compression Algorithm	Distribution List(s)	Max File Size *	Data Flow *	Frequency (Production)	Updated By	Original request number *	Change required *
+N	BCBSA_ElevanceHealth_OOA_MRA_Supplemental*.txt	RAA Outbound Files	.txt	"tagore.netala@carelon.com
+"	PROD	"163391535226	"	Koduri, Srihari/Boddapati,Hanumantharao	Medicare	RAA	Outbound			CRLN-RAA-prod-Lambda-Basic-Exec-Access-Role	cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX012/prod/mra/virtix/		Y	RITM26422975 	ELEVANCE_RAA_RISK-ADJUSTMENT-ANALYSIS_OUTBOUND_2026-08-26T16-33-24Z_Unprotect.json	N	N	NA	tagore.netala@carelon.com;dl-raaetldevelopers@anthem.com	5 GB	"
+S3-->CFX-->EFX-->SFTP "	Adhoc	Akhil Reddy Pullannagari		
