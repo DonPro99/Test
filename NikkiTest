@@ -1,30 +1,24 @@
-Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
-$ git status
-On branch feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes
-Your branch is up to date with 'origin/feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes'.
+# Undo the commit but keep all changes staged (soft reset)
+git reset --soft HEAD~1
 
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-        modified:   dms_api/Dms.Api.Designee/Program.cs
-        modified:   dms_api/Dms.Api.Designee/Properties/launchSettings.json
-        modified:   dms_api/Dms.Api.Designee/appsettings.json
-        modified:   dms_api/Dms.Api.Faa/Program.cs
-        modified:   dms_api/Dms.Api.Faa/Properties/launchSettings.json
-        modified:   dms_api/Dms.Api.Faa/appsettings.json
-        modified:   dms_api/Dms.Api.Faa/web.config
-        modified:   dms_api/Dms.Services/Assembler/CloaPreApprovalRequestViewModelMapper.cs
-        modified:   dms_api/Dms.Services/Implementation/PreApprovalRequest/AdminPeGenPreApprovalRequestService.cs
-        modified:   dms_api/Dms.Services/Implementation/PreApprovalRequest/AfsPreApprovalRequestService.cs
-        modified:   dms_api/Dms.Services/ViewModel/Designee/DesigneeViewModel.cs
-        modified:   dms_ui/dms-web-shared/src/app/models/exportparams.model.ts
-        modified:   dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
-        modified:   dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/adminpe-index.component.ts
-        modified:   dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/index.component.ts
-        deleted:    dms_ui/dms_web_designee/web.config
+# Unstage the files you don't want
+git restore --staged dms_api/Dms.Api.Designee/Program.cs
+git restore --staged dms_api/Dms.Api.Designee/Properties/launchSettings.json
+git restore --staged dms_api/Dms.Api.Designee/appsettings.json
+git restore --staged dms_api/Dms.Api.Faa/Program.cs
+git restore --staged dms_api/Dms.Api.Faa/Properties/launchSettings.json
+git restore --staged dms_api/Dms.Api.Faa/appsettings.json
+git restore --staged dms_api/Dms.Api.Faa/web.config
+git restore --staged dms_ui/dms_web_designee/web.config
 
+# Now discard those changes in your working directory too (revert them to match origin)
+git checkout -- dms_api/Dms.Api.Designee/Program.cs
+git checkout -- dms_api/Dms.Api.Designee/Properties/launchSettings.json
+git checkout -- dms_api/Dms.Api.Designee/appsettings.json
+git checkout -- dms_api/Dms.Api.Faa/Program.cs
+git checkout -- dms_api/Dms.Api.Faa/Properties/launchSettings.json
+git checkout -- dms_api/Dms.Api.Faa/appsettings.json
+git checkout -- dms_api/Dms.Api.Faa/web.config
 
-Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
-$ git commit -m "fix for preapproal for ADMINPEGEN toggle ON"
-[feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes 64908da] fix for preapproal for ADMINPEGEN toggle ON
- 16 files changed, 375 insertions(+), 130 deletions(-)
- delete mode 100644 dms_ui/dms_web_designee/web.config
+# The deleted web.config needs to be restored (since it was deleted, checkout brings it back)
+git checkout -- dms_ui/dms_web_designee/web.config
