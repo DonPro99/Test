@@ -1,1 +1,1 @@
-Hi Tagore, made the change - it's in UAT now. Hit a config issue during testing (properties file had prod values hardcoded), flagged it to Akhil, waiting on that before it can move to prod.
+Hi Tagore, made the change to switch to key-pair auth (pem_private_key) instead of sfPassword for Snowflake authentication - updated the session creation, the read/write logic to use Snowpark instead of the old PySpark connector, and removed the manual secrets-manager password lookup. Tested in UAT, and it's moving to prod now.
