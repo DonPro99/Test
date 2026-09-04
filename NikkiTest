@@ -1,13 +1,55 @@
-git checkout feature/RBICA-13935-jarfix-09012026
-git pull origin feature/RBICA-13935-jarfix-09012026
+#!/bin/bash
+set -euo pipefail
+
+sudo mkdir -p /home/hadoop/config
+sudo chmod -R 777 /home/hadoop/config
+
+sudo mkdir -p /home/hadoop/scripts
+sudo chmod -R 777 /home/hadoop/scripts
+
+sudo mkdir -p /home/hadoop/jars
+sudo chmod -R 777 /home/hadoop/jars
+
+sudo mkdir -p /home/hadoop/logs
+sudo chmod -R 777 /home/hadoop/logs
+
+#copying all jar files from libs to local jars
+sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/ /home/hadoop/jars/ --exclude "*" --include "*dependencies.jar" --recursive
+sudo chmod -R 777 /home/hadoop/jars/*
+
+#copying .properties files from snowpark config to local config
+sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/ /home/hadoop/config/ --exclude "*" --include "*uat.properties" --recursive
+
+sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/external_uat.properties /home/hadoop/config/external.properties
+sudo chmod -R 777 /home/hadoop/config/external.properties
+
+sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/db.properties /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/db.properties
+
+#copying rad_mcaid_chase_all_lob_s3_to_snflk_load.properties for MCAID chase files load (RBICA-13935)
+# NOTE: filename does not match the "*uat.properties" wildcard above (no "uat" in
+# the name), so it is silently skipped by that pattern - must be copied explicitly.
+sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
+sudo chmod -R 777 /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+
+#coying json config for transact load
+sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/chartextraction/conf/cra_transact_config.json /home/hadoop/config/
+
+sudo aws s3 cp s3://crln-652798729258-edl-uat-toolsz-nogbd-nophi-useast1/libs/rrr_spark/reduce_reuse_recycle-0.1-SNAPSHOT.jar /home/hadoop/jars/
+sudo chmod 777 /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar
 
 # Copy Snowflake JDBC and Spark Connector JARs from internal library path for RBICA-13935 (Virtix chase file load)
 # TEMPORARY - to be removed once pom.xml dependency upgrade is confirmed and migrated (per Rajesh)
+# NOTE: intentionally no exit-on-failure here - a failure on this step should not
+# block the rest of bootstrap (subsequent steps still need to run).
 sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/snowflake-jdbc-3.14.4.jar /home/hadoop/jars/
 sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar /home/hadoop/jars/
 sudo chmod 777 /home/hadoop/jars/snowflake-jdbc-3.14.4.jar
 sudo chmod 777 /home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar
 
+# Recursively copying uat.properties files from all etl dir to local config
+sudo aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep 'uat.properties' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/{} /home/hadoop/config/
 
+sudo find /home/hadoop/config  -type f \( -name "*.json" -o -name "*.properties" -o -name "*.conf" -o -name "*.txt" \) -exec sed -i $'s/\r$//' {} +
 
-
+# Run secondary boot
