@@ -1,4 +1,4 @@
-git checkout release/8.5
-git pull origin release/8.5
-git checkout feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes
-git merge release/8.5
+git add dms_api/Dms.Services/Implementation/PreApprovalRequest/AdminPeGenPreApprovalRequestService.cs
+
+git status
+
