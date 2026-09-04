@@ -1,2 +1,13 @@
-aws s3 cp spark-snowflake_2.12-2.12.0-spark_3.4.jar s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/
-aws s3 cp snowflake-jdbc-3.14.4.jar s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/
+git checkout feature/RBICA-13935-jarfix-09012026
+git pull origin feature/RBICA-13935-jarfix-09012026
+
+# Copy Snowflake JDBC and Spark Connector JARs from internal library path for RBICA-13935 (Virtix chase file load)
+# TEMPORARY - to be removed once pom.xml dependency upgrade is confirmed and migrated (per Rajesh)
+sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/snowflake-jdbc-3.14.4.jar /home/hadoop/jars/
+sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar /home/hadoop/jars/
+sudo chmod 777 /home/hadoop/jars/snowflake-jdbc-3.14.4.jar
+sudo chmod 777 /home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar
+
+
+
+
