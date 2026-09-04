@@ -1,2 +1,2 @@
-aws s3 cp snowflake-jdbc-3.14.4.jar s3://<his-jars-bucket-path>/
-aws s3 cp spark-snowflake_2.12-2.12.0-spark_3.4.jar s3://<his-jars-bucket-path>/
+aws s3 cp spark-snowflake_2.12-2.12.0-spark_3.4.jar s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/
+aws s3 cp snowflake-jdbc-3.14.4.jar s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/
