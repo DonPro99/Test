@@ -1,5 +1,1 @@
-Matched Admin-PE-Gen's approval logic to APD's exact pattern, as directed. The approval decision itself now behaves the same as APD.
-
-Found a separate issue while testing: the popup message ("requires FAA authorization") and the actual saved outcome can disagree — confirmed with a real request where selectedRequestAuthorizations was empty, but the saved record still showed approverComment: "Auto Pre Approval". This is a mismatch between an earlier "check" call and the final "save" call — they're not always seeing the same data.
-
-Tried a targeted frontend fix (skip the popup check specifically for Admin-PE-Gen, rely on the save outcome instead) but haven't confirmed it's taking effect yet — still seeing the popup in testing after the change. Need to verify the change actually built/reloaded, or that the designee type check is matching correctly, before trusting this fix.
+   console.log('DEBUG: v=', v, 'designeeTypeId=', this.designeeTypeId, 'ADMINPEGEN=', DesigneeTypeEnum.ADMINPEGEN);
