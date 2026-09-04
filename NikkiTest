@@ -1,6 +1,5 @@
-git reset --soft HEAD~1
-git restore --staged dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
-git checkout -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroup3/index.component.ts
-git commit -m "fix for preapproval for ADMINPEGEN toggle ON"
+git diff HEAD~2 HEAD -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/index.component.ts
 
-git push --force-with-lease
+git fetch origin
+git diff origin/release/8.5 origin/feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/index.component.ts
+
