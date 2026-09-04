@@ -1,25 +1,33 @@
 protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
 {
+    Console.WriteLine($"[DEBUG] IsAutoPreApproval called. model.Id={model.Id}, isSubmit={model.isSubmit}");
+
     var cloaAutoPreApproval = _context.PreApprovalRequests
         .Where(par => par.Id == model.Id)
         .Select(par => par.Cloa.IsAutoPreApproval)
         .FirstOrDefault();
 
+    Console.WriteLine($"[DEBUG] cloaAutoPreApproval={cloaAutoPreApproval}");
+
     if (cloaAutoPreApproval)
     {
+        Console.WriteLine("[DEBUG] Returning TRUE from toggle check");
         return true;
     }
 
-    // Fix for AdminPeGen: if nothing is currently selected, treat it as no function codes
-    // (the shared SaveDpeSaeFunctionCodes doesn't clear stale codes when both lists are empty)
     bool nothingSelected =
         (model.TestCheckInformation.SelectedRequestAuthorizations == null || model.TestCheckInformation.SelectedRequestAuthorizations.Count == 0) &&
         (model.TestCheckInformation.SelectedTemporaryAuthorizations == null || model.TestCheckInformation.SelectedTemporaryAuthorizations.Count == 0);
 
+    Console.WriteLine($"[DEBUG] SelectedRequestAuthorizations count={model.TestCheckInformation.SelectedRequestAuthorizations?.Count ?? -1}, SelectedTemporaryAuthorizations count={model.TestCheckInformation.SelectedTemporaryAuthorizations?.Count ?? -1}, nothingSelected={nothingSelected}");
+
     if (nothingSelected)
     {
+        Console.WriteLine("[DEBUG] Returning FALSE - nothing selected");
         return false;
     }
 
-    return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
+    var result = !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
+    Console.WriteLine($"[DEBUG] Returning {result} from base fallback");
+    return result;
 }
