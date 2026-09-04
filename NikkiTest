@@ -6,12 +6,9 @@ using Dms.Services.Interface.Message;
 using Dms.Services.Interface.Security;
 using Dms.Services.Interface.Shared;
 using Dms.Services.Interface.Task;
-<<<<<<< Updated upstream
-=======
 using Dms.Services.ViewModel.Activity;
 using System;
 using System.Linq;
->>>>>>> Stashed changes
 
 namespace Dms.Services.Implementation.Activity
 {
@@ -27,23 +24,16 @@ namespace Dms.Services.Implementation.Activity
         {
             _designeeType = (int)DesigneeTypeEnum.ADMINPEGEN;
         }
-<<<<<<< Updated upstream
-=======
 
         protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
         {
-            Console.WriteLine($"[DEBUG] IsAutoPreApproval called. model.Id={model.Id}, isSubmit={model.isSubmit}");
-
             var cloaAutoPreApproval = _context.PreApprovalRequests
                 .Where(par => par.Id == model.Id)
                 .Select(par => par.Cloa.IsAutoPreApproval)
                 .FirstOrDefault();
 
-            Console.WriteLine($"[DEBUG] cloaAutoPreApproval={cloaAutoPreApproval}");
-
             if (cloaAutoPreApproval)
             {
-                Console.WriteLine("[DEBUG] Returning TRUE from toggle check");
                 return true;
             }
 
@@ -51,19 +41,12 @@ namespace Dms.Services.Implementation.Activity
                 (model.TestCheckInformation.SelectedRequestAuthorizations == null || model.TestCheckInformation.SelectedRequestAuthorizations.Count == 0) &&
                 (model.TestCheckInformation.SelectedTemporaryAuthorizations == null || model.TestCheckInformation.SelectedTemporaryAuthorizations.Count == 0);
 
-            Console.WriteLine($"[DEBUG] SelectedRequestAuthorizations count={model.TestCheckInformation.SelectedRequestAuthorizations?.Count ?? -1}, SelectedTemporaryAuthorizations count={model.TestCheckInformation.SelectedTemporaryAuthorizations?.Count ?? -1}, nothingSelected={nothingSelected}");
-
             if (nothingSelected)
             {
-                Console.WriteLine("[DEBUG] Returning FALSE - nothing selected");
                 return false;
             }
 
-            var result = !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
-            Console.WriteLine($"[DEBUG] Returning {result} from base fallback");
-            return result;
+            return !model.TestCheckInformation.IsOtherAdminActivity.GetValueOrDefault() && base.IsAutoPreApproval(model);
         }
->>>>>>> Stashed changes
     }
-
-    }
+}
