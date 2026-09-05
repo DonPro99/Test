@@ -1,5 +1,13 @@
+snowpark/config/bootstrap_key_uat.sh
+
+# RBICA-13935: rad_mcaid_chase_all_lob_s3_to_snflk_load.properties uses .properties extension and not .conf, so it is silently skipped by the "uat.conf" filter above. So, copy it explicitly.
+sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
+sudo chmod 777 /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+
+
 git add snowpark/config/bootstrap_key_uat.sh
 git commit -m "RBICA-13935: Remove duplicate properties-copy block in UAT bootstrap"
 
-
 git push origin feature/RBICA-13935-jarfix-09012026
+
+git push origin --delete feature/RBICA-13935-jarfix-09012026-v2
