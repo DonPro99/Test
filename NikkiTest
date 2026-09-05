@@ -1,4 +1,21 @@
-git show --stat ace22ab06
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ git show --stat ace22ab06
+commit ace22ab0645d4fc7b570959a517f78c1c936ec81 (HEAD -> feature/RBICA-13935-jarfix-09012026)
+Author: Komandla, Nikhitha <Nikhitha.Komandla@elevancehealth.com>
+Date:   Tue Sep 1 12:41:39 2026 -0400
 
-git status
-git log origin/feature/RBICA-13935-jarfix-09012026..HEAD --oneline
+    RBICA-13935: Explicitly copy rad_mcaid_chase_all_lob_s3_to_snflk_load.properties in bootstrap
+
+ snowpark/config/bootstrap_key_uat.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ git status
+On branch feature/RBICA-13935-jarfix-09012026
+nothing to commit, working tree clean
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ git log origin/feature/RBICA-13935-jarfix-09012026..HEAD --oneline
+fatal: ambiguous argument 'origin/feature/RBICA-13935-jarfix-09012026..HEAD': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
