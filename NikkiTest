@@ -1,1 +1,2 @@
-grep -n "elif \"PROV\"" snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py | cat -A | head -3
+$ grep -n "elif \"PROV\"" snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py | cat -A | head -3
+175:       elif "PROV" in file_name:$
