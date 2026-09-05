@@ -1,5 +1,69 @@
-git diff origin/preprod origin/ir -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
-git diff origin/ir origin/master -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+$ git diff origin/develop origin/master -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+diff --git a/sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql b/sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+index ca6d0a58b..d9fd077f7 100644
+--- a/sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
++++ b/sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+@@ -21,7 +21,6 @@ USE DATABASE ${db};
+ USE SCHEMA ${schma};
 
 
-git diff origin/develop origin/master -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+-
+ /* Load the UAT dataset from HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_TEMP_STG*/
+
+ INSERT OVERWRITE INTO ${stg_db_schema}.HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG
+@@ -251,8 +250,9 @@ order by EDL_LOAD_DTM desc
+ create or replace temporary table S01_HLTH_OS_CLNCL_INTLGNC_LLM_STTS_STG as (
+ with llm_stts as (
+         select distinct
++        stts.edl_load_dtm,
++        stts.edl_run_id,
+         stts.trace_id,
+-               stts.file_id,
+         stts.file_nm,
+         stts.encntr_guid,
+         coalesce(trkr.llm_stts_cd,stts.llm_stts_cd) as llm_stts_cd,
+@@ -260,25 +260,29 @@ with llm_stts as (
+         from ${S01_hos_db_schema}.HLTH_OS_CLNCL_INTLGNC_LLM_STTS stts
+         left join ${S01_hos_db_schema}.HLTH_OS_CLNCL_INTLGNC_TRKR trkr
+             on stts.edl_run_id=trkr.edl_run_id
+-            and stts.encntr_guid=trkr.encntr_guid
++            and stts.encntr_guid=trkr.src_encntr_id
+         where stts.llm_nm='RA_LLM'
+         and stts.edl_scrty_lvl_cd='RA_PDF'
+         ),
+ RA_LLM_completed_files as (
+         select
++        edl_load_dtm,
++        edl_run_id,
+         trace_id,
+-               file_id,
+         file_nm,
+-        max(stts_updt_dtm) AS max_updt_dtm,
+-        count(distinct encntr_guid) as encntr_cnt
++        stts_updt_dtm,
++        encntr_guid
+         from llm_stts
+         group by all
+         having min(case when trim(llm_stts_cd)='COMPLETED' then 1 else 0 end)=1
+         )
+ select distinct
++edl_load_dtm,
++edl_run_id,
+ trace_id,
+-file_id,
+-file_nm
++file_nm,
++stts_updt_dtm,
++encntr_guid
+ from RA_LLM_completed_files
+ );
+
+@@ -321,7 +325,7 @@ DRVG.PRGM_YR_NBR
+ FROM S01_HLTH_OS_RISK_ACRCY_ENCNTR_PAT_STG PAT
+ INNER JOIN S01_HLTH_OS_CLNCL_INTLGNC_LLM_STTS_STG STTS
+ ON PAT.TRACE_ID=STTS.TRACE_ID
+-AND PAT.FILE_ID=STTS.FILE_ID
++AND PAT.ENCNTR_GUID=STTS.ENCNTR_GUID
+ INNER JOIN S01_HLTH_OS_RISK_ACRCY_ENCNTR_PROV_STG PROV
+ ON PAT.FILE_ID=PROV.FILE_ID
+ AND PAT.ENCNTR_GUID=PROV.ENCNTR_GUID
