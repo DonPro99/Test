@@ -1,3 +1,8 @@
-git log origin/preprod --format="%h  %an  %ad  %s" --date=short -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+Hi Nazir,
 
-git log origin/develop --format="%h  %an  %ad  %s" --date=short -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+Submitted the PR for RBICA-13935 to preprod today, but it's showing a merge conflict. Looked into it — the conflict is on an unrelated SQL file (sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql), not my bootstrap changes. Seems like preprod has a different version of that file (diverged since 9/9/25) that never made it back into develop.
+
+Didn't want to force a resolution without knowing the context there. I'll be online tomorrow from 10 AM — let me know if/when you're free to take a look.
+
+Thanks,
+Nikhitha
