@@ -1,22 +1,2 @@
-RBICA-13935: Fix MemberDOB->MBRDOB reference in ChartData_ANT_Virtix branch and indentation typo in PROV elif block
- MERGED 
-BRANCHES
-feature/RBICA-13935-followup
-→	
-preprod
-NEW ACTIVITY
-2 Comments
- 
-	
-SRCAEDLDEVOPS
-🚀 Deployment Started
+git log --oneline origin/preprod -- snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py | head -5
 
-SNAP ID: PREPROD-SNAP-1976229B2167
-Target Environment: preprod
-Repository: ncr_dna2_raa_files
-Deployment Type: files
-Started: 2026-09-05 17:44:47
-📋 Live Logs: View Deployment Logs
-⏳ Processing PR merge and preparing deployment...
-
-Reply	·	Like	·	05 September 2026 05:44 PM
