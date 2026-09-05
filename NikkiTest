@@ -1,5 +1,4 @@
-git fetch origin IR:refs/remotes/origin/IR
-git fetch origin prod:refs/remotes/origin/prod
+git ls-remote --heads origin | grep -i ir
+git ls-remote --heads origin | grep -i prod
 
-git diff origin/preprod origin/IR -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
-git diff origin/IR origin/prod -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+git fetch origin <exact-branch-name>:refs/remotes/origin/<exact-branch-name>
