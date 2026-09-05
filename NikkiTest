@@ -1,27 +1,3 @@
-$ sed -n '150,175p' snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
-        elif "MBR" in file_name:
-            logger.info(f"Inside File {file_name} for date conversion in MBR")
-            df = df.withColumn("memberbirthdate", lit(to_date(trim(col("memberbirthdate")), "yyyyMMdd"))).withColumn("memberdateofdeath", lit(to_date(trim(col("memberdateofdeath")), "yyyyMMdd")))
-            cleaned_columns = [re.sub(r'[^a-zA-Z0-9]+$','', col) for col in df.columns]
-            df = df.toDF(*cleaned_columns)
-        elif "ChartData_ANT_Virtix" in file_name:
-            logger.info(f"Inside File {file_name} for date conversion in Virtix")
-            df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM/dd/yyyy"))) \
-                   .withColumn("STATE", regexp_extract(input_file_name(), r'ChartData_ANT_Virtix_Chase_([A-Za-z]{2})_\d{8}\.txt', 1)) \
-                   .withColumn("KF_TMS", lit(None).cast("timestamp")) \
-                   .withColumn("EDL_CREAT_DTM", current_timestamp()) \
-                   .withColumn("EDL_INCRMNTL_LOAD_DTM", lit("8888-12-31 00:00:00").cast("timestamp"))
-        elif "ChartData_ANT" in file_name:
-            logger.info(f"Inside File {file_name} for date conversion in Episource")
-            df = df.withColumn("MBRDOB", lit(to_date(trim(col("MBRDOB")),"MM/dd/yyyy"))).withColumn("TIN", lit(0)).withColumn("BILLNPI", lit(0)).withColumn("BILLTIN", lit(0)).withColumn("PRVGROUP",col("PRVGROUP").substr(1,50))
-        elif "ChartData_CAID_Virtix" in file_name:
-            logger.info(f"Inside File {file_name} for date conversion in Virtix")
-            # RBICA-13935 : Virtix files don't carry STATE as a data column. STATE is embedded in the
-            # merged output filename by the SAS merge step, e.g. ChartData_CAID_Virtix_Chase_<STATE>_yyyymmdd.txt
-            # so we extract it here from the actual S3 file path being read.
-            df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM/dd/yyyy"))) \
-                   .withColumn("STATE", regexp_extract(input_file_name(), r'ChartData_CAID_Virtix_Chase_([A-Za-z]{2})_\d{8}\.txt', 1)) \
-                   .withColumn("KF_TMS", lit(None).cast("timestamp")) \
-                   .withColumn("EDL_CREAT_DTM", current_timestamp()) \
-                   .withColumn("EDL_INCRMNTL_LOAD_DTM", lit("8888-12-31 00:00:00").cast("timestamp"))
-       elif "PROV" in file_name:
+sed -i '157s/df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM\/dd\/yyyy")))/df = df.withColumn("MBRDOB", lit(to_date(trim(col("MBRDOB")), "MM\/dd\/yyyy")))/' snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+
+sed -n '155,161p' snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
