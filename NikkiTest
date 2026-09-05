@@ -1,6 +1,2 @@
-$ git log --oneline -5
-5f2382780 (HEAD -> feature/RBICA-13935-followup) RBICA-13935: Fix MemberDOB->MBRDOB reference in ChartData_ANT_Virtix branch and indentation typo in PROV elif block
-084f5020c (origin/feature/RBICA-13935-followup) RBICA-13935: Sync SQL file with preprod/prod version to resolve promotion
-df36f057a remove conflict
-4308163cd (feature/RBICA-13935-jarfix-v3, develop) Pull request #16064: bootstrap jars fix
-605340fbb (feature/RBICA-13935-jarfix-09012026) dup fix
+git fetch origin
+git log --oneline origin/develop -- snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py | head -5
