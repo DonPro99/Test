@@ -1,1 +1,14 @@
-Hi Nikitha, I will be away from 8:30, copy your version(backup) in to one file and then copy the prepord code in to feature branch and promot all the way till prepord. and then copy your version code into the feature branch and again promote. then only that conflict issue will be resolved. 
+mkdir -p ~/nikki_backup_sept5
+cp snowpark/config/bootstrap_key_uat.sh ~/nikki_backup_sept5/
+cp snowpark/config/bootstrap_key_prod.sh ~/nikki_backup_sept5/
+cp snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py ~/nikki_backup_sept5/
+
+git checkout origin/preprod -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+git status
+
+git add sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+git commit -m "RBICA-13935: Sync SQL file with preprod/prod version to resolve promotion conflict, per Nazir"
+git push origin feature/RBICA-13935-followup
+
+diff ~/nikki_backup_sept5/bootstrap_key_uat.sh snowpark/config/bootstrap_key_uat.sh
+diff ~/nikki_backup_sept5/bootstrap_key_prod.sh snowpark/config/bootstrap_key_prod.sh
