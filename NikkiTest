@@ -1,3 +1,22 @@
-git log --oneline -10
-git remote -v
-find . -iname "bootstrap_key_uat.sh"
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ git log --oneline -10
+ace22ab06 (HEAD -> feature/RBICA-13935-jarfix-09012026) RBICA-13935: Explicitly copy rad_mcaid_chase_all_lob_s3_to_snflk_load.properties in bootstrap
+0eca253fa Resolve merge conflict
+d6b09fd6d RBICA-13935: Add Snowflake jar download verification to bootstrap n remove conflict packges
+085284fd0 RBICA-13935: Remove conflicting --packages flag, use local --jars only for Snowflake JDBC/Spark connector to fix version mismatch
+aea9f5e1d Pull request #15957: Feature/AM45700 202608 mraprsppdf
+b6a35cfd6 cioxrt_application_prod.properties edited online with Bitbucket
+083974df2 cioxrt_application_uat.properties edited online with Bitbucket
+186b6ef92 cioxrt_application_radv_prod.properties edited online with Bitbucket
+de1bf240e cioxrt_application_radv_uat.properties edited online with Bitbucket
+c7fa850e0 Pull request #15953: Feature/RAA-12487 POC INPATIENT DATA ORDER
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ git remote -v
+origin  https://AM71511@bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files.git (fetch)
+origin  https://AM71511@bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files.git (push)
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ find . -iname "bootstrap_key_uat.sh"
+./RA_Charts/scripts/bootstrap_key_uat.sh
+./snowpark/config/bootstrap_key_uat.sh
