@@ -1,22 +1,10 @@
+
 AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
-$ git status
-On branch feature/RBICA-13935-followup
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-        modified:   sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+$ git push origin feature/RBICA-13935-followup
+Everything up-to-date
 
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        .idea/
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
+$ diff ~/nikki_backup_sept5/bootstrap_key_uat.sh snowpark/config/bootstrap_key_uat.sh
 
-git commit -m "RBICA-13935: Sync SQL file with preprod/prod version to resolve promotion conflict, per Nazir"
-git push origin feature/RBICA-13935-followup
-
-
-
-git add sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
-git commit -m "RBICA-13935: Sync SQL file with preprod/prod version to resolve promotion conflict, per Nazir"
-git push origin feature/RBICA-13935-followup
-
-diff ~/nikki_backup_sept5/bootstrap_key_uat.sh snowpark/config/bootstrap_key_uat.sh
-diff ~/nikki_backup_sept5/bootstrap_key_prod.sh snowpark/config/bootstrap_key_prod.sh
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
+$ diff ~/nikki_backup_sept5/bootstrap_key_prod.sh snowpark/config/bootstrap_key_prod.sh
