@@ -1,7 +1,4 @@
-$ git diff --stat
-warning: in the working copy of 'snowpark/config/bootstrap_key_prod.sh', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'snowpark/config/bootstrap_key_uat.sh', LF will be replaced by CRLF the next time Git touches it
- .../bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py   |  2 ++
- snowpark/config/bootstrap_key_prod.sh                 |  2 ++
- snowpark/config/bootstrap_key_uat.sh                  | 19 +++++--------------
- 3 files changed, 9 insertions(+), 14 deletions(-)
+git diff snowpark/config/bootstrap_key_uat.sh
+
+git diff snowpark/config/bootstrap_key_prod.sh
+git diff snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
