@@ -1,15 +1,1 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
-$ grep -n "env = \"uat\"" snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
-$ git log --all --oneline -- snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py | head -10
-32f0667bd Merge branch 'develop' of https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files into feature/RBICA-13935-jarfix-09012026
-92e7931c7 RBICA-13935-bootstrap-jarfix
-639be548a RBICA-13935: Fix for  IndentationError
-69da31401 RBICA-13935: Rename Virtix pattern to ChartData_ANT_Virtix_Chase_* to pass CFX validation
-679da574b RBICA-13935 timestamp col
-5c0a9ed89 RBICA-13935 volumn count fix for Virtix chase file load
-1e4b79c66 RBICA-13935 added code to convert PEM private key
-3fe5ac6e2 RBICA-13935 updating the extract state info from filename and column list in props file
-5eea04f6c RBICA-13935 - Added Mcaid Virtix integration script file
-f020f6f15 rad_mcaid_chase_all_lob_s3_to_snflk_load.py edited online with Bitbucket
+grep -n "MemberDOB\|MBRDOB" snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
