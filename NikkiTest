@@ -9,6 +9,8 @@ Untracked files:
   (use "git add <file>..." to include in what will be committed)
         .idea/
 
+git commit -m "RBICA-13935: Sync SQL file with preprod/prod version to resolve promotion conflict, per Nazir"
+git push origin feature/RBICA-13935-followup
 
 
 
