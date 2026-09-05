@@ -1,5 +1,11 @@
 git fetch origin develop:refs/remotes/origin/develop
+$ git fetch origin develop:refs/remotes/origin/develop
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files
+ * [new branch]          develop    -> origin/develop
 git fetch origin preprod:refs/remotes/origin/preprod
+$ git fetch origin preprod:refs/remotes/origin/preprod
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files
+ * [new branch]          preprod    -> origin/preprod
 
 git diff origin/develop origin/preprod -- <path-to-the-sql-file>
 
