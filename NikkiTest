@@ -1,4 +1,19 @@
-git ls-remote --heads origin | grep -i ir
-git ls-remote --heads origin | grep -i prod
+$ git fetch origin master:refs/remotes/origin/master
+remote: Enumerating objects: 26, done.
+remote: Counting objects: 100% (21/21), done.
+remote: Compressing objects: 100% (8/8), done.
+remote: Total 8 (delta 5), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (8/8), 1.22 KiB | 26.00 KiB/s, done.
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files
+ * [new branch]          master     -> origin/master
 
-git fetch origin <exact-branch-name>:refs/remotes/origin/<exact-branch-name>
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
+$ git fetch origin ir:refs/remotes/origin/ir
+remote: Enumerating objects: 1401, done.
+remote: Counting objects: 100% (1279/1279), done.
+remote: Compressing objects: 100% (690/690), done.
+remote: Total 1132 (delta 705), reused 754 (delta 442), pack-reused 0 (from 0)
+Receiving objects: 100% (1132/1132), 195.74 KiB | 2.17 MiB/s, done.
+Resolving deltas: 100% (705/705), completed with 39 local objects.
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files
+ * [new branch]          ir         -> origin/ir
