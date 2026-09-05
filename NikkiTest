@@ -1,10 +1,2 @@
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
-$ git push origin feature/RBICA-13935-followup
-Everything up-to-date
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
-$ diff ~/nikki_backup_sept5/bootstrap_key_uat.sh snowpark/config/bootstrap_key_uat.sh
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
-$ diff ~/nikki_backup_sept5/bootstrap_key_prod.sh snowpark/config/bootstrap_key_prod.sh
+git log --oneline -3
+git status
