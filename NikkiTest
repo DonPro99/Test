@@ -1,1 +1,7 @@
-grep -n "MemberDOB\|MBRDOB" snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
+$ grep -n "MemberDOB\|MBRDOB" snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+142:            df = df.withColumn("MemberDOB", when(col("MemberDOB").rlike(r"\d{2}[A-Za-z]{3}\d{4}"),
+144:                                          .when(col("MemberDOB").rlike(r"\d{2}/\d{2}/\d{4}"), to_date(col("MemberDOB"),"MM/dd/yyyy")).otherwise(None))
+157:            df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM/dd/yyyy"))) \
+164:            df = df.withColumn("MBRDOB", lit(to_date(trim(col("MBRDOB")),"MM/dd/yyyy"))).withColumn("TIN", lit(0)).withColumn("BILLNPI", lit(0)).withColumn("BILLTIN", lit(0)).withColumn("PRVGROUP",col("PRVGROUP").substr(1,50))
+170:            df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM/dd/yyyy"))) \
