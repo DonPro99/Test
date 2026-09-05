@@ -1,18 +1,3 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
-$ git branch
-  develop
-  feature/RBICA-13935-NKCLEAN
-* feature/RBICA-13935-followup
-  feature/RBICA-13935-jarfix-09012026
-  feature/RBICA-13935-jarfix-v3
+grep -n "env = \"uat\"" snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
-$ git status
-On branch feature/RBICA-13935-followup
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        .idea/
-
-nothing added to commit but untracked files present (use "git add" to track)
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
+git log --all --oneline -- snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py | head -10
