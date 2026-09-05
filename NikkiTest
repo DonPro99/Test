@@ -1,15 +1,13 @@
-$ git pull origin preprod
-remote: Enumerating objects: 2974, done.
-remote: Counting objects: 100% (2645/2645), done.
-remote: Compressing objects: 100% (1323/1323), done.
-remote: Total 2494 (delta 1712), reused 1643 (delta 1171), pack-reused 0 (from 0)
-Receiving objects: 100% (2494/2494), 340.68 KiB | 2.20 MiB/s, done.
-Resolving deltas: 100% (1712/1712), completed with 52 local objects.
-From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files
- * branch                preprod    -> FETCH_HEAD
-Auto-merging snowpark/config/bootstrap_key_prod.sh
-Auto-merging snowpark/config/bootstrap_key_uat.sh
-CONFLICT (content): Merge conflict in snowpark/config/bootstrap_key_uat.sh
-Auto-merging sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
-CONFLICT (content): Merge conflict in sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
-Automatic merge failed; fix conflicts and then commit the result.
+This pull request has conflicts.
+
+You must resolve the conflicts by manually merging preprod into this branch. After the conflicts are resolved you will be able to merge the pull request.
+
+Step 1: Checkout the source branch and merge in the changes from the target branch. Resolve conflicts.
+
+git checkout develop
+git pull origin preprod
+Step 2: After the merge conflicts are resolved, stage the changes accordingly, commit the changes and push.
+
+git commit
+git push origin HEAD
+Step 3: Merge the updated pull request.
