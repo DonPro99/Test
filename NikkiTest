@@ -1,14 +1,2 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
-$ git log --oneline -3
-084f5020c (HEAD -> feature/RBICA-13935-followup) RBICA-13935: Sync SQL file with preprod/prod version to resolve promotion
-df36f057a remove conflict
-4308163cd (feature/RBICA-13935-jarfix-v3, develop) Pull request #16064: bootstrap jars fix
+git log origin/feature/RBICA-13935-followup --oneline -3
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
-$ git status
-On branch feature/RBICA-13935-followup
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        .idea/
-
-nothing added to commit but untracked files present (use "git add" to track)
