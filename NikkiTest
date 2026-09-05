@@ -1,2 +1,5 @@
 git add snowpark/config/bootstrap_key_uat.sh
 git commit -m "RBICA-13935: Remove duplicate properties-copy block in UAT bootstrap"
+
+
+git push origin feature/RBICA-13935-jarfix-09012026
