@@ -1,3 +1,15 @@
+git status
+
+git stash
+
+git fetch origin
+git checkout release/8.5
+git pull origin release/8.5
+
+git stash drop
+
+
+
 protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
 {
     var cloaAutoPreApproval = _context.PreApprovalRequests
@@ -21,3 +33,106 @@ get isAutoPreApproval(): boolean {
   const testCheckInfo = this.pr?.testCheckInformation as any;
   ... // rest of Indu's logic unchanged
 }
+
+=========================
+
+protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
+{
+    var cloaAutoPreApproval = _context.PreApprovalRequests
+        .Where(par => par.Id == model.Id)
+        .Select(par => par.Cloa.IsAutoPreApproval)
+        .FirstOrDefault();
+
+    if (cloaAutoPreApproval)
+    {
+        return true;
+    }
+
+    var testCheckInfo = model?.TestCheckInformation;
+    if (testCheckInfo == null) return false;
+
+    if (testCheckInfo.IsOtherAdminActivity.GetValueOrDefault())
+    {
+        return true;
+    }
+
+    if (model.ActivityLocation != null && model.ActivityLocation.IsOutsideOfficeDistrict.GetValueOrDefault())
+    {
+        return false;
+    }
+
+    var autoApprovedCloaCodes = GetAutoApprovedCloaCodes(model.ApplicationId.GetValueOrDefault());
+
+    var selectedCodes = GetSelectedCodeLabels(testCheckInfo);
+    if (!selectedCodes.Any()) return false;
+
+    return selectedCodes.Any(selected =>
+        autoApprovedCloaCodes.Any(approved => approved.Contains(selected, StringComparison.OrdinalIgnoreCase))
+    );
+}
+
+==============================
+
+get isAutoPreApproval(): boolean {
+  if (this.pr?.designeeInfo?.isAutoPreApproval) {
+    return true;
+  }
+
+  const testCheckInfo = this.pr?.testCheckInformation as any;
+
+  if (testCheckInfo?.isOtherAdminActivity) {
+    return true;
+  }
+
+  const isInsideDistrict = !this.pr?.activityLocation?.isOutsideOfficeDistrict;
+  if (!isInsideDistrict) {
+    return false;
+  }
+
+  const designeeTypeId = this.pr?.designeeInfo?.typeId;
+
+  if (designeeTypeId === DesigneeTypeEnum.ADMINPEGEN || designeeTypeId === 31) {
+    const requestedAuthorizations = testCheckInfo?.requestedAuthorizations ?? [];
+
+    const autoApprovedCodes = requestedAuthorizations
+      .filter((a: any) => a.isAutoPreApproval || a.isAutomaticPreapproval)
+      .map((a: any) => (a.functionCode || a.name || '').toUpperCase());
+
+    const adminPeGenCheckboxMap = [
+      { isSelected: !!(testCheckInfo?.isAdminPeGenFpe || testCheckInfo?.isAdminPeGenFPE), code: 'FPE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenMce || testCheckInfo?.isAdminPeGenMCE), code: 'MCE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenGie || testCheckInfo?.isAdminPeGenGIE), code: 'GIE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenFire || testCheckInfo?.isAdminPeGenFIRE), code: 'FIRE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenBae || testCheckInfo?.isAdminPeGenBAE), code: 'BAE' }
+    ];
+
+    const selectedCodes = adminPeGenCheckboxMap
+      .filter(item => item.isSelected)
+      .map(item => item.code);
+
+    if (selectedCodes.length === 0) {
+      return false;
+    }
+
+    const hasAutoApprovedMatch = selectedCodes.some(selectedCode =>
+      autoApprovedCodes.some((approvedCode: string) => approvedCode.includes(selectedCode))
+    );
+
+    return hasAutoApprovedMatch;
+  }
+
+  const selectedAuthorizations = testCheckInfo?.selectedRequestAuthorizations ?? [];
+  const selectedFcs = selectedAuthorizations.map((item: any) => item.id);
+  const requestedAuthorizations = testCheckInfo?.requestedAuthorizations ?? [];
+
+  return (
+    isInsideDistrict &&
+    super.canAutoApprove(selectedFcs, requestedAuthorizations)
+  );
+}
+
+===================
+
+git add -A
+git commit -m "Fix DMS-8269: restore main-toggle check ahead of per-function-code logic (regression from latest merge)"
+git push origin release/8.5
