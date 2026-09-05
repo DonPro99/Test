@@ -1,4 +1,52 @@
-git config --get-all remote.origin.fetch
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ git config --get-all remote.origin.fetch
++refs/heads/feature/RBICA-13935-NKCLEAN:refs/remotes/origin/feature/RBICA-13935-NKCLEAN
 
-git fetch origin feature/RBICA-13935-jarfix-09012026:refs/remotes/origin/feature/RBICA-13935-jarfix-09012026
-git log HEAD..origin/feature/RBICA-13935-jarfix-09012026 --oneline
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ git fetch origin feature/RBICA-13935-jarfix-09012026:refs/remotes/origin/feature/RBICA-13935-jarfix-09012026
+remote: Enumerating objects: 765, done.
+remote: Counting objects: 100% (597/597), done.
+remote: Compressing objects: 100% (400/400), done.
+remote: Total 401 (delta 292), reused 0 (delta 0), pack-reused 0 (from 0)
+Receiving objects: 100% (401/401), 94.89 KiB | 670.00 KiB/s, done.
+Resolving deltas: 100% (292/292), completed with 37 local objects.
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files
+ * [new branch]          feature/RBICA-13935-jarfix-09012026 -> origin/feature/RBICA-13935-jarfix-09012026
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ git log HEAD..origin/feature/RBICA-13935-jarfix-09012026 --oneline
+32f0667bd (origin/feature/RBICA-13935-jarfix-09012026) Merge branch 'develop' of https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files into feature/RBICA-13935-jarfix-09012026
+92e7931c7 RBICA-13935-bootstrap-jarfix
+2170b9248 Pull request #16055: raa_chartview_s3_process_handler.py edited online with Bitbucket
+a39a544d1 Pull request #16049: added changes
+923d7858a added changes
+a5bf5bbf6 Pull request #16045: added changes
+2a56aece2 added changes
+7c3456e2f Pull request #16041: added changes
+fa6177e67 added changes
+1f1605dbb Pull request #16037: added changes
+5a487de3a added changes
+d826cef95 Pull request #16034: Feature/AM18673 20260904 testing
+089285617 added changes
+a86776694 Pull request #16027: Feature/RAA-1031 RISKACCURACY GRP2
+7836cb7ab raa_chartview_s3_process_handler.py edited online with Bitbucket
+489b19105 Pull request #16028: Feature/AH08 26
+588d5bbd3 email update
+cd5eb8997 Added partial success attachment and rrr changes
+63a360bc1 Error logging enhancement and manifest mismatch
+be4214dc2 Pull request #16022: added changes
+9b4a6ce17 Pull request #16019: raa_chartview_s3_process_handler.sh edited online with Bitbucket
+1d98859de added changes
+f5eb84df1 raa_chartview_s3_process_handler.sh edited online with Bitbucket
+243c2a0a5 Pull request #16016: Feature/RAA-0623 S3OPT MN-2026
+4ccfbfcdc raa-chartview-s3-process-handler-prod.conf edited online with Bitbucket
+75da31c7b raa-chartview-s3-process-handler-uat.conf edited online with Bitbucket
+6d2535993 raa_chartview_s3_process_handler.py edited online with Bitbucket
+6724f35e9 Pull request #16013: Feature/RAA-0623 S3OPT MN-2026
+765bc5e6a raa-chartview-s3-process-handler-prod.conf edited online with Bitbucket
+2db0decf0 raa-chartview-s3-process-handler-uat.conf edited online with Bitbucket
+4ade93de0 raa_chartview_s3_process_handler.py edited online with Bitbucket
+60f184b93 Pull request #16009: Changes to the data
+53da9ca46 raa_chartview_s3_process_handler.py edited online with Bitbucket
+951dc5127 Changes to the data
+993b24b5e Pull request #16005: Changes to the data
