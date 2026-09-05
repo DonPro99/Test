@@ -1,46 +1,5 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
-$ git show --stat 92e7931c7
-commit 92e7931c7b32b40c8e954a1e5d81ce5053beea15
-Author: Komandla, Nikhitha <Nikhitha.Komandla@elevancehealth.com>
-Date:   Fri Sep 4 17:57:57 2026 -0400
+git pull origin feature/RBICA-13935-jarfix-09012026
 
-    RBICA-13935-bootstrap-jarfix
-
- .../rad_mcaid_chase_all_lob_s3_to_snflk_load.py    |  2 +-
- snowpark/config/bootstrap_key_prod.sh              | 12 ++++++++--
- snowpark/config/bootstrap_key_uat.sh               | 27 +++++++---------------
- 3 files changed, 19 insertions(+), 22 deletions(-)
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
-$ git diff origin/feature/RBICA-13935-jarfix-09012026 HEAD -- snowpark/config/bootstrap_key_uat.sh snowpark/config/bootstrap_key_prod.sh
-diff --git a/snowpark/config/bootstrap_key_prod.sh b/snowpark/config/bootstrap_key_prod.sh
-index 909abf9d8..883743c98 100644
---- a/snowpark/config/bootstrap_key_prod.sh
-+++ b/snowpark/config/bootstrap_key_prod.sh
-@@ -23,9 +23,6 @@ sudo chmod -R 777 /home/hadoop/config/external.properties
-
- sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/db.properties /home/hadoop/config/
- sudo chmod -R 777 /home/hadoop/config/db.properties
--# RBICA-13935: rad_mcaid_chase_all_lob_s3_to_snflk_load.properties uses .properties extension but does not contain "prod" in the filename, so it is silently skipped by the "*prod.properties" filter above. So, copy it explicitly.
--sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
--sudo chmod 777 /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
-
- # Copying json config for transact load
- sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/chartextraction/conf/cra_transact_config.json /home/hadoop/config/
-@@ -37,7 +34,7 @@ sudo chmod -R 777 /home/hadoop/config/Transact_config.json
- #coying json config for Matrix aca load
- sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/mtrx-prsp-etl/config/mtrx-prsp.json /home/hadoop/config/
- sudo chmod -R 777 /home/hadoop/config/mtrx-prsp.json
--
-+
- #coying json config for verisma aca load
- sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/verisma-aca-etl/config/vrsmart-aca.json /home/hadoop/config/
- sudo chmod -R 777 /home/hadoop/config/vrsmart-aca.json
-@@ -123,12 +120,7 @@ sudo python3.11 -m pip install /home/hadoop/scripts/ReduceReuseRecycle-1.5-py3-n
- # ===============================
- sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/rrr_spark/reduce_reuse_recycle-0.1-SNAPSHOT.jar /home/hadoop/jars/
- sudo chmod 777 /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar
--# Copy Snowflake JDBC and Spark Connector JARs from internal library path for RBICA-13935 (Virtix chase file load)
--# TEMPORARY fix to be removed once pom.xml dependency upgrade is confirmed and migrated
--sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/snowflake-jdbc-3.14.4.jar /home/hadoop/jars/
--sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar /home/
+grep -n "rad_mcaid_chase_all_lob_s3_to_snflk_load.properties" snowpark/config/bootstrap_key_uat.sh snowpark/config/bootstrap_key_prod.sh
+grep -n "wget\|aws s3 cp.*snowflake-jdbc\|exit 1" snowpark/config/bootstrap_key_uat.sh snowpark/config/bootstrap_key_prod.sh
+grep -n "====" snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
