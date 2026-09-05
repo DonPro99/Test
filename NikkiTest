@@ -1,2 +1,10 @@
-git fetch origin feature/RBICA-13935-followup:refs/remotes/origin/feature/RBICA-13935-followup
-git log origin/feature/RBICA-13935-followup --oneline -3
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
+$ git fetch origin feature/RBICA-13935-followup:refs/remotes/origin/feature/RBICA-13935-followup
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files
+ * [new branch]          feature/RBICA-13935-followup -> origin/feature/RBICA-13935-followup
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
+$ git log origin/feature/RBICA-13935-followup --oneline -3
+084f5020c (HEAD -> feature/RBICA-13935-followup, origin/feature/RBICA-13935-followup) RBICA-13935: Sync SQL file with preprod/prod version to resolve promotion
+df36f057a remove conflict
+4308163cd (feature/RBICA-13935-jarfix-v3, develop) Pull request #16064: bootstrap jars fix
