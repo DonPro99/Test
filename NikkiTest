@@ -1,2 +1,5 @@
-git log origin/feature/RBICA-13935-followup --oneline -3
-
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-followup)
+$ git log origin/feature/RBICA-13935-followup --oneline -3
+fatal: ambiguous argument 'origin/feature/RBICA-13935-followup': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
