@@ -1,11 +1,347 @@
-  elif "ChartData_ANT_Virtix" in file_name:
-            logger.info(f"Inside File {file_name} for date conversion in Virtix")
-            df = df.withColumn("MBRDOB", lit(to_date(trim(col("MBRDOB")), "MM/dd/yyyy"))) \
-                   .withColumn("STATE", regexp_extract(input_file_name(), r'ChartData_ANT_Virtix_Chase_([A-Za-z]{2})_\d{8}\.txt', 1)) \
-                   .withColumn("KF_TMS", lit(None).cast("timestamp")) \
-                   .withColumn("EDL_CREAT_DTM", current_timestamp()) \
-                   .withColumn("EDL_INCRMNTL_LOAD_DTM", lit("8888-12-31 00:00:00").cast("timestamp"))
+dms_api/Dms.Services/Implementation/PreApprovalRequest/AdminPeGenPreApprovalRequestService.cs
+
+using Dms.Core.EntityFramework.Data;
+using Dms.Core.Utils;
+using Dms.Services.Interface.Activity;
+using Dms.Services.Interface.Lookup;
+using Dms.Services.Interface.Message;
+using Dms.Services.Interface.Security;
+using Dms.Services.Interface.Shared;
+using Dms.Services.Interface.Task;
+using Dms.Services.ViewModel.Activity;
+using Dms.Services.ViewModel.Lookup;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Dms.Services.Implementation.Activity
+{
+       public class AdminPeGenPreApprovalRequestService : AdminPePreApprovalRequestService
+    {
+                public AdminPeGenPreApprovalRequestService(
+            DmsContext context,
+            ITaskService taskService,
+            IDocumentService documentService,
+            IActivityService activityService,
+            IMessageService messageService,
+            ISharedService sharedService,
+            ILookupService lookupService,
+            IUserService userService)
+            : base(context, taskService, documentService, activityService, messageService, sharedService, lookupService, userService)
+        {
+            _designeeType = (int)DesigneeTypeEnum.ADMINPEGEN;
+        }
+
+    public override PreApprovalRequestViewModel GetNew(int applicationId)
+        {
+            base.GetNew(applicationId);
+            if (_preApprovalRequestViewModel?.TestCheckInformation != null && _cloa != null)
+            {
+                var cloaFunctionCodes = _context.CloaFunctionCodes
+                    .Where(c => c.CloaId == _cloa.Id && c.Cloa.CloaStatusId == (int)CloaStatusEnum.Active)
+                    .Include(c => c.FunctionCode)
+                    .ToList();
+
+                var requestedAuths = cloaFunctionCodes.Select(c => new FunctionCodeViewModel
+                {
+                    Id = c.FunctionCodeId,
+                    FunctionCode = c.FunctionCode?.Name,
+                    HasTypeRating = c.FunctionCode?.HasTypeRating ?? false,
+                    IsAutomaticPreapproval = c.IsAutoPreApproval
+                }).ToList();
+
+                _preApprovalRequestViewModel.TestCheckInformation.RequestedAuthorizations = requestedAuths;
+
+                if (_cloa.DesigneeInfo?.TypeId == (int)DesigneeTypeEnum.ADMINPEGEN || _cloa.DesigneeInfo?.TypeId == 31)
+                {
+                    var codeNames = requestedAuths.Select(a => a.FunctionCode ?? string.Empty).ToList();
+                    var testCheckInfo = _preApprovalRequestViewModel.TestCheckInformation;
+
+                    testCheckInfo.IsAdminPeGenFPE = codeNames.Any(c => c.Contains("FPE", StringComparison.OrdinalIgnoreCase));
+                    testCheckInfo.IsAdminPeGenMCE = codeNames.Any(c => c.Contains("MCE", StringComparison.OrdinalIgnoreCase));
+                    testCheckInfo.IsAdminPeGenGIE = codeNames.Any(c => c.Contains("GIE", StringComparison.OrdinalIgnoreCase));
+                    testCheckInfo.IsAdminPeGenFIRE = codeNames.Any(c => c.Contains("FIRE", StringComparison.OrdinalIgnoreCase));
+                    testCheckInfo.IsAdminPeGenBAE = codeNames.Any(c => c.Contains("BAE", StringComparison.OrdinalIgnoreCase));
+                }
+            }
+
+            return _preApprovalRequestViewModel;
+        }
+
+        protected override bool IsAutoPreApproval(PreApprovalRequestViewModel model)
+        {
+            var testCheckInfo = model?.TestCheckInformation;
+            if (testCheckInfo == null) return false;
+
+            if (testCheckInfo.IsOtherAdminActivity.GetValueOrDefault())
+            {
+                return true;
+            }
+
+            if (model.ActivityLocation != null && model.ActivityLocation.IsOutsideOfficeDistrict.GetValueOrDefault())
+            {
+                return false;
+            }
+
+            var autoApprovedCloaCodes = GetAutoApprovedCloaCodes(model.ApplicationId.GetValueOrDefault());
+
+            var selectedCodes = GetSelectedCodeLabels(testCheckInfo);
+            if (!selectedCodes.Any()) return false;
+
+            return selectedCodes.Any(selected =>
+                autoApprovedCloaCodes.Any(approved => approved.Contains(selected, StringComparison.OrdinalIgnoreCase))
+            );
+        }
+
+        public override PreApprovalRequestViewModel Save(PreApprovalRequestViewModel model)
+        {
+            var testCheckInfo = model?.TestCheckInformation;
+            if (model != null && model.isSubmit && testCheckInfo != null)
+            {
+                var autoApprovedCloaCodes = GetAutoApprovedCloaCodes(model.ApplicationId.GetValueOrDefault());
+                var classification = ClassifyFlags(testCheckInfo, autoApprovedCloaCodes);
+
+                // MIXED SELECTION: Split into Record 1 (Auto) and Record 2 (Manual)
+                if (classification.HasAuto && classification.HasManual)
+                {
+                    // Clean Record 1 to strictly hold Auto-Approved flags
+                    ApplyFlags(testCheckInfo, classification.AutoFlags);
+
+                    // Save Record 1
+                    base.Save(model);
+
+                    // Create & Save Record 2 (Manual Approval)
+                    var manualModel = JsonConvert.DeserializeObject<PreApprovalRequestViewModel>(JsonConvert.SerializeObject(model));
+                    manualModel.Id = 0;
+                    manualModel.RequestInfo.ControlNumber = _activityService.GenerateTrackingNumber(model.DesigneeInfo.CloaId, (int)ProcessTypeEnum.PreApproval, null);
+
+                    ApplyFlags(manualModel.TestCheckInformation, classification.ManualFlags);
+
+                    base.Save(manualModel);
+                    base.CreateTask(manualModel);
+
+                    return model;
+                }
+            }
+
+            return base.Save(model);
+        }
+
+        protected override void CompleteOrCreateTask(PreApprovalRequestViewModel model, bool canComplete)
+        {
+            // Standard execution handles auto-approval tasks for sanitized Record 1 and pure requests
+            base.CompleteOrCreateTask(model, canComplete);
+        }
+
+        #region Helper Methods
+
+        private List<string> GetAutoApprovedCloaCodes(int applicationId)
+        {
+            return _context.CloaFunctionCodes
+                .Where(c => c.Cloa.ApplicationId == applicationId &&
+                            c.Cloa.CloaStatusId == (int)CloaStatusEnum.Active &&
+                            c.IsAutoPreApproval)
+                .Select(c => c.FunctionCode.Name.ToUpper())
+                .ToList();
+        }
+
+        private List<string> GetSelectedCodeLabels(PreApprovalTestCheckInformationViewModel testCheckInfo)
+        {
+            var selectedCodes = new List<string>();
+            if (testCheckInfo.IsAdminPeGenFPE.GetValueOrDefault()) selectedCodes.Add("FPE");
+            if (testCheckInfo.IsAdminPeGenMCE.GetValueOrDefault()) selectedCodes.Add("MCE");
+            if (testCheckInfo.IsAdminPeGenGIE.GetValueOrDefault()) selectedCodes.Add("GIE");
+            if (testCheckInfo.IsAdminPeGenFIRE.GetValueOrDefault()) selectedCodes.Add("FIRE");
+            if (testCheckInfo.IsAdminPeGenBAE.GetValueOrDefault()) selectedCodes.Add("BAE");
+            return selectedCodes;
+        }
+
+        private FlagClassification ClassifyFlags(PreApprovalTestCheckInformationViewModel testCheckInfo, List<string> autoApprovedCloaCodes)
+        {
+            var result = new FlagClassification();
+
+            bool isFpe = testCheckInfo.IsAdminPeGenFPE.GetValueOrDefault();
+            bool isMce = testCheckInfo.IsAdminPeGenMCE.GetValueOrDefault();
+            bool isGie = testCheckInfo.IsAdminPeGenGIE.GetValueOrDefault();
+            bool isFire = testCheckInfo.IsAdminPeGenFIRE.GetValueOrDefault();
+            bool isBae = testCheckInfo.IsAdminPeGenBAE.GetValueOrDefault();
+
+            result.AutoFlags.FPE = isFpe && autoApprovedCloaCodes.Any(c => c.Contains("FPE"));
+            result.AutoFlags.MCE = isMce && autoApprovedCloaCodes.Any(c => c.Contains("MCE"));
+            result.AutoFlags.GIE = isGie && autoApprovedCloaCodes.Any(c => c.Contains("GIE"));
+            result.AutoFlags.FIRE = isFire && autoApprovedCloaCodes.Any(c => c.Contains("FIRE"));
+            result.AutoFlags.BAE = isBae && autoApprovedCloaCodes.Any(c => c.Contains("BAE"));
+
+            result.ManualFlags.FPE = isFpe && !result.AutoFlags.FPE;
+            result.ManualFlags.MCE = isMce && !result.AutoFlags.MCE;
+            result.ManualFlags.GIE = isGie && !result.AutoFlags.GIE;
+            result.ManualFlags.FIRE = isFire && !result.AutoFlags.FIRE;
+            result.ManualFlags.BAE = isBae && !result.AutoFlags.BAE;
+
+            return result;
+        }
+
+        private void ApplyFlags(PreApprovalTestCheckInformationViewModel target, AdminPeGenFlags flags)
+        {
+            target.IsAdminPeGenFPE = flags.FPE;
+            target.IsAdminPeGenMCE = flags.MCE;
+            target.IsAdminPeGenGIE = flags.GIE;
+            target.IsAdminPeGenFIRE = flags.FIRE;
+            target.IsAdminPeGenBAE = flags.BAE;
+        }
+
+        private class FlagClassification
+        {
+            public AdminPeGenFlags AutoFlags { get; set; } = new AdminPeGenFlags();
+            public AdminPeGenFlags ManualFlags { get; set; } = new AdminPeGenFlags();
+            public bool HasAuto => AutoFlags.FPE || AutoFlags.MCE || AutoFlags.GIE || AutoFlags.FIRE || AutoFlags.BAE;
+            public bool HasManual => ManualFlags.FPE || ManualFlags.MCE || ManualFlags.GIE || ManualFlags.FIRE || ManualFlags.BAE;
+        }
+
+        private class AdminPeGenFlags
+        {
+            public bool FPE { get; set; }
+            public bool MCE { get; set; }
+            public bool GIE { get; set; }
+            public bool FIRE { get; set; }
+            public bool BAE { get; set; }
+        }
+
+        #endregion
+    }
+}====================
+
+dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/adminpe-index.component.ts
+
+get isAutoPreApproval(): boolean {
+  const testCheckInfo = this.pr?.testCheckInformation as any;
+
+  if (testCheckInfo?.isOtherAdminActivity) {
+    return true;
+  }
+
+  const isInsideDistrict = !this.pr?.activityLocation?.isOutsideOfficeDistrict;
+  if (!isInsideDistrict) {
+    return false;
+  }
+
+  const designeeTypeId = this.pr?.designeeInfo?.typeId;
+
+  if (designeeTypeId === DesigneeTypeEnum.ADMINPEGEN || designeeTypeId === 31) {
+    const requestedAuthorizations = testCheckInfo?.requestedAuthorizations ?? [];
+
+    // Extract code labels that the AO/MS explicitly set for auto-preapproval
+    const autoApprovedCodes = requestedAuthorizations
+      .filter((a: any) => a.isAutoPreApproval || a.isAutomaticPreapproval)
+      .map((a: any) => (a.functionCode || a.name || '').toUpperCase());
+
+    // Mapping UI checkboxes to code labels
+    const adminPeGenCheckboxMap = [
+      { isSelected: !!(testCheckInfo?.isAdminPeGenFpe || testCheckInfo?.isAdminPeGenFPE), code: 'FPE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenMce || testCheckInfo?.isAdminPeGenMCE), code: 'MCE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenGie || testCheckInfo?.isAdminPeGenGIE), code: 'GIE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenFire || testCheckInfo?.isAdminPeGenFIRE), code: 'FIRE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenBae || testCheckInfo?.isAdminPeGenBAE), code: 'BAE' }
+    ];
+
+    // Filter to selected codes
+    const selectedCodes = adminPeGenCheckboxMap
+      .filter(item => item.isSelected)
+      .map(item => item.code);
+
+    if (selectedCodes.length === 0) {
+      return false;
+    }
+
+        // CHECK: At least one selected code matches an AO/MS auto-approved code
+    const hasAutoApprovedSelection = selectedCodes.some(selectedCode =>
+      autoApprovedCodes.some((approvedCode: string) => approvedCode.includes(selectedCode))
+    );
+
+    return hasAutoApprovedSelection;
+  
+  }
+
+  // Standard Admin-PE fallback logic
+  const selectedAuthorizations = testCheckInfo?.selectedRequestAuthorizations ?? [];
+  const selectedFcs = selectedAuthorizations.map((item: any) => item.id);
+  const requestedAuthorizations = testCheckInfo?.requestedAuthorizations ?? [];
+
+  return (
+    isInsideDistrict &&
+    super.canAutoApprove(selectedFcs, requestedAuthorizations)
+  );
+}
+}
 
 
-       elif "PROV" in file_name:
-        elif "PROV" in file_name:
+========================
+
+dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/adminpe-index.component.ts
+
+ get isAutoPreApproval(): boolean {
+  const testCheckInfo = this.pr?.testCheckInformation as any;
+
+  if (testCheckInfo?.isOtherAdminActivity) {
+    return true;
+  }
+
+  const isInsideDistrict = !this.pr?.activityLocation?.isOutsideOfficeDistrict;
+  if (!isInsideDistrict) {
+    return false;
+  }
+
+  const designeeTypeId = this.pr?.designeeInfo?.typeId;
+
+  // Admin-PE-GEN Logic
+  if (designeeTypeId === DesigneeTypeEnum.ADMINPEGEN || designeeTypeId === 31) {
+    const requestedAuthorizations = testCheckInfo?.requestedAuthorizations ?? [];
+
+    // Extract code labels that the AO/MS explicitly set for auto-preapproval
+    // Auto-approved codes from AO/MS
+    const autoApprovedCodes = requestedAuthorizations
+      .filter((a: any) => a.isAutoPreApproval || a.isAutomaticPreapproval)
+      .map((a: any) => (a.functionCode || a.name || '').toUpperCase());
+
+    // Mapping UI checkboxes to code labels
+    // Map UI checkboxes
+    const adminPeGenCheckboxMap = [
+      { isSelected: !!(testCheckInfo?.isAdminPeGenFpe || testCheckInfo?.isAdminPeGenFPE), code: 'FPE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenMce || testCheckInfo?.isAdminPeGenMCE), code: 'MCE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenGie || testCheckInfo?.isAdminPeGenGIE), code: 'GIE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenFire || testCheckInfo?.isAdminPeGenFIRE), code: 'FIRE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenBae || testCheckInfo?.isAdminPeGenBAE), code: 'BAE' }
+    ];
+
+    // Filter to selected codes
+    const selectedCodes = adminPeGenCheckboxMap
+      .filter(item => item.isSelected)
+      .map(item => item.code);
+
+    if (selectedCodes.length === 0) {
+      return false;
+    }
+
+     // MATCH CHECK: Does AT LEAST ONE selected checkbox match an AO/MS auto-approved code?
+    const hasAutoApprovedMatch = selectedCodes.some(selectedCode =>
+      autoApprovedCodes.some((approvedCode: string) => approvedCode.includes(selectedCode))
+    );
+
+       // Directly return true if matched, bypassing super.canAutoApprove
+    return hasAutoApprovedMatch;
+  }
+
+  // Standard Admin-PE fallback logic
+  // Standard Admin-PE fallback
+  const selectedAuthorizations = testCheckInfo?.selectedRequestAuthorizations ?? [];
+  const selectedFcs = selectedAuthorizations.map((item: any) => item.id);
+  const requestedAuthorizations = testCheckInfo?.requestedAuthorizations ?? [];
+
+  return (
+    isInsideDistrict &&
+    super.canAutoApprove(selectedFcs, requestedAuthorizations)
+  );
+}
+}
