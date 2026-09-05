@@ -1,14 +1,2 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
-$ git ls-remote origin feature/RBICA-13935-jarfix-09012026
-32f0667bd0e64c041a2c2807930c5822f790ad26        refs/heads/feature/RBICA-13935-jarfix-09012026
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
-$ git push origin feature/RBICA-13935-jarfix-09012026
-To https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files.git
- ! [rejected]            feature/RBICA-13935-jarfix-09012026 -> feature/RBICA-13935-jarfix-09012026 (fetch first)
-error: failed to push some refs to 'https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files.git'
-hint: Updates were rejected because the remote contains work that you do not
-hint: have locally. This is usually caused by another repository pushing to
-hint: the same ref. If you want to integrate the remote changes, use
-hint: 'git pull' before pushing again.
-hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+git fetch origin
+git log HEAD..origin/feature/RBICA-13935-jarfix-09012026 --oneline
