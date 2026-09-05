@@ -1,2 +1,7 @@
-python3 -c "print('syntax check placeholder')"  # skip, this is bash not python
-bash -n snowpark/config/bootstrap_key_uat.sh && echo "SYNTAX OK"
+git fetch origin develop
+git fetch origin preprod
+
+git diff origin/develop origin/preprod -- <path-to-the-sql-file>
+
+git log --oneline origin/develop -- <path-to-the-sql-file>
+git log --oneline origin/preprod -- <path-to-the-sql-file>
