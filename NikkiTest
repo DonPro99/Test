@@ -1,2 +1,10 @@
-git fetch origin
-git log origin/feature/RBICA-13935-jarfix-09012026..HEAD --oneline
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ git fetch origin
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files
+   ed64beebb..b0790e483  feature/RBICA-13935-NKCLEAN -> origin/feature/RBICA-13935-NKCLEAN
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files (feature/RBICA-13935-jarfix-09012026)
+$ git log origin/feature/RBICA-13935-jarfix-09012026..HEAD --oneline
+fatal: ambiguous argument 'origin/feature/RBICA-13935-jarfix-09012026..HEAD': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
