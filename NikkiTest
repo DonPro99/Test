@@ -1,10 +1,5 @@
-$ sed -n '170,178p' snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
-            df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM/dd/yyyy"))) \
-                   .withColumn("STATE", regexp_extract(input_file_name(), r'ChartData_CAID_Virtix_Chase_([A-Za-z]{2})_\d{8}\.txt', 1)) \
-                   .withColumn("KF_TMS", lit(None).cast("timestamp")) \
-                   .withColumn("EDL_CREAT_DTM", current_timestamp()) \
-                   .withColumn("EDL_INCRMNTL_LOAD_DTM", lit("8888-12-31 00:00:00").cast("timestamp"))
-        elif "PROV" in file_name:
-            logger.info(f"Inside File {file_name} for date conversion in PROV")
-            if "UserDefined2" not in df.columns:
-                df = df.withColumn("UserDefined2", lit(""))
+python3 -c "import ast; ast.parse(open('snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py').read())" && echo "SYNTAX OK"
+
+git add snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+git commit -m "RBICA-13935: Fix MemberDOB->MBRDOB reference in ChartData_ANT_Virtix branch and indentation typo in PROV elif block"
+git push origin feature/RBICA-13935-followup
