@@ -1,3 +1,14 @@
 git fetch origin develop:develop
 git checkout develop
 git pull origin develop
+
+
+git checkout -b feature/RBICA-13935-jarfix-v3
+
+git checkout feature/RBICA-13935-jarfix-09012026 -- snowpark/config/bootstrap_key_uat.sh
+git checkout feature/RBICA-13935-jarfix-09012026 -- snowpark/config/bootstrap_key_prod.sh
+git checkout feature/RBICA-13935-jarfix-09012026 -- snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+
+git add snowpark/config/bootstrap_key_uat.sh snowpark/config/bootstrap_key_prod.sh snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+git commit -m "RBICA-13935: bootstrap jar fix - properties copy (UAT+PROD), Snowflake jar via S3 copy"
+git push origin feature/RBICA-13935-jarfix-v3
