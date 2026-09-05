@@ -1,13 +1,23 @@
-snowpark/config/bootstrap_key_uat.sh
-
-# RBICA-13935: rad_mcaid_chase_all_lob_s3_to_snflk_load.properties uses .properties extension and not .conf, so it is silently skipped by the "uat.conf" filter above. So, copy it explicitly.
-sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
-sudo chmod 777 /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
-
-
-git add snowpark/config/bootstrap_key_uat.sh
-git commit -m "RBICA-13935: Remove duplicate properties-copy block in UAT bootstrap"
-
-git push origin feature/RBICA-13935-jarfix-09012026
-
-git push origin --delete feature/RBICA-13935-jarfix-09012026-v2
+$ git push origin feature/RBICA-13935-jarfix-09012026
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 14 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 435 bytes | 217.00 KiB/s, done.
+Total 5 (delta 4), reused 0 (delta 0), pack-reused 0 (from 0)
+remote:
+remote: =====================================================================
+remote: You cannot push the following commits, you can only push your own commits to this repository:
+remote:
+remote: Current user: Komandla, Nikhitha <Nikhitha.Komandla@elevancehealth.com>
+remote:
+remote: Author: 4652c72c151: Komandla,Nikhitha <Nikhitha.Komandla@elevancehealth.com>
+remote: Commiter: 4652c72c151: Komandla,Nikhitha <Nikhitha.Komandla@elevancehealth.com>
+remote:
+remote: Check all gitconfigs have the correct email address, give repository permissions, or contact an administrator.
+remote: =====================================================================
+remote:
+remote:
+To https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files.git
+ ! [remote rejected]     feature/RBICA-13935-jarfix-09012026 -> feature/RBICA-13935-jarfix-09012026 (pre-receive hook declined)
+error: failed to push some refs to 'https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_files.git'
