@@ -1,5 +1,3 @@
-git log origin/preprod --oneline -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+git log origin/preprod --format="%h  %an  %ad  %s" --date=short -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
 
-git log origin/preprod --format="%h %an %ad %s" --date=short -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
-
-git log origin/develop --format="%h %an %ad %s" --date=short -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
+git log origin/develop --format="%h  %an  %ad  %s" --date=short -- sql/sf_sr_riskadj_HOS_RISK_ACRCY_CHRT_ABSTRCTN_RSLT_STG_PRODCombined.sql
