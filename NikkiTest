@@ -1,5 +1,5 @@
-git fetch origin develop
-git fetch origin preprod
+git fetch origin develop:refs/remotes/origin/develop
+git fetch origin preprod:refs/remotes/origin/preprod
 
 git diff origin/develop origin/preprod -- <path-to-the-sql-file>
 
