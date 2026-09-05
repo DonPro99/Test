@@ -1,1 +1,1 @@
-One more detail: I compared the SQL file across the pipeline — preprod, ir, and master (prod) all already have the same version (ENCNTR_GUID-based joins, with edl_load_dtm/edl_run_id columns). Only develop still has the old FILE_ID-based version.
+Hi Nikitha, I will be away from 8:30, copy your version(backup) in to one file and then copy the prepord code in to feature branch and promot all the way till prepord. and then copy your version code into the feature branch and again promote. then only that conflict issue will be resolved. 
