@@ -1,4 +1,1 @@
-console.log('[DEBUG] ngOnChanges fired. Changes:', Object.keys(changes), 
-    'isAdministrativePreapproval=', this.isAdministrativePreapproval, 
-    'hasAirportControl=', !!this.form?.get('airportOfTraining'),
-    'changes.form=', changes['form']);
+[DEBUG] ngOnChanges fired nnow. Changes: Array(12)0: "afsPostActivityGroup2"1: "preApprovalRequestData"2: "preApprovalRequestFormGroup"3: "form"4: "isExternal"5: "testCheckInformation"6: "designeeTypeId"7: "isProficiencyCheck"8: "categoryId"9: "isDisabled"10: "isEditPostActivity"11: "isActulDateDifference"length: 12[[Prototype]]: Array(0) isAdministrativePreapproval= false hasAirportControl= false changes.form= 
