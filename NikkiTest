@@ -13,8 +13,8 @@
     <handlers>
       <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
     </handlers>
-    <aspNetCore processPath="dotnet" arguments=".\Dms.Api.Designee.dll" stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout" startupTimeLimit="3600" requestTimeout="23:00:00" hostingModel="InProcess" />
-    <validation validateIntegratedModeConfiguration="false" />
+    <aspNetCore processPath="dotnet" arguments=".\Dms.Api.Designee.dll" stdoutLogEnabled="true" stdoutLogFile=".\logs\stdout" startupTimeLimit="3600" requestTimeout="23:00:00" hostingModel="InProcess" />
+<validation validateIntegratedModeConfiguration="false" />
     <security>
       <requestFiltering>
         <requestLimits maxAllowedContentLength="10485760" />
