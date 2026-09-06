@@ -1,1 +1,4 @@
-group2postactivity.component.ts:889 ngOnChanges fired, isAdministrativePreapproval= true
+console.log('[DEBUG] ngOnChanges fired. Changes:', Object.keys(changes), 
+    'isAdministrativePreapproval=', this.isAdministrativePreapproval, 
+    'hasAirportControl=', !!this.form?.get('airportOfTraining'),
+    'changes.form=', changes['form']);
