@@ -1,1 +1,1 @@
-onsole.log('ngOnChanges fired, isAdministrativePreapproval=', this.isAdministrativePreapproval)
+group2postactivity.component.ts:889 ngOnChanges fired, isAdministrativePreapproval= true
