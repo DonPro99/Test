@@ -1,24 +1,190 @@
-chunk-CBGV3H2P.js?v=0838e4ae:2757 ERROR RuntimeError: NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'false'. Current value: 'true'. Expression location: _PreApprovalRequestIndexComponent component. Find more at https://v20.angular.dev/errors/NG0100
-    at throwErrorIfNoChangesMode (chunk-CBGV3H2P.js?v=0838e4ae:6770:9)
-    at bindingUpdated (chunk-CBGV3H2P.js?v=0838e4ae:11998:9)
-    at ɵɵproperty (chunk-CBGV3H2P.js?v=0838e4ae:18161:7)
-    at PreApprovalRequestIndexComponent_Template (index.component.html:97:165)
-    at executeTemplate (chunk-CBGV3H2P.js?v=0838e4ae:8597:5)
-    at refreshView (chunk-CBGV3H2P.js?v=0838e4ae:9283:7)
-    at detectChangesInView (chunk-CBGV3H2P.js?v=0838e4ae:9455:5)
-    at detectChangesInViewIfAttached (chunk-CBGV3H2P.js?v=0838e4ae:9438:3)
-    at detectChangesInComponent (chunk-CBGV3H2P.js?v=0838e4ae:9431:3)
-    at detectChangesInChildComponents (chunk-CBGV3H2P.js?v=0838e4ae:9486:5)
-handleError @ chunk-CBGV3H2P.js?v=0838e4ae:2757
-12:04:37.505 ngx-logger.mjs:754 2026-09-06T16:04:37.505Z LOG [chunk-NLCOQ7ND.js:65571:19] /postactivity/afsgroups/ENC%7CNL5dNWt0tcX6MSBUwmVCfrjk-WOoUiynQuZ8DuxeQ_LY7nA Navigation Event 1
-12:04:38.548 chunk-CBGV3H2P.js?v=0838e4ae:2757 ERROR Error: Cannot find control with name: 'airportOfTraining'
-    at _throwError (chunk-J54U7WO4.js?v=0838e4ae:2867:9)
-    at setUpControl (chunk-J54U7WO4.js?v=0838e4ae:2729:19)
-    at _FormGroupDirective.addControl (chunk-J54U7WO4.js?v=0838e4ae:4508:5)
-    at _FormControlName._setUpControl (chunk-J54U7WO4.js?v=0838e4ae:5077:39)
-    at _FormControlName.ngOnChanges (chunk-J54U7WO4.js?v=0838e4ae:5033:28)
-    at _FormControlName.rememberChangeHistoryAndInvokeOnChangesHook (chunk-CBGV3H2P.js?v=0838e4ae:3479:10)
-    at callHookInternal (chunk-CBGV3H2P.js?v=0838e4ae:3615:10)
-    at callHook (chunk-CBGV3H2P.js?v=0838e4ae:3633:5)
-    at callHooks (chunk-CBGV3H2P.js?v=0838e4ae:3604:9)
-    at executeInitAndCheckHooks (chunk-CBGV3H2P.js?v=0838e4ae:3573:5)
+import { Component, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { SelectItem } from 'primeng/api';
+import {
+  ActivityRequestStatusEnum,
+  DesigneeTypeEnum,
+  DmsApplicationInformationComponent,
+  DmsTestCheckInformationComponent,
+  LookupService,
+  PreApprovalRequestInfoModel,
+  PreApprovalTabEnum,
+} from 'dms-web-shared';
+import { PreApprovalBaseComponent } from './pre-approval-base.component';
+
+@Component({
+    selector: 'dms-pr-adminpe-index',
+    templateUrl: './adminpe-index.component.html',
+    standalone: false
+})
+export class AdminpeIndexComponent
+  extends PreApprovalBaseComponent
+  implements OnInit {
+  activityRequestStatusEnum = ActivityRequestStatusEnum;
+  practicalTypes: SelectItem[] = [];
+
+  constructor(public override lookupService: LookupService) {
+    super(lookupService);
+    this.props = {
+      title: 'Administrative Activity Pre-Approval Request',
+      userguideComponent: 'PreAppvAdmin',
+      headers: [
+        PreApprovalTabEnum.preApprovalTab,
+        PreApprovalTabEnum.testCheckTab,
+        PreApprovalTabEnum.locationTab,
+        PreApprovalTabEnum.applicantTab,
+        PreApprovalTabEnum.uploadTab,
+        PreApprovalTabEnum.summaryTab,
+      ],
+      uploadRefMessage: [],
+      formGroupMap: {
+        1: ['testCheckInformation'],
+        2: ['activityLocation'],
+        3: ['applicationInformation'],
+        4: ['comments', 'uploadId'],
+      },
+    };
+    this.practicalTypes = [];
+  }
+
+  public static override buildForm(
+    model: PreApprovalRequestInfoModel,
+    options: any
+  ): FormGroup {
+    options.categoryId = 0;
+    const form = PreApprovalBaseComponent.buildForm(model, options);
+    // Using the application's actual designee type (e.g. Admin-PE-GEN, id 31) rather than hardcoding Admin-PE, 
+    // so this shared component correctly reflects which designee type is being processed.
+    const designeeTypeId = model.designeeInfo?.typeId ?? DesigneeTypeEnum.ADMINPE;
+
+    form.addControl(
+      'testCheckInformation',
+      DmsTestCheckInformationComponent.buildForm(
+        model.testCheckInformation!,
+        model.testInformation!,
+        model.applicantInformation!,
+        {
+          designeeTypeId,
+          categoryId: options.categoryId,
+          isDisabled: options.isDisabled,
+        }
+      )
+    );
+
+    form.addControl(
+      'applicationInformation',
+      DmsApplicationInformationComponent.buildForm(
+        model.applicationInformation!,
+        {
+          designeeTypeId,
+          categoryId: options.categoryId,
+          isDisabled: options.isDisabled,
+        }
+      )
+    );
+
+    return form;
+  }
+
+  public static override buildModel(
+    form: FormGroup,
+    model: PreApprovalRequestInfoModel
+  ) {
+    PreApprovalBaseComponent.buildModel(form, model);
+    DmsApplicationInformationComponent.buildModel(
+      form.get('applicationInformation') as FormGroup,
+      model.applicationInformation!
+    );
+    DmsTestCheckInformationComponent.buildModel(
+      form.get('testCheckInformation') as FormGroup,
+      model.testCheckInformation!,
+      model.testInformation!,
+      model.applicantInformation!,
+      model.designeeTypeId!,
+      model.categoryId || 0
+    );
+  }
+
+  async ngOnInit() {
+    await super.setBaseConfig(this.pr!);
+    this.props.tabCount = this.props.headers.length - 1;
+    this.getConfig.emit(this.props);
+
+    this.form = AdminpeIndexComponent.buildForm(this.pr!, {
+      isDisabled: this.isDisabled,
+    });
+  }
+
+  override onTabChange($event: any) {
+    AdminpeIndexComponent.buildModel(this.form!, this.pr!);
+    super.onTabChange($event);
+  }
+
+    getModel() {
+    AdminpeIndexComponent.buildModel(this.form!, this.pr!);
+    return this.pr;
+  }
+
+  get isAutoPreApproval(): boolean {
+   if (this.pr?.designeeInfo?.isAutoPreApproval) {
+    return true;
+  }
+  const testCheckInfo = this.pr?.testCheckInformation as any;
+
+  if (testCheckInfo?.isOtherAdminActivity) {
+    return true;
+  }
+
+  const isInsideDistrict = !this.pr?.activityLocation?.isOutsideOfficeDistrict;
+  if (!isInsideDistrict) {
+    return false;
+  }
+
+  const designeeTypeId = this.pr?.designeeInfo?.typeId;
+
+  // Admin-PE-GEN Logic
+  if (designeeTypeId === DesigneeTypeEnum.ADMINPEGEN || designeeTypeId === 31) {
+    const requestedAuthorizations = testCheckInfo?.requestedAuthorizations ?? [];
+
+    // Auto-approved codes from AO/MS
+    const autoApprovedCodes = requestedAuthorizations
+      .filter((a: any) => a.isAutoPreApproval || a.isAutomaticPreapproval)
+      .map((a: any) => (a.functionCode || a.name || '').toUpperCase());
+
+    // Map UI checkboxes
+    const adminPeGenCheckboxMap = [
+      { isSelected: !!(testCheckInfo?.isAdminPeGenFpe || testCheckInfo?.isAdminPeGenFPE), code: 'FPE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenMce || testCheckInfo?.isAdminPeGenMCE), code: 'MCE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenGie || testCheckInfo?.isAdminPeGenGIE), code: 'GIE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenFire || testCheckInfo?.isAdminPeGenFIRE), code: 'FIRE' },
+      { isSelected: !!(testCheckInfo?.isAdminPeGenBae || testCheckInfo?.isAdminPeGenBAE), code: 'BAE' }
+    ];
+
+    const selectedCodes = adminPeGenCheckboxMap
+      .filter(item => item.isSelected)
+      .map(item => item.code);
+
+    if (selectedCodes.length === 0) {
+      return false;
+    }
+
+    // MATCH CHECK: Does AT LEAST ONE selected checkbox match an AO/MS auto-approved code?
+    const hasAutoApprovedMatch = selectedCodes.some(selectedCode =>
+      autoApprovedCodes.some((approvedCode: string) => approvedCode.includes(selectedCode))
+    );
+
+    // Directly return true if matched, bypassing super.canAutoApprove
+    return hasAutoApprovedMatch;
+  }
+
+  // Standard Admin-PE fallback
+  const selectedAuthorizations = testCheckInfo?.selectedRequestAuthorizations ?? [];
+  const selectedFcs = selectedAuthorizations.map((item: any) => item.id);
+  const requestedAuthorizations = testCheckInfo?.requestedAuthorizations ?? [];
+
+  return (
+    isInsideDistrict &&
+    super.canAutoApprove(selectedFcs, requestedAuthorizations)
+  );
+}
+}
