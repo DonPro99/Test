@@ -1,241 +1,332 @@
-import { Directive, Injectable, Input, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { SelectItem } from 'primeng/api';
-import { Afsgroup2IacraComponent } from './afsgroup2iacra.component';
-import { LookupService } from '../../../../services/lookup.service';
-import { DmsActivityLocationComponent } from '../../afs/dms-activity-location.component';
-import { DmsTestCheckInformationComponent } from '../../afs/dms-test-check-information.component';
-import { ValidateRequiredUpload } from '../../../../extensions';
-import { PoApplicationInformationComponent } from '../poapplicationinfo.component';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
-  AfsGroupsPostActivityViewModel,
+  ActionButton, ActivityRequestStatusEnum,
+  AdminpeIndexComponent as AdminPePoIndexComponent,
+  AfsGroupsPostActivityViewModel, BaseComponent,
+  ButtonActionsEnum,
+  DartPoIndexComponent,
   DesigneeTypeEnum,
-  DocumentReference,
-  FunctionCode,
-  GradeofCertificateEnum,
-  PreApprovalActivityLocation,
-  PreApprovalApplicantInformation,
-  PreApprovalApplicationInformation,
+  DmePoIndexComponent,
+  DpeIndexComponent as DpePoIndexComponent,
+  DprePoIndexComponent,
+  LookupService,
+  PreApprovalRequestService,
   PreApprovalRequestStatusEnum,
-  PreApprovalTestCheckInformation,
-  PreApprovalTestInformation,
-} from '../../../../models/exportparams.model';
-import { BaseComponent } from '../../../shared/base/base.component';
-import { UploadControlComponent } from '../../../fileuploader/upload-control.component';
-import { CryptoService } from '../../../../services/crypto.service';
-@Directive()
-@Injectable()
-export class AfsGroup2PostActivityBaseComponent extends BaseComponent {
-  constructor(public lookupService: LookupService, public cryptoService: CryptoService) {
-    super();
-    this.designeeTypeId = -1;
-  }
-  @Input() data: AfsGroupsPostActivityViewModel | undefined | null;
-  @Input() userId: number = 0;
-  @Input() isDisabled = false;
-  @Input() isEditPostActivity: boolean = false;
-  @Input() isCancel = false;
-  categoryId: number = 0;
-  @Input() iacraDisplay = false;
-  @Input() isFromCorrectiveAction: boolean = true;
+  SaeIndexComponent as SaePoIndexComponent,
+  UtilityService,
+} from 'dms-web-shared';
+import { ConfirmationService, MessageService as ToastService} from 'primeng/api';
 
-  preApprovalRequestId: number = 0;
-  form: FormGroup | undefined | null;
-  designeeTypeId: number=0;
+import { FormArray, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { HttpStatusCode } from '@angular/common/http';
+
+@Component({
+    selector: 'po-afs-index',
+    templateUrl: './index.component.html',
+    styleUrls: ['./index.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
+})
+export class PoIndexComponent extends BaseComponent implements OnInit {
+  actionButtons: ActionButton[] = [];
+  isEditPostActivity: boolean = false;
+  isDisabled = false;
   showEdit = false;
+  postActivityCantSubmit = true;
+
+  constructor(private readonly lookupService: LookupService,
+              private readonly service: PreApprovalRequestService,
+              private readonly route: ActivatedRoute,
+              private readonly router: Router,
+              private readonly util: UtilityService,
+              private readonly confirmationService: ConfirmationService,
+              public utilityService: UtilityService,
+              private readonly toastService: ToastService) {
+                super();
+    this.props = {
+      title: 'Post Activity',
+      tabCount: 0,
+      buttons: [],
+      acceptLabel: 'Yes',
+      acceptVisible: true,
+      rejectLabel: 'No',
+      rejectVisible: true,
+    };
+  }
+  designeeTypeId: number = 0;
+  categoryId?: number = 0;
+  data: AfsGroupsPostActivityViewModel | undefined | null;
+  activeIndex: number = 0;
+  props: any;
+  isAdmin: boolean = false;
+  preApprovalRequestId: number = 0;
   postActivityId = 0;
-  isProficiencyCheck = false;
-  cancelReasons: SelectItem[] = [];
-  preApprovalUrl: string = '';
-  showIacra = false;
+  preApprovalRequestFormGroup: FormGroup | undefined | null;
   designeeTypeEnum: typeof DesigneeTypeEnum = DesigneeTypeEnum;
-  isAdministrativePreapproval = false;
-  isActualDateDifference: any;
-  @ViewChild('uploadControl') uploadControl: UploadControlComponent | undefined | null;
 
-  public static buildForm(
-    model: AfsGroupsPostActivityViewModel,
-    options: any
-  ): FormGroup | null{
-    if (!model) return null;
-    const fb = new FormBuilder();
-    const form = fb.group({
-      // post activity controls
-      selectedFunctionCodes: new FormControl({ value: '', disabled: true }, []),
-      generalComments: new FormControl(
-        {
-          value: model.generalComments,
-          disabled: options.isDisabled,
-        },
-        model.preApprovalRequest?.testCheckInformation?.selectedRequestAuthorizations?.find(a => a.functionCode?.endsWith('-BAE')) ? [Validators.required] : []
-      ),
-      cancelComments: new FormControl(
-        {
-          value: model.preApprovalRequest?.justificationForCancellation,
-          disabled: true,
-        },
-        []
-      ),
-      reasonDropdown: new FormControl(
-        { value: model.preApprovalRequest?.cancellationTypeId, disabled: true },
-        []
-      ),
+  @ViewChild('active') index: DartPoIndexComponent | DmePoIndexComponent | DprePoIndexComponent | DpePoIndexComponent | SaePoIndexComponent | AdminPePoIndexComponent | undefined | null;
 
-      // preapproval controls
-      activityLocation: DmsActivityLocationComponent.buildForm(
-        model.preApprovalRequest?.activityLocation as PreApprovalActivityLocation,
-        model.preApprovalRequest?.categoryId || 0,
-        options.designeeTypeId,
-        options.isDisabled,
-        true
-      ),
-      comments: [{ value: model.comments, disabled: options.isDisabled }],
-      prUploadId: [
-        {
-          value:
-            model.documentReference && model.documentReference.uploadedFiles
-              ? model.documentReference.uploadedFiles.map((uf) => uf.documentId)
-              : '',
-          disabled: true,
-        },
-        [],
-      ],
-      uploadId: [
-        {
-          value:
-            model.documentReference && model.documentReference.uploadedFiles
-              ? model.documentReference.uploadedFiles.map((uf) => uf.documentId)
-              : '',
-          disabled: options.isDisabled,
-        },
-        options.isAttachmentNotRequired ? [] : [ValidateRequiredUpload],
-      ],
-      afsGrp2IacraFormGroup: Afsgroup2IacraComponent.buildForm(
-        model.afsPostActivityGroup2,
-        options.isDisabled
-      ),
-      testCheckInformation: DmsTestCheckInformationComponent.buildForm(
-        model.preApprovalRequest?.testCheckInformation as PreApprovalTestCheckInformation,
-        model.preApprovalRequest?.testInformation as PreApprovalTestInformation,
-        model.preApprovalRequest?.applicantInformation as PreApprovalApplicantInformation,
-        {
-          designeeTypeId: options.designeeTypeId,
-          categoryId: options.categoryId,
-          isDisabled: options.isDisabled,
-          isPostActivity: true,
-        }
-      ),
-      poapplicationInformationGroup: PoApplicationInformationComponent.buildForm(
-        model.preApprovalRequest?.applicationInformation as PreApprovalApplicationInformation,
-        options.isAdmin,
-        true,
-        true,
-        options.isDisabled
-      ),
-    });
 
-    return form;
+  get getIsDisabled() {
+    return this.data!.requestInfo?.activityStatus?.id === ActivityRequestStatusEnum.Completed ||
+      this.data!.requestInfo?.activityStatus?.id === ActivityRequestStatusEnum.Canceled;
   }
 
-  public static buildModel(
-    form: FormGroup | AbstractControl | undefined | null,
-    model: AfsGroupsPostActivityViewModel | undefined | null,
-    isAdminPreapproval: boolean = false
-  ) {
-    if(!form || !model) return;
-    DmsTestCheckInformationComponent.buildModel(
-      form.get('testCheckInformation') as FormGroup,
-      model.preApprovalRequest?.testCheckInformation as PreApprovalTestCheckInformation,
-      model.preApprovalRequest?.testInformation as PreApprovalTestInformation,
-      model.preApprovalRequest?.applicantInformation as PreApprovalApplicantInformation,
-      model.preApprovalRequest?.designeeTypeId as number,
-      model.preApprovalRequest?.categoryId || 0
-    );
-
-    DmsActivityLocationComponent.buildModel(
-      form.get('activityLocation') as FormGroup,
-      model.preApprovalRequest?.activityLocation as PreApprovalActivityLocation 
-    );
-
-    Afsgroup2IacraComponent.buildModel(
-      form.get('afsGrp2IacraFormGroup') as FormGroup,
-      model.afsPostActivityGroup2
-    );
-    PoApplicationInformationComponent.buildModel(
-      form.get('poapplicationInformationGroup') as FormGroup,
-      model.preApprovalRequest?.applicationInformation as PreApprovalApplicationInformation 
-    );
-
-    model.comments = form.get('comments')?.value;
-    model.generalComments = form.get('generalComments')?.value;
+  get isCancel() {
+    return this.data!.statusId === PreApprovalRequestStatusEnum.Cancelled;
   }
 
-  async initialize() {
-    if (!this.data) return;
-    this.categoryId = this.data.preApprovalRequest?.categoryId || 0;
-    this.isAdministrativePreapproval = this.data.preApprovalRequest?.designeeTypeId === DesigneeTypeEnum.ADMINPE || this.categoryId !== 0;
-    this.postActivityId = this.data.id as number;
-    this.preApprovalRequestId = this.data.preApprovalRequestId as number;
-    this.isCancel =
-      this.data.statusId === PreApprovalRequestStatusEnum.Cancelled;
-    if (this.isCancel) {
-      this.cancelReasons = this.lookupService.getPreApprovalCancelReasons();
+   ngOnInit() {
+    if (!this.lookupService.hasLookupDataCached) {
+        this.lookupService.populateLookupData();
     }
-    this.setDefault();
-    this.filterFunctionCodes();
-    this.preApprovalUrl =
-      '/preapprovalrequest/afs/summary/' + (await this.cryptoService.encrypt(this.preApprovalRequestId)) ;
-    if (this.data.afsPostActivityGroup2 && this.isFromCorrectiveAction) {
-      this.calculateActualDateDifference();
-    }
-  }
-
-  private calculateActualDateDifference() {
-    if (!this.data) return;
-    const proposeStartDate = new Date(
-      this.data.preApprovalRequest?.testInformation?.proposeStartDate as string
-    );
-    const proposeEndDate = new Date(
-      this.data.preApprovalRequest?.testInformation?.proposeEndDate as string
-    );
-    const postActivityStartDate = new Date(
-      this.data.afsPostActivityGroup2?.actualStartDate ?? new Date()
-    );
-
-    this.isActualDateDifference = !(postActivityStartDate >= proposeStartDate &&
-      postActivityStartDate <= proposeEndDate) || proposeStartDate > proposeEndDate;
-  }
-
-  setDefault() {
-    if (!this.data) return;
-    if (this.data.afsPostActivityGroup2 && !this.data.afsPostActivityGroup2.gradeOfCertificateId && this.isAdministrativePreapproval) {
-      this.data.afsPostActivityGroup2.gradeOfCertificateId =
-        GradeofCertificateEnum.NAAdminPe;
-    }
-  }
-
-  filterFunctionCodes(): any {
-    if (!this.data) return;
-    if (this.categoryId ?? 0 > 0 ) {
-      if(this.data.preApprovalRequest) {
-        this.data.preApprovalRequest.authFunctionCodes = this.data.preApprovalRequest?.authFunctionCodes?.filter(
-          (it) => it.categoryId === this.categoryId
-        );
+    this.designeeTypeId = +this.route.snapshot.data['designeeTypeId'];
+    this.isAdmin = this.util.toBoolean(this.route.snapshot.params['isAdmin']);
+    this.showEdit = (this.route.snapshot.queryParams['isVersion'] !== 'true');
+    const postActivity$ = this.route.snapshot.data['postActivity'];
+    
+    postActivity$.pipe(takeUntil(this.destroying$)).subscribe((data: any) => {
+      this.data = data;
+      this.isDisabled = this.getIsDisabled;
+      if (this.showEdit && this.isDisabled && this.data!.completedDate
+        && this.data!.statusId === PreApprovalRequestStatusEnum.Completed
+        && this.data!.isLatestVersion
+        && new Date(this.data!.completedDate)
+        >= new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000))) {
+        this.showEdit = true;
+      } else {
+        this.showEdit = false;
       }
+      this.getActionButtions();
+    });
+  }
+
+  private getActionButtions() {
+    this.actionButtons = this.lookupService.getActionButtons();
+    this.actionButtons.splice(
+      2,
+      0,
+      new ActionButton('Print', 'Print', 'printPage', true, false, 5, 'fa fa-print')
+    );
+    this.actionButtons.splice(
+      3,
+      0,
+      new ActionButton('Edit', 'Edit', 'edit', true, false, 2, 'fa fa-pencil')
+    );
+      
+    this.actionButtons.forEach((a) => {
+      switch (a.eventKey) {
+        case ButtonActionsEnum.Back:
+          a.displayOrder = 1;
+          break;
+        case ButtonActionsEnum.Cancel:
+          a.displayOrder = 6;
+          break;
+        case ButtonActionsEnum.Save:
+          a.displayOrder = 3;
+          a.isDisplay = !this.isDisabled && !this.isEditPostActivity;
+          break;
+        case 'edit':
+          a.isDisplay = this.isDisabled && this.showEdit;
+          break;
+        case ButtonActionsEnum.Submit:
+          a.displayOrder = 4;
+          a.isDisplay = !this.isDisabled || this.isEditPostActivity;
+          break;
+      }
+    });
+  }
+
+
+  actionButtonClick(eventKey: string) {
+    switch (eventKey) {
+      case ButtonActionsEnum.Back:
+        this.goToActionsPage();
+        break;
+      case ButtonActionsEnum.Save:
+        this.onSubmit(false);
+        break;
+      case 'printPage':
+        this.printPage();
+        break;
+      case 'edit':
+        this.enableEdit();
+        break;
+      case ButtonActionsEnum.Submit:
+        this.onSubmit(true);
+        break;
+      case ButtonActionsEnum.Cancel:
+        this.goToHomePage();
+        break;
+    }
+  }
+  onSubmit(isSubmit: boolean) {
+    const data: AfsGroupsPostActivityViewModel  = this.index!.getModel()!;
+    data.isSubmit = isSubmit;
+    if (isSubmit === true) {
+      this.index!.form?.markAllAsTouched();
+      if (this.index!.form?.invalid) {
+        return;
+      }
+      if (data.statusId === PreApprovalRequestStatusEnum.Completed) {
+        this.confirmationService.confirm({
+          header: 'Confirm new version',
+          message: 'Are you sure you want to create a new version of Post Activity?',
+          key: 'dms',
+          icon: undefined,
+          acceptLabel: this.props?.acceptLabel,
+          acceptVisible: this.props?.acceptVisible,
+          rejectLabel: this.props?.rejectLabel,
+          rejectVisible: this.props?.rejectVisible,
+          rejectIcon: 'fa fa-times',
+          acceptIcon: 'fa fa-check',
+          accept: () => {
+            this.saveRequest(data).pipe(takeUntil(this.destroying$)).subscribe();
+          },
+          reject: () => { }
+        });
+      } else {
+        this.validateDate(data);
+      }
+    } else {
+      this.saveRequest(data).pipe(takeUntil(this.destroying$)).subscribe();
     }
   }
 
-  addIacraDocs(docRef: DocumentReference) {
-    if (!this.data) return;
-    this.data.documentReference = docRef;
+  private validateDate(data: any)  {
+    if (this.data!.preApprovalRequest?.testInformation?.proposeStartDate) {
+      const proposeStartDate = new Date(this.data!.preApprovalRequest.testInformation.proposeStartDate);
+      this.postActivityCantSubmit = proposeStartDate <= new Date();
+      if (this.postActivityCantSubmit) {
+        this.saveRequest(data).pipe(takeUntil(this.destroying$)).subscribe();
+      }
+  }
   }
 
-  get isCommentsRequired() {
-    const validator = this.form?.get('generalComments')?.validator;
-    if(validator) {
-      const err = validator({} as AbstractControl);
-      return err ? err['required'] : false;
+  private saveRequest(saveData: AfsGroupsPostActivityViewModel): Observable<any> {
+    const saveMessage = 'Post-Activity has been saved successfully.';
+    const updateMessage = 'Post-Activity has been updated successfully.';
+    if (saveData.id === 0) {
+      return new Observable(observer => {
+        this.service.savePostActivity(saveData).pipe(takeUntil(this.destroying$)).subscribe({
+          next: (result) => {
+            this.data!.id = result.id;
+            this.data!.documentReference!.referenceId = result.id;
+            this.data!.documentReference!.secondaryReferenceId = 0;
+            this.uploadDocuments(saveMessage, saveData);          
+            observer.next();
+            observer.complete();
+          }, 
+          error: (err) => {
+            this.toastService.add({ key: 'dms', severity: 'error', summary: 'Error Message', detail: 'Request failed.' });
+            this.handleBadRequest(err);
+          }
+        });
+      });
     }
-    return false;
+    return new Observable(observer => {
+      this.service.savePostActivity(saveData).pipe(takeUntil(this.destroying$)).subscribe({
+        next: (result) => {
+        this.data!.documentReference!.referenceId = result.id;
+        this.data!.documentReference!.secondaryReferenceId = 0;
+        this.uploadDocuments(updateMessage, saveData);   
+        observer.next();
+        observer.complete();
+        }, 
+        error: (err) => {
+        this.toastService.add({ key: 'dms', severity: 'error', summary: 'Error Message', detail: 'Request failed.' });
+        this.handleBadRequest(err);
+      }});
+    });
+  }
+
+  private handleBadRequest(err: any) {
+    if (err?.status === HttpStatusCode.BadRequest &&
+      (err?.error?.id && err?.error.id != this.data?.id) ||
+      (err?.error?.statusId && err?.error.statusId != this.data?.statusId)) {
+        this.confirmationService.confirm({
+          header: 'Confirm new version',
+          message: 'An updated version of Post Activity is already submitted. Please accept to load new version of Post Activity.',
+          key: 'dms',
+          acceptLabel: this.props?.acceptLabel,
+          acceptVisible: this.props?.acceptVisible,
+          rejectLabel: this.props?.rejectLabel,
+          rejectVisible: this.props?.rejectVisible,
+          rejectIcon: 'fa fa-times',
+          acceptIcon: 'fa fa-check',
+          accept: () => {
+            this.data!.id = err?.error.id;
+            this.router.navigate([`postactivity/afsgroups/version/${this.data?.id}`]); 
+          },
+          reject: () => { }
+        });
+    }
+  }
+
+  private uploadDocuments(message: string, saveData: AfsGroupsPostActivityViewModel) {
+    this.index!.uploadControl?.fileUpload(this.data!.documentReference!.referenceId!)
+      .pipe(takeUntil(this.destroying$))
+      .subscribe({
+        next: () => {
+          this.toastService.add({ key: 'dms', severity: 'success', summary: 'Success Message', detail: message });
+          if (saveData.isSubmit) {
+            this.goToHomePage();
+          }
+        },
+        error: () => {
+          this.toastService.add({
+            key: 'dms',
+            severity: 'error',
+            summary: 'Error Message',
+            detail: 'Upload Document failed.'
+          });
+        }
+      });
+  }
+
+  closeDialog() {
+    this.postActivityCantSubmit = true;
+  }
+  enableEdit() {
+    this.isEditPostActivity = true;
+    this.index!.form!.get('uploadId')?.enable();
+    this.isDisabled = !this.isEditPostActivity;
+    this.getActionButtions();
+
+    this.index!.form!.get('generalComments')?.enable();
+    if (this.index!.form!.contains('dart196FormGroup')) {
+      this.index!.form!.get('dart196FormGroup')?.enable();
+    }
+    if (this.index!.form!.contains('dart176FormGroup')) {
+      this.index!.form!.get('dart176FormGroup')?.enable();      
+      const postActivityCertificatesGroup = this.index!.form!.get('dart176FormGroup')?.get('certificatesGroup') as FormArray;
+      postActivityCertificatesGroup['controls']
+        ?.forEach((certificate:any) => {
+          if(!certificate.get('isSelected')?.value)
+          {
+            certificate.get('certificateCategoryId').disable();                        
+            certificate.get('issuanceTypeId').disable(); 
+            certificate.get('issuanceDate').disable(); 
+          }
+        
+      })
+      
+    }
+  }
+
+  goToActionsPage() {
+    const url = 'preapprovalrequest';
+    this.router.navigate([url]);
+  }
+
+  goToHomePage() {
+    this.router.navigate(['/home']);
+  }
+
+  printPage() {
+    window.print();
   }
 }
