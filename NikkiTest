@@ -1,190 +1,72 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { SelectItem } from 'primeng/api';
-import {
-  ActivityRequestStatusEnum,
-  DesigneeTypeEnum,
-  DmsApplicationInformationComponent,
-  DmsTestCheckInformationComponent,
-  LookupService,
-  PreApprovalRequestInfoModel,
-  PreApprovalTabEnum,
-} from 'dms-web-shared';
-import { PreApprovalBaseComponent } from './pre-approval-base.component';
-
-@Component({
-    selector: 'dms-pr-adminpe-index',
-    templateUrl: './adminpe-index.component.html',
-    standalone: false
-})
-export class AdminpeIndexComponent
-  extends PreApprovalBaseComponent
-  implements OnInit {
-  activityRequestStatusEnum = ActivityRequestStatusEnum;
-  practicalTypes: SelectItem[] = [];
-
-  constructor(public override lookupService: LookupService) {
-    super(lookupService);
-    this.props = {
-      title: 'Administrative Activity Pre-Approval Request',
-      userguideComponent: 'PreAppvAdmin',
-      headers: [
-        PreApprovalTabEnum.preApprovalTab,
-        PreApprovalTabEnum.testCheckTab,
-        PreApprovalTabEnum.locationTab,
-        PreApprovalTabEnum.applicantTab,
-        PreApprovalTabEnum.uploadTab,
-        PreApprovalTabEnum.summaryTab,
-      ],
-      uploadRefMessage: [],
-      formGroupMap: {
-        1: ['testCheckInformation'],
-        2: ['activityLocation'],
-        3: ['applicationInformation'],
-        4: ['comments', 'uploadId'],
-      },
-    };
-    this.practicalTypes = [];
-  }
-
-  public static override buildForm(
-    model: PreApprovalRequestInfoModel,
-    options: any
-  ): FormGroup {
-    options.categoryId = 0;
-    const form = PreApprovalBaseComponent.buildForm(model, options);
-    // Using the application's actual designee type (e.g. Admin-PE-GEN, id 31) rather than hardcoding Admin-PE, 
-    // so this shared component correctly reflects which designee type is being processed.
-    const designeeTypeId = model.designeeInfo?.typeId ?? DesigneeTypeEnum.ADMINPE;
-
-    form.addControl(
-      'testCheckInformation',
-      DmsTestCheckInformationComponent.buildForm(
-        model.testCheckInformation!,
-        model.testInformation!,
-        model.applicantInformation!,
-        {
-          designeeTypeId,
-          categoryId: options.categoryId,
-          isDisabled: options.isDisabled,
-        }
-      )
-    );
-
-    form.addControl(
-      'applicationInformation',
-      DmsApplicationInformationComponent.buildForm(
-        model.applicationInformation!,
-        {
-          designeeTypeId,
-          categoryId: options.categoryId,
-          isDisabled: options.isDisabled,
-        }
-      )
-    );
-
-    return form;
-  }
-
-  public static override buildModel(
-    form: FormGroup,
-    model: PreApprovalRequestInfoModel
-  ) {
-    PreApprovalBaseComponent.buildModel(form, model);
-    DmsApplicationInformationComponent.buildModel(
-      form.get('applicationInformation') as FormGroup,
-      model.applicationInformation!
-    );
-    DmsTestCheckInformationComponent.buildModel(
-      form.get('testCheckInformation') as FormGroup,
-      model.testCheckInformation!,
-      model.testInformation!,
-      model.applicantInformation!,
-      model.designeeTypeId!,
-      model.categoryId || 0
-    );
-  }
-
-  async ngOnInit() {
-    await super.setBaseConfig(this.pr!);
-    this.props.tabCount = this.props.headers.length - 1;
-    this.getConfig.emit(this.props);
-
-    this.form = AdminpeIndexComponent.buildForm(this.pr!, {
-      isDisabled: this.isDisabled,
-    });
-  }
-
-  override onTabChange($event: any) {
-    AdminpeIndexComponent.buildModel(this.form!, this.pr!);
-    super.onTabChange($event);
-  }
-
-    getModel() {
-    AdminpeIndexComponent.buildModel(this.form!, this.pr!);
-    return this.pr;
-  }
-
-  get isAutoPreApproval(): boolean {
-   if (this.pr?.designeeInfo?.isAutoPreApproval) {
-    return true;
-  }
-  const testCheckInfo = this.pr?.testCheckInformation as any;
-
-  if (testCheckInfo?.isOtherAdminActivity) {
-    return true;
-  }
-
-  const isInsideDistrict = !this.pr?.activityLocation?.isOutsideOfficeDistrict;
-  if (!isInsideDistrict) {
-    return false;
-  }
-
-  const designeeTypeId = this.pr?.designeeInfo?.typeId;
-
-  // Admin-PE-GEN Logic
-  if (designeeTypeId === DesigneeTypeEnum.ADMINPEGEN || designeeTypeId === 31) {
-    const requestedAuthorizations = testCheckInfo?.requestedAuthorizations ?? [];
-
-    // Auto-approved codes from AO/MS
-    const autoApprovedCodes = requestedAuthorizations
-      .filter((a: any) => a.isAutoPreApproval || a.isAutomaticPreapproval)
-      .map((a: any) => (a.functionCode || a.name || '').toUpperCase());
-
-    // Map UI checkboxes
-    const adminPeGenCheckboxMap = [
-      { isSelected: !!(testCheckInfo?.isAdminPeGenFpe || testCheckInfo?.isAdminPeGenFPE), code: 'FPE' },
-      { isSelected: !!(testCheckInfo?.isAdminPeGenMce || testCheckInfo?.isAdminPeGenMCE), code: 'MCE' },
-      { isSelected: !!(testCheckInfo?.isAdminPeGenGie || testCheckInfo?.isAdminPeGenGIE), code: 'GIE' },
-      { isSelected: !!(testCheckInfo?.isAdminPeGenFire || testCheckInfo?.isAdminPeGenFIRE), code: 'FIRE' },
-      { isSelected: !!(testCheckInfo?.isAdminPeGenBae || testCheckInfo?.isAdminPeGenBAE), code: 'BAE' }
-    ];
-
-    const selectedCodes = adminPeGenCheckboxMap
-      .filter(item => item.isSelected)
-      .map(item => item.code);
-
-    if (selectedCodes.length === 0) {
-      return false;
-    }
-
-    // MATCH CHECK: Does AT LEAST ONE selected checkbox match an AO/MS auto-approved code?
-    const hasAutoApprovedMatch = selectedCodes.some(selectedCode =>
-      autoApprovedCodes.some((approvedCode: string) => approvedCode.includes(selectedCode))
-    );
-
-    // Directly return true if matched, bypassing super.canAutoApprove
-    return hasAutoApprovedMatch;
-  }
-
-  // Standard Admin-PE fallback
-  const selectedAuthorizations = testCheckInfo?.selectedRequestAuthorizations ?? [];
-  const selectedFcs = selectedAuthorizations.map((item: any) => item.id);
-  const requestedAuthorizations = testCheckInfo?.requestedAuthorizations ?? [];
-
-  return (
-    isInsideDistrict &&
-    super.canAutoApprove(selectedFcs, requestedAuthorizations)
-  );
-}
+@if (form && pr) {
+  <form [formGroup]="form">
+  <p-tabs #tv [value]="activeIndex" (valueChange)="onTabChange($event)">
+    <p-tablist>
+      @for (header of props.headers; track $index) {
+        <p-tab [value]="$index" [ngClass]="setTabError($index)">
+          <i class="fa fa-book"></i>
+          <span>{{header}}</span>
+        </p-tab>
+      }
+    </p-tablist>
+    <p-tabpanels>
+      @for (header of props.headers; track $index) {
+        <p-tabpanel [value]="$index">
+          @switch ($index) {
+            @case (0) {
+              <designeesummary-page [designeeInformation]="pr.designeeInfo!" [showPersonPerformed]="false">
+              </designeesummary-page>
+              <requestinfo-page [requestInfo]="pr.requestInfo"></requestinfo-page>
+            }
+            @case (1) {
+              <dms-test-check-information #testcheckinfoComponent [testCheckInformation]="pr.testCheckInformation"
+                [designeeTypeId]="pr.designeeInfo?.typeId" [form]="$any(form.get('testCheckInformation'))"
+                [triggerFieldChangeEvent]="isPreApprovalApproved" (OnTriggerFieldChange)="emitFieldChange($event)">
+              </dms-test-check-information>
+            }
+            @case (2) {
+              <dms-activity-location [location]="pr.activityLocation" [designeeTypeId]="pr.designeeInfo?.typeId"
+                [isDisabled]="isDisabled" [form]="$any(form.get('activityLocation'))"
+                [triggerFieldChangeEvent]="isPreApprovalApproved" (OnTriggerFieldChange)="emitFieldChange($event)">
+              </dms-activity-location>
+            }
+            @case (3) {
+              <dms-application-information [designeeTypeId]="pr.designeeInfo?.typeId"
+                [form]="$any(form.get('applicationInformation'))" [isDisabled]="isDisabled"
+                [triggerFieldChangeEvent]="isPreApprovalApproved">
+              </dms-application-information>
+            }
+            @case (4) {
+              <div class="grid">
+                <dms-input-text-area identity="id_preapprqst_textarea_comments" formControlName="comments" label="Comments"
+                  controlSize="large" [showLegendLength]="true" layout="grid" [rows]="6" [cols]="100" [maxlength]="4000">
+                </dms-input-text-area>
+                <div class="col-12">
+                  @if (pr.documentReference) {
+                    <dms-uploadcontrol #uploadControl [uploadFormGroup]="form" formControlName="uploadId"
+                      [documentReference]="pr.documentReference" (uploadedFiles)="uploadedFiles($event)">
+                    </dms-uploadcontrol>
+                  }
+                </div>
+              </div>
+            }
+            @case (5) {
+              @if (summaryForm) {
+                <preapprovalrequest-summary
+                  [isAfsGroup2]="true"
+                  [isCancel]="$any(isCancel)"
+                  [preApprovalRequestData]="pr"
+                  [form]="summaryForm"
+                  [showDecision]="!copyPreApprovalRequestId"
+                  [cancelReasons] ="cancelReasons"
+                  id="summary">
+                </preapprovalrequest-summary>
+              }
+            }
+          }
+        </p-tabpanel>
+      }
+    </p-tabpanels>
+  </p-tabs>
+</form>
 }
