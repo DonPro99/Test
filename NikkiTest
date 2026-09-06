@@ -1,1 +1,1 @@
-console.log(this.form?.valid, this.form?.errors)
+AfsGroup2PostActivityBaseComponent
