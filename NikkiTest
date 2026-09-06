@@ -1,1 +1,24 @@
-<aspNetCore processPath="dotnet" arguments=".\YourApp.dll" stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout" hostingModel="InProcess" />
+root_effect_scheduler.mjs:3637 ERROR RuntimeError: NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'false'. Current value: 'true'. Expression location: _PreApprovalRequestIndexComponent component. Find more at https://v20.angular.dev/errors/NG0100
+    at throwErrorIfNoChangesMode (debug_node.mjs:6439:11)
+    at bindingUpdated (debug_node.mjs:14117:17)
+    at ɵɵproperty (debug_node.mjs:23387:9)
+    at PreApprovalRequestIndexComponent_Template (index.component.html:97:165)
+    at executeTemplate (debug_node.mjs:9125:9)
+    at refreshView (debug_node.mjs:10161:13)
+    at detectChangesInView (debug_node.mjs:10381:9)
+    at detectChangesInViewIfAttached (debug_node.mjs:10341:5)
+    at detectChangesInComponent (debug_node.mjs:10329:5)
+    at detectChangesInChildComponents (debug_node.mjs:10407:9)
+
+
+root_effect_scheduler.mjs:3637 ERROR RuntimeError: NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'false'. Current value: 'true'. Expression location: _PreApprovalRequestIndexComponent component. Find more at https://v20.angular.dev/errors/NG0100
+    at throwErrorIfNoChangesMode (debug_node.mjs:6439:11)
+    at bindingUpdated (debug_node.mjs:14117:17)
+    at ɵɵproperty (debug_node.mjs:23387:9)
+    at PreApprovalRequestIndexComponent_Template (index.component.html:97:165)
+    at executeTemplate (debug_node.mjs:9125:9)
+    at refreshView (debug_node.mjs:10161:13)
+    at detectChangesInView (debug_node.mjs:10381:9)
+    at detectChangesInViewIfAttached (debug_node.mjs:10341:5)
+    at detectChangesInComponent (debug_node.mjs:10329:5)
+    at detectChangesInChildComponents (debug_node.mjs:10407:9)
