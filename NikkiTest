@@ -1,1 +1,13 @@
-grep -rn "airportOfTraining" --include=*.ts --include=*.html dms_ui/
+dms_ui/dist/dms-web-shared/index.d.ts:1631:    airportOfTraining: LookupItem | undefined;
+dms_ui/dms-web-shared/src/app/models/exportparams.model.ts:2112:  airportOfTraining: LookupItem | undefined;
+dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/postactivity/group2postactivity.component.html:251:          <dms-auto-complete identity="id_grp2postact_pautocomp_airportOfTraining"
+dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/postactivity/group2postactivity.component.html:252:            formControlName="airportOfTraining" (completeMethod)="filterAirports($event)"
+dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/postactivity/group2postactivity.component.spec.ts:52:    get id_grp2postact_pautocomp_airportOfTraining() {
+dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/postactivity/group2postactivity.component.spec.ts:53:        return this.query('#id_grp2postact_pautocomp_airportOfTraining');
+dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/postactivity/group2postactivity.component.spec.ts:468:        (component.form as FormGroup<any>).addControl('airportOfTraining',  new FormControl({ value: new LookupItem(1, 'O-Hare International Airport', true), disabled: false },
+dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/postactivity/group2postactivity.component.ts:248:    controls = addFormControl(controls, 'airportOfTraining', model.airportOfTraining, isDisabled,
+dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/postactivity/group2postactivity.component.ts:301:      form.removeControl('airportOfTraining');
+dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/postactivity/group2postactivity.component.ts:355:    model.airportOfTraining = value.airportOfTraining
+dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/postactivity/group2postactivity.component.ts:356:      ? value.airportOfTraining
+dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/dpe-index.component.spec.ts:42: 
+dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/sae-index.component.spec.ts:42:
