@@ -1,5 +1,3 @@
-git stash show --stat stash@{0}
-
-git checkout stash@{0} -- dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/afs/dms-test-check-information.component.ts
-git checkout stash@{0} -- dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/adminpe-index.component.ts
-git checkout stash@{0} -- dms_api/Dms.Services/Implementation/PreApprovalRequest/AdminPeGenPreApprovalRequestService.cs
+git add dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/afs/dms-test-check-information.component.ts
+git add dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/adminpe-index.component.ts
+git add dms_api/Dms.Services/Implementation/PreApprovalRequest/AdminPeGenPreApprovalRequestService.cs
