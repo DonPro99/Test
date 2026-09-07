@@ -1,27 +1,3 @@
-Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
-$ git commit -m "Other Admin Activity preapproval fix"
-On branch feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes
-Your branch is ahead of 'origin/feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes' by 10 commits.
-  (use "git push" to publish your local commits)
+git stash show --stat stash@{0}
 
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        dms_api/Dms.Api.Designee/logs/
-
-nothing added to commit but untracked files present (use "git add" to track)
-
-Nikhitha CTR Komandl@F100237345 MINGW64 ~/NikkiProjectWorkspace/dms_8.5/dms (feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes)
-$ git push origin feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes
-Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
-remote:
-remote: ================================================================================
-remote: #### If you need assistance from the Admins or Solutions Delivery, please create a ticket [HERE](https://jira.faa.gov/servicedesk/customer/portal/1/group/2).  You can also check our [wiki](https://wiki.faa.gov/display/DEVOPS/Toolchain+Bulletin) for Toolchain status.
-remote: ================================================================================
-remote:
-remote:
-remote: Create pull request for feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes:
-remote:   https://git.faa.gov/projects/DMSNEW/repos/dms/pull-requests?create&sourceBranch=refs%2Fheads%2Ffeature%2F8.5%2FDMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes
-remote:
-To https://git.faa.gov/scm/dmsnew/dms.git
-   0dd34a7..c2cc49c  feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes -> feature/8.5/DMS-8284-Admin-PE-GEN-Pre-Post-Activity-Changes
-
+git checkout stash@{0} -- dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/afs/dms-test-check-information.component.ts
