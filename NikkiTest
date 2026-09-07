@@ -1,3 +1,8 @@
-git add dms_ui/dms-web-shared/src/app/modules/preapprovalrequestshared/afs/dms-test-check-information.component.ts
-git add dms_ui/dms_web_designee/src/app/preapprovalrequest/afsgroups/adminpe-index.component.ts
-git add dms_api/Dms.Services/Implementation/PreApprovalRequest/AdminPeGenPreApprovalRequestService.cs
+<group2postactivity-page #group2PostActivityComponent [afsPostActivityGroup2]="data.afsPostActivityGroup2"
+  [preApprovalRequestData]="data.preApprovalRequest" [preApprovalRequestFormGroup]="form"
+  [form]="form.get('afsGroup2PostActivityFormGroup')" [isExternal]="isExternal"
+  [testCheckInformation]="data.preApprovalRequest?.testCheckInformation" [designeeTypeId]="designeeTypeId"
+  [isProficiencyCheck]="isProficiencyCheck" [categoryId]="categoryId" [isDisabled]="isDisabled"
+  [isEditPostActivity]="isEditPostActivity" [isActulDateDifference]="isActualDateDifference"
+  [isAdministrativePreapproval]="isAdministrativePreapproval">
+</group2postactivity-page>
