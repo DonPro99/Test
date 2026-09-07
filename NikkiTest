@@ -1,53 +1,44 @@
-root_effect_scheduler.mjs:3637 ERROR RuntimeError: NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'false'. Current value: 'true'. Expression location: _PreApprovalRequestIndexComponent component. Find more at https://v20.angular.dev/errors/NG0100
-    at throwErrorIfNoChangesMode (debug_node.mjs:6439:11)
-    at bindingUpdated (debug_node.mjs:14117:17)
-    at ɵɵproperty (debug_node.mjs:23387:9)
-    at PreApprovalRequestIndexComponent_Template (index.component.html:97:165)
-    at executeTemplate (debug_node.mjs:9125:9)
-    at refreshView (debug_node.mjs:10161:13)
-    at detectChangesInView (debug_node.mjs:10381:9)
-    at detectChangesInViewIfAttached (debug_node.mjs:10341:5)
-    at detectChangesInComponent (debug_node.mjs:10329:5)
-    at detectChangesInChildComponents (debug_node.mjs:10407:9)
-ngx-logger.mjs:754 2026-09-07T00:11:44.790Z LOG [chunk-NLCOQ7ND.js:65571:19] /postactivity/afsgroups/ENC%7C-wxmcLIci1Rv-_gwZAuCAxULOE46C6MrbyDaXOeQFLFRMQk Navigation Event 1
-root_effect_scheduler.mjs:3637 ERROR Error: Cannot find control with name: 'airportOfTraining'
-    at _throwError (forms.mjs:3573:9)
-    at setUpControl (forms.mjs:3364:19)
-    at _FormGroupDirective.addControl (forms.mjs:5585:5)
-    at _FormControlName._setUpControl (forms.mjs:6266:39)
-    at _FormControlName.ngOnChanges (forms.mjs:6222:28)
-    at _FormControlName.rememberChangeHistoryAndInvokeOnChangesHook (debug_node.mjs:594:14)
-    at callHookInternal (debug_node.mjs:860:14)
-    at callHook (debug_node.mjs:891:9)
-    at callHooks (debug_node.mjs:841:17)
-    at executeInitAndCheckHooks (debug_node.mjs:791:9)
+ngOnChanges(changes: SimpleChanges) {
+  // Recompute isAdministrativePreapproval whenever designeeTypeId or categoryId changes,
+  // since ngOnInit only runs once and this component instance can be reused across navigations.
+  if (changes['designeeTypeId'] || changes['categoryId']) {
+    this.isAfsGroup2 =
+      this.designeeTypeId === DesigneeTypeEnum.DPE ||
+      this.designeeTypeId === DesigneeTypeEnum.SAE ||
+      this.designeeTypeId === DesigneeTypeEnum.ADMINPE ||
+      this.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN;
 
-+=========
-root_effect_scheduler.mjs:3637 ERROR RuntimeError: NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'false'. Current value: 'true'. Expression location: _PreApprovalRequestIndexComponent component. Find more at https://v20.angular.dev/errors/NG0100
-    at throwErrorIfNoChangesMode (debug_node.mjs:6439:11)
-    at bindingUpdated (debug_node.mjs:14117:17)
-    at ɵɵproperty (debug_node.mjs:23387:9)
-    at PreApprovalRequestIndexComponent_Template (index.component.html:97:165)
-    at executeTemplate (debug_node.mjs:9125:9)
-    at refreshView (debug_node.mjs:10161:13)
-    at detectChangesInView (debug_node.mjs:10381:9)
-    at detectChangesInViewIfAttached (debug_node.mjs:10341:5)
-    at detectChangesInComponent (debug_node.mjs:10329:5)
-    at detectChangesInChildComponents (debug_node.mjs:10407:9)
+    if (
+      this.isAfsGroup2 &&
+      (this.designeeTypeId === DesigneeTypeEnum.ADMINPE ||
+        this.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN ||
+        this.categoryId !== 0)
+    ) {
+      this.isAdministrativePreapproval = true;
+      this.isMultipleApplicants =
+        this.preApprovalRequestData!.testCheckInformation?.isMultipleApplicants as boolean;
+    } else {
+      this.isAdministrativePreapproval = false;
+    }
+  }
 
-ngx-logger.mjs:754 2026-09-07T00:13:51.540Z LOG [chunk-NLCOQ7ND.js:65571:19] /postactivity/afsgroups/ENC%7CTmpAYlmE14T3xod_ABzyiVwWi5UWddTAQX42i4q9rMdVGp8 Navigation Event 1
-root_effect_scheduler.mjs:3637 ERROR Error: Cannot find control with name: 'airportOfTraining'
-    at _throwError (forms.mjs:3573:9)
-    at setUpControl (forms.mjs:3364:19)
-    at _FormGroupDirective.addControl (forms.mjs:5585:5)
-    at _FormControlName._setUpControl (forms.mjs:6266:39)
-    at _FormControlName.ngOnChanges (forms.mjs:6222:28)
-    at _FormControlName.rememberChangeHistoryAndInvokeOnChangesHook (debug_node.mjs:594:14)
-    at callHookInternal (debug_node.mjs:860:14)
-    at callHook (debug_node.mjs:891:9)
-    at callHooks (debug_node.mjs:841:17)
-    at executeInitAndCheckHooks (debug_node.mjs:791:9)
-
-
-
-
+  if (changes['isEditPostActivity']) {
+    if (this.isEditPostActivity) {
+      this.isDisabled = !this.isEditPostActivity;
+      this.form!.enable();
+      this.preApprovalRequestFormGroup!.get('generalComments')?.enable();
+      this.form!.get('proposedStartDate')?.disable();
+    }
+  }
+  if (
+    changes['selectedFunctioncode'] &&
+    !changes['selectedFunctioncode'].firstChange
+  ) {
+    this.isSmtfSelected = Group2PostActivityComponent.isSmtfSelection(
+      this.preApprovalRequestData!.testCheckInformation as PreApprovalTestCheckInformation,
+      this.getFunctionCode()
+    );
+    this.smtfSelected(this.isSmtfSelected);
+    this.setIACRAVisibility();
+  }
+}
