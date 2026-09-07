@@ -1,8 +1,7 @@
-root_effect_scheduler.mjs:3637
- ERROR RuntimeError: NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'false'. Current value: 'true'. Expression location: _PreApprovalRequestIndexComponent component. Find more at https://v20.angular.dev/errors/NG0100
-    at PreApprovalRequestIndexComponent_Template (index.component.html:97:165)
-handleError	@	root_effect_scheduler.mjs:3637
-ngx-logger.mjs:754 2026-09-07T22:48:36.136Z LOG [chunk-VAATFDZ7.js:65574:19] /postactivity/afsgroups/ENC%7C85PVTuW6sYj9QwWocad5xO2H41K6oblhn_5feCGk8qcuZXE Navigation Event 1
-root_effect_scheduler.mjs:3637
- ERROR Error: Cannot find control with name: 'airportOfTraining'
-handleError	@	root_effect_scheduler.mjs:3637
+this.isAdministrativePreapproval = 
+  this.data.preApprovalRequest?.designeeTypeId === DesigneeTypeEnum.ADMINPE || 
+  this.data.preApprovalRequest?.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN || 
+  this.categoryId !== 0;
+
+
+AfsGroup2PostActivityBaseComponent.ts
