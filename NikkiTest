@@ -1,135 +1,1019 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
-import { AfsGroup2PostActivityBaseComponent } from './afs-group2-post-activity-base-component';
-import { LookupService } from '../../../../services/lookup.service';
 import {
-  AfsGroupsPostActivityViewModel,
-  DesigneeTypeEnum,
-  PreApprovalTestCheckInformation,
-} from '../../../../models/exportparams.model';
-import { Group2PostActivityComponent } from '../group2postactivity.component';
-import { ActivatedRoute } from '@angular/router';
-import { DmsTestCheckInformationComponent } from '../../afs/dms-test-check-information.component';
-import { DmsFunctionCodeSelectionComponent } from '../../../functionocode/functioncodeselection/dms-functioncode-selection.component';
-import { CryptoService } from '../../../../services/crypto.service';
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { SelectItem } from 'primeng/api';
 
+import { LookupService } from '../../../services/lookup.service';
+import {
+  Address,
+  AddressParams,
+  AfsGroupsPostActivityViewModel,
+  AfsPostActivityGroup2,
+  Applicants,
+  DesigneeTypeEnum,
+  FunctionCode,
+  GradeofCertificateEnum,
+  IacraStatusTypeEnum,
+  LookupItem,
+  PracticalOralTestEnum,
+  PracticalTestResult,
+  PreApprovalRequestInfoModel,
+  PreApprovalTestCheckInformation,
+  RegularExpressions,
+} from '../../../models/exportparams.model';
+import { DmsAddressComponent } from '../../address/dms-address.component';
+import { UtilityService } from '../../../services/utility.service';
+import { GreaterThanDateTimeValidatorFactory } from '../../../customvalidators/greaterthandatetimevalidatorfactory';
+import { DecimalPipe } from '@angular/common';
+import { DmsFunctionCodeSelectionComponent } from '../../functionocode/functioncodeselection/dms-functioncode-selection.component';
+import { startWith, takeUntil } from 'rxjs/operators';
+import { markAsModified } from '../../../extensions';
+import { BaseComponent } from '../../shared/base/base.component';
+import { addFormControl, addFormControlWithCondition, setFormGroup } from '../../shared/form/form.component';
 @Component({
-    selector: 'po-adminpe-index',
-    templateUrl: './adminpe-index.component.html',
-    styleUrls: ['adminpe-index.component.scss'],
+    selector: 'group2postactivity-page',
+    templateUrl: 'group2postactivity.component.html',
+    styleUrls: ['group2postactivity.component.scss'],
     standalone: false
 })
-export class AdminpeIndexComponent
-  extends AfsGroup2PostActivityBaseComponent
-  implements OnInit
-{
+export class Group2PostActivityComponent extends BaseComponent implements OnInit, OnChanges {
+  // tslint:disable-next-line:no-input-rename
+  @Input()
+  preApprovalRequestFormGroup: FormGroup | AbstractControl | undefined | null;
+  // tslint:disable-next-line:no-input-rename
+  @Input()
+  afsPostActivityGroup2: AfsPostActivityGroup2  | undefined | null;
+  // tslint:disable-next-line:no-input-rename
+  @Input()
+  preApprovalRequestData: PreApprovalRequestInfoModel | undefined | null;
+  // tslint:disable-next-line:no-input-rename
+  @Input()
+  designeeTypeId: number=0;
+  // tslint:disable-next-line:no-input-rename
+  @Input()
+  formSubmitted = false;
+  // tslint:disable-next-line:no-input-rename
+  @Input()
+  isDisabled = false;
+  // tslint:disable-next-line: no-input-rename
+  @Input()
+  isEditPostActivity = false;
+  // tslint:disable-next-line:no-input-rename
+  @Input()
+  isProficiencyCheck = false;
+  // tslint:disable-next-line:no-input-rename
+  @Input()
+  isActulDateDifference= false;
+  // tslint:disable-next-line:no-input-rename
+  @Input()
+  categoryId = 0;
+  @Input() testCheckInformation: PreApprovalTestCheckInformation | undefined | null;
+  isAdministrativePreapproval = false;
+  isMultipleApplicants = false;
+  @Input()
+  form: FormGroup | AbstractControl | undefined | null;
   @Input() isExternal: boolean = false;
-  constructor(
-    private route: ActivatedRoute,
-    public override lookupService: LookupService,
-    public override cryptoService: CryptoService
+  @Input()
+  groupIndex = 0;
+
+  @Input()
+  isVersionComparision = false;
+
+  @Input()
+  selectedFunctioncode: any;
+  @Input() modifiedTestInfoControls: any[] = [];
+  markAsModified: typeof markAsModified = markAsModified;
+  @Input() isAircraftNotRequired = true;
+  isDpe = false;
+  isSae = false;
+  isAdminPe = false;
+  isAfsGroup2 = false;
+  isTempCertifcateIssue = false;
+  isNoticeOfDisapproval = false;
+  isLetterOfDiscon = false;
+  practicalTypes: SelectItem[] = [];
+  resultsOfProfCheck: SelectItem[] = [];
+  resultsOfPracticalTest: SelectItem[] = [];
+  gradesOfCertificate: SelectItem[] = [];
+  aircraftCategories: SelectItem[] = [];
+  aircraftClasses: SelectItem[] = [];
+  aircraftMakeModels: LookupItem[] = [];
+  airports: LookupItem[] = [];
+  countries: SelectItem[] = [];
+  todayDate: any;
+  gradeOfCertificateTypeEnum: typeof GradeofCertificateEnum =
+    GradeofCertificateEnum;
+  maxDate: any;
+  gradeOfCertificateId: number = 0;
+  iacraStatusTypeEnum: typeof IacraStatusTypeEnum = IacraStatusTypeEnum;
+  isSmtfSelected = false;
+  showIacra: boolean = false;
+  invalidActualEndDate: Map<string, string> = new Map().set('endDateEarlierThanStartDate', 'Actual End Date cannot be before Actual Start Date.');
+  invalidPattern: Map<string, string> = new Map().set('pattern', ' Must be number (e.g. 999.9) and a decimal point is required (ex. 1.3 or 10.0).');
+
+
+  public static buildForm(
+    model: AfsPostActivityGroup2 | undefined | null,
+    practicalOralTestId: number,
+    isDpe: boolean,
+    isSae: boolean,
+    isAdministrativePreapproval: boolean,
+    isDisabled: boolean,
+    showRetestQuestion: boolean,
+    isProficiencyCheck: boolean,
+    isTempCertifcateIssue: boolean,
+    isMultipleApplicants: boolean,
+    isAfsGroup2: boolean,
+    isLetterOfDiscon: boolean,
+    isSmtfSelected = false,
+    groupIndex: number = 0
   ) {
-    super(lookupService, cryptoService);
-    this.designeeTypeId = DesigneeTypeEnum.ADMINPE;
-  }
+    if(!model) return;
+    const decimalPipe = new DecimalPipe('en-US');
+    let controls: Record<string, FormControl | FormGroup | FormArray<FormControl<unknown>>> = {};
 
-  isRedirectionFromCorrectiveAction = false;
+    controls = addFormControlWithCondition(controls, 'isAdditionalInstructionsProvided', 
+                  model.isAdditionalInstructionsProvided, isDisabled, [Validators.required], showRetestQuestion);
+    controls = addFormControl(controls, 'airManName', model.airManName, isDisabled, [Validators.maxLength(100)]);
+    controls = addFormControl(controls, 'certificateNumber', model.airManCertificateNumber, isDisabled, [Validators.maxLength(30)]);
+    controls = addFormControl(controls, 'flightInstructorName', model.flightInstructorName, isDisabled, [Validators.maxLength(100)]);
+    controls = addFormControl(controls, 'flightInstructorcertificateNumber', model.flightInstructorCertificateNumber, isDisabled, 
+      model.isAdditionalInstructionsProvided && isDpe && !isAdministrativePreapproval && showRetestQuestion ?
+            [Validators.required, Validators.maxLength(30)] : [Validators.maxLength(30)]);
 
-  public static override buildForm(
-    model: AfsGroupsPostActivityViewModel | undefined | null,
-    options: any
-  ): FormGroup | null {
-    if(!model) return null;
-    const form = AfsGroup2PostActivityBaseComponent.buildForm(model, options);
 
-    if(!form) return null;
+    controls = Group2PostActivityComponent.buildFormFromPracticalOralTestId(controls, model, decimalPipe, isDisabled, isMultipleApplicants,
+      isAdministrativePreapproval, isDpe, isSae, isSmtfSelected, isProficiencyCheck, isLetterOfDiscon, practicalOralTestId, isTempCertifcateIssue);
 
-    const isTempCertificateIssue = [26, 30].includes(
-      model?.afsPostActivityGroup2?.postActivityResultTypeId??0
-    );
-    const isLetterOfDiscontinue = [28, 32].includes(
-      model.afsPostActivityGroup2?.postActivityResultTypeId??0
-    );
+    controls = Group2PostActivityComponent.buildFormFromDurationOfFstdSimulatorPortion(controls, model, decimalPipe, isDisabled, isMultipleApplicants,
+      isAdministrativePreapproval, isDpe, isSae, isSmtfSelected, isProficiencyCheck, isLetterOfDiscon);
 
-    const functionCodeSelection =
-      DmsTestCheckInformationComponent.selectAuthorizations(
-        model.preApprovalRequest?.testCheckInformation as PreApprovalTestCheckInformation,
-        DesigneeTypeEnum.DPE,
-        model.preApprovalRequest?.categoryId ?? 0
-      );
+    const fb = new FormBuilder();
+    let form : any = fb.group(controls, 
+                      {
+                        validators: GreaterThanDateTimeValidatorFactory.getValidator(
+                          'actualStartDate',
+                          'actualEndDate'
+                        ),
 
-    const fg = DmsFunctionCodeSelectionComponent.buildForm(
-      functionCodeSelection,
-      true,
-      options.isDisabled,
-      DesigneeTypeEnum.DPE
-    );
+                      }
+                    );
 
-    const functionCode = fg.value ? fg.value.functionCode : null;
-
-    const isSmtfSelected = Group2PostActivityComponent.isSmtfSelection(
-      model.preApprovalRequest?.testCheckInformation as PreApprovalTestCheckInformation,
-      functionCode
-    );
-
-    form.addControl(
-      'afsGroup2PostActivityFormGroup',
-      Group2PostActivityComponent.buildForm(
-        model.afsPostActivityGroup2,
-        model.preApprovalRequest?.testCheckInformation?.practicalOralTestId ?? 0,
-        false,
-        false,
-        true,
-        options.isDisabled,
-        false,
-        false, // isProficiencyCheck
-        isTempCertificateIssue,
-        model.preApprovalRequest?.testCheckInformation?.isMultipleApplicants as boolean,
-        true,
-        isLetterOfDiscontinue,
-        isSmtfSelected
-      )
-    );
-
+    form = Group2PostActivityComponent.buildFormLastGroup(form, groupIndex, model, 
+      isProficiencyCheck, isLetterOfDiscon, isDisabled, isMultipleApplicants, isAdministrativePreapproval);
+    
     return form;
   }
+  private static buildFormFromPracticalOralTestId (controls: Record<string, any>,model: AfsPostActivityGroup2,
+    decimalPipe: DecimalPipe, isDisabled: boolean, isMultipleApplicants: boolean, 
+    isAdministrativePreapproval: boolean, isDpe: boolean, isSae: boolean, isSmtfSelected: boolean, 
+    isProficiencyCheck: boolean, isLetterOfDiscon: boolean, practicalOralTestId: number, isTempCertifcateIssue: boolean) {
+  
+    const isAdminPreSaeDpe = (isSae || isDpe) && !isAdministrativePreapproval;
+    
+    (isDisabled === false && !isSmtfSelected && isAdminPreSaeDpe) 
+      ? controls = addFormControl(controls, 'practicalOralTestId', practicalOralTestId > 0 ? practicalOralTestId : null, isDisabled, [Validators.required])
+      : controls = addFormControl(controls, 'practicalOralTestId', practicalOralTestId, isDisabled, []);
+    controls = addFormControl(controls, 'proficiencyCheck', model.postActivityResultTypeId, isDisabled, 
+      (isProficiencyCheck && isAdminPreSaeDpe) ? [Validators.required] : []);
+    controls = addFormControl(controls, 'practicalTest', model.postActivityResultTypeId, isDisabled, 
+      (!isProficiencyCheck && isAdminPreSaeDpe) ? [Validators.required] : []);
+    controls = addFormControl(controls, 'areasOfOpertion', model.areasOfOperationAndTaskFound, isDisabled, []);
+    controls = addFormControl(controls, 'reasonForDiscontinue', model.reasonForDiscontinue, isDisabled, []);
+    controls = addFormControl(controls, 'airCraftClass', model.airCraftClassId, isDisabled, []);
+    controls = addFormControl(controls, 'simulatorFaaId', model.simulatorFaaId, isDisabled, [Validators.maxLength(100)]);
+    controls = addFormControl(controls, 'actualStartDate', model.actualStartDate, isDisabled, [Validators.required]);
+    controls = addFormControl(controls, 'proposedStartDate', model.proposedStartDate, true, []);
+    
+    controls = Group2PostActivityComponent.buildFormWithIsAdminPreSaeDpe(controls, model, decimalPipe, isDisabled, isAdminPreSaeDpe, isTempCertifcateIssue, isProficiencyCheck);
+    
+    return controls;
+  }
+    private static buildFormWithIsAdminPreSaeDpe (controls: Record<string, any>,model: AfsPostActivityGroup2,
+    decimalPipe: DecimalPipe, isDisabled: boolean, isAdminPreSaeDpe: boolean, isTempCertifcateIssue: boolean, isProficiencyCheck: boolean ) {
+    
+    controls = addFormControl(controls, 'gradeOfCertificate', model.gradeOfCertificateId, isDisabled, 
+      (isAdminPreSaeDpe && isTempCertifcateIssue && !isProficiencyCheck) ? [Validators.required] : []);
+    controls = addFormControl(controls, 'airCraftCatergory', model.airCraftCatergoryId, isDisabled, 
+      (isAdminPreSaeDpe) ? [Validators.required] : []);
+    controls = addFormControl(controls, 'airCraftRegistrationNumber', model.airCraftRegistrationNumber, isDisabled, 
+      (isAdminPreSaeDpe) ? [Validators.required, Validators.maxLength(100)] : [Validators.maxLength(100)]);
+    controls = addFormControl(controls, 'actualEndDate', model.actualEndDate, isDisabled, 
+      (isAdminPreSaeDpe) ? [Validators.required] : []);
 
-  public static override buildModel(
-    form: FormGroup | AbstractControl | undefined | null,
-    model: AfsGroupsPostActivityViewModel | undefined | null
-  ) {
-    if (!form || !model) return;
-    AfsGroup2PostActivityBaseComponent.buildModel(form, model);
-    if(model.preApprovalRequest?.testInformation) {
-        model.preApprovalRequest.testInformation.practicalOralTestId = model.preApprovalRequest.testCheckInformation?.practicalOralTestId;
+    if (isAdminPreSaeDpe) {  
+      controls = addFormControl(controls, 'durationOfGroundPortion', 
+          decimalPipe.transform(model.durationOfGroundPortion, '.1-9'), isDisabled, 
+          Validators.compose([Validators.required, Validators.maxLength(5),
+                              Validators.pattern(RegularExpressions.numericOneDecimal)]));
+      controls = addFormControl(controls, 'durationOfFlightPortion', 
+          decimalPipe.transform(model.durationOfFlightPortion, '.1-9'), isDisabled, 
+          Validators.compose([Validators.required, Validators.maxLength(5),
+                              Validators.pattern(RegularExpressions.numericOneDecimal)]));
+
+    } else {
+      controls = addFormControl(controls, 'durationOfGroundPortion', model.durationOfGroundPortion, isDisabled, []);
+      controls = addFormControl(controls, 'durationOfFlightPortion', model.durationOfFlightPortion, isDisabled, []);
+    
     }
-    // model.preApprovalRequest.testInformation.practicalOralTestId =
-    //   model.preApprovalRequest.testCheckInformation.practicalOralTestId =
-        Group2PostActivityComponent.buildModel(
-          form.get('afsGroup2PostActivityFormGroup') as FormGroup,
-          model.afsPostActivityGroup2,
-          false,
-          false, false, false, false
-        );
+    return controls;
+  }
+  private static buildFormFromDurationOfFstdSimulatorPortion (controls: Record<string, any>,model: AfsPostActivityGroup2,
+    decimalPipe: DecimalPipe, isDisabled: boolean, isMultipleApplicants: boolean, 
+    isAdministrativePreapproval: boolean, isDpe: boolean, isSae: boolean, isSmtfSelected: boolean, 
+    isProficiencyCheck: boolean, isLetterOfDiscon: boolean) {
+      
+    controls = addFormControl(controls, 'durationOfFstdSimulatorPortion', 
+      decimalPipe.transform(model.durationOfFstdSimulatorPortion, '.1-9'), isDisabled, 
+      [Validators.pattern(RegularExpressions.numericOneDecimal), Validators.maxLength(5)]);
+    controls = addFormControl(controls, 'phoneNumber', model.phoneNumber, isDisabled, !isMultipleApplicants ? 
+      [Validators.required, Validators.maxLength(20)] : []);
+    controls = addFormControl(controls, 'email', model.email, isDisabled, [Validators.maxLength(100)]);
+    controls = addFormControl(controls, 'certificateNumberOfApplicant', model.certificateNumberOfApplicant, isDisabled, 
+      !isMultipleApplicants ? [Validators.required, Validators.maxLength(30)] : []);
+    controls = addFormControl(controls, 'countryOfApplicant', model.applicantCountryId, isDisabled, 
+      !isMultipleApplicants ? Validators.required : []);
+    controls = addFormControl(controls, 'airportOfTraining', model.airportOfTraining, isDisabled, 
+      isAdministrativePreapproval ? [] : Validators.required);
+    controls = addFormControl(controls, 'datePaperWorkSent', model.datePaperWorkSent, isDisabled,
+      (model.iacraStatusTypeId === IacraStatusTypeEnum.No && !isProficiencyCheck && !isLetterOfDiscon) 
+      || ((isDpe || isSae) && isSmtfSelected) ? Validators.required : []);
+    controls = addFormControl(controls, 'airmanCertificateNotissuedReason', model.reasonsForAirManCertificateNotIssue, isDisabled, []);
+    controls = addFormControl(controls, 'isAirManCertificateNotIssue', model.isAirManCertificateNotIssue, isDisabled, []);
+    controls = setFormGroup(controls as any, 'addressFormGroup', 
+      DmsAddressComponent.buildForm(model.address as Address,
+                                    new AddressParams(isDisabled,
+                                    false,
+                                    true,
+                                    true,
+                                    false,
+                                    true,
+                                    false,
+                                    false
+                                  ))); 
+    controls['applicantGroup'] = new FormBuilder().array([]);
+    controls = addFormControl(controls, 'nameOfApplicant', model.nameOfApplicant, isDisabled, 
+      !isMultipleApplicants ? [Validators.required, Validators.maxLength(100)] : []);
+    return controls;
+  }
+  private static buildFormLastGroup(form: any, groupIndex: number, model: AfsPostActivityGroup2, 
+    isProficiencyCheck: boolean, isLetterOfDiscon: boolean, isDisabled: boolean, isMultipleApplicants: boolean, 
+    isAdministrativePreapproval: boolean) {
+
+    form.addControl(
+      `iacraStatusType${groupIndex}`,
+      !isProficiencyCheck && !isLetterOfDiscon
+        ? new FormControl(
+            {
+              value: model.iacraStatusTypeId,
+              disabled: isDisabled,
+            },
+            Validators.required
+          )
+        : new FormControl({
+            value: model.iacraStatusTypeId,
+            disabled: isDisabled,
+          })
+    );
+
+    if (isMultipleApplicants) {
+      form.removeControl('addressFormGroup');
+      form.removeControl('nameOfApplicant');
+      form.removeControl('phoneNumber');
+      form.removeControl('email');
+      form.removeControl('certificateNumberOfApplicant');
+      form.removeControl('countryOfApplicant');
+      form.get('applicantGroup')?.setValidators([Validators.required]);
+    }
+    if (isAdministrativePreapproval) {
+      form.removeControl('airportOfTraining');
+    }
+    return form;
+  }
+  public static buildModel(
+    form: FormGroup,
+    model: AfsPostActivityGroup2 | undefined | null,
+    isProficiencyCheck: boolean,
+    isDpe: boolean,
+    isSae: boolean,
+    isSmtfSelected: boolean,
+    isAdministrativePreapproval: boolean,
+    groupIndex: number = 0
+  ) {
+    if(!model || !form) return;
+    const value = form.getRawValue();
+    model.isAdditionalInstructionsProvided =
+      value.isAdditionalInstructionsProvided;
+    model.airManName = value.airManName;
+    model.airManCertificateNumber = value.certificateNumber;
+    model.flightInstructorName = value.flightInstructorName;
+    model.flightInstructorCertificateNumber =
+      value.flightInstructorcertificateNumber;
+    model.postActivityResultTypeId =
+      isProficiencyCheck && value.proficiencyCheck
+        ? value.proficiencyCheck
+        : value.practicalTest;
+    model.gradeOfCertificateId = value.gradeOfCertificate;
+    model.airCraftCatergoryId = value.airCraftCatergory;
+    model.airCraftClassId = value.airCraftClass;
+    model.isAirManCertificateNotIssue = value.isAirManCertificateNotIssue;
+    model.reasonsForAirManCertificateNotIssue =
+      value.airmanCertificateNotissuedReason;
+    model.areasOfOperationAndTaskFound = value.areasOfOpertion;
+    model.reasonForDiscontinue = value.reasonForDiscontinue;
+    model.airCraftRegistrationNumber = value.airCraftRegistrationNumber;
+    model.simulatorFaaId = value.simulatorFaaId;
+    model.actualStartDate = value.actualStartDate;
+    model.proposedStartDate = value.proposedStartDate;
+    model.actualEndDate = value.actualEndDate;
+    model.durationOfGroundPortion = value.durationOfGroundPortion;
+    model.durationOfFlightPortion = value.durationOfFlightPortion;
+    model.durationOfFstdSimulatorPortion = value.durationOfFstdSimulatorPortion;
+    model.nameOfApplicant = value.nameOfApplicant
+      ? value.nameOfApplicant
+      : null;
+    model.phoneNumber = value.phoneNumber ? value.phoneNumber : null;
+    model.email = value.email ? value.email : null;
+    model.certificateNumberOfApplicant = value.certificateNumberOfApplicant
+      ? value.certificateNumberOfApplicant
+      : null;
+    model.applicantCountryId = value.countryOfApplicant
+      ? value.countryOfApplicant
+      : null;
+    model.airportOfTraining = value.airportOfTraining
+      ? value.airportOfTraining
+      : null;
+    model.iacraStatusTypeId = value[`iacraStatusType${groupIndex}`];
+    model.datePaperWorkSent = value.datePaperWorkSent;
+    model.address = value.addressFormGroup ? value.addressFormGroup : null;
+    model.applicants = value.applicantGroup;
+
+    if ((isDpe || isSae) && !isSmtfSelected && !isAdministrativePreapproval)
+      return value.practicalOralTestId;
+
+    return -1;
+  }
+  public static isSmtfSelection(
+    testCheckInformation: PreApprovalTestCheckInformation,
+    functionCode: any
+  ) {
+    const fnCodes = testCheckInformation!.adminDpeSaeFunctionCodes!
+      .concat(testCheckInformation!.requestedAuthorizations!)
+      .concat(testCheckInformation!.temporaryAuthorizations!);
+    const smftCodes = DmsFunctionCodeSelectionComponent.smftFunctionCodeId(fnCodes);
+      if (Array.isArray(functionCode)) {
+        return smftCodes.some((s:any) => functionCode.some(f => f === s));    
+      }
+
+    return smftCodes.some((s:any) => s === functionCode);
+  }
+  constructor(
+    private lookupService: LookupService,
+    public util: UtilityService
+  ) { super(); }
+
+  async ngOnInit() {
+    await this.lookupService.populateLookupData();
+    await this.getInitialData();
+    if(!this.form) return;
+
+    this.valueChangedOfIacraStatusType();
+    this.valueChangedOfPracticalOralTestId();
+    this.valueChangedOfPracticalTest();
+    this.valueChangedOfAirCraftCatergory();
+    this.valueChangedOfIsAdditionalInstructionsProvided();
+    this.valueChangedOfIsAirManCertificateNotIssue();
+
+    this.initiateApplicantFormGroup();
+    this.setIACRAVisibility();
   }
 
-  getModel() {
-    if(this.form) AdminpeIndexComponent.buildModel(this.form, this.data);
-    return this.data;
-  }
+  private async getInitialData() {
+    this.todayDate = new Date(new Date().setHours(0, 0, 0, 0));
+    const dt = new Date()
+    this.maxDate = new Date(new Date(
+      dt.getFullYear(),
+      dt.getMonth(),
+      dt.getDate() + 7
+    ).setHours(0,0,0,0));
+    this.isDpe = this.designeeTypeId === DesigneeTypeEnum.DPE;
+    this.isSae = this.designeeTypeId === DesigneeTypeEnum.SAE;
+    this.isAfsGroup2 =
+      this.designeeTypeId === DesigneeTypeEnum.DPE ||
+      this.designeeTypeId === DesigneeTypeEnum.SAE ||
+      this.designeeTypeId === DesigneeTypeEnum.ADMINPE ||
+      this.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN;
+    if (
+      this.isAfsGroup2 &&
+      (this.designeeTypeId === DesigneeTypeEnum.ADMINPE ||
+        this.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN ||
+        this.categoryId !== 0)
+    ) {
+      this.isAdministrativePreapproval = true;
+      this.isMultipleApplicants =
+        this.preApprovalRequestData!.testCheckInformation?.isMultipleApplicants as boolean;
+    }
+    this.isTempCertifcateIssue =
+      this.afsPostActivityGroup2!.postActivityResultTypeId === 26 ||
+      this.afsPostActivityGroup2!.postActivityResultTypeId === 30;
+    this.isNoticeOfDisapproval =
+      this.afsPostActivityGroup2!.postActivityResultTypeId === 27 ||
+      this.afsPostActivityGroup2!.postActivityResultTypeId === 31;
+    this.isLetterOfDiscon =
+      this.afsPostActivityGroup2!.postActivityResultTypeId === 28 ||
+      this.afsPostActivityGroup2!.postActivityResultTypeId === 32;
+    await this.lookupService.populateLookupData();
+    this.isProficiencyCheck =
+      (this.designeeTypeId === DesigneeTypeEnum.DPE &&
+        this.form!.getRawValue().practicalOralTestId === 11) ||
+      (this.designeeTypeId === DesigneeTypeEnum.SAE &&
+        this.form!.getRawValue().practicalOralTestId === 21);
+    this.populateData();
 
-  ngOnInit() {
-    super.initialize();
-     this.designeeTypeId = this.data?.preApprovalRequest?.designeeTypeId ?? DesigneeTypeEnum.ADMINPE;
-    this.isRedirectionFromCorrectiveAction =
-      this.route.snapshot.params['cAction'] === 'true';
-    this.form = AdminpeIndexComponent.buildForm(this.data, {
-      designeeTypeId: this.designeeTypeId,
-      isDisabled: this.isDisabled,
-      categoryId: this.categoryId,
-      isEditPostActivity: this.isEditPostActivity,
-      isAttachmentNotRequired: true,
-      isAdmin: this.isAdministrativePreapproval
+    this.isSmtfSelected = Group2PostActivityComponent.isSmtfSelection(
+      this.preApprovalRequestData!.testCheckInformation as PreApprovalTestCheckInformation,
+      this.getFunctionCode()
+    );
+  }
+  private valueChangedOfIacraStatusType() {
+    this.form!.get(`iacraStatusType${this.groupIndex}`)?.valueChanges.subscribe((value?: number) => {
+      if ((value === IacraStatusTypeEnum.No && !this.isProficiencyCheck && !this.isLetterOfDiscon) || ((this.isDpe || this.isSae) && this.isSmtfSelected)) {
+        this.form!.get('datePaperWorkSent')?.setValidators([Validators.required]);
+      } else {
+        this.form!.get('datePaperWorkSent')?.setValidators([]);
+      }
+      this.afsPostActivityGroup2!.iacraStatusTypeId = value;
+      this.form!.get('datePaperWorkSent')?.updateValueAndValidity();
     });
+  }
+  private valueChangedOfPracticalOralTestId() {
+
+    this.form!.get('practicalOralTestId')?.valueChanges.pipe(takeUntil(this.destroying$), startWith(this.form!.get('practicalOralTestId')?.value)).subscribe(
+          (practicalOralTestId: number) => {
+            switch (this.designeeTypeId) {
+                case DesigneeTypeEnum.DPE:
+                    this.isProficiencyCheck = practicalOralTestId === 11;
+                    break;
+                case DesigneeTypeEnum.SAE:
+                    this.isProficiencyCheck = practicalOralTestId === 21;
+                    break;
+            }
+            this.reinitiateIacraGroup();
+            if (this.isProficiencyCheck) {
+                this.form!.get('proficiencyCheck')?.setValidators([Validators.required]);
+              
+                this.afsPostActivityGroup2!.practicalTestResultId = 0;
+            } else {
+                this.form!.get('proficiencyCheck')?.setValidators([]);
+                this.form!.get('proficiencyCheck')?.setValue('');
+                this.afsPostActivityGroup2!.proficiencyCheckResultId = 0;
+            }
+
+            if(!this.isAdministrativePreapproval)
+            {
+                if (this.isProficiencyCheck) {
+                    this.form!.get('practicalTest')?.setValidators([]);
+                    this.form!.get('practicalTest')?.setValue('');
+                } else {
+                    this.form!.get('practicalTest')?.setValidators([Validators.required]);                 
+                }
+            }
+
+            this.form!.get('proficiencyCheck')?.updateValueAndValidity();
+            this.form!.get('practicalTest')?.updateValueAndValidity();
+
+        if (this.showRetestQuestion) {
+          this.form!
+            .get('isAdditionalInstructionsProvided')
+            ?.setValue(
+              this.afsPostActivityGroup2!.isAdditionalInstructionsProvided == null ? false : this.afsPostActivityGroup2!.isAdditionalInstructionsProvided
+            );
+          this.form!
+            .get('isAdditionalInstructionsProvided')
+            ?.setValidators([Validators.required]);
+        } else {
+          this.form!.get('isAdditionalInstructionsProvided')?.setValue(null);
+          this.afsPostActivityGroup2!.isAdditionalInstructionsProvided = false;
+          this.form!.get('isAdditionalInstructionsProvided')?.setValidators([]);
+        }
+        this.form!
+          .get('isAdditionalInstructionsProvided')
+          ?.updateValueAndValidity();
+    });
+  }
+  private valueChangedOfPracticalTest() {
+
+    this.form!.get('practicalTest')?.valueChanges
+      .pipe(startWith(this.form!.get('practicalTest')?.value))
+      .subscribe((practicalTestId?: any) => {
+        this.updateValidatorsWithPracticalTestId(practicalTestId);
+
+        this.form!.get('gradeOfCertificate')?.updateValueAndValidity({ emitEvent: false });
+        this.form!.get('areasOfOpertion')?.updateValueAndValidity();
+        this.form!.get('reasonForDiscontinue')?.updateValueAndValidity();
+
+        if (!this.isTempCertifcateIssue) {
+          if (this.form!.get('gradeOfCertificate') &&
+              this.form!.get('airCraftCatergory')?.enabled) {
+            this.form!.get('gradeOfCertificate')?.setValue(null);
+          }
+
+          if (this.form!.get('airCraftCatergory') &&
+              this.form!.get('airCraftCatergory')?.enabled) {
+            this.form!.get('airCraftCatergory')?.setValue(null);
+          }
+
+          if (this.form!.get('airCraftClass') &&
+              this.form!.get('airCraftClass')?.enabled) {
+            this.form!.get('airCraftClass')?.setValue(null);
+          }
+        }
+      });
+  }
+  private updateValidatorsWithPracticalTestId(practicalTestId?: any) {
+        if (practicalTestId != null) {
+          if ((practicalTestId === PracticalTestResult.DpeSatisfactoryTemporaryAirmanCertificateIssued ||
+              practicalTestId === PracticalTestResult.SaeSatisfactoryTemporaryAirmanCertificateIssued)) {
+            this.form?.get('gradeOfCertificate')?.setValidators([Validators.required]);
+          }
+          if ((practicalTestId === PracticalTestResult.DpeUnsatisfactoryNoticeofDisapprovalIssued ||
+               practicalTestId === PracticalTestResult.SaeUnsatisfactoryNoticeofDisapprovalIssued)) {
+            this.form!.get('areasOfOpertion')?.setValidators([Validators.required]);
+          }
+          if((practicalTestId === PracticalTestResult.DpeLetterofDiscontinuanceIssued ||
+              practicalTestId === PracticalTestResult.SaeLetterofDiscontinuanceIssued)) {
+            this.form?.get('reasonForDiscontinue')?.setValidators([Validators.required]);
+          } 
+          this.practicalTestChanged(practicalTestId);
+        } else {
+          this.form!.get('gradeOfCertificate')?.setValidators([]);
+          this.form!.get('areasOfOpertion')?.setValidators([]);
+          this.form!.get('reasonForDiscontinue')?.setValidators([]);
+        }
+  }
+  private valueChangedOfAirCraftCatergory() {
+
+    this.form!.get('airCraftCatergory')?.valueChanges
+      .pipe(startWith(this.form!.getRawValue().airCraftCatergory))
+      .subscribe((aircraftCategoryId?: any) => {
+        const aircraftcategoryid = aircraftCategoryId || 0;
+        if (aircraftcategoryid !== 0) {
+          this.populateAircraftClass(
+            this.gradeOfCertificateId,
+            aircraftcategoryid
+          );
+          if (
+            this.aircraftClasses != null &&
+            this.aircraftClasses.length !== 0
+          ) {
+            this.form!.get('airCraftClass')?.setValidators([Validators.required]);
+          } else {
+            this.form!.get('airCraftClass')?.setValidators([]);
+          }
+          this.form!.get('airCraftClass')?.updateValueAndValidity();
+        }
+      });
+  }
+  private valueChangedOfIsAdditionalInstructionsProvided() {
+
+    this.form!.get('isAdditionalInstructionsProvided')
+      ?.valueChanges.subscribe((value: boolean) => {
+        if (this.isSae && !this.isAdministrativePreapproval) {
+          if (value == null || value === undefined || !value) {
+            this.form!.get('airManName')?.setValidators([]);
+            this.form!.get('certificateNumber')?.setValidators([]);
+          } else {
+            this.form!.get('airManName')?.setValidators([Validators.required]);
+            this.form!
+              .get('certificateNumber')
+              ?.setValidators([Validators.required]);
+          }
+
+          this.form!.get('airManName')?.updateValueAndValidity();
+          this.form!.get('certificateNumber')?.updateValueAndValidity();
+        }
+
+        if (this.isDpe && !this.isAdministrativePreapproval) {
+          const flName = this.form!.get('flightInstructorName');
+          const fiNumber = this.form!.get('flightInstructorcertificateNumber');
+          if (value == null || value === undefined || !value) {
+            flName?.setValidators([]);
+            fiNumber?.setValidators([]);
+          } else {
+            flName?.setValidators([Validators.required]);
+            fiNumber?.setValidators([Validators.required]);
+          }
+
+          flName?.updateValueAndValidity();
+          fiNumber?.updateValueAndValidity();
+        }
+      });
+  }
+  private valueChangedOfIsAirManCertificateNotIssue() {
+
+    this.form!.get('isAirManCertificateNotIssue')
+      ?.valueChanges.subscribe((value: boolean) => {
+        if (this.isAdministrativePreapproval === true && value === true) {
+          this.form!
+            .get('airmanCertificateNotissuedReason')
+            ?.setValidators([Validators.required]);
+        } else {
+          this.form!.get('airmanCertificateNotissuedReason')?.setValidators([]);
+          this.form!.get('airmanCertificateNotissuedReason')?.setValue(null);
+        }
+
+        this.form!
+          .get('airmanCertificateNotissuedReason')
+          ?.updateValueAndValidity();
+      });
+  }
+
+  reinitiateIacraGroup() {
+    if (!this.isProficiencyCheck && !this.isLetterOfDiscon && this.showIacra) {
+      this.form!
+        .get(`iacraStatusType${this.groupIndex}`)
+        ?.setValidators([Validators.required]);
+    } else {
+      this.form!.get(`iacraStatusType${this.groupIndex}`)?.setValidators([]);
+    }
+    this.form!.get(`iacraStatusType${this.groupIndex}`)?.updateValueAndValidity();
+  }
+
+  getFunctionCode() : any {
+     if (Array.isArray(this.selectedFunctioncode)) {
+        return this.selectedFunctioncode.map(s => s.id ?? s.functionCode);
+     } else if (this.selectedFunctioncode) {
+        return this.selectedFunctioncode.id ?? this.selectedFunctioncode.functionCode
+     }
+      
+     return null
+  }
+
+  populateData() {
+    this.resultsOfProfCheck = this.lookupService.getPostActivityResult(
+      this.designeeTypeId
+    );
+    this.resultsOfPracticalTest = this.lookupService.getPracticalResultTypes(
+      this.designeeTypeId
+    );
+    this.gradeOfCertificateId = this.afsPostActivityGroup2!.gradeOfCertificateId??0;
+    if (
+      this.afsPostActivityGroup2!.gradeOfCertificateId != null &&
+      this.afsPostActivityGroup2!.gradeOfCertificateId !== 0
+    ) {
+      this.aircraftCategories = this.lookupService.getAircraftCategoryTypes(
+        this.afsPostActivityGroup2!.gradeOfCertificateId
+      );
+    }
+
+    const designeeType =
+      this.categoryId !== 0 ? DesigneeTypeEnum.ADMINPE : this.designeeTypeId;
+    this.gradesOfCertificate =
+      this.lookupService.getGradeCertificateTypes(designeeType);
+
+    this.countries = this.lookupService.getCountriesWithId();
+    if (this.afsPostActivityGroup2!.gradeOfCertificateId??0 > 0) {
+      this.populateCategories(this.afsPostActivityGroup2!.gradeOfCertificateId??0);
+    }
+    if (
+      (this.afsPostActivityGroup2!.gradeOfCertificateId ?? 0) > 0 &&
+      this.afsPostActivityGroup2!.airCraftCatergoryId as number > 0
+    ) {
+      this.populateAircraftClass(
+        this.afsPostActivityGroup2!.gradeOfCertificateId??0,
+        this.afsPostActivityGroup2!.airCraftCatergoryId as number
+      );
+    }
+    if (this.afsPostActivityGroup2!.postActivityResultTypeId != null) {
+      this.practicalTestChanged(
+        this.afsPostActivityGroup2!.postActivityResultTypeId
+      );
+    }
+  
+
+    this.practicalTypes = this.lookupService.getPracticalTypesDesigneeTypeId(
+      this.designeeTypeId
+    );
+
+    this.form!
+      .get('gradeOfCertificate')
+      ?.valueChanges.pipe(startWith(this.form!.get('gradeOfCertificate')?.value)).subscribe((gradeCertificateId?: any) => {
+        this.gradeOfCertificateId = gradeCertificateId || 0;
+        if (
+          this.gradeOfCertificateId !== 0 &&
+          this.gradeOfCertificateId !== GradeofCertificateEnum.NADpe &&
+          this.gradeOfCertificateId !== GradeofCertificateEnum.NASae &&
+          this.gradeOfCertificateId !== GradeofCertificateEnum.NAAdminPe
+        ) {
+          this.populateCategories(this.gradeOfCertificateId);
+          if (
+            this.aircraftCategories != null &&
+            this.aircraftCategories.length !== 0 &&
+            this.form!.get('airCraftCatergory')?.enabled
+          ) {
+            this.form!
+              .get('airCraftCatergory')
+              ?.setValidators([Validators.required]);
+          } else {
+            this.form!.get('airCraftCatergory')?.setValidators([]);
+          }
+          this.form!.get('airCraftCatergory')?.updateValueAndValidity();
+        }
+      });
+  }
+
+  populateCategories(gradeCertificateId: number) {
+    this.aircraftCategories = [];
+    if (
+      gradeCertificateId != null &&
+      gradeCertificateId !== 0 &&
+      gradeCertificateId !== GradeofCertificateEnum.NADpe &&
+      gradeCertificateId !== GradeofCertificateEnum.NASae &&
+      gradeCertificateId !== GradeofCertificateEnum.NAAdminPe
+    ) {
+      this.aircraftCategories =
+        this.lookupService.getAircraftCategoryTypes(gradeCertificateId);
+    }
+  }
+
+  populateAircraftClass(
+    gradeCertificateId: number,
+    aircraftCategoryId: number
+  ) {
+    this.aircraftClasses = [];
+    if (
+      gradeCertificateId != null &&
+      gradeCertificateId !== 0 &&
+      gradeCertificateId !== GradeofCertificateEnum.NADpe &&
+      gradeCertificateId !== GradeofCertificateEnum.NASae &&
+      gradeCertificateId !== GradeofCertificateEnum.NAAdminPe &&
+      this.form!.get('airCraftCatergory')?.value != null &&
+      this.form!.get('airCraftCatergory')?.value !== 0
+    ) {
+      this.aircraftClasses = this.lookupService.getAircraftClassTypes(
+        gradeCertificateId,
+        aircraftCategoryId
+      );
+    }
+  }
+
+  smtfSelected(value: boolean) {
+    if ((this.isDpe || this.isSae) && !value && !this.isAdministrativePreapproval) {
+      this.form!.get('practicalOralTestId')?.setValidators(Validators.required);
+      this.form!.get('practicalOralTestId')?.updateValueAndValidity();
+    } else {
+      this.form!.get('practicalOralTestId')?.clearValidators();
+      this.form!.get('practicalOralTestId')?.updateValueAndValidity();
+    }
+  }
+
+  practicalTestChanged(postActivityResultTypeId: number) {
+    this.isTempCertifcateIssue =
+      postActivityResultTypeId === 26 || postActivityResultTypeId === 30;
+    this.isNoticeOfDisapproval =
+      postActivityResultTypeId === 27 || postActivityResultTypeId === 31;
+    this.isLetterOfDiscon =
+      postActivityResultTypeId === 28 || postActivityResultTypeId === 32;
+    this.reinitiateIacraGroup();
+  }
+
+  filterAirports(event: any) {
+    this.lookupService.filterAirports(event.query).subscribe((d) => {
+      this.airports = d;
+    });
+  }
+  filterMakeModel(event: any) {
+    this.lookupService.getMakeModelSeries(event.query).subscribe((d) => {
+      this.aircraftMakeModels = d;
+    });
+    if (this.testCheckInformation) {
+      if (this.testCheckInformation?.selectedRequestAuthorizations?.length ??0 > 0) {
+        this.getMakeModels(
+          this.testCheckInformation?.selectedRequestAuthorizations ?? [],
+          event.query
+        );
+      } else if (
+        this.testCheckInformation?.selectedTemporaryAuthorizations?.length ?? 0 > 0
+      ) {
+        this.getMakeModels(
+          this.testCheckInformation?.selectedTemporaryAuthorizations??[],
+          event.query
+        );
+      }
+    }
+  }
+
+  getMakeModels(selectedFunctionCodes: FunctionCode[], query: string) {
+    const categoryIds: any[] = [];
+    selectedFunctionCodes
+      .filter((a) => a.categoryId != null)
+      .forEach((a) => {
+        if (categoryIds.findIndex((c) => c.value === a.categoryId) === -1) {
+          categoryIds.push(a.categoryId);
+          this.lookupService
+            .getMakeModelSeriesWithCategory(
+              query,
+              this.designeeTypeId,
+              a.categoryId??0
+            )
+            .subscribe((d) => {
+              this.aircraftMakeModels = d;
+            });
+        }
+      });
+  }
+
+  initiateApplicantFormGroup() {
+    if (this.afsPostActivityGroup2!.applicants != null) {
+      this.afsPostActivityGroup2!.applicants.forEach((applicant) => {
+        this.addApplicantGroup(applicant);
+      });
+    }
+  }
+
+  get applicantFormGroups(): FormArray {
+    return this.form!.get('applicantGroup') as FormArray;
+  }
+
+  addApplicant() {
+    this.addApplicantGroup(new Applicants(0, 0));
+  }
+
+  removeApplicant(index: number) {
+    this.applicantFormGroups.removeAt(index);
+  }
+
+  addApplicantGroup(model: Applicants) {
+    this.applicantFormGroups.push(
+      new FormBuilder().group({
+        id: model.id,
+        postActivityId: model.postActivityId,
+        applicantName: new FormControl(
+          { value: model.applicantName, disabled: this.isDisabled },
+          [Validators.required, Validators.maxLength(100)]
+        ),
+        certificateNumber: new FormControl(
+          { value: model.certificateNumber, disabled: this.isDisabled },
+          [Validators.required, Validators.maxLength(30)]
+        ),
+      })
+    );
+  }
+
+  get showRetestQuestion() {
+    return (
+      (this.isDpe || this.isSae) &&
+      [
+        PracticalOralTestEnum.RetestforOriginalCertificateDPE,
+        PracticalOralTestEnum.RetestforAdditionalRatingDPE,
+        PracticalOralTestEnum.RetestforOriginalCertificateSAE,
+        PracticalOralTestEnum.RetestforAdditionalRatingSAE,
+      ].includes(this.form!.getRawValue().practicalOralTestId) &&
+      !this.isAdministrativePreapproval
+    );
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['isEditPostActivity']) {
+      if (this.isEditPostActivity) {
+        this.isDisabled = !this.isEditPostActivity;
+        this.form!.enable();
+        this.preApprovalRequestFormGroup!.get('generalComments')?.enable();
+        this.form!.get('proposedStartDate')?.disable();
+      }
+    }
+    if (
+      changes['selectedFunctioncode'] &&
+      !changes['selectedFunctioncode'].firstChange
+    ) {
+
+      this.isSmtfSelected = Group2PostActivityComponent.isSmtfSelection(
+        this.preApprovalRequestData!.testCheckInformation as PreApprovalTestCheckInformation,
+        this.getFunctionCode()
+      );
+      this.smtfSelected(this.isSmtfSelected);
+      this.setIACRAVisibility();
+    }
+  }
+
+  onDurationBlur(event: any, formControlname: string) {
+    if (event.target.value) {
+      const numbericregex = RegExp(RegularExpressions.numeric, 'd');
+      const decimalregex = RegExp(RegularExpressions.numericOneDecimal, 'g');
+      const match =
+        numbericregex.exec(event.target.value) ||
+        decimalregex.exec(event.target.value);
+      if (!match) {
+        this.form!.get(formControlname)?.setValue(null);
+      } else {
+        this.form!
+          .get(formControlname)
+          ?.setValue(
+            new DecimalPipe('en-US').transform(event.target.value, '.1-9')
+          );
+      }
+      this.form!.get(formControlname)?.updateValueAndValidity();
+    }
+  }
+
+  showGradeOfCertificate() {
+    const result =
+      (this.isDpe || this.isSae) &&
+      !this.isProficiencyCheck &&
+      !this.isAdministrativePreapproval &&
+      this.isTempCertifcateIssue;
+    if (result === false && this.form!.get('gradeOfCertificate')?.enabled) {
+      this.form!.get('gradeOfCertificate')?.setValidators([]);
+      this.form!.get('gradeOfCertificate')?.updateValueAndValidity();
+    }
+
+    return result;
+  }
+
+  showAircraftCategory() {
+    const gradeOfCertificateId = this.form!.getRawValue().gradeOfCertificate;
+    const result =
+      !this.isAdministrativePreapproval &&
+      this.aircraftCategories != null &&
+      this.aircraftCategories.length > 0 &&
+      gradeOfCertificateId != this.gradeOfCertificateTypeEnum.NADpe &&
+      gradeOfCertificateId != this.gradeOfCertificateTypeEnum.NASae &&
+      gradeOfCertificateId != this.gradeOfCertificateTypeEnum.NAAdminPe &&
+      (this.isSae || this.isDpe) &&
+      this.aircraftCategories != null &&
+      this.aircraftCategories.length > 0 &&
+      this.isTempCertifcateIssue &&
+      !this.isProficiencyCheck;
+
+    if (result === false && this.form!.get('airCraftCatergory')?.enabled) {
+      this.form!.get('airCraftCatergory')?.setValidators([]);
+      this.form!.get('airCraftCatergory')?.updateValueAndValidity();
+    }
+
+    return result;
+  }
+
+  showAircraftClass() {
+    const result =
+      !this.isAdministrativePreapproval &&
+      this.aircraftClasses != null &&
+      this.aircraftClasses.length > 0 &&
+      (this.isSae || this.isDpe) &&
+      this.aircraftClasses != null &&
+      this.aircraftClasses.length > 0 &&
+      this.isTempCertifcateIssue &&
+      !this.isProficiencyCheck;
+
+    if (result === false && this.form!.get('airCraftClass')?.enabled) {
+      this.form!.get('airCraftClass')?.setValidators([]);
+      this.form!.get('airCraftClass')?.updateValueAndValidity();
+    }
+
+    return result;
+  }
+
+  setIACRAVisibility() {
+      if((this.isDpe || this.isSae) && this.selectedFunctioncode && this.isSmtfSelected){
+        this.showIacra = false;
+        this.form!.get(`iacraStatusType${this.groupIndex}`)?.clearValidators();
+        this.form!
+          .get(`iacraStatusType${this.groupIndex}`)
+          ?.updateValueAndValidity();
+        if (!this.resultsOfPracticalTest) {
+          this.resultsOfPracticalTest = this.lookupService.getPracticalResultTypes(
+            this.designeeTypeId
+          );
+        }
+        this.resultsOfPracticalTest = [
+          ...this.resultsOfPracticalTest.filter(
+            (x) =>
+              ['Satisfactory', 'Unsatisfactory', '- Select -'].indexOf(
+                x.label??''
+              ) != -1
+          ),
+        ];
+    } else {
+      this.showIacra = true;
+      this.reinitiateIacraGroup();
+      this.resultsOfPracticalTest = this.lookupService.getPracticalResultTypes(
+        this.designeeTypeId
+      );
+    }
+  }
+
+  clearAirCraftClass() {
+    this.form!.get('airCraftClass')?.setValue(null);
   }
 }
