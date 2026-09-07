@@ -9,8 +9,20 @@ root_effect_scheduler.mjs:3637 ERROR RuntimeError: NG0100: ExpressionChangedAfte
     at detectChangesInViewIfAttached (debug_node.mjs:10341:5)
     at detectChangesInComponent (debug_node.mjs:10329:5)
     at detectChangesInChildComponents (debug_node.mjs:10407:9)
+ngx-logger.mjs:754 2026-09-07T00:11:44.790Z LOG [chunk-NLCOQ7ND.js:65571:19] /postactivity/afsgroups/ENC%7C-wxmcLIci1Rv-_gwZAuCAxULOE46C6MrbyDaXOeQFLFRMQk Navigation Event 1
+root_effect_scheduler.mjs:3637 ERROR Error: Cannot find control with name: 'airportOfTraining'
+    at _throwError (forms.mjs:3573:9)
+    at setUpControl (forms.mjs:3364:19)
+    at _FormGroupDirective.addControl (forms.mjs:5585:5)
+    at _FormControlName._setUpControl (forms.mjs:6266:39)
+    at _FormControlName.ngOnChanges (forms.mjs:6222:28)
+    at _FormControlName.rememberChangeHistoryAndInvokeOnChangesHook (debug_node.mjs:594:14)
+    at callHookInternal (debug_node.mjs:860:14)
+    at callHook (debug_node.mjs:891:9)
+    at callHooks (debug_node.mjs:841:17)
+    at executeInitAndCheckHooks (debug_node.mjs:791:9)
 
-
++=========
 root_effect_scheduler.mjs:3637 ERROR RuntimeError: NG0100: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'false'. Current value: 'true'. Expression location: _PreApprovalRequestIndexComponent component. Find more at https://v20.angular.dev/errors/NG0100
     at throwErrorIfNoChangesMode (debug_node.mjs:6439:11)
     at bindingUpdated (debug_node.mjs:14117:17)
@@ -22,3 +34,20 @@ root_effect_scheduler.mjs:3637 ERROR RuntimeError: NG0100: ExpressionChangedAfte
     at detectChangesInViewIfAttached (debug_node.mjs:10341:5)
     at detectChangesInComponent (debug_node.mjs:10329:5)
     at detectChangesInChildComponents (debug_node.mjs:10407:9)
+
+ngx-logger.mjs:754 2026-09-07T00:13:51.540Z LOG [chunk-NLCOQ7ND.js:65571:19] /postactivity/afsgroups/ENC%7CTmpAYlmE14T3xod_ABzyiVwWi5UWddTAQX42i4q9rMdVGp8 Navigation Event 1
+root_effect_scheduler.mjs:3637 ERROR Error: Cannot find control with name: 'airportOfTraining'
+    at _throwError (forms.mjs:3573:9)
+    at setUpControl (forms.mjs:3364:19)
+    at _FormGroupDirective.addControl (forms.mjs:5585:5)
+    at _FormControlName._setUpControl (forms.mjs:6266:39)
+    at _FormControlName.ngOnChanges (forms.mjs:6222:28)
+    at _FormControlName.rememberChangeHistoryAndInvokeOnChangesHook (debug_node.mjs:594:14)
+    at callHookInternal (debug_node.mjs:860:14)
+    at callHook (debug_node.mjs:891:9)
+    at callHooks (debug_node.mjs:841:17)
+    at executeInitAndCheckHooks (debug_node.mjs:791:9)
+
+
+
+
