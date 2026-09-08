@@ -13,7 +13,6 @@ ETL Step Target Schema	RAA_RAWZ
 ETL Step Target Stg Schema	RAA_RAWZ_STG
 Step Sequence Number	1.0
 Step Parameters JSON
-json
 {
   "clusternm": "RAA2",
   "jobargs": [
@@ -44,7 +43,6 @@ json
   "terminationwaittime": 10,
   "terminateoption": "NO"
 }
-
 
 
 
