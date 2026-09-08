@@ -3,9 +3,5 @@ intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
 intervention.datavantprematch.code=DTVNTRTPM
 
 
-$ git log --oneline -5
-5f0d70c78 (HEAD -> feature/RBICA-14070-datavant-prematch, origin/feature/RBICA-14070-datavant-prematch, feature/AM71511-jarfix-09012026) RBICA-14070: Add Datavant Pre-Match config keys for dev and uat
-a0c379f58 (origin/feature/AM18673-20260818-DSCHRGDT, master) Merge pull request #15770 in AEDLNC/ncr_dna2_raa_files from feature/RAA-12487-POC-INPATIENT-DATA-ORDER to master
-7d9680e65 Merge pull request #15772 in AEDLNC/ncr_dna2_raa_files from feature/RAA-1208-CHARTGEN-REL to master
-a497cabc3 (origin/feature/RAA-1208-CHARTGEN-REL) src nm changes for all scripts
-b79a7965f Changes to the data
+grep -A2 "Datavant Pre-Match" snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
+grep -A2 "Datavant Pre-Match" snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_dev.properties
