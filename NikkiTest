@@ -1,3 +1,117 @@
-aws secretsmanager list-secrets --query "SecretList[?contains(Name, 'snowflake/raa')].Name"
-
-aws secretsmanager describe-secret --secret-id uat/snowflake/raa
+[hadoop@ip-10-127-204-210 ~]$ aws secretsmanager describe-secret --secret-id uat/snowflake/raa
+{
+    "ARN": "arn:aws:secretsmanager:us-east-1:652798729258:secret:uat/snowflake/raa-LIkPip",
+    "Name": "uat/snowflake/raa",
+    "Description": "Master DB credentials for uat Snowflake ",
+    "KmsKeyId": "arn:aws:kms:us-east-1:652798729258:key/aa117f42-2745-42b6-8ac3-8f57127ddb90",
+    "RotationEnabled": false,
+    "LastChangedDate": "2026-09-02T13:44:56.767000+00:00",
+    "LastAccessedDate": "2026-09-08T00:00:00+00:00",
+    "Tags": [
+        {
+            "Key": "application-name",
+            "Value": "EDL"
+        },
+        {
+            "Key": "business-division",
+            "Value": "CORP"
+        },
+        {
+            "Key": "workspace",
+            "Value": "awsssedadna2apm1010565-utncmlti"
+        },
+        {
+            "Key": "elvh-infra-env",
+            "Value": "test"
+        },
+        {
+            "Key": "PatchWindow",
+            "Value": "Default"
+        },
+        {
+            "Key": "elvh-app-env",
+            "Value": "test"
+        },
+        {
+            "Key": "apm-id",
+            "Value": "APM1010565"
+        },
+        {
+            "Key": "elvh-apm-id",
+            "Value": "apm1010565"
+        },
+        {
+            "Key": "elvh-ci-owner",
+            "Value": "AD30071"
+        },
+        {
+            "Key": "elvh-app-servicenow-group",
+            "Value": "Anthem Enterprise Data Lake Support"
+        },
+        {
+            "Key": "elvh-application-name",
+            "Value": "Member _amp_ Clinical  Analytics"
+        },
+        {
+            "Key": "aws-migration-project-id",
+            "Value": "MPE19072"
+        },
+        {
+            "Key": "app-servicenow-group",
+            "Value": "eda devops cloud support"
+        },
+        {
+            "Key": "environment",
+            "Value": "uat"
+        },
+        {
+            "Key": "elvh-app-support-dl",
+            "Value": "dl-edl-notifications@anthem.com"
+        },
+        {
+            "Key": "elvh-workspace",
+            "Value": "awsssedadna2apm1010565-utncmlti"
+        },
+        {
+            "Key": "elvh-costcenter",
+            "Value": "5570200400"
+        },
+        {
+            "Key": "compliance",
+            "Value": "PHI"
+        },
+        {
+            "Key": "company",
+            "Value": "CRLN"
+        },
+        {
+            "Key": "elvh-company",
+            "Value": "Anthem"
+        },
+        {
+            "Key": "app-support-dl",
+            "Value": "dl-aedl-te@anthem.com"
+        },
+        {
+            "Key": "costcenter",
+            "Value": "5570200400"
+        },
+        {
+            "Key": "elvh-business-division",
+            "Value": "corp"
+        },
+        {
+            "Key": "PatchGroup",
+            "Value": "Default"
+        }
+    ],
+    "VersionIdsToStages": {
+        "2e05d500-9bce-493a-9949-0343e0ccf78a": [
+            "AWSPREVIOUS"
+        ],
+        "terraform-unHGve317nPPJnyb7NyIh0nfGn": [
+            "AWSCURRENT"
+        ]
+    },
+    "CreatedDate": "2023-07-17T07:04:40.517000+00:00"
+}
