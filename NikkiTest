@@ -1,1 +1,30 @@
-DatavantMbrProvETLDriver.scala
+package com.anthem.hca.intervention.datavantmbr
+import com.anthem.utils.ConfigurationConstants
+//log
+object DatavantMbrProvETLDriver {
+
+  def main( args : Array[String] ) {
+
+    if( args.length != 5 ) {
+      System.err.println("Please provide the line of Business and properties file ")
+      System.exit(1)
+    }
+
+    val lob: String = args(0)
+    val propertiesFileName = ConfigurationConstants.sanitizeFileName(args(1).split("/").reverse(0))
+    val propFilePath = ConfigurationConstants.CONFIG_FOLDER + "/" + propertiesFileName
+    val configFolder = ConfigurationConstants.CONFIG_FOLDER
+    val configFile = ConfigurationConstants.sanitizeFileName(args(3).split("/").reverse(0))
+    val runId: String = args(4)
+    if(!lob.equals("MCR") ) {
+      System.err.println("Please provide valid line of business as MCR")
+      System.exit(1)
+    }
+    if( lob.nonEmpty ) {
+      val datavantMbrProvFileETL = new DatavantMbrProvFileETL(propFilePath, configFolder, configFile, runId)
+      datavantMbrProvFileETL.generateDatavantMbrProvOutboundFile(lob)
+      datavantMbrProvFileETL.generateDatavantCPLOutboundFile(lob)
+    }
+
+  }
+}
