@@ -3,5 +3,14 @@ intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
 intervention.datavantprematch.code=DTVNTRTPM
 
 
-grep -A2 "Datavant Pre-Match" snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
-grep -A2 "Datavant Pre-Match" snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_dev.properties
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/RBICA-14070-datavant-prematch)
+$ grep -A2 "Datavant Pre-Match" snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
+# Datavant Pre-Match (RBICA-14070)
+intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
+intervention.datavantprematch.code=DTVNTRTPM
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/RBICA-14070-datavant-prematch)
+$ grep -A2 "Datavant Pre-Match" snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_dev.properties
+# Datavant Pre-Match (RBICA-14070)
+intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
+intervention.datavantprematch.code=DTVNTRTPM
