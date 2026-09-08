@@ -1,10 +1,6 @@
-[hadoop@ip-10-127-204-210 bin]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -A 8 "\[snowflake\]"
-[snowflake]
-env=uat
-region_name=us-east-1
-secret_path=/snowflake/raa
-usedatabase=U01_RAA
-raaDatabase=U01_RAA.RAA_RAWZ
-warehouse=U01_RAA_LOAD_WH_M
-sf_schema=RAA_RAWZ
-process=MCAID
+Basically trying to switch our Snowflake login over to the newer key-pair method instead of passwords, and make sure it still works fine across all the different vendor schemas that use this same script. The code's already done and sitting in UAT — just kept getting blocked because the UAT config file kept reverting back to prod settings. Fixed that again just now, so ready to actually test it once I hear back on which schemas to check."
+
+Fixed the UAT properties env issue again (env=prod was hardcoded, blocking testing) - ready to test now for 14101.
+
+Quick question before I start - which schemas should I actually be validating against? Want to make sure I'm testing the right ones rather than assuming it's all of them.
+s
