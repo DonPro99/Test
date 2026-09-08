@@ -1,38 +1,267 @@
-User record: 
+ // RBICA-14070: Datavant Pre-Match Outbound File
+  // Target table: RAD_DATAVANT_CHASE_PREMATCH
+  def generateDatavantPreMatchOutboundFile(lineOfBusiness: String) {
 
-Id	OktaCid	UserName	EmailAddress	StatusId	CreatedDate
-20138	00u58414ofF7unPdA4h7	AME_EANORGA16168	eanorga@protonmail.com
-1	11/18/2015 15:09
+    val log = LoggerFactory.getLogger("datavantMbrProvFileETL")
+    log.info(s"Starting DatavantPreMatch ETL for line of business:$lineOfBusiness")
 
-Application record: 
-Id	ApplicationDate	DesigneeTypeId	IsMinRequireMet	SubmissionDate	StatusId	StateId	UserId	OfficeId	IsActive	IsReviewed	Comments	CreatedBy	UpdatedBy	CreatedDate	UpdatedDate	IsDeployed	AuditPrimaryLogId
-20896	11/18/2015 15:13	20	NULL	11/18/2015 15:16	3	8	20138	160	0	NULL	NULL	1	NULL	11/18/2015 15:13	NULL	0	NULL
+    val datavantPreMatchTable: String = cfg.getString("intervention.master.hive.table.datavantprematch")
+    val intervention: String = cfg.getString("intervention.datavantprematch.code")
+    val outBoundLocation: String = cfg.getString("Outbound_Location")
+    val hiveDBName = cfg.getString("intervention.hive.database")
+    val chrtsMasterTable = cfg.getString("intervention.master.hive.table.mbrs")
+    val deployTable = cfg.getString("intervention.master.hive.table.deploy")
+    val lob: String = lineOfBusiness
+    val spark = this.getSession(configFolder, configFile)
+    val ts = DateTime.now()
+    val dt = new DateTime(ts.toString())
+    val processname2 = cfg.getString("processname2") + lineOfBusiness
+    val processid = cfg.getString(s"processID.$lineOfBusiness").toInt
+    val step2 = cfg.getString("step2") + lineOfBusiness
+    val stepId1 = cfg.getString("stepID1").toInt
+    val stepId2 = cfg.getString("stepID2").toInt
+    val status1 = cfg.getString("status1")
+    val status2 = cfg.getString("status2")
+    val emailFrom = cfg.getString("emailFrom")
+    val emailTo = cfg.getString("emailTo")
+    val emailToList = cfg.getString("emailToList")
+    val email = new Email()
+    var batchId = 0L
+    var deplyRecordCnt = 0L
+    var fFlag = ""
 
+    try {
 
-Cloa history for his location record: shows AppointingOfficialId changed from 108936 (valid) to 212065 on 4/22/2026
-Id	OfficeId	AppointingOfficialId	CloaStatusId	UpdatedDate
-147168	171	212065	1	4/22/2026 13:35
-132802	171	108936	5	11/19/2025 17:10
-116043	171	108936	5	12/2/2024 11:38
-96442	171	108936	5	11/20/2023 13:14
-77689	171	108936	5	10/3/2022 10:58
-64386	171	108936	5	12/2/2021 13:35
-61295	171	5950	5	2/12/2021 13:14
-58125	171	5950	5	11/16/2020 16:04
-53741	171	5950	5	8/10/2020 13:59
-38736	171	5950	5	2/6/2020 10:41
-29691	171	5950	5	8/22/2018 17:41
-20567	171	2260	5	8/31/2016 7:39
+      spark.sql(s""" use SCHEMA $hiveDBName """).count()
 
+      var res = spark.sql(
+        s"""SELECT batchid, status, reccnt from ${cfg.getString("riskadjustment.hive.table.loadlog")}
+          where processid = ${processid} and stepid = ${stepId1}
+          order by batchid desc limit 1""")
 
-Confirmed 212065 has no matching user: No result
+      if (res.count > 0) {
+        batchId = res.first.get.getLong(0)
+        deplyRecordCnt = res.first().get.getLong(2)
+      }
 
-Confirmed who made the update:
+      if (res.count == 0 || res.first.get.getString(1) != status1 || deplyRecordCnt == 0) {
+        throw new Exception(
+          s"No load_log_key entry or failed status or 0 deploy record for processid = $processid and stepid = $stepId1")
+      }
 
-Id	ApplicationId	OfficeId	AppointmentDate	ExpirationDate	CloaStatusId	ManagingSpecialistId	AppointingOfficialId	AuthorityGrantedDate	IsAutoPreApproval	DesigneeClassTypeId	CertificateNumber	CertificateIssuedDate	TerminationDate	Ftn
-147168	20896	171	11/1/1991	11/30/2026	1	7129	108936	8/22/2018	0	1	NULL	NULL	NULL	NULL
+      runId = spark.sql("select md5(current_timestamp)").first().get.getString(0)
 
-IsAutoPostActivity	DesignatorName	DesignatorId	DisciplineTypeId	ProfileVersionId	AovCompanyTypeId	MedicalCertificationDate	CreatedBy	CreatedDate	UpdatedBy	UpdatedDate	AuditPrimaryLogId	SysStartDate	SysEndDate
-0	NULL	NULL	NULL	17267	NULL	NULL	20138	11/19/2025 17:10	NULL	NULL	NULL	11/19/2025 23:10	4/22/2026 18:35
+      // Build Pre-Match DataFrame
+      val preMatchDplyDf = spark.sql(
+        s""" select
+              b.add_val4,
+              b.add_val6    as ONOFFSHORE,
+              b.add_val11   as FTPFLAG,
+              b.rundatetime,
+              b.add_val3,
+              a.CHART_PROV_ADRS1,
+              a.CHART_PROV_ADRS2,
+              a.CHART_PROV_CITY,
+              a.CHART_PROV_ST,
+              a.CHART_PROV_ZIP,
+              a.INPAT_CD,
+              a.chart_taxid,
+              a.CHART_NPI,
+              a.CHART_PROV_PHONE_NBR,
+              a.CHART_PROV_FAX,
+              a.MBR_ZIP,
+              a.HC_ID,
+              a.PAT_ACCT_NBR
+          from $deployTable b
+          inner join $chrtsMasterTable a
+              on trim(a.recordid)      = trim(b.recordid)
+              and trim(a.filedatetime) = trim(b.filedatetime)
+              and trim(chartid)        = trim(add_val1)
+              and trim(chartdatetime)  = trim(add_val2)
+              and trim(a.lob)          = trim(b.lob)
+              and trim(b.intervention) = '$intervention'
+              and trim(b.lob)          = '$lob'
+              and b.batch_id           = '$batchId'
+      """)
 
+      if (preMatchDplyDf.first(1).isEmpty) {
+        throw new Exception(
+          s"Empty dataframe for Pre-Match — no data to generate for $intervention and $lob")
+      }
 
+      preMatchDplyDf.dropDuplicates().createOrReplaceTempView("PREMATCH_DPLY_DATA")
+
+      // Transform Pre-Match columns per finalized mapping doc
+      val preMatchFileTempDf = spark.sql(
+        s""" select
+              trim(CHART_PROV_ADRS1)                          as "AddressLine1",
+              trim(CHART_PROV_ADRS2)                          as "AddressLine2",
+              trim(CHART_PROV_CITY)                           as "City",
+              trim(CHART_PROV_ST)                             as "State",
+              trim(CHART_PROV_ZIP)                            as "Zipcode",
+              case when (trim(INPAT_CD)) = 'Y' then 'Inpatient'
+              ELSE 'Outpatient' end                           as "FacilityType",
+              ''                                               as "FacilityNPI",
+              trim(chart_taxid)                               as "FacilityTIN",
+              trim(CHART_NPI)                                 as "PracticionerNPI",
+              trim(CHART_PROV_PHONE_NBR)                      as "ProviderPhone",
+              trim(CHART_PROV_FAX)                            as "ProviderFax",
+              trim(MBR_ZIP)                                   as "MemberZip",
+              trim(HC_ID)                                     as "MemberInsuranceId",
+              trim(PAT_ACCT_NBR)                              as "ClaimId",
+              ONOFFSHORE,
+              FTPFLAG
+          from PREMATCH_DPLY_DATA
+      """).cacheResult()
+
+      val row_count = preMatchFileTempDf.count()
+      preMatchFileTempDf.createOrReplaceTempView("PREMATCH_FINAL_TABLE")
+
+      // Check FTP flag. Pre-Match uses add_val11 directly (Y/N)
+      val ftpFlagDf = spark.sql(s"""SELECT distinct FTPFLAG FROM PREMATCH_FINAL_TABLE""")
+      val ftpToVendor = if (ftpFlagDf.count() > 0) ftpFlagDf.first().get.getString(0) else "N"
+      log.info(s"add_val11 FTP flag = $ftpToVendor")
+
+      // Generate Pre-Match outbound file(s)
+      def generatePreMatchOutboundFile(finalDataFrame: DataFrame, fileInd: String): Unit = {
+
+        val Rvalue: String = spark.sql(
+            s"""Select Substr(add_val4,1,2) as Aval from PREMATCH_DPLY_DATA""")
+          .first().get.getString(0)
+
+        val maxRecordsPerFile = 500000L
+        val filteredDF = finalDataFrame
+          .filter(col("ONOFFSHORE") === fileInd)
+          .drop("ONOFFSHORE", "FTPFLAG")
+          .withColumn("row_num", row_number().over(Window.orderBy(lit(1))))
+
+        val totalRecords = filteredDF.count()
+        val numFiles = Math.ceil(totalRecords.toDouble / maxRecordsPerFile).toInt
+
+        log.info(s"Creating $numFiles Pre-Match file(s) for $lob with $totalRecords records")
+
+        for (fileNum <- 1 to numFiles) {
+          val startRow = (fileNum - 1) * maxRecordsPerFile + 1
+          val endRow   = Math.min(fileNum * maxRecordsPerFile, totalRecords)
+
+          val preMatchFilename: String =
+            s"ELV_DTVNT_${Rvalue}_MRA_PREMATCH_${fileInd}_${fileNum}_" +
+              dt.toString("yyyyMMdd") + dt.toString("HHmmss") + ".txt"
+
+          val fileOutBoundLocation: String =
+            outBoundLocation + "/datavantprematch-etl/" +
+              dt.toString("yyyyMMdd_HHmmss") + "/" + preMatchFilename
+
+          log.info(s"Writing Pre-Match file $fileNum of $numFiles: records $startRow to $endRow")
+
+          filteredDF
+            .filter(col("row_num") >= startRow && col("row_num") <= endRow)
+            .drop("row_num")
+            .write
+            .option("header", "true")
+            .option("field_delimiter", "|")
+            .option("empty_field_as_null", false)
+            .option("null_if", "")
+            .option("COMPRESSION", "NONE")
+            .option("SINGLE", "True")
+            .option("MAX_FILE_SIZE", 999999999)
+            .mode("Overwrite")
+            .csv(fileOutBoundLocation)
+
+          log.info(s"Successfully created Pre-Match file: $preMatchFilename")
+
+          if (ftpToVendor == "Y") {
+            log.info(s"add_val11=Y — SFTP transfer to vendor for file: $preMatchFilename")
+            // CFX/SFTP transfer logic goes here
+          } else {
+            log.info(s"add_val11=N — skipping SFTP for file: $preMatchFilename")
+          }
+        }
+      }
+
+      val fileCnt = spark.sql(
+        s"""Select count(distinct ONOFFSHORE) from PREMATCH_FINAL_TABLE
+          where length(ONOFFSHORE) > 0""").first().get.getLong(0).toInt
+
+      if (fileCnt > 1) {
+        fFlag = spark.sql(
+          s"""Select distinct ONOFFSHORE from PREMATCH_FINAL_TABLE
+            where ONOFFSHORE='ONSHORE'""").first().get.getString(0)
+        generatePreMatchOutboundFile(preMatchFileTempDf, fFlag)
+
+        fFlag = spark.sql(
+          s"""Select distinct ONOFFSHORE from PREMATCH_FINAL_TABLE
+            where ONOFFSHORE='OFFSHORE'""").first().get.getString(0)
+        generatePreMatchOutboundFile(preMatchFileTempDf, fFlag)
+      } else {
+        fFlag = spark.sql(
+            s"""Select distinct ONOFFSHORE from PREMATCH_FINAL_TABLE""")
+          .first().get.getString(0)
+        generatePreMatchOutboundFile(preMatchFileTempDf, fFlag)
+      }
+
+      // Insert into RAD_DATAVANT_CHASE_PREMATCH
+      spark.sql(
+        s""" insert into $datavantPreMatchTable (
+              EDL_LOAD_DTM,
+              EDL_RUN_ID,
+              EDL_SCRTY_LVL_CD,
+              EDL_LOB_CD,
+              EDL_EXTRNL_LOAD_CD,
+              EDL_SOR_CD,
+              ADDRESSLINE1,
+              ADDRESSLINE2,
+              CITY,
+              STATE,
+              ZIPCODE,
+              FACILITYTYPE,
+              FACILITYNPI,
+              FACILITYTIN,
+              PRACTICIONERNPI,
+              PROVIDERPHONE,
+              PROVIDERFAX,
+              MEMBERZIP,
+              MEMBERINSURANCEID,
+              CLAIMID
+          )
+          select
+              current_timestamp()  as EDL_LOAD_DTM,
+              '$runId'             as EDL_RUN_ID,
+              'NA'                 as EDL_SCRTY_LVL_CD,
+              '$lob'               as EDL_LOB_CD,
+              'NA'                 as EDL_EXTRNL_LOAD_CD,
+              '1104'               as EDL_SOR_CD,
+              "AddressLine1",
+              "AddressLine2",
+              "City",
+              "State",
+              "Zipcode",
+              "FacilityType",
+              "FacilityNPI",
+              "FacilityTIN",
+              "PracticionerNPI",
+              "ProviderPhone",
+              "ProviderFax",
+              "MemberZip",
+              "MemberInsuranceId",
+              "ClaimId"
+          from PREMATCH_FINAL_TABLE
+      """).count()
+
+      val li = new LogInfo(s"$runId", batchId, intervention, s"DatavantPreMatch: ${outBoundLocation + "/" + intervention + "_" + lob}", row_count, processname2, processid, step2, stepId2, status1, ts.toString(), DateTime.now().toString())
+      LoadLogKey.log(spark, li)
+
+      log.info(s"*******Successfully completed DatavantPreMatch outbound file*******")
+
+    } catch {
+      case NonFatal(ioe) =>
+        val errMsg = ioe.getLocalizedMessage
+        email.sendMail(emailFrom, emailToList,
+          s"Error while Generating the Pre-Match file for $intervention and $lob!",
+          s"$errMsg \n\nBatchId: $batchId Failed")
+        val li = new LogInfo(s"$runId", batchId, intervention, s"DatavantPreMatch: ${outBoundLocation + "/" + intervention + "_" + lob}", 0, processname2, processid, step2, stepId2, status2, ts.toString(), DateTime.now().toString())
+        LoadLogKey.log(spark, li)
+        throw new RuntimeException(
+          "Error while Generating the DatavantPreMatch outbound files!", ioe)
+    }
+  }
