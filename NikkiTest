@@ -1,3 +1,4 @@
-download: s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties to ../../tmp/properties_14101_fix.txt
-Anchor found 1 time(s)
-FIX APPLIED
+aws s3 cp /tmp/properties_14101_fix.txt s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -A 8 "\[snowflake\]"
+
