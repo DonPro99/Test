@@ -1,17 +1,12 @@
-APP ID For Austin Lassard 5638367 that has the wrong FTN info in DMS
+-- Find Austin Lassard's current Cloa/Ftn record
+SELECT c.Id AS CloaId, c.ApplicationId, c.Ftn, c.CloaStatusId, c.UpdatedDate, c.UpdatedBy
+FROM [YourDB].[dbo].[Cloa] c
+WHERE c.ApplicationId = 5638367
+ORDER BY c.UpdatedDate DESC;
 
-APP ID for Matthew Schneer 5647381
-
-Austin Lassard in DMS has Matthew's FTN info and now he cannot update or fix it as he is logged out.
-
-Austin Lassard's account is the only one that is messed up and needs corrected
-
-I am unable to troubleshoot this. Routing to AVS application support.
-
-===========
-
-CI not found
-DescriptionTodd was inputing information in after a checkride and selected the incorrect name and input the wrong FTN and info in and not it's flagged and he cannot update it.
-
-=========
+-- Find Matthew Schneer's current Cloa/Ftn record  
+SELECT c.Id AS CloaId, c.ApplicationId, c.Ftn, c.CloaStatusId, c.UpdatedDate, c.UpdatedBy
+FROM [YourDB].[dbo].[Cloa] c
+WHERE c.ApplicationId = 5647381
+ORDER BY c.UpdatedDate DESC;
 
