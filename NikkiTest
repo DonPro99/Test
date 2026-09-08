@@ -1,1 +1,70 @@
-{   "clusternm": "RAA2",   "jobargs": [     {       "jobname": "DTVNT_PROV_LAMBDA",       "job": [         "python3.11",         "/home/hadoop/scripts/Datavant_Prov_Lambda_Notification.py"       ]     }   ],   "createcluster": "YES",   "application": "RAA",   "configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/files/snowpark/config/STANDARD_L.json",   "maxconcurrency": 1,   "clusterid": "na",   "bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast1",   "bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh",   "emrenv": "${env}",   "logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/logs/risk-adjustment-adl/",   "terminateoption": "NO" }
+{
+  "resourceType": "glue",
+  "resource": "startJobRun.sync",
+  "error": "States.TaskFailed",
+  "cause": {
+    "AllocatedCapacity": 0,
+    "Arguments": {
+      "--trgt_schma": "edl",
+      "--job_id": "780009056",
+      "--s3_cnsmptn_key": "medicare/na/dtvntprovrt-etl",
+      "--del_file_cnt": "0",
+      "--warehouse_size_suffix": "_XS",
+      "--del_key_list": "na",
+      "--post_load_mthd": "na",
+      "--stg_schma": "edl_stg",
+      "--blncg_flag_ind": "Y",
+      "--src_rcrd_cnt": "-1",
+      "--etl_sfn_parms": "{}",
+      "--unld_type": "na",
+      "--key_list": "{\"filter\":\"NA\",\"default\":[\"*\"],\"orderby\":[\"NA\"],\"partitionby\":[\"NA\"]}",
+      "--etl_stp_nbr_lst": "na",
+      "--oprtn_type": "etl",
+      "--src_load_prfx": "na",
+      "--env": "uat",
+      "--account": "652798729258",
+      "--del_tbl_nm": "dtvntprovrt-etl_del",
+      "--prcsng_type": "etl",
+      "--edl_load_dtm": "2026-09-08 10:22:33",
+      "--retry": "no",
+      "--s3_cnsmptn_bkt": "crln-raa-uat-sf-dataz-gbd-phi-useast1",
+      "--lightson_handover_flag": "n",
+      "--unld_partn_key": "na",
+      "--aplctn_cd": "RAA",
+      "--audt_clmns_ind": "Y",
+      "--trgt_tbl_nm": "dtvntprovrt-etl",
+      "--region_name": "us-east-1",
+      "--stg_tbl_nm": "dtvntprovrt-etl_stg",
+      "--s3_bkt_key_cmbntn": "crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/dtvntprovrt-etl",
+      "--execution_name": "RAA-etl-dtvntprovrt-etl-na-Rundt-20260908_102233",
+      "--load_type": "full",
+      "--unld_file_type": "gzip",
+      "--edl_run_id": "bb5581d7-ab90-11f1-a75a-ef0f4427bc69"
+    },
+    "Attempt": 0,
+    "CompletedOn": 1788878965364,
+    "ErrorMessage": "Exception: There are errors in the steps ['2'] , SFN CRLN-EDL-uat-Sfn-InvokeEMRAsync Failed",
+    "ExecutionTime": 1595,
+    "GlueVersion": "1.0",
+    "Id": "jr_5e415a356a929088bcc05817c0ae13ee20adb62bd726ca9b3f95faa0fbae4340",
+    "JobMode": "SCRIPT",
+    "JobName": "CRLN-EDL-uat-Gj-EtlOrchestrator",
+    "JobRunState": "FAILED",
+    "LastModifiedOn": 1788878965364,
+    "LogGroupName": "/aws-glue/python-jobs/CRLN-EDL-uat-glue-security-configuration-16-role/CRLN-EDL-uat-Glue-S3-Full-Access-Role",
+    "MaxCapacity": 0.0625,
+    "NotificationProperty": {
+      "NotifyDelayAfter": 1
+    },
+    "PredecessorRuns": [],
+    "SecurityConfiguration": "CRLN-EDL-uat-glue-security-configuration-16",
+    "StartedOn": 1788877354421,
+    "Timeout": 4320
+  }
+}
+
+
+===================
+
+
+
