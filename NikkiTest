@@ -1,6 +1,64 @@
-Hi 
-Komandla, Nikhitha, that's correct! Datavant Prematch file is a completely independent file/process and does not trigger or be bundled with the Mbr+prov or CPL files.
- 
-For this year, the Datavant prematch file should be sent approx 1-3 weeks before the second-round datavant mbr+prov and CPL files.
- 
-And this 1-3 week timeframe is the expected timing for this year and may change in future years. Thanks
+{
+  "resourceType": "glue",
+  "resource": "startJobRun.sync",
+  "error": "States.TaskFailed",
+  "cause": {
+    "AllocatedCapacity": 0,
+    "Arguments": {
+      "--trgt_schma": "edl",
+      "--job_id": "780009119",
+      "--s3_cnsmptn_key": "medicare/na/RAD_DATAVANT_CHASE_PREMATCH",
+      "--del_file_cnt": "0",
+      "--warehouse_size_suffix": "_M",
+      "--del_key_list": "na",
+      "--post_load_mthd": "na",
+      "--stg_schma": "edl_stg",
+      "--blncg_flag_ind": "Y",
+      "--src_rcrd_cnt": "-1",
+      "--etl_sfn_parms": "{}",
+      "--unld_type": "na",
+      "--key_list": "{\"filter\":\"NA\",\"default\":[\"*\"],\"orderby\":[\"NA\"],\"partitionby\":[\"NA\"]}",
+      "--etl_stp_nbr_lst": "na",
+      "--oprtn_type": "etl",
+      "--src_load_prfx": "na",
+      "--env": "uat",
+      "--account": "652798729258",
+      "--del_tbl_nm": "RAD_DATAVANT_CHASE_PREMATCH_del",
+      "--prcsng_type": "etl",
+      "--edl_load_dtm": "2026-09-08 17:32:19",
+      "--retry": "no",
+      "--s3_cnsmptn_bkt": "crln-sf-uat-dataz-gbd-phi-useast1",
+      "--lightson_handover_flag": "n",
+      "--unld_partn_key": "na",
+      "--aplctn_cd": "RAA",
+      "--audt_clmns_ind": "Y",
+      "--trgt_tbl_nm": "rad_datavant_chase_prematch",
+      "--region_name": "us-east-1",
+      "--stg_tbl_nm": "RAD_DATAVANT_CHASE_PREMATCH_stg",
+      "--s3_bkt_key_cmbntn": "crln-070864595727-ssm-uat-filetransfer/inbound/raa/medicare/na/RAD_DATAVANT_CHASE_PREMATCH",
+      "--execution_name": "RAA-etl-rad_datavant_chase_prematch-na-Rundt-20260908_173219",
+      "--load_type": "append",
+      "--unld_file_type": "gzip",
+      "--edl_run_id": "c4dbfa09-abcc-11f1-a909-d1e6edc74fa5"
+    },
+    "Attempt": 0,
+    "CompletedOn": 1788903192613,
+    "ErrorMessage": "Exception: There are errors in the steps ['1'] , SFN CRLN-raa-uat-Sfn-RAA-DATAVANTPREMATCH-ETL Failed",
+    "ExecutionTime": 34,
+    "GlueVersion": "1.0",
+    "Id": "jr_031540ade8cd3baa347cd27bbd928aa48cb3654bc242e479c8df56072aacd7ab",
+    "JobMode": "SCRIPT",
+    "JobName": "CRLN-EDL-uat-Gj-EtlOrchestrator",
+    "JobRunState": "FAILED",
+    "LastModifiedOn": 1788903192613,
+    "LogGroupName": "/aws-glue/python-jobs/CRLN-EDL-uat-glue-security-configuration-16-role/CRLN-EDL-uat-Glue-S3-Full-Access-Role",
+    "MaxCapacity": 0.0625,
+    "NotificationProperty": {
+      "NotifyDelayAfter": 1
+    },
+    "PredecessorRuns": [],
+    "SecurityConfiguration": "CRLN-EDL-uat-glue-security-configuration-16",
+    "StartedOn": 1788903143354,
+    "Timeout": 4320
+  }
+}
