@@ -1,5 +1,6 @@
 {
- "job_id": "8000091032",
- "etl_stp_nbr_lst": "1.0",
- "retry": "no"
+  "job_id": "8000091032",
+  "etl_stp_nbr_lst": "1.0",
+  "retry": "no",
+  "env": "uat"
 }
