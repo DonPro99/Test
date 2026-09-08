@@ -1,22 +1,4 @@
-datavantmbrprov-etl_dev.properties
-intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
-intervention.datavantprematch.code=DTVNTRTPM
+Sample one only for step params:
 
-
--- 1. Table existence check across all environments
-SHOW TABLES LIKE 'RAD_DATAVANT_CHASE_PREMATCH' IN SCHEMA D01_RAA.RAA_RAWZ;
-SHOW TABLES LIKE 'RAD_DATAVANT_CHASE_PREMATCH' IN SCHEMA DDL_REPOSITORY_01.RAA_RAWZ;
-SHOW TABLES LIKE 'RAD_DATAVANT_CHASE_PREMATCH' IN SCHEMA T01_RAA.RAA_RAWZ;
-SHOW TABLES LIKE 'RAD_DATAVANT_CHASE_PREMATCH' IN SCHEMA U01_RAA.RAA_RAWZ;
-
--- 2. Views check across all environments (using wildcard in case naming differs slightly)
-SHOW VIEWS LIKE 'RAD_DATAVANT_CHASE_PREMATCH%' IN SCHEMA D01_RAA.RAA_RAWZ;
-SHOW VIEWS LIKE 'RAD_DATAVANT_CHASE_PREMATCH%' IN SCHEMA T01_RAA.RAA_RAWZ;
-SHOW VIEWS LIKE 'RAD_DATAVANT_CHASE_PREMATCH%' IN SCHEMA U01_RAA.RAA_RAWZ;
-
--- 3. Full detail via ACCOUNT_USAGE (creation dates, who created it, across everything)
-SELECT table_catalog, table_schema, table_name, table_type, created, last_altered
-FROM SNOWFLAKE.ACCOUNT_USAGE.TABLES
-WHERE table_name = 'RAD_DATAVANT_CHASE_PREMATCH'
-  AND table_schema = 'RAA_RAWZ'
-ORDER BY created DESC;
+ETL Step Sequence Number
+{ "clusternm": "RAA", 	"jobargs": [{ 		"jobname": "RAA-DEPLOY-LOADER", 		"job": ["java", "-cp", "/home/hadoop/jars/intervention-loader-1.0-jar-with-dependencies.jar", "com.anthem.hca.chaselist.automation.DeployLoadDriver","mrocprt" ,"radv", "/home/hadoop/config/application_${env}.properties", "/home/hadoop/config/", "db.properties", "${edl_run_id}"] 	}], 	"createcluster": "YES", 	"application": "RAA", 	"configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast2/files/snowpark/config/STANDARD_S.json", 	"maxconcurrency": 1, 	"clusterid": "na", 	"bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast2", 	"bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh", 	"emrenv": "${env}", 	"logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast2/logs/", 	"terminationwaittime": 10, 	"terminateoption": "NO" }
