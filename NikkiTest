@@ -1,6 +1,38 @@
-{
-  "job_id": "8000091032",
-  "etl_stp_nbr_lst": "1.0",
-  "retry": "no",
-  "env": "uat"
-}
+User record: 
+
+Id	OktaCid	UserName	EmailAddress	StatusId	CreatedDate
+20138	00u58414ofF7unPdA4h7	AME_EANORGA16168	eanorga@protonmail.com
+1	11/18/2015 15:09
+
+Application record: 
+Id	ApplicationDate	DesigneeTypeId	IsMinRequireMet	SubmissionDate	StatusId	StateId	UserId	OfficeId	IsActive	IsReviewed	Comments	CreatedBy	UpdatedBy	CreatedDate	UpdatedDate	IsDeployed	AuditPrimaryLogId
+20896	11/18/2015 15:13	20	NULL	11/18/2015 15:16	3	8	20138	160	0	NULL	NULL	1	NULL	11/18/2015 15:13	NULL	0	NULL
+
+
+Cloa history for his location record: shows AppointingOfficialId changed from 108936 (valid) to 212065 on 4/22/2026
+Id	OfficeId	AppointingOfficialId	CloaStatusId	UpdatedDate
+147168	171	212065	1	4/22/2026 13:35
+132802	171	108936	5	11/19/2025 17:10
+116043	171	108936	5	12/2/2024 11:38
+96442	171	108936	5	11/20/2023 13:14
+77689	171	108936	5	10/3/2022 10:58
+64386	171	108936	5	12/2/2021 13:35
+61295	171	5950	5	2/12/2021 13:14
+58125	171	5950	5	11/16/2020 16:04
+53741	171	5950	5	8/10/2020 13:59
+38736	171	5950	5	2/6/2020 10:41
+29691	171	5950	5	8/22/2018 17:41
+20567	171	2260	5	8/31/2016 7:39
+
+
+Confirmed 212065 has no matching user: No result
+
+Confirmed who made the update:
+
+Id	ApplicationId	OfficeId	AppointmentDate	ExpirationDate	CloaStatusId	ManagingSpecialistId	AppointingOfficialId	AuthorityGrantedDate	IsAutoPreApproval	DesigneeClassTypeId	CertificateNumber	CertificateIssuedDate	TerminationDate	Ftn
+147168	20896	171	11/1/1991	11/30/2026	1	7129	108936	8/22/2018	0	1	NULL	NULL	NULL	NULL
+
+IsAutoPostActivity	DesignatorName	DesignatorId	DisciplineTypeId	ProfileVersionId	AovCompanyTypeId	MedicalCertificationDate	CreatedBy	CreatedDate	UpdatedBy	UpdatedDate	AuditPrimaryLogId	SysStartDate	SysEndDate
+0	NULL	NULL	NULL	17267	NULL	NULL	20138	11/19/2025 17:10	NULL	NULL	NULL	11/19/2025 23:10	4/22/2026 18:35
+
+
