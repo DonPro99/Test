@@ -1,1 +1,10 @@
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -A 8 "\[snowflake\]"
+[hadoop@ip-10-127-204-210 bin]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -A 8 "\[snowflake\]"
+[snowflake]
+env=prod
+region_name=us-east-1
+secret_path=/snowflake/raa
+usedatabase=P01_RAA
+raaDatabase=P01_RAA.RAA_RAWZ
+warehouse=P01_RAA_LOAD_WH_M
+sf_schema=RAA_RAWZ
+process=MCAID
