@@ -1,35 +1,15 @@
--- 1. Confirm the User record
-SELECT Id, OktaCid, UserName, EmailAddress, StatusId, CreatedDate
-FROM [DMS_Mimic].[dbo].[User]
-WHERE UserName LIKE '%Anorga%' OR EmailAddress LIKE '%Anorga%';
+Traceback (most recent call last):
+  File "/home/hadoop/scripts/Datavant_Prov_Lambda_Notification.py", line 8, in <module>
+    secretsConfig = client.get_secret_value(SecretId=f'{environment}/snowflake/raa')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/botocore/client.py", line 606, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/botocore/context.py", line 123, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/botocore/client.py", line 1094, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.errorfactory.ResourceNotFoundException: An error occurred (ResourceNotFoundException) when calling the GetSecretValue operation: Secrets Manager can't find the specified secret.
+Command exiting with ret '1'
 
--- 2. Confirm the Application record
-SELECT * FROM [DMS_Mimic].[dbo].[Application] WHERE UserId = 20138;
-
--- 3. Confirm the Cloa history (this is the core evidence)
-SELECT Id, OfficeId, AppointingOfficialId, CloaStatusId, UpdatedDate
-FROM [DMS_Mimic].[dbo].[Cloa]
-WHERE ApplicationId = 20896
-ORDER BY UpdatedDate DESC;
-
--- 4. Confirm the invalid AO doesn't exist
-SELECT Id, UserName, EmailAddress, StatusId
-FROM [DMS_Mimic].[dbo].[User]
-WHERE Id = 212065;
-
--- 5. Confirm who made the change and when (CloaHistory)
-SELECT * FROM [DMS_Mimic].[dbo].[CloaHistory]
-WHERE Id = 147168
-ORDER BY SysStartDate;
-
-Hi [manager], to be fully transparent about how I reached this finding — here's exactly what I ran and what came back, so there's a clear record.
-
-I searched for Eduardo Anorga in the DMS_Mimic database (this is the database I had access to and used for the investigation). Here's what I found:
-
-User record: [paste result 1]
-Application record: [paste result 2]
-Cloa history for his location record: [paste result 3] — shows AppointingOfficialId changed from 108936 (valid) to 212065 on 4/22/2026
-Confirmed 212065 has no matching user: [paste result 4]
-Confirmed who made the update: [paste result 5]
-
-This is the data I had available to investigate against. If the client's actual case is in a different environment/database than Mimic, I'm glad to rerun this same check there — just let me know which one to point to, and I'll get you an updated answer right away.
