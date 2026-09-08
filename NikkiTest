@@ -1,11 +1,10 @@
 package com.anthem.hca.intervention.datavantmbr
+
 import com.anthem.utils.ConfigurationConstants
-//log
-object DatavantMbrProvETLDriver {
 
-  def main( args : Array[String] ) {
-
-    if( args.length != 5 ) {
+object DatavantPreMatchETLDriver {
+  def main(args: Array[String]) {
+    if (args.length != 5) {
       System.err.println("Please provide the line of Business and properties file ")
       System.exit(1)
     }
@@ -16,15 +15,16 @@ object DatavantMbrProvETLDriver {
     val configFolder = ConfigurationConstants.CONFIG_FOLDER
     val configFile = ConfigurationConstants.sanitizeFileName(args(3).split("/").reverse(0))
     val runId: String = args(4)
-    if(!lob.equals("MCR") ) {
-      System.err.println("Please provide valid line of business as MCR")
+
+    // TODO: confirm exact LOB value with Akhil/Tagore - using MRA per properties file convention
+    if (!lob.equals("MRA")) {
+      System.err.println("Please provide valid line of business as MRA")
       System.exit(1)
     }
-    if( lob.nonEmpty ) {
-      val datavantMbrProvFileETL = new DatavantMbrProvFileETL(propFilePath, configFolder, configFile, runId)
-      datavantMbrProvFileETL.generateDatavantMbrProvOutboundFile(lob)
-      datavantMbrProvFileETL.generateDatavantCPLOutboundFile(lob)
-    }
 
+    if (lob.nonEmpty) {
+      val datavantMbrProvFileETL = new DatavantMbrProvFileETL(propFilePath, configFolder, configFile, runId)
+      datavantMbrProvFileETL.generateDatavantPreMatchOutboundFile(lob)
+    }
   }
 }
