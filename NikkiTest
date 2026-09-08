@@ -1,1 +1,3 @@
 datavantmbrprov-etl_dev.properties
+intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
+intervention.datavantprematch.code=DTVNTRTPM
