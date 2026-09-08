@@ -1,30 +1,46 @@
-package com.anthem.hca.intervention.datavantmbr
-
-import com.anthem.utils.ConfigurationConstants
-
-object DatavantPreMatchETLDriver {
-  def main(args: Array[String]) {
-    if (args.length != 5) {
-      System.err.println("Please provide the line of Business and properties file ")
-      System.exit(1)
+Field	Value
+Application	RAA
+Owner ID	(your ID — AM71511)
+Ownership	AEDL
+Job ID	(to be assigned by whoever creates it)
+Job Type	RUN_SFN
+ETL Step Description	DTVNT_PREMATCH_ETL
+Target Table Name	RAD_DATAVANT_CHASE_PREMATCH
+ETL Step Target Platform	Snowflake
+ETL Step Source Schema	RAA_RAWZ
+ETL Step Source Stg Schema	RAA_RAWZ_STG
+ETL Step Target Schema	RAA_RAWZ
+ETL Step Target Stg Schema	RAA_RAWZ_STG
+Step Sequence Number	1.0
+Step Parameters JSON
+json
+{
+  "clusternm": "RAA2",
+  "jobargs": [
+    {
+      "jobname": "RAA-DATAVANTPREMATCH-ETL",
+      "job": [
+        "java",
+        "-cp",
+        "/home/hadoop/jars/datavantmbr-etl-1.0-jar-with-dependencies.jar",
+        "com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver",
+        "MRA",
+        "/home/hadoop/config/datavantmbrprov-etl_${env}.properties",
+        "/home/hadoop/config/",
+        "db.properties",
+        "${edl_run_id}"
+      ]
     }
-
-    val lob: String = args(0)
-    val propertiesFileName = ConfigurationConstants.sanitizeFileName(args(1).split("/").reverse(0))
-    val propFilePath = ConfigurationConstants.CONFIG_FOLDER + "/" + propertiesFileName
-    val configFolder = ConfigurationConstants.CONFIG_FOLDER
-    val configFile = ConfigurationConstants.sanitizeFileName(args(3).split("/").reverse(0))
-    val runId: String = args(4)
-
-    // TODO: confirm exact LOB value with Akhil/Tagore - using MRA per properties file convention
-    if (!lob.equals("MRA")) {
-      System.err.println("Please provide valid line of business as MRA")
-      System.exit(1)
-    }
-
-    if (lob.nonEmpty) {
-      val datavantMbrProvFileETL = new DatavantMbrProvFileETL(propFilePath, configFolder, configFile, runId)
-      datavantMbrProvFileETL.generateDatavantPreMatchOutboundFile(lob)
-    }
-  }
+  ],
+  "createcluster": "YES",
+  "application": "RAA",
+  "configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/files/snowpark/config/STANDARD_L.json",
+  "maxconcurrency": 1,
+  "clusterid": "na",
+  "bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast1",
+  "bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh",
+  "emrenv": "${env}",
+  "logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/logs/risk-adjustment-adl/",
+  "terminationwaittime": 10,
+  "terminateoption": "NO"
 }
