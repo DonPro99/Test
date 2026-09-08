@@ -1,51 +1,5 @@
-Field	Value
-Application	RAA
-Owner ID	(your ID — AM71511)
-Ownership	AEDL
-Job ID	(to be assigned by whoever creates it)
-Job Type	RUN_SFN
-ETL Step Description	DTVNT_PREMATCH_ETL
-Target Table Name	RAD_DATAVANT_CHASE_PREMATCH
-ETL Step Target Platform	Snowflake
-ETL Step Source Schema	RAA_RAWZ
-ETL Step Source Stg Schema	RAA_RAWZ_STG
-ETL Step Target Schema	RAA_RAWZ
-ETL Step Target Stg Schema	RAA_RAWZ_STG
-Step Sequence Number	1.0
-Step Parameters JSON
 {
-  "clusternm": "RAA2",
-  "jobargs": [
-    {
-      "jobname": "RAA-DATAVANTPREMATCH-ETL",
-      "job": [
-        "java",
-        "-cp",
-        "/home/hadoop/jars/datavantmbr-etl-1.0-jar-with-dependencies.jar",
-        "com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver",
-        "MRA",
-        "/home/hadoop/config/datavantmbrprov-etl_${env}.properties",
-        "/home/hadoop/config/",
-        "db.properties",
-        "${edl_run_id}"
-      ]
-    }
-  ],
-  "createcluster": "YES",
-  "application": "RAA",
-  "configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/files/snowpark/config/STANDARD_L.json",
-  "maxconcurrency": 1,
-  "clusterid": "na",
-  "bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast1",
-  "bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh",
-  "emrenv": "${env}",
-  "logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/logs/risk-adjustment-adl/",
-  "terminationwaittime": 10,
-  "terminateoption": "NO"
+  "job_id": "7900051511",
+  "etl_stp_nbr_lst": "1.0",
+  "retry": "no"
 }
-
-
-
-grep -i "useast" ~/NikkiProjectWorkspace/ncr_dna2_raa_files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --region us-east-1
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast2/ --region us-east-2
