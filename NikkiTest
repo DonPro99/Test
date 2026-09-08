@@ -1,6 +1,23 @@
-Basically trying to switch our Snowflake login over to the newer key-pair method instead of passwords, and make sure it still works fine across all the different vendor schemas that use this same script. The code's already done and sitting in UAT — just kept getting blocked because the UAT config file kept reverting back to prod settings. Fixed that again just now, so ready to actually test it once I hear back on which schemas to check."
+-- 1. Confirm the User record
+SELECT Id, OktaCid, UserName, EmailAddress, StatusId, CreatedDate
+FROM [DMS_Mimic].[dbo].[User]
+WHERE UserName LIKE '%Anorga%' OR EmailAddress LIKE '%Anorga%';
 
-Fixed the UAT properties env issue again (env=prod was hardcoded, blocking testing) - ready to test now for 14101.
+-- 2. Confirm the Application record
+SELECT * FROM [DMS_Mimic].[dbo].[Application] WHERE UserId = 20138;
 
-Quick question before I start - which schemas should I actually be validating against? Want to make sure I'm testing the right ones rather than assuming it's all of them.
-s
+-- 3. Confirm the Cloa history (this is the core evidence)
+SELECT Id, OfficeId, AppointingOfficialId, CloaStatusId, UpdatedDate
+FROM [DMS_Mimic].[dbo].[Cloa]
+WHERE ApplicationId = 20896
+ORDER BY UpdatedDate DESC;
+
+-- 4. Confirm the invalid AO doesn't exist
+SELECT Id, UserName, EmailAddress, StatusId
+FROM [DMS_Mimic].[dbo].[User]
+WHERE Id = 212065;
+
+-- 5. Confirm who made the change and when (CloaHistory)
+SELECT * FROM [DMS_Mimic].[dbo].[CloaHistory]
+WHERE Id = 147168
+ORDER BY SysStartDate;
