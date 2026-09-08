@@ -44,3 +44,10 @@ json
   "terminationwaittime": 10,
   "terminateoption": "NO"
 }
+
+
+
+
+grep -i "useast" ~/NikkiProjectWorkspace/ncr_dna2_raa_files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --region us-east-1
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast2/ --region us-east-2
