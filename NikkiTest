@@ -3,3 +3,10 @@
   "etl_stp_nbr_lst": "1.0",
   "retry": "no"
 }
+
+
+Quick confirmation on RBICA-14070 (Datavant Pre-Match) - we've set this up as its own independent job, so it runs and sends the Pre-Match file on its own, separate from the existing MBR+Prov and CPL files.
+
+Can you confirm this is the complete requirement - i.e., just generating and sending the Pre-Match file by itself is sufficient, with no dependency on or need to also trigger the other files alongside it?
+
+Want to make sure I'm not missing anything before moving forward with testing.
