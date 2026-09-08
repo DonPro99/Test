@@ -3,14 +3,20 @@ intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
 intervention.datavantprematch.code=DTVNTRTPM
 
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/RBICA-14070-datavant-prematch)
-$ grep -A2 "Datavant Pre-Match" snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
-# Datavant Pre-Match (RBICA-14070)
-intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
-intervention.datavantprematch.code=DTVNTRTPM
+-- 1. Table existence check across all environments
+SHOW TABLES LIKE 'RAD_DATAVANT_CHASE_PREMATCH' IN SCHEMA D01_RAA.RAA_RAWZ;
+SHOW TABLES LIKE 'RAD_DATAVANT_CHASE_PREMATCH' IN SCHEMA DDL_REPOSITORY_01.RAA_RAWZ;
+SHOW TABLES LIKE 'RAD_DATAVANT_CHASE_PREMATCH' IN SCHEMA T01_RAA.RAA_RAWZ;
+SHOW TABLES LIKE 'RAD_DATAVANT_CHASE_PREMATCH' IN SCHEMA U01_RAA.RAA_RAWZ;
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/RBICA-14070-datavant-prematch)
-$ grep -A2 "Datavant Pre-Match" snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_dev.properties
-# Datavant Pre-Match (RBICA-14070)
-intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
-intervention.datavantprematch.code=DTVNTRTPM
+-- 2. Views check across all environments (using wildcard in case naming differs slightly)
+SHOW VIEWS LIKE 'RAD_DATAVANT_CHASE_PREMATCH%' IN SCHEMA D01_RAA.RAA_RAWZ;
+SHOW VIEWS LIKE 'RAD_DATAVANT_CHASE_PREMATCH%' IN SCHEMA T01_RAA.RAA_RAWZ;
+SHOW VIEWS LIKE 'RAD_DATAVANT_CHASE_PREMATCH%' IN SCHEMA U01_RAA.RAA_RAWZ;
+
+-- 3. Full detail via ACCOUNT_USAGE (creation dates, who created it, across everything)
+SELECT table_catalog, table_schema, table_name, table_type, created, last_altered
+FROM SNOWFLAKE.ACCOUNT_USAGE.TABLES
+WHERE table_name = 'RAD_DATAVANT_CHASE_PREMATCH'
+  AND table_schema = 'RAA_RAWZ'
+ORDER BY created DESC;
