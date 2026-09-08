@@ -1,63 +1,23 @@
 {
-  "resourceType": "elasticmapreduce",
-  "resource": "addStep.sync",
-  "error": "States.TaskFailed",
-  "cause": {
-    "SdkHttpMetadata": {
-      "AllHttpHeaders": {
-        "x-amzn-RequestId": [
-          "41de2437-455f-4e8e-bb98-6fd152243bcb"
-        ],
-        "Content-Length": [
-          "553"
-        ],
-        "Date": [
-          "Tue, 08 Sep 2026 14:48:47 GMT"
-        ],
-        "Content-Type": [
-          "application/x-amz-json-1.1"
-        ]
-      },
-      "HttpHeaders": {
-        "Content-Length": "553",
-        "Content-Type": "application/x-amz-json-1.1",
-        "Date": "Tue, 08 Sep 2026 14:48:47 GMT",
-        "x-amzn-RequestId": "41de2437-455f-4e8e-bb98-6fd152243bcb"
-      },
-      "HttpStatusCode": 200
-    },
-    "SdkResponseMetadata": {
-      "RequestId": "41de2437-455f-4e8e-bb98-6fd152243bcb"
-    },
-    "Step": {
-      "ActionOnFailure": "CONTINUE",
-      "Config": {
-        "Args": [
-          "python3.11",
-          "/home/hadoop/scripts/Datavant_Prov_Lambda_Notification.py"
-        ],
-        "Jar": "command-runner.jar",
-        "Properties": {}
-      },
-      "Id": "s-01831472OXDT488BJC22",
-      "Name": "DTVNT_PROV_LAMBDA",
-      "Status": {
-        "FailureDetails": {
-          "LogFile": "s3://crln-raa-uat-codez-nogbd-phi-useast1/logs/j-036770815DPRL0RPYDSX/steps/s-01831472OXDT488BJC22/",
-          "Reason": "Unknown Error."
-        },
-        "State": "FAILED",
-        "StateChangeReason": {},
-        "Timeline": {
-          "CreationDateTime": 1788878868163,
-          "EndDateTime": 1788878880568,
-          "StartDateTime": 1788878876429
-        }
-      }
-    },
-    "StepId": "s-01831472OXDT488BJC22"
-  }
+  "clusternm": "RAA2",
+  "jobargs": [
+    {
+      "jobname": "DTVNT_PROV_LAMBDA",
+      "job": [
+        "python3.11",
+        "/home/hadoop/scripts/Datavant_Prov_Lambda_Notification.py"
+      ]
+    }
+  ],
+  "createcluster": "YES",
+  "application": "RAA",
+  "env": "uat",
+  "configfile": "s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/STANDARD_L.json",
+  "maxconcurrency": 1,
+  "clusterid": "na",
+  "bootstrapbucket": "crln-raa-uat-codez-nogbd-phi-useast1",
+  "bootstrapkey": "files/snowpark/config/bootstrap_key_uat.sh",
+  "emrenv": "uat",
+  "logpath": "s3://crln-raa-uat-codez-nogbd-phi-useast1/logs/risk-adjustment-adl/",
+  "terminateoption": "NO"
 }
-
-=============
-
