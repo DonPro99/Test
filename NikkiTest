@@ -5,3 +5,6 @@ intervention.datavantprematch.code=DTVNTRTPM
 
 cd ~/NikkiProjectWorkspace/ncr_dna2_raa_files
 git branch -a | grep -i 14070
+$ git branch -a | grep -i 14070
+  feature/RBICA-14070-datavant-prematch
+  remotes/origin/feature/RBICA-14070-datavant-prematch
