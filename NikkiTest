@@ -1,7 +1,1 @@
-this.isAdministrativePreapproval = 
-  this.data.preApprovalRequest?.designeeTypeId === DesigneeTypeEnum.ADMINPE || 
-  this.data.preApprovalRequest?.designeeTypeId === DesigneeTypeEnum.ADMINPEGEN || 
-  this.categoryId !== 0;
-
-
-AfsGroup2PostActivityBaseComponent.ts
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -A 8 "\[snowflake\]"
