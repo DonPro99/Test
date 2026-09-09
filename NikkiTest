@@ -6,5 +6,12 @@ cd /hcaaapck/backup/IT/DEV/scripts
 /hcaaapck/backup/IT/DEV/scripts/start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
 
 
-cd /hcaaapck/backup/IT/SIT/scripts
-./start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/SIT/scripts>./start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
+Source the Deploy configuration file - /hcaaapck/backup/IT/PROD/conf/deploy.properties
+Using deploy location: /raa1/backup/prodenvironment/sas_repository/deploy_in
+Using output location: /raa1/backup/prodenvironment/sas_repository/deploy_out
+Intervention provided is DTVNTRTPM;Line of Business is MRA
+Deploy File Name pattern: deply_dtvntrtpm_mra
+Deploy file for intervention DTVNTRTPM and line of business MRA does not exist at deploy location /raa1/backup/prodenvironment/sas_repository/deploy_in
+No SAS Deploy dataset with intervention DTVNTRTPM and line of business MRA available for copy to HDFS..
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/SIT/scripts>
