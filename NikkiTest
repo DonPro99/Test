@@ -6,7 +6,4 @@ cd /hcaaapck/backup/IT/DEV/scripts
 /hcaaapck/backup/IT/DEV/scripts/start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
 
 
-
-[SAS@dc04plpsas104-srcradcoolbthpr]/raa1/backup>grep -i "DEPLOY_MRA_DATASET_SAS_LOCATION\|DEPLOY_DATASET_SAS_LOCATION" /hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh
-   export SAS_DEPLOY_LOC=${DEPLOY_MRA_DATASET_SAS_LOCATION}
-   export SAS_DEPLOY_LOC=${DEPLOY_DATASET_SAS_LOCATION}
+grep -n -i "source\|^\. \|DEPLOY_CONFIG_FILE\|\.properties\|export DEPLOY_MRA" /hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh | head -20
