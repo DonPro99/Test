@@ -10,23 +10,4 @@ grep -i "DEPLOY_FILE_EXT" /hcaaapck/backup/IT/SIT/conf/deploy.properties
 
 ls -la /raa1/backup/devenvironment/sas_repository/deploy_in/ | grep -i dtvntrtpm
 
-
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/SIT/scripts>grep -n -B2 -A10 "SAS_ENV=" /hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh
-55-if [[ "${ENVIRONMENT}" == "ts" ]]
-56-then
-57:   SAS_ENV="SIT"
-58-elif [[ "${ENVIRONMENT}" == "dv" ]]
-59-then
-60:   SAS_ENV="DEV"
-61-else
-62:   SAS_ENV="PROD"
-63-fi
-64-
-65-SAS_HOME="/hcaaapck/backup/IT/${SAS_ENV}/scripts"
-66-LOG_LOCATION="/hcaaapck/backup/IT/${SAS_ENV}/log"
-67-DEPLOY_CONFIG_FILE="/hcaaapck/backup/IT/${SAS_ENV}/conf/deploy.properties"
-68-SAS_CONFIG_FILE="/hcaaapck/backup/IT/${SAS_ENV}/conf/sas.properties"
-69-
-70-python3.6 $SAS_HOME/validateArguments.py $INTERVENTION $LOB
-71-
-72-if [ $? -ne 0 ]
+grep -n "ENVIRONMENT" /hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh | head -20
