@@ -1,8 +1,3 @@
-[hadoop@ip-10-127-204-210 ~]$ aws emr list-clusters --active --query "Clusters[*].[Id,Name,Status.State,Status.Timeline.CreationDateTime]" --output table
------------------------------------------------------------------------------------------------------------------------
-|                                                    ListClusters                                                     |
-+------------------------+--------------------------------------------+----------+------------------------------------+
-|  j-099111814OBUNVX2NIW5|  CRLN-RAA-uat-Emr-RAA-MRAHOS-ENC           |  RUNNING |  2026-09-08T11:45:57.860000+00:00  |
-|  j-0976328325FP01901U25|  CRLN-RAA-uat-Emr-CDA_EMR10-NOGBD          |  RUNNING |  2026-09-08T11:13:41.232000+00:00  |
-|  j-09345931F722JB9FOISY|  CRLN-RAA-uat-Emr-RAA-PATIENT-ENC          |  RUNNING |  2026-09-08T09:10:27.791000+00:00  |
-|  j-0871035WHW215NV3A4R |  CRLN-AEDLDNA2-preprod-Emr-falcon-NOGBD-1  |  WAITING |  2026-08-12T06:56:58.495000+00:00  |
+  find / -iname "datavantmbrprov-etl_uat.properties" 2>/dev/null
+
+  aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties - | grep -i "processID"s
