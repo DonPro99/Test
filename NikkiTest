@@ -7,3 +7,29 @@ cd /hcaaapck/backup/IT/DEV/scripts
 
 
 find /hcaaapck/backup/IT/ -iname "start_sas_deploy_copy_hdfs*" 2>/dev/null
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/DEV/scripts>find /hcaaapck/backup/IT/ -iname "start_sas_deploy_copy_hdfs*" 2>/dev/null
+/hcaaapck/backup/IT/SIT_backup/scripts/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/DEV/scripts/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/RAA_GIT_CODE/enterprise-risk-adjustment/landing-zone/bin/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/RAA_GIT_CODE/enterprise-risk-adjustment/landing-zone-v1/scripts/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/PROD_BACKUP/20180122/PROD/scripts/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/PROD_BACKUP/20180120/PROD/scripts/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN_backup.sh
+/hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh
+/hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_bkp.sh
+/hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs-bkp.sh
+/hcaaapck/backup/IT/PROD/scripts/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/PROD/scripts/start_sas_deploy_copy_hdfs_bkp_20250306.sh
+/hcaaapck/backup/IT/PROD/scripts/start_sas_deploy_copy_hdfs_MN.sh
+/hcaaapck/backup/IT/PROD/scripts-backup/11-09-2018/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/PROD/scripts-backup/11-09-2018/start_sas_deploy_copy_hdfs.sh.bkp
+/hcaaapck/backup/IT/PROD/scripts-backup/08-10-2018/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/PROD/scripts-backup/10-12-2018/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/PROD/scripts-backup/10-12-2018/start_sas_deploy_copy_hdfs.sh.bkp
+/hcaaapck/backup/IT/PROD/scripts-backup/05-02-2018/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/PROD/scripts-backup/05-02-2018/start_sas_deploy_copy_hdfs.sh.bkp
+/hcaaapck/backup/IT/PROD/scripts-backup/03-01-2019/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/PROD/scripts-backup/03-01-2019/start_sas_deploy_copy_hdfs.sh.bkp
+/hcaaapck/backup/IT/PROD/scripts-backup/09-13-2018/start_sas_deploy_copy_hdfs.sh
+/hcaaapck/backup/IT/PROD/scripts-backup/09-13-2018/start_sas_deploy_copy_hdfs.sh.bkp
