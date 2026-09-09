@@ -1,3 +1,1 @@
-nano datavantmbrprov-etl_uat.properties
-
-processID.MRA=10500
+aws s3 cp datavantmbrprov-etl_uat.properties s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
