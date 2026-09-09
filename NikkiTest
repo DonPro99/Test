@@ -1,1 +1,1 @@
-"Thanks for confirming prod! I also need this same outbound connectivity set up for UAT (AWS account: [need to get this], environment: uat, path: [confirm]). Should I open a new ticket for UAT, or can this be added to the same ticket?"
+s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/dtvntprematch-etl/
