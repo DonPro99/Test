@@ -1,24 +1,2 @@
-Hi Tagore,
+SELECT GET_DDL('TABLE', 'D01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRT_MRA_STG');
 
-Quick update on the RBICA-14070 CFX tickets:
-
-Outbound (prod): CFX confirmed complete — path is I_ELV_CFX013/prod/mra/ciox/, matching the existing DTVNTMBRRT job (780009026)'s actual working destination, so this is correct and legitimate (not a different vendor's path). I'm verifying the source-side path before pushing a test file.
-
-Outbound (UAT) and Inbound (SaaS→S3, UAT and prod): submitted as new RATMs — I've replied to CFX asking them to look into both.
-
-I'll keep you posted as these come back. Let me know if you have any questions on the outbound path now that it's confirmed.
-
-=
-
-Hi team,
-
-Thank you for confirming the outbound prod path — appreciate the quick turnaround.
-
-Separately, I've also submitted two new RATMs for this same workstream (RBICA-14070, Datavant Pre-Match):
-
-Outbound (UAT): RATM #[____]
-Inbound (SaaS→S3, UAT and prod): RATM #[____]
-
-Could you please look into these when you get a chance? Happy to answer any questions.
-
-Thanks,
