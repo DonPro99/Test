@@ -14,3 +14,6 @@ Filename pattern: ELV_DTVNT_*_MRA_PREMATCH_*.txt
 inbound
 prod: crln-163391535226-ssm-prod-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/yyyyMMdd_HHmmss/incr/deply_dtvntrtpm_mra.txt
 uat: crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/yyyyMMdd_HHmmss/incr/deply_dtvntrtpm_mra.txt
+
+
+grep -ri "kms" /home/hadoop/config/*.properties
