@@ -1,2 +1,3 @@
-[hadoop@ip-10-127-204-210 ~]$ grep -i "processID" /home/hadoop/config/datavantmbrprov-etl_uat.properties
-processID.MCR=255
+nano /home/hadoop/config/datavantmbrprov-etl_uat.properties
+
+processID.MRA=10500
