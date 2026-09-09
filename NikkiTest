@@ -1,13 +1,3 @@
-Hi Rajesh,
+Did the job fully complete after that, or did it stop at a different step further along? If you have the latest log output (success or any new error), could you share it? Want to see exactly where things stand now.
 
-Running into a stubborn issue with my new Pre-Match job (RBICA-14070) in UAT. Job keeps throwing:
-
-com.typesafe.config.ConfigException$Missing: No configuration setting found for key 'processID.MRA'
-
-I've added processID.MRA=10500 to datavantmbrprov-etl_uat.properties and verified it's correct in BOTH places:
-- S3: s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties (confirmed via aws s3 cp ... - | grep)
-- Local EMR node: /home/hadoop/config/datavantmbrprov-etl_uat.properties (confirmed via cat/grep)
-
-But the job still throws the same error every time I retrigger. Ran out of ideas last night - wondering if this is a cluster lifecycle thing (fresh cluster per run not picking up the updated file at bootstrap?) or something else entirely.
-
-Job ID: 780009120. Would really appreciate a look whenever you get a chance - trying to get end-to-end testing done 
+Really appreciate you taking a look this morning.
