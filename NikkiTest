@@ -1,5 +1,1 @@
-[hadoop@ip-10-127-204-210 ~]$ grep -ri "cfx-antm" /home/hadoop/config/*.properties
-/home/hadoop/config/patient_encounter_files_merge-uat.properties:dest_s3_bucket=cfx-antm-uat-mgft-outbound
-/home/hadoop/config/patient_encounter_files_merge_cra-uat.properties:dest_s3_bucket=cfx-antm-uat-mgft-outbound
-/home/hadoop/config/patient_encounter_files_merge_mra-uat.properties:dest_s3_bucket=cfx-antm-uat-mgft-outbound
-[hadoop@ip-10-127-204-210 ~]$
+grep -ri "dest_s3" /home/hadoop/config/patient_encounter_files_merge-uat.properties
