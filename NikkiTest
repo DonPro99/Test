@@ -1,5 +1,5 @@
-{
-  "job_id": "780009074",
-  "etl_stp_nbr_lst": "1.0",
-  "retry": "no"
-}
+grep -i "riskadjustment.hive.table.loadlog" /home/hadoop/config/datavantmbrprov-etl_uat.properties
+
+grep -i "loadlog" /home/hadoop/config/datavantmbrprov-etl_uat.properties
+
+grep -ri "loadlog" /home/hadoop/config/*.properties
