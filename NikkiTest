@@ -1,2 +1,92 @@
-[hadoop@ip-10-127-204-103 ~]$ aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/ | grep datavantmbrprov-etl_uat
-2026-09-09 02:55:14       1693 datavantmbrprov-etl_uat.properties
+{
+  "resourceType": "glue",
+  "resource": "startJobRun.sync",
+  "error": "States.TaskFailed",
+  "cause": {
+    "AllocatedCapacity": 0,
+    "Arguments": {
+      "--trgt_schma": "raa_rawz_stg",
+      "--job_id": "780009120",
+      "--s3_cnsmptn_key": "medicare/na/RAD_DATAVANT_CHASE_PREMATCH",
+      "--del_file_cnt": "0",
+      "--warehouse_size_suffix": " ",
+      "--del_key_list": "na",
+      "--post_load_mthd": "na",
+      "--stg_schma": "edl_stg",
+      "--blncg_flag_ind": "Y",
+      "--src_rcrd_cnt": "-1",
+      "--etl_sfn_parms": "{}",
+      "--unld_type": "na",
+      "--key_list": "{\"filter\":\"NA\",\"default\":[\"*\"],\"orderby\":[\"NA\"],\"partitionby\":[\"NA\"]}",
+      "--etl_stp_nbr_lst": "na",
+      "--oprtn_type": "etl",
+      "--src_load_prfx": "na",
+      "--env": "uat",
+      "--account": "652798729258",
+      "--del_tbl_nm": "RAD_DATAVANT_CHASE_PREMATCH_del",
+      "--prcsng_type": "etl",
+      "--edl_load_dtm": "2026-09-08 22:57:54",
+      "--retry": "no",
+      "--s3_cnsmptn_bkt": "crln-sf-uat-dataz-gbd-phi-useast1",
+      "--lightson_handover_flag": "n",
+      "--unld_partn_key": "na",
+      "--aplctn_cd": "RAA",
+      "--audt_clmns_ind": "Y",
+      "--trgt_tbl_nm": "rad_datavant_chase_prematch",
+      "--region_name": "us-east-1",
+      "--stg_tbl_nm": "RAD_DATAVANT_CHASE_PREMATCH_stg",
+      "--s3_bkt_key_cmbntn": "crln-070864595727-ssm-uat-filetransfer/inbound/raa/medicare/na/RAD_DATAVANT_CHASE_PREMATCH",
+      "--execution_name": "RAA-etl-rad_datavant_chase_prematch-na-Rundt-20260908_225754",
+      "--load_type": "append",
+      "--unld_file_type": "gzip",
+      "--edl_run_id": "40ce3fb4-abfa-11f1-a081-b161ffc0c800"
+    },
+    "Attempt": 0,
+    "CompletedOn": 1788924241101,
+    "ErrorMessage": "Exception: There are errors in the steps ['1'] , SFN CRLN-EDL-uat-Sfn-InvokeEMRAsync Failed",
+    "ExecutionTime": 1556,
+    "GlueVersion": "1.0",
+    "Id": "jr_e541c1ac5c3812a181f42f706312ff3c33228575a2b7a84f537492b19d9afb74",
+    "JobMode": "SCRIPT",
+    "JobName": "CRLN-EDL-uat-Gj-EtlOrchestrator",
+    "JobRunState": "FAILED",
+    "LastModifiedOn": 1788924241101,
+    "LogGroupName": "/aws-glue/python-jobs/CRLN-EDL-uat-glue-security-configuration-16-role/CRLN-EDL-uat-Glue-S3-Full-Access-Role",
+    "MaxCapacity": 0.0625,
+    "NotificationProperty": {
+      "NotifyDelayAfter": 1
+    },
+    "PredecessorRuns": [],
+    "SecurityConfiguration": "CRLN-EDL-uat-glue-security-configuration-16",
+    "StartedOn": 1788922676297,
+    "Timeout": 4320
+  }
+}
+
+=================
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+java.lang.ClassNotFoundException: com.org.rrr.aedl.dbutils.Snowpark$
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:581)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:527)
+	at java.base/java.lang.Class.forName0(Native Method)
+	at java.base/java.lang.Class.forName(Class.java:315)
+	at com.anthem.utils.SessionCreator$.createRRRSession(SessionCreator.scala:175)
+	at com.anthem.utils.SessionCreator$.getSession(SessionCreator.scala:85)
+	at com.anthem.hca.intervention.datavantmbr.ETLStrategy.getSession(ETLStrategy.scala:17)
+	at com.anthem.hca.intervention.datavantmbr.DatavantMbrProvFileETL.generateDatavantPreMatchOutboundFile(DatavantMbrProvETL.scala:538)
+	at com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver$.main(DatavantPreMatchETLDriver.scala:26)
+	at com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver.main(DatavantPreMatchETLDriver.scala)
+Exception in thread "main" java.lang.Exception: Unable to create Snowpark Session: com.org.rrr.aedl.dbutils.Snowpark$
+	at com.anthem.utils.SessionCreator$.getSession(SessionCreator.scala:127)
+	at com.anthem.hca.intervention.datavantmbr.ETLStrategy.getSession(ETLStrategy.scala:17)
+	at com.anthem.hca.intervention.datavantmbr.DatavantMbrProvFileETL.generateDatavantPreMatchOutboundFile(DatavantMbrProvETL.scala:538)
+	at com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver$.main(DatavantPreMatchETLDriver.scala:26)
+	at com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver.main(DatavantPreMatchETLDriver.scala)
+Command exiting with ret '1'
+==============
+
+sanitizeFileName:: datavantmbrprov-etl_uat.properties
+sanitizeFileName:: db.properties
