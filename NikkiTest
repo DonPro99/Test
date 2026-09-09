@@ -1,5 +1,1 @@
-about the latest execution 
-the job failed with 
-/home/hadoop/jars/snowflake-jdbc-3.14.4.jar does not exist
-so it is the same error we got previously and the u moved to production right.. the code changes 
-but the jar file have not updated for virtix 
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/bootstrap_key_uat.sh - | grep -c "libs/jars/snowflake-jdbc-3.14.4"
