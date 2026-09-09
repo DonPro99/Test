@@ -3,3 +3,6 @@ Hi Komandla, Nikhitha, that's correct! Datavant Prematch file is a completely in
 For this year, the Datavant prematch file should be sent approx 1-3 weeks before the second-round datavant mbr+prov and CPL files.
  
 And this 1-3 week timeframe is the expected timing for this year and may change in future years. Thanks
+
+
+grep -ri "ssm-uat" /home/hadoop/config/*.properties
