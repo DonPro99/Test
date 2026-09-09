@@ -17,3 +17,6 @@ uat: crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare
 
 
 grep -ri "kms" /home/hadoop/config/*.properties
+
+
+Quick heads up — as part of RBICA-14070 Pre-Match, I've got two new CFX tickets ready to submit (inbound + outbound/UAT). Wanted to flag before sending, since I know you're tracking this workstream
