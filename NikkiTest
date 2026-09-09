@@ -1,7 +1,9 @@
-# On your laptop, in Git Bash / MINGW64
-cd ~/NikkiProjectWorkspace/ncr_dna2_raa_files
-aws s3 cp snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties \
-  s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
+$ where aws
+INFO: Could not find files for the given pattern(s).
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/RBICA-14070-datavant-prematch)
+$ which aws
+which: no aws in (/c/Users/AM71511/bin:/mingw64/bin:/usr/local/bin:/usr/bin:/bin:/mingw64/bin:/usr/bin:/c/Users/AM71511/bin:/c/WINDOWS/system32:/c/WINDOWS:/c/WINDOWS/System32/Wbem:/c/WINDOWS/System32/WindowsPowerShell/v1.0:/c/WINDOWS/System32/OpenSSH:/c/Program Files/dotnet:/c/Program Files/Devin/bin:/c/Users/AM71511/AppData/Local/Microsoft/WindowsApps:/c/Users/AM71511/AppData/Local/Programs/IntelliJ IDEA 2026.1.2/bin:/usr/bin/vendor_perl:/usr/bin/core_perl)
 
 curl -o datavantmbrprov-etl_uat.properties \
   "https://bitbucket.elevancehealth.com/rest/api/1.0/projects/AEDLNC/repos/ncr_dna2_raa_files/raw/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties?at=refs/heads/feature/RBICA-14070-datavant-prematch"
