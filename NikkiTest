@@ -1,2 +1,2 @@
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/ | grep datavantmbrprov-etl_uat
-
+[hadoop@ip-10-127-204-103 ~]$ aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/ | grep datavantmbrprov-etl_uat
+2026-09-09 02:55:14       1693 datavantmbrprov-etl_uat.properties
