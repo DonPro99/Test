@@ -6,6 +6,42 @@ cd /hcaaapck/backup/IT/DEV/scripts
 /hcaaapck/backup/IT/DEV/scripts/start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
 
 
-find /raa1/backup/ -maxdepth 1 2>/dev/null
-
-find /raa1/ -maxdepth 2 2>/dev/null
+[SAS@dc04plpsas104-srcradcoolbthpr]/raa1/backup>find /raa1/backup/ -maxdepth 1 2>/dev/null
+/raa1/backup/
+/raa1/backup/mra
+/raa1/backup/lost_found
+/raa1/backup/from_pck
+/raa1/backup/sandbox
+/raa1/backup/dropbox
+/raa1/backup/ma_rep
+/raa1/backup/devenvironment
+/raa1/backup/users
+/raa1/backup/it
+/raa1/backup/reports
+/raa1/backup/mrashare
+/raa1/backup/prodenvironment
+[SAS@dc04plpsas104-srcradcoolbthpr]/raa1/backup>find /raa1/ -maxdepth 2 2>/dev/null
+/raa1/
+/raa1/backup
+/raa1/backup/mra
+/raa1/backup/lost_found
+/raa1/backup/from_pck
+/raa1/backup/sandbox
+/raa1/backup/dropbox
+/raa1/backup/ma_rep
+/raa1/backup/devenvironment
+/raa1/backup/users
+/raa1/backup/it
+/raa1/backup/reports
+/raa1/backup/mrashare
+/raa1/backup/prodenvironment
+/raa1/san_path_check
+/raa1/.ptrash
+/raa1/nobackup
+/raa1/.afm
+/raa1/nshare
+/raa1/nshare/al83867
+/raa1/nshare/ah32062
+/raa1/nshare/ag70130
+/raa1/.snapshots
+[SAS@dc04plpsas104-srcradcoolbthpr]/raa1/backup>
