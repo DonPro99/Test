@@ -1,3 +1,2 @@
-cat datavantmbrprov-etl_uat.properties | grep -A2 "Datavant Pre-Match"
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/ | grep datavantmbrprov-etl_uat
 
-aws s3 cp datavantmbrprov-etl_uat.properties s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
