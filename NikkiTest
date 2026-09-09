@@ -1,1 +1,4 @@
-SELECT * FROM U01_RAA.RAA_RAWZ.load_log_key WHERE processid = 10500 AND stepid = 10 ORDER BY batchid DESC;
+SELECT * FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB 
+WHERE intervention = 'DTVNTRTPM' 
+ORDER BY rundatetime DESC 
+LIMIT 20;
