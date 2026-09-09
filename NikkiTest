@@ -1,6 +1,1 @@
-grep -i "processID" /home/hadoop/datavantmbrprov-etl_uat.properties
-
-
-nano /home/hadoop/datavantmbrprov-etl_uat.properties
-
-processID.MRA=10500
+grep -i "processID" /home/hadoop/config/datavantmbrprov-etl_uat.properties
