@@ -1,4 +1,3 @@
-[hadoop@ip-10-127-204-210 ~]$ grep -ri "dest_s3" /home/hadoop/config/patient_encounter_files_merge-uat.properties
-dest_s3_bucket=cfx-antm-uat-mgft-outbound
-dest_s3_path=uat/raalookup/inbound/
-[hadoop@ip-10-127-204-210 ~]$
+Destination S3 bucket: cfx-antm-uat-mgft-outbound
+
+Destination S3 path: uat/raa/dtvntprematch-etl/
