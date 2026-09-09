@@ -1,4 +1,5 @@
-SELECT * FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB 
-WHERE intervention = 'DTVNTRTPM' 
-ORDER BY rundatetime DESC 
-LIMIT 20;
+Job ID: 780009120
+Driver class: com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver
+Process ID: 10500 (in datavantmbrprov-etl_uat.properties, as processID.MRA=10500)
+Intervention: DTVNTRTPM
+Target table: RAD_DATAVANT_CHASE_PREMATCH
