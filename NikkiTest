@@ -1,3 +1,5 @@
-Did the job fully complete after that, or did it stop at a different step further along? If you have the latest log output (success or any new error), could you share it? Want to see exactly where things stand now.
-
-Really appreciate you taking a look this morning.
+{
+  "job_id": "780009074",
+  "etl_stp_nbr_lst": "1.0",
+  "retry": "no"
+}
