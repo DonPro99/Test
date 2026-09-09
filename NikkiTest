@@ -1,2 +1,13 @@
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/
+[hadoop@ip-10-127-204-210 ~]$ aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/
 aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/config/
+2025-02-27 17:36:26       1445 datavantmbr-etl_dev.properties
+2025-03-14 12:42:23       1447 datavantmbr-etl_prod.properties
+2025-02-27 17:36:26       1447 datavantmbr-etl_sit.properties
+2025-03-14 12:42:23       1448 datavantmbr-etl_uat.properties
+2025-04-25 14:14:10       1427 datavantmbrprov-etl_dev.properties
+2025-04-25 14:14:10       1427 datavantmbrprov-etl_prod.properties
+2025-04-25 14:14:10       1430 datavantmbrprov-etl_sit.properties
+2026-06-17 19:33:19       1536 datavantmbrprov-etl_uat.properties
+2025-02-27 17:36:26        148 db.properties
+2025-02-27 17:36:26         86 external.properties
+2025-02-27 17:36:26       2027 hadoop.properties
