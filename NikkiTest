@@ -1,1 +1,3 @@
+cd ~
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties .
 grep -i "processID" datavantmbrprov-etl_uat.properties
