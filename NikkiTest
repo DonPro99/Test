@@ -1,8 +1,1 @@
-[hadoop@ip-10-127-204-210 ~]$ cat /home/hadoop/config/datavantmbrprov-etl_uat.properties | grep -A1 -B1 "processID"
-step2=Insert and Outbound File Generation
-processID.MCR=255
-processID.MRA=10500
-stepID1=10
-[hadoop@ip-10-127-204-210 ~]$ hostname
-ip-10-127-204-210.652798729258.awsdns.internal.das
-[hadoop@ip-10-127-204-210 ~]$
+cat /mnt/var/lib/info/job-flow.json | grep -i jobFlowId
