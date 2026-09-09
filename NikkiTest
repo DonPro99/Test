@@ -1,1 +1,5 @@
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i datavantmbrprov-etl_uat
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i "datavantmbrprov"
+
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i "properties" | grep -i "datavant"
+
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep -i "conf"
