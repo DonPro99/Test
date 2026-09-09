@@ -1,5 +1,2 @@
-find /hcaaapck/backup/IT/uat/ -iname "validateArguments.py" 2>/dev/null
-
-find /hcaaapck/backup/ -iname "validateArguments.py" 2>/dev/null
-
-cat /hcaaapck/backup/IT/<env>/scripts/validateArguments.py
+cat /hcaaapck/backup/IT/sit/scripts/validateArguments.py
+cat /hcaaapck/backup/IT/dev/scripts/validateArguments.py
