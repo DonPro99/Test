@@ -1,1 +1,4 @@
-find / -iname "validateArguments.py" 2>/dev/null
+python3.6 $SAS_HOME/validateArguments.py $INTERVENTION $LOB
+
+
+find /hcaaapck/backup/IT/ -iname "validateArguments.py" 2>/dev/null
