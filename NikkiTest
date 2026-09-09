@@ -1,4 +1,10 @@
-[hadoop@ip-10-127-204-103 ~]$ aws s3 cp ~/NikkiProjectWorkspace/ncr_dna2_raa_files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties \
+# On your laptop, in Git Bash / MINGW64
+cd ~/NikkiProjectWorkspace/ncr_dna2_raa_files
+aws s3 cp snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties \
   s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
 
-The user-provided path /home/hadoop/NikkiProjectWorkspace/ncr_dna2_raa_files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties does not exist.
+curl -o datavantmbrprov-etl_uat.properties \
+  "https://bitbucket.elevancehealth.com/rest/api/1.0/projects/AEDLNC/repos/ncr_dna2_raa_files/raw/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties?at=refs/heads/feature/RBICA-14070-datavant-prematch"
+
+aws s3 cp datavantmbrprov-etl_uat.properties \
+  s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
