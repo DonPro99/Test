@@ -9,3 +9,9 @@ cd /hcaaapck/backup/IT/DEV/scripts
 grep -i "DEPLOY_FILE_EXT" /hcaaapck/backup/IT/SIT/conf/deploy.properties
 
 ls -la /raa1/backup/devenvironment/sas_repository/deploy_in/ | grep -i dtvntrtpm
+
+
+export ENVIRONMENT=ts
+./start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
+
+Source the Deploy configuration file - /hcaaapck/backup/IT/SIT/conf/deploy.properties
