@@ -1,1 +1,3 @@
-grep -i "stepID" datavantmbrprov-etl_uat.properties
+nano datavantmbrprov-etl_uat.properties
+
+processID.MRA=10500
