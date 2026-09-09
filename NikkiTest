@@ -1,1 +1,6 @@
 aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/bootstrap_key_prod.sh - | grep -c "libs/jars/snowflake-jdbc-3.14.4"
+
+
+SHOW TABLES LIKE 'DEPLY_DTVNTRTPM_MRA_STG' IN SCHEMA D01_RAA.RAA_RAWZ_STG;
+SHOW TABLES LIKE 'DEPLY_DTVNTRTPM_MRA_STG' IN SCHEMA DDL_REPOSITORY_01.RAA_RAWZ_STG;
+SHOW VIEWS LIKE 'DEPLY_DTVNTRTPM_MRA_STG%' IN SCHEMA D01_RAA.RAA_RAWZ_STG;
