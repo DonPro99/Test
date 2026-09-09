@@ -1,5 +1,12 @@
-Hi team,
+Thought for 1s
+Hi Tagore,
 
-Thanks for confirming the path is set up. Before pushing a test file, I want to verify a couple of things internally on our end (source configuration, and whether this shares a folder with our existing live production process) so we don't cause any confusion on your side. I'll follow up shortly once I've confirmed it's safe to proceed with a test push.
+Quick update on the RBICA-14070 CFX tickets:
 
-Thanks,
+Outbound (prod): CFX confirmed this is complete — path is I_ELV_CFX013/prod/mra/ciox/, which matches the existing DTVNTMBRRT job (780009026)'s actual working destination, so this is the correct, legitimate path (not a different vendor's path — just existing CFX naming for Datavant's MRA files). I'm verifying the source-side path before pushing a test file, then I'll confirm connectivity with them.
+
+Outbound (UAT): still pending — submitted separately, awaiting CFX to complete the same setup for UAT.
+
+Inbound (SaaS→S3, both UAT and prod): also submitted, still pending on CFX's end.
+
+I'll keep you posted as these come back. Let me know if you have any questions on the outbound path now that it's confirmed.
