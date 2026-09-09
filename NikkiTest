@@ -1,19 +1,8 @@
-RBICA-14070 — Status & Remaining Steps
+Hi Pranaya,
 
-Confirmed done:
+Quick confirmation needed on RBICA-14070 before I proceed - does the Pre-Match deploy file (deply_dtvntrtpm_mra_20260812) have the same columns/structure as the existing Datavant MBR+Prov deploy file (DTVNTRT)?
 
-Outbound Scala code (generateDatavantPreMatchOutboundFile) — built, tested, reaches the load_log_key check successfully
-New driver (DatavantPreMatchETLDriver) — created, wired to call only Pre-Match logic
-New job (780009120) — created, classpath fixed (RRR jar added), properties file config fixed (processID.MRA=10500)
-Table RAD_DATAVANT_CHASE_PREMATCH — created in D01, registered in DDL Repository
-Join logic — confirmed correct by Tagore (same pattern as CPL/MBRProv)
-Intervention/naming — DTVNTRTPM / deply_dtvntrtpm_mra_yyyymmdd — confirmed with Tagore, Akhil, Pranaya
+If they match, we can reuse the existing SAS deploy script as-is (just need to add DTVNTRTPM to the validation list) rather than needing a separate SAS code change. Want to confirm before starting that piece.
 
-Still needed before full end-to-end testing:
-
-Script update — start_sas_deploy_copy_hdfs_MN.sh/validateArguments.py needs DTVNTRTPM added as a recognized intervention, to convert the raw deploy file into .txt
-New stage table — needs to be created (same generic structure as other staging tables) for Pre-Match's deploy data
-Protegrity ticket (inbound) — being evaluated live on this call; leaning toward not needed, since deploy/staging columns are generic (add_val1, etc.) and tokenization likely only applies at final table/outbound generation — final answer still pending as of this message
-CFX ticket — inbound (SaaS→S3) — needs submission, both UAT and prod
-CFX ticket — outbound (S3→SaaS) — already exists for prod, needs UAT details added
-Ingest job — new job needed to load converted file into the new stage table → RAD_DEPLOY_ALL_LOB
+Thanks,
+Don
