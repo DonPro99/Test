@@ -1,15 +1,5 @@
-start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
+Hi team,
 
+Thanks for confirming the path is set up. Before pushing a test file, I want to verify a couple of things internally on our end (source configuration, and whether this shares a folder with our existing live production process) so we don't cause any confusion on your side. I'll follow up shortly once I've confirmed it's safe to proceed with a test push.
 
-cd /hcaaapck/backup/IT/DEV/scripts
-./start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
-/hcaaapck/backup/IT/DEV/scripts/start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
-
-
-grep -i "DEPLOY_FILE_EXT" /hcaaapck/backup/IT/SIT/conf/deploy.properties
-
-ls -la /raa1/backup/devenvironment/sas_repository/deploy_in/ | grep -i dtvntrtpm
-
-grep -ri "163391535226\|ssm-prod" /home/hadoop/config/*.properties
-
-grep -ri "163391535226\|ssm-prod" /home/hadoop/config/*.properties
+Thanks,
