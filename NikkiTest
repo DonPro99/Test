@@ -10,11 +10,6 @@ grep -i "DEPLOY_FILE_EXT" /hcaaapck/backup/IT/SIT/conf/deploy.properties
 
 ls -la /raa1/backup/devenvironment/sas_repository/deploy_in/ | grep -i dtvntrtpm
 
-grep -ri "ciox" /home/hadoop/config/datavantmbrprov-etl_uat.properties
-grep -ri "outbound" /home/hadoop/config/*.properties | grep -i dtvnt
+job id 780009026 in UAT
+{"clusternm":"RAA2","jobargs":[{"jobname":"RAA-DATAVANTMBR-OUT-ETL","job":["python3.11","/home/hadoop/scripts/MRA_SAS_VENDOR_FTP.py","DEPLY_DTVNTMBRRT_MRA_STG","prod","--src-s3-path","outbound/raa/datavantmbr-retro-etl/",     "--sas-dest-bucket","cfx-antm-prod-raaetl-outbound",        "--sas-dest-path","hcaaapck_CFX_STG/",        "--vendor-dest-bucket","cfx-antm-prod-mgft-raafiles-outbound",          "--vendor-dest-path","I_ELV_CFX013/prod/mra/ciox/",       "--arh-s3-bucket","crln-raa-prod-archz-gbd-phi-useast1",         "--arh-s3-path","raa/medicare/na/deply_dtvntmbrrt_mra_stg/",       "--proc-name","DTVNTMBRRT-MRA",          "--notify-to","dl-raaetldevelopers@anthem.com,DL-RAA_ETL_Process_Owners@anthem.com"]}],"createcluster":"YES","application":"RAA","configfile":"s3://crln-raa-${env}-codez-nogbd-phi-useast1/files/snowpark/config/STANDARD_L.json","maxconcurrency":"1","clusterid":"na","bootstrapbucket":"crln-raa-${env}-codez-nogbd-phi-useast1","bootstrapkey":"files/snowpark/config/bootstrap_key_${env}.sh","emrenv":"${env}","logpath":"s3://crln-raa-${env}-codez-nogbd-phi-useast1/logs/risk-adjustment-adl/","terminateoption":"NO"}
 
-
-grep -ri "ciox" /home/hadoop/config/*prod*.properties
-grep -ri "mra/ciox\|prod/mra" /home/hadoop/config/*.properties
-
-grep -ri "dest_s3_path\|dest_s3_bucket" /home/hadoop/config/*dtvnt*prod*.properties
