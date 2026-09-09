@@ -4,7 +4,7 @@ For this year, the Datavant prematch file should be sent approx 1-3 weeks before
  
 And this 1-3 week timeframe is the expected timing for this year and may change in future years. Thanks
 
-
+ELV_DTVNT_*_MRA_PREMATCH_*.txt 
 dest_s3_path=uat/raalookup/inbound/
 [hadoop@ip-10-127-204-210 ~]$ grep -ri "ssm-uat" /home/hadoop/config/*.properties
 /home/hadoop/config/Patient_decryptloader_cra-uat.properties:Outbound_Location = s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/hoscda/cra
