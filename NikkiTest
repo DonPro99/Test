@@ -1,5 +1,37 @@
-grep -i "riskadjustment.hive.table.loadlog" /home/hadoop/config/datavantmbrprov-etl_uat.properties
-
-grep -i "loadlog" /home/hadoop/config/datavantmbrprov-etl_uat.properties
-
-grep -ri "loadlog" /home/hadoop/config/*.properties
+[hadoop@ip-10-127-204-45 ~]$ grep -i "riskadjustment.hive.table.loadlog" /home/hadoop/config/datavantmbrprov-etl_uat.properties
+riskadjustment.hive.table.loadlog=load_log_key
+[hadoop@ip-10-127-204-45 ~]$ grep -i "loadlog" /home/hadoop/config/datavantmbrprov-etl_uat.properties
+riskadjustment.hive.table.loadlog=load_log_key
+[hadoop@ip-10-127-204-45 ~]$ grep -ri "loadlog" /home/hadoop/config/*.properties
+/home/hadoop/config/altegrart-common-uat.properties:intervention.master.hive.table.loadlog=load_log_key
+/home/hadoop/config/application_uat.properties:intervention.master.hive.table.loadlog=load_log_key
+/home/hadoop/config/carillon_application_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
+/home/hadoop/config/centauri-etl_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
+/home/hadoop/config/cioxrt_application_radv_uat.properties:intervention.master.hive.table.loadlog=load_log_key
+/home/hadoop/config/cioxrt_application_uat.properties:intervention.master.hive.table.loadlog=load_log_key
+/home/hadoop/config/cobcprsp-common-uat.properties:intervention.master.hive.table.loadlog=load_log_key
+/home/hadoop/config/datavantmbr-etl_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
+/home/hadoop/config/datavantmbrprov-etl_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
+/home/hadoop/config/dncxwalk_application-uat.properties:loadlog.key.table=U01_RAA.RAA_RAWZ.load_log_key
+/home/hadoop/config/episource-etl_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
+/home/hadoop/config/epsln-emlcmpn-common-uat.properties:intervention.master.hive.table.loadlog=U01_RAA.RAA_RAWZ.load_log_key
+/home/hadoop/config/invinarrtro_application_uat.properties:intervention.inar.master.hive.table.loadlog=load_log_key
+/home/hadoop/config/invooartro_application_uat.properties:intervention.master.hive.table.loadlog=load_log_key
+/home/hadoop/config/invprsp_application_uat.properties:intervention.master.hive.table.loadlog=S01_RAA.RAA_RAWZ.load_log_key
+/home/hadoop/config/invrt_application_uat.properties:intervention.master.hive.table.loadlog=U01_RAA.RAA_RAWZ.load_log_key
+/home/hadoop/config/mmdm-etl_uat.properties:intervention.master.hive.table.loadlog=U01_RAA.RAA_RAWZ.load_log_key
+/home/hadoop/config/mrdm-etl_uat.properties:riskadjustment.hive.table.loadlog=S01_RAA.RAA_RAWZ.load_log_key
+/home/hadoop/config/mro_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
+/home/hadoop/config/mrocprt-application-uat.properties:intervention.hive.table.loadlog=load_log_key
+/home/hadoop/config/mrocprt-radv-application-uat.properties:intervention.hive.table.loadlog=load_log_key
+/home/hadoop/config/pcv-emailcampaign_uat.properties:invpcv.snowflake.table.loadlog=load_log_key
+/home/hadoop/config/see-your-doctor-application-uat.properties:intervention.hive.table.loadlog=U01_RAA.RAA_RAWZ.load_log_key
+/home/hadoop/config/shrcrRadv-application-uat.properties:intervention.hive.table.loadlog=load_log_key
+/home/hadoop/config/shrcrrt-application-radv-uat.properties:intervention.hive.table.loadlog=load_log_key
+/home/hadoop/config/shrcrrt-application-uat.properties:intervention.hive.table.loadlog=load_log_key
+/home/hadoop/config/shrcrrtmra-application-uat.properties:intervention.hive.table.loadlog=load_log_key
+/home/hadoop/config/verscend-etl_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
+/home/hadoop/config/verscend-radv-etl_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
+/home/hadoop/config/vrtxrt-etl_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
+/home/hadoop/config/vrtxrt-etl_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
+/home/hadoop/config/vrtxrt-radv-etl_uat.properties:riskadjustment.hive.table.loadlog=load_log_key
