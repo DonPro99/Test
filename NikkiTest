@@ -1,26 +1,7 @@
-Running for schema: schema_virtix and runid: 1234
-:: loading settings :: url = jar:file:/usr/lib/spark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
-/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:25: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
-  import imp
-Traceback (most recent call last):
-  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 39, in <module>
-    spark = SparkSession.builder \
-  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/sql/session.py", line 497, in getOrCreate
-  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/context.py", line 535, in getOrCreate
-  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/context.py", line 206, in __init__
-  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/context.py", line 299, in _do_init
-  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/context.py", line 432, in _initialize_context
-  File "/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1587, in __call__
-  File "/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/protocol.py", line 326, in get_return_value
-py4j.protocol.Py4JJavaError: An error occurred while calling None.org.apache.spark.api.java.JavaSparkContext.
-: java.io.FileNotFoundException: File file:/home/hadoop/jars/snowflake-jdbc-3.14.4.jar does not exist
-	at org.apache.hadoop.fs.RawLocalFileSystem.deprecatedGetFileStatus(RawLocalFileSystem.java:969)
+Hi Rajesh,
 
-26/09/09 13:57:59 INFO Client: Uploading resource file:/home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar -> hdfs://ip-10-197-212-53.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1788961931455_0001/reduce_reuse_recycle-0.1-SNAPSHOT.jar
-26/09/09 13:58:00 INFO Client: Uploading resource file:/home/hadoop/jars/snowflake-jdbc-3.14.4.jar -> hdfs://ip-10-197-212-53.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1788961931455_0001/snowflake-jdbc-3.14.4.jar
-26/09/09 13:58:00 INFO Client: Deleted staging directory hdfs://ip-10-197-212-53.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1788961931455_0001
-26/09/09 13:58:00 ERROR SparkContext: Error initializing SparkContext.
-java.io.FileNotFoundException: File file:/home/hadoop/jars/snowflake-jdbc-3.14.4.jar does not exist
-	at org.apache.hadoop.fs.RawLocalFileSystem.deprecatedGetFileStatus(RawLocalFileSystem.java:969) ~[hadoop-client-api-3.4.1-amzn-2.jar:?]
-	at org.apache.hadoop.fs.RawLocalFileSystem.getFileLinkStatusInternal(RawLocalFileSystem.java:1290) ~[hadoop-client-api-3.4.1-amzn-2.jar:?]
-	at org.apache.hadoop.fs.RawLocalFileSystem.getFileStatus(RawLocalFileSystem.java:959) ~[hadoop-client-api-3.4.1-amzn-2.jar:?]
+Ran into an issue testing the jar fix - getting the same FileNotFoundException for snowflake-jdbc-3.14.4.jar on both UAT and PROD.
+
+On UAT: tried running the aws s3 cp command manually from a UAT node and got a permissions/access issue trying to reach the PROD bucket (crln-163391535226-edl-prod-toolsz-...) - makes sense since it's cross-account.
+
+On PROD though, I'm seeing the same "file does not exist" error even though the node is in the correct account. The log actually shows it uploading the jar to HDFS staging successfully, then immediately failing with file not found right after - so it doesn't look like a missing-file issue there, more like something failing right after upload.
