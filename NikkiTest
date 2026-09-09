@@ -1,3 +1,37 @@
-find / -iname "*rrr*" 2>/dev/null
-find / -iname "*aedl-dbutils*" 2>/dev/null
-find /home/hadoop/jars/ -iname "*.jar" 2>/dev/null
+[hadoop@ip-10-127-204-210 ~]$ find / -iname "*rrr*" 2>/dev/null
+/home/hadoop/scripts/rrr_snowpark_session_util.py
+/home/hadoop/AnthemRaUtil/rrr_snowpark_session_util.py
+/home/hadoop/AnthemRaUtil/__pycache__/rrr_snowpark_session_util.cpython-311.pyc
+[hadoop@ip-10-127-204-210 ~]$ find / -iname "*aedl-dbutils*" 2>/dev/null
+[hadoop@ip-10-127-204-210 ~]$ find /home/hadoop/jars/ -iname "*.jar" 2>/dev/null
+/home/hadoop/jars/altegra-retro-etl-1.0.0-jar-with-dependencies.jar
+/home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/ciox-retro-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/ahg-prsp-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/centauri-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/common-ingestion-1.0.0-jar-with-dependencies.jar
+/home/hadoop/jars/cobc-prsp-etl-1.0.0-jar-with-dependencies.jar
+/home/hadoop/jars/datavantmbr-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/dnc-xwalk-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/email-campaign-ingestion-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/episource-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/epsln-emlcmpn-etl-1.0.0-jar-with-dependencies.jar
+/home/hadoop/jars/inovalon-retro-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/intervention-loader-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/inovalon-prsp-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/invpcv-email-campaign-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/mmdm-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/mrdm-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/mrdm-member-extraction-1.0.0-jar-with-dependencies.jar
+/home/hadoop/jars/mro-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/pdfgen-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+/home/hadoop/jars/optmrt-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/mrocp-retro-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/patient-encounter-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/risk-adjustment-adl-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/risk-adjustment-disenrl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/sydr-emlcmpn-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/shrcr-retro-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/virtix-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/verscend-etl-1.0-jar-with-dependencies.jar
+/home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar
