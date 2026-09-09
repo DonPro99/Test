@@ -1,42 +1,16 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>cat /hcaaapck/backup/IT/SIT/scripts/validateArguments.py
 import argparse
 import sys
 parser = argparse.ArgumentParser()
 parser.add_argument("intervention")
 parser.add_argument("lob")
 args = parser.parse_args()
-
 validInterventions=frozenset(["ALLSRCRT", "INVRTSP", "INVPRSP", "AVAILPRSP", "CARPRSP", "PCMS", "INVPRSP_MMDM",
  "VRSCNDRT", "EPISRCRT", "INVRTSP_OOA", "CRA_HIGHPROB", "GBDMCAID_TN", "DIRCONRT", "INTMEDRT", "ALTEGRT", "PLAYBOOKPRSP",
- "ALTEGSMAS", "OPTMRTT", "MDXMPRSP", "CIOXRT", "CIOXPMRT", "CIOXDDRT", "COBCPRSP", "BCBSMNRT", "MTRXPRSP", "OPTUMRT", "AHGPRSP", "EMLCMPN", "SHRCRRT", "MROCPRT", "OPTUMPRSP", "OPTMRT", "CRAPCVDR", "CRASYDR","SURSCRPRSP", "CENTRT", "CTVIRT", "DTVNTMBRRT", "DTVNTRT", "VRTXRT", "VRTXRT_OOA","VRSMART","MTRXPRSP","CENTPRVRT", "ALL"]);
-
+ "ALTEGSMAS", "OPTMRTT", "MDXMPRSP", "CIOXRT", "CIOXPMRT", "CIOXDDRT", "COBCPRSP", "BCBSMNRT", "MTRXPRSP", "OPTUMRT", "AHGPRSP", "EMLCMPN", "SHRCRRT", "MROCPRT", "OPTUMPRSP", "OPTMRT", "CRAPCVDR", "CRASYDR","SURSCRPRSP", "CENTRT", "CTVIRT", "DTVNTMBRRT", "DTVNTRT", "DTVNTRTPM", "VRTXRT", "VRTXRT_OOA","VRSMART","MTRXPRSP","CENTPRVRT", "ALL"]);
 validLinesOfBusiness=frozenset(["ACA", "MCAID", "MCARE", "ALLLOB", "MRA", "RADV"])
-
 if args.intervention not in validInterventions:
     print("%s is not a valid intervention. Possible interventions are %s." % (args.intervention, ", ".join(validInterventions)));
     sys.exit(1);
-
-if args.lob not in validLinesOfBusiness:
-    print("%s is not a valid line of business. Possible lines of business are %s." % (args.lob, ", ".join(validLinesOfBusiness)));
-    sys.exit(1);
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>cat /hcaaapck/backup/IT/DEV/scripts/validateArguments.py
-import argparse
-import sys
-parser = argparse.ArgumentParser()
-parser.add_argument("intervention")
-parser.add_argument("lob")
-args = parser.parse_args()
-
-validInterventions=frozenset(["ALLSRCRT", "INVRTSP", "INVPRSP", "AVAILPRSP", "CARPRSP", "PCMS", "INVPRSP_MMDM",
- "VRSCNDRT", "EPISRCRT", "INVRTSP_OOA", "CRA_HIGHPROB", "GBDMCAID_TN", "DIRCONRT", "INTMEDRT", "ALTEGRT", "PLAYBOOKPRSP",
- "ALTEGSMAS", "MDXMPRSP", "CIOXRT", "COBCPRSP", "BCBSMNRT", "MTRXPRSP", "OPTUMRT", "AHGPRSP"]);
-
-validLinesOfBusiness=frozenset(["ACA", "MCAID", "MCARE", "ALLLOB"])
-
-if args.intervention not in validInterventions:
-    print("%s is not a valid intervention. Possible interventions are %s." % (args.intervention, ", ".join(validInterventions)));
-    sys.exit(1);
-
 if args.lob not in validLinesOfBusiness:
     print("%s is not a valid line of business. Possible lines of business are %s." % (args.lob, ", ".join(validLinesOfBusiness)));
     sys.exit(1);
