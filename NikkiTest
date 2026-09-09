@@ -10,4 +10,25 @@ grep -i "DEPLOY_FILE_EXT" /hcaaapck/backup/IT/SIT/conf/deploy.properties
 
 ls -la /raa1/backup/devenvironment/sas_repository/deploy_in/ | grep -i dtvntrtpm
 
-sed -n '35,55p' /hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/SIT/scripts>sed -n '35,55p' /hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh
+fi
+
+export INTERVENTION=$1
+export LOB=$2
+
+#Determine the environment based on the user.
+export SERVICE_USER=`echo $USER`
+
+if [[ $SERVICE_USER == "srcradcoolbthts" ]]
+then
+    export ENVIRONMENT="ts"
+elif [[ $SERVICE_USER == "srcradcoolbthpr" ]]
+then
+    export ENVIRONMENT="pr"
+else
+    export ENVIRONMENT="dv"
+fi
+
+export ENV=$ENVIRONMENT
+
+if [[ "${ENVIRONMENT}" == "ts" ]]
