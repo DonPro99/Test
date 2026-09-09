@@ -1,4 +1,5 @@
-python3.6 $SAS_HOME/validateArguments.py $INTERVENTION $LOB
+find /hcaaapck/backup/IT/uat/ -iname "validateArguments.py" 2>/dev/null
 
+find /hcaaapck/backup/ -iname "validateArguments.py" 2>/dev/null
 
-find /hcaaapck/backup/IT/ -iname "validateArguments.py" 2>/dev/null
+cat /hcaaapck/backup/IT/<env>/scripts/validateArguments.py
