@@ -12,3 +12,12 @@ ls -la /raa1/backup/devenvironment/sas_repository/deploy_in/ | grep -i dtvntrtpm
 
 grep -ri "ciox" /home/hadoop/config/datavantmbrprov-etl_uat.properties
 grep -ri "outbound" /home/hadoop/config/*.properties | grep -i dtvnt
+
+
+[hadoop@ip-10-127-204-210 ~]$ grep -ri "ciox" /home/hadoop/config/datavantmbrprov-etl_uat.properties
+intervention.master.hive.table.datavantmbrprov=rad_cioxrt_all_lob
+intervention.master.hive.table.nogbddatavantmbrprov=rad_cioxrt_all_lob
+
+[hadoop@ip-10-127-204-210 ~]$ grep -ri "outbound" /home/hadoop/config/*.properties | grep -i dtvnt
+/home/hadoop/config/application_uat.properties:dtvntmbrrt.mra.processname=DATAVANTRT Medicare Outbound File Generation
+/home/hadoop/config/application_uat.properties:dtvntrt.mra.processname=DATAVANTRTPROV Medicare Outbound File Generation
