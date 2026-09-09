@@ -1,1 +1,1 @@
-cfx-antm-prod-raaetl-outbound/hcaaapck_CFX_STG/
+grep -ri "cfx-antm" /home/hadoop/config/*.properties
