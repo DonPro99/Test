@@ -5,4 +5,20 @@ For this year, the Datavant prematch file should be sent approx 1-3 weeks before
 And this 1-3 week timeframe is the expected timing for this year and may change in future years. Thanks
 
 
-grep -ri "ssm-uat" /home/hadoop/config/*.properties
+dest_s3_path=uat/raalookup/inbound/
+[hadoop@ip-10-127-204-210 ~]$ grep -ri "ssm-uat" /home/hadoop/config/*.properties
+/home/hadoop/config/Patient_decryptloader_cra-uat.properties:Outbound_Location = s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/hoscda/cra
+/home/hadoop/config/Patient_decryptloader_mra-uat.properties:Outbound_Location = s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/hoscda/mra
+/home/hadoop/config/inv_mbrdx_merge_uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/inv_mbrdx_merge_uat.properties:dest_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/mdcdraa_claim_chase_merge-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/mdcdraa_claim_merge-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/mdcdraa_claimdx_merge-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/mdcdraa_claimrx_merge-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/mdcdraa_enrl_state_merge-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/mdcdraa_mbr_mkt_key_merge-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/mdcdraa_mbr_state_merge-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/mdcdraa_state_encounter_merge-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/patient_encounter_files_merge-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/patient_encounter_files_merge_cra-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
+/home/hadoop/config/patient_encounter_files_merge_mra-uat.properties:src_s3_bucket=crln-652798729258-ssm-uat-filetransfer
