@@ -1,2 +1,4 @@
-aws s3 cp ~/NikkiProjectWorkspace/ncr_dna2_raa_files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties \
+[hadoop@ip-10-127-204-103 ~]$ aws s3 cp ~/NikkiProjectWorkspace/ncr_dna2_raa_files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties \
   s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
+
+The user-provided path /home/hadoop/NikkiProjectWorkspace/ncr_dna2_raa_files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties does not exist.
