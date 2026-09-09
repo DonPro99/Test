@@ -1,2 +1,1 @@
-[hadoop@ip-10-127-204-210 ~]$ grep -i "processID" datavantmbrprov-etl_uat.properties
-processID.MCR=255
+grep -ri "processID" /home/hadoop/ 2>/dev/null
