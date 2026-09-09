@@ -1,3 +1,6 @@
-  find / -iname "datavantmbrprov-etl_uat.properties" 2>/dev/null
+[hadoop@ip-10-127-204-210 ~]$   find / -iname "datavantmbrprov-etl_uat.properties" 2>/dev/null
+/home/hadoop/config/datavantmbrprov-etl_uat.properties
+/home/hadoop/datavantmbrprov-etl_uat.properties
+[hadoop@ip-10-127-204-210 ~]$
 
   aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties - | grep -i "processID"s
