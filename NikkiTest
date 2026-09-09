@@ -1,1 +1,2 @@
-cat /mnt/var/lib/info/job-flow.json | grep -i jobFlowId
+[hadoop@ip-10-127-204-210 ~]$ cat /mnt/var/lib/info/job-flow.json | grep -i jobFlowId
+  "jobFlowId": "j-09345931F722JB9FOISY",
