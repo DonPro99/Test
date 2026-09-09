@@ -1,3 +1,36 @@
-nano /home/hadoop/config/datavantmbrprov-etl_uat.properties
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Command exiting with ret '1'
 
-processID.MRA=10500
+sanitizeFileName:: datavantmbrprov-etl_uat.properties
+sanitizeFileName:: db.properties
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+Sep 09, 2026 4:21:01 AM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
+INFO: Initializing new connection
+Sep 09, 2026 4:21:01 AM net.snowflake.client.core.SFSession open
+INFO: Opening session with server: https://carelon-eda-preprod.privatelink.snowflakecomputing.com:443/, account: carelon-eda-preprod, user: SRCRAADU, password is not provided, role: SRCRAADU_PRIVS, database: U01_RAA, schema: , warehouse: U01_LOAD_02_WH_XL, validate default parameters: null, authenticator: null, ocsp mode: FAIL_OPEN, passcode in password: null, passcode is not provided, private key is provided, disable socks proxy: null, application: null, app id: Snowpark, app version: 1.15.0, login timeout: null, retry timeout: null, network timeout: null, query timeout: null, connection timeout: null, socket timeout: null, tracing: null, private key file: null, private key pwd is not provided, enable_diagnostics: not provided, diagnostics_allowlist_path: null, session parameters: client store temporary credential: null, gzip disabled: null, browser response timeout: null
+Sep 09, 2026 4:21:01 AM net.snowflake.client.core.SFBaseSession logHttpClientInitInfo
+INFO: Driver OCSP mode: FAIL_OPEN, gzip disabled: false and no proxy
+Sep 09, 2026 4:21:01 AM net.snowflake.client.core.SFSession open
+INFO: Connecting to GLOBAL Snowflake domain
+Sep 09, 2026 4:21:01 AM net.snowflake.client.core.FileUtil logFileUsage
+INFO: Cache file creation: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
+Sep 09, 2026 4:21:01 AM net.snowflake.client.core.FileUtil logFileUsage
+INFO: Read cache: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
+Sep 09, 2026 4:21:02 AM net.snowflake.client.core.FileUtil logFileUsage
+INFO: Write to cache: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
+Sep 09, 2026 4:21:02 AM net.snowflake.client.core.SFSession open
+INFO: Session 15658176876873362 opened in 789 ms.
+Sep 09, 2026 4:21:02 AM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
+INFO: Connection initialized successfully in 895 ms. Session id: 15658176876873362
+Exception in thread "main" com.typesafe.config.ConfigException$Missing: No configuration setting found for key 'processID.MRA'
+	at com.typesafe.config.impl.SimpleConfig.findKeyOrNull(SimpleConfig.java:156)
+	at com.typesafe.config.impl.SimpleConfig.findOrNull(SimpleConfig.java:174)
+	at com.typesafe.config.impl.SimpleConfig.findOrNull(SimpleConfig.java:180)
+	at com.typesafe.config.impl.SimpleConfig.find(SimpleConfig.java:188)
+	at com.typesafe.config.impl.SimpleConfig.find(SimpleConfig.java:193)
+	at com.typesafe.config.impl.SimpleConfig.getString(SimpleConfig.java:250)
+	at com.anthem.hca.intervention.datavantmbr.DatavantMbrProvFileETL.generateDatavantPreMatchOutboundFile(DatavantMbrProvETL.scala:542)
+	at com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver$.main(DatavantPreMatchETLDriver.scala:26)
+	at com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver.main(DatavantPreMatchETLDriver.scala)
