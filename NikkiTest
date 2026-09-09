@@ -1,8 +1,1 @@
-Hi Pranaya,
-
-Quick confirmation needed on RBICA-14070 before I proceed - does the Pre-Match deploy file (deply_dtvntrtpm_mra_20260812) have the same columns/structure as the existing Datavant MBR+Prov deploy file (DTVNTRT)?
-
-If they match, we can reuse the existing SAS deploy script as-is (just need to add DTVNTRTPM to the validation list) rather than needing a separate SAS code change. Want to confirm before starting that piece.
-
-Thanks,
-Don
+find / -iname "validateArguments.py" 2>/dev/null
