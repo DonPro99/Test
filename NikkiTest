@@ -4,6 +4,8 @@ For this year, the Datavant prematch file should be sent approx 1-3 weeks before
  
 And this 1-3 week timeframe is the expected timing for this year and may change in future years. Thanks
 
+crln-163391535226-ssm-prod-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntmbrrt_mra/yyyyMMdd_HHmmss/incr/deply_dtvntmbrrt_mra.txt
+
 Outbound
 Source: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/dtvntprematch-etl/
 Destination: cfx-antm-uat-mgft-outbound / uat/raa/dtvntprematch-etl/
