@@ -4,3 +4,6 @@ start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
 cd /hcaaapck/backup/IT/DEV/scripts
 ./start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
 /hcaaapck/backup/IT/DEV/scripts/start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
+
+
+find /hcaaapck/backup/IT/ -iname "start_sas_deploy_copy_hdfs*" 2>/dev/null
