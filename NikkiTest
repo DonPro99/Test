@@ -1,1 +1,6 @@
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py /home/hadoop/scripts/
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
+
 grep -c "if 'raa_private_key' in secret_dict" /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+python3 -c "import ast; ast.parse(open('/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py').read())" && echo "SYNTAX OK"
+grep -A 8 "\[snowflake\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
