@@ -6,14 +6,4 @@ cd /hcaaapck/backup/IT/DEV/scripts
 /hcaaapck/backup/IT/DEV/scripts/start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
 
 
-[SAS@dc04plpsas104-srcradcoolbthpr]/raa1/backup>grep -n -i "source\|^\. \|DEPLOY_CONFIG_FILE\|\.properties\|export DEPLOY_MRA" /hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh | head -20
-13:#                 BATCH_INTERVENTIONS_<LOB> from deploy.properties and runs all
-17:#                 update only deploy.properties (no script changes, no Control-M changes).
-67:DEPLOY_CONFIG_FILE="/hcaaapck/backup/IT/${SAS_ENV}/conf/deploy.properties"
-68:SAS_CONFIG_FILE="/hcaaapck/backup/IT/${SAS_ENV}/conf/sas.properties"
-102:if [ ! -f ${DEPLOY_CONFIG_FILE} ]; then
-107:#Source the configuration file.
-108:LOG_MESG "Source the Deploy configuration file - $DEPLOY_CONFIG_FILE"
-109:. ${DEPLOY_CONFIG_FILE}
-256:# Description: Reads BATCH_INTERVENTIONS_<LOB> from deploy.properties and executes
-360:    LOG_MESG "ERROR: ${batch_var} is not defined in ${DEPLOY_CONFIG_FILE}"
+grep -i "DEPLOY_MRA_DATASET_SAS_LOCATION\|DEPLOY_DATASET_SAS_LOCATION" /hcaaapck/backup/IT/SIT/conf/deploy.properties
