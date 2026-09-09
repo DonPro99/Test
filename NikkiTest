@@ -1,6 +1,15 @@
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py /home/hadoop/scripts/
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
-
-grep -c "if 'raa_private_key' in secret_dict" /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
-python3 -c "import ast; ast.parse(open('/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py').read())" && echo "SYNTAX OK"
-grep -A 8 "\[snowflake\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+[hadoop@ip-10-127-204-94 ~]$ grep -c "if 'raa_private_key' in secret_dict" /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+0
+[hadoop@ip-10-127-204-94 ~]$ python3 -c "import ast; ast.parse(open('/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py').read())" && echo "SYNTAX OK"
+SYNTAX OK
+[hadoop@ip-10-127-204-94 ~]$ grep -A 8 "\[snowflake\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+[snowflake]
+env=uat
+region_name=us-east-1
+secret_path=/snowflake/raa
+usedatabase=U01_RAA
+raaDatabase=U01_RAA.RAA_RAWZ
+warehouse=U01_RAA_LOAD_WH_M
+sf_schema=RAA_RAWZ
+process=MCAID
+[hadoop@ip-10-127-204-94 ~]$
