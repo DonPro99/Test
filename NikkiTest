@@ -10,4 +10,12 @@ grep -i "DEPLOY_FILE_EXT" /hcaaapck/backup/IT/SIT/conf/deploy.properties
 
 ls -la /raa1/backup/devenvironment/sas_repository/deploy_in/ | grep -i dtvntrtpm
 
-grep -n "ENVIRONMENT" /hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh | head -20
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/SIT/scripts>grep -n "ENVIRONMENT" /hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh | head -20
+45:    export ENVIRONMENT="ts"
+48:    export ENVIRONMENT="pr"
+50:    export ENVIRONMENT="dv"
+53:export ENV=$ENVIRONMENT
+55:if [[ "${ENVIRONMENT}" == "ts" ]]
+58:elif [[ "${ENVIRONMENT}" == "dv" ]]
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/SIT/scripts>echo $ENVIRONMENT
+ts
