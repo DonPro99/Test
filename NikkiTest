@@ -1,3 +1,5 @@
-Destination S3 bucket: cfx-antm-uat-mgft-outbound
-
-Destination S3 path: uat/raa/dtvntprematch-etl/
+Hi Komandla, Nikhitha, that's correct! Datavant Prematch file is a completely independent file/process and does not trigger or be bundled with the Mbr+prov or CPL files.
+ 
+For this year, the Datavant prematch file should be sent approx 1-3 weeks before the second-round datavant mbr+prov and CPL files.
+ 
+And this 1-3 week timeframe is the expected timing for this year and may change in future years. Thanks
