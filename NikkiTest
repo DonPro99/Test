@@ -1,7 +1,1 @@
-{
-  "job_id": "790009519",
-  "retry": "N",
-  "etl_stp_nbr_lst": "1",
-  "etl_run_id": "VIRTIX-PACKAGES-FIX-TEST-001",
-  "etl_sfn_parms": "{}"
-}
+Hey, just wanted to give a quick explanation on my end (not making excuses, just context) — I branched from dev because my changes were already merged into dev/UAT at that point, and I wanted a cleaner branch off of that instead of starting fresh from master. Dev didn't have any issues when I branched from it — it was only after I synced/pulled that the other unflagged changes came in. Didn't realize that was the risk at the time. Noted for next time, thanks for flagging it.
