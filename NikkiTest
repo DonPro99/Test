@@ -1,9 +1,1 @@
-Good news - the packages fix worked, tested in UAT and it loaded successfully (batch 8, no jar errors).
-
-One thing I noticed - the archive step failed for both files, since it's trying to write to the prod archive bucket from a UAT role (read works, write doesn't - makes sense, cross-account). Wanted to check - should this go to the UAT archive bucket instead for testing, or does the UAT role need write access to prod for this specific setup?
-
-Everything else looked clean.
-
-===============
-
-ls -la /home/hadoop/jars/ | grep snowflake
+aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/mcaid_chase_all_lob_s3_to_snflk_load.sh - | grep -- "--packages\|--jars"
