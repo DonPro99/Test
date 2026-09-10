@@ -3,7 +3,7 @@ FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
 WHERE STATE IN ('VA', 'IN')
 ORDER BY EDL_LOAD_DTM DESC;
 
-find / -iname "spark-submit" 2>/dev/null
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/mcaid_chase_all_lob_s3_to_snflk_load.sh - | grep -- "--packages\|--jars"
 
 I created the staging table yesterday as part of getting the ingest job set up, and submitted the metadata ticket and all related tickets — the metadata ticket is now complete. I realized I still haven't submitted the change ticket for this. I know I'm late on it — could I submit it today?
 deply_DTVNTRTPM_MRA.txts
