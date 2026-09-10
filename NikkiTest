@@ -2,3 +2,6 @@ SELECT DISTINCT FILENAME, STATE, BATCH_ID, EDL_LOAD_DTM
 FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
 WHERE STATE IN ('VA', 'IN')
 ORDER BY EDL_LOAD_DTM DESC;
+
+
+aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/bootstrap_key_prod.sh - | grep -A 3 "snowflake-jdbc-3.14.4"
