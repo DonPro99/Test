@@ -1,1 +1,2 @@
-Hi Tagore — following up on this (I'd asked in the team chat earlier today): I created the staging table yesterday as part of the ingest job setup, and the metadata ticket is now complete. I realized I still hadn't submitted the change ticket for it — could I submit it today? Let me know when you get a chance.
+SHOW VIEWS LIKE 'DEPLY_DTVNTRTPM_MRA_STG%' IN SCHEMA D01_RAA.RAA_RAWZ_STG;
+SHOW VIEWS LIKE 'DEPLY_DTVNTRTPM_MRA_STG%' IN SCHEMA T01_RAA.RAA_RAWZ_STG;
