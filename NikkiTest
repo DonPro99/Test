@@ -5,3 +5,11 @@ ORDER BY EDL_LOAD_DTM DESC;
 
 
 aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/bootstrap_key_prod.sh - | grep -A 3 "snowflake-jdbc-3.14.4"
+[hadoop@ip-10-197-212-83 bin]$ cd ~
+[hadoop@ip-10-197-212-83 ~]$ aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/bootstrap_key_prod.sh - | grep -A 3 "snowflake-jdbc-3.14.4"
+sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/snowflake-jdbc-3.14.4.jar /home/hadoop/jars/
+sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar /home/hadoop/jars/
+sudo chmod 777 /home/hadoop/jars/snowflake-jdbc-3.14.4.jar
+sudo chmod 777 /home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar
+# Secondary boot execution
+sudo aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/secondary_boot.sh /home/hadoop/scripts && sudo bash /home/hadoop/scripts/secondary_boot.sh & sleep 180 && exit 0
