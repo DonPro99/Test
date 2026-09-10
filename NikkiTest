@@ -5,5 +5,4 @@ ORDER BY EDL_LOAD_DTM DESC;
 
 ls -la /home/hadoop/jars/ | grep snowflake
 
-
 /usr/local/bin/spark-submit --master yarn --deploy-mode client --driver-cores 2 --driver-memory 5G --executor-cores 6 --executor-memory 10G --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar --packages net.snowflake:snowflake-jdbc:3.20.1,net.snowflake:spark-snowflake_2.12:2.12.0-spark_3.4 --conf spark.kryoserializer.buffer.max=128 --conf yarn.nodemanager.resource.memory-mb=36G --conf spark.driver.memoryOverhead=1536 --conf spark.executor.memoryOverhead=1536 --conf spark.dynamicAllocation.enabled=true --conf spark.shuffle.service.enabled=true --conf spark.sql.broadcastTimeout=4800 --conf spark.mail.conf=/home/hadoop/config/mail-prod.conf --conf spark.network.timeout=10000000 --conf spark.executor.heartbeatInterval=10000000 --conf spark.default.parallelism=1000 /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py -c rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config schema_virtix 1234
