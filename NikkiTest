@@ -1,2 +1,12 @@
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
+[hadoop@ip-10-127-204-247 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
 grep -A 8 "\[schema_virtix\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+download: s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties to config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+[schema_virtix]
+s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
+s3_archive_file_path=s3://crln-raa-prod-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/virtix/
+delimiter=|
+file_format=txt
+file_pattern=ChartData_ANT_Virtix_Chase_*.txt
+tablename=rad_virtix_chase_mcaid_load
+schema_name=
+columns_list=["FileName", "MBRID", "MBRFNAME", "MBRLNAME", "MBRDOB", "EnrollmentDate", "EnrollmentEndDate", "ESRDIndicator", "ProjectName", "ClientRequestId", "RecordTypeId", "OnshoreIndicator", "Gender", "ProviderLastName", "ProviderFirstName", "ProviderNPI", "MemberMiddle", "ProviderId", "UserDefinedText1", "UserDefinedText2", "UserDefinedText3", "UserDefinedText4"]
