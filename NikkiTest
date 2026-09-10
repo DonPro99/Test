@@ -1,7 +1,1 @@
-Hi Rajesh,
-
-Ran into an issue testing the jar fix - getting the same FileNotFoundException for snowflake-jdbc-3.14.4.jar on both UAT and PROD.
-
-On UAT: tried running the aws s3 cp command manually from a UAT node and got a permissions/access issue trying to reach the PROD bucket (crln-163391535226-edl-prod-toolsz-...) - makes sense since it's cross-account.
-
-On PROD though, I'm seeing the same "file does not exist" error even though the node is in the correct account. The log actually shows it uploading the jar to HDFS staging successfully, then immediately failing with file not found right after - so it doesn't look like a missing-file issue there, more like something failing right after upload.
+find /raa2/backup/prodenvironment/rev_opt/chasefiles/ -iname "*VirtixHealth*"
