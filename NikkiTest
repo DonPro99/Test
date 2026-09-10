@@ -3,6 +3,8 @@ FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
 WHERE STATE IN ('VA', 'IN')
 ORDER BY EDL_LOAD_DTM DESC;
 
+the copy statement is genuinely present and correct in the live PROD bootstrap script, exactly as we set it up.
+
 
 aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/files/snowpark/config/bootstrap_key_prod.sh - | grep -A 3 "snowflake-jdbc-3.14.4"
 [hadoop@ip-10-197-212-83 bin]$ cd ~
