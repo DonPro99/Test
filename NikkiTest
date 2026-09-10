@@ -3,7 +3,25 @@ FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
 WHERE STATE IN ('VA', 'IN')
 ORDER BY EDL_LOAD_DTM DESC;
 
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/mcaid_chase_all_lob_s3_to_snflk_load.sh - | grep -- "--packages\|--jars"
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/mcaid_chase_all_lob_s3_to_snflk_load.sh /tmp/shell_packages_fix.sh
 
-[hadoop@ip-10-127-204-166 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/mcaid_chase_all_lob_s3_to_snflk_load.sh - | grep -- "--packages\|--jars"
-  --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar,/home/hadoop/jars/snowflake-jdbc-3.14.4.jar,/home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar \
+python3 << 'PYEOF'
+with open('/tmp/shell_packages_fix.sh', 'r') as f:
+    content = f.read()
+
+old_line = '''  --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar,/home/hadoop/jars/snowflake-jdbc-3.14.4.jar,/home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar \\'''
+
+new_lines = '''  --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar \\
+  --packages net.snowflake:snowflake-jdbc:3.20.1,net.snowflake:spark-snowflake_2.12:2.12.0-spark_3.4 \\'''
+
+count = content.count(old_line)
+print(f"Anchor found {count} time(s)")
+
+if count == 1:
+    content = content.replace(old_line, new_lines, 1)
+    with open('/tmp/shell_packages_fix.sh', 'w') as f:
+        f.write(content)
+    print("FIX APPLIED")
+else:
+    print("ABORTED - anchor not found exactly once")
+PYEOF
