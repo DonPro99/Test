@@ -1,1 +1,1 @@
-does this current PROD script (with ${JDBC_VER} variables and both --packages AND --jars) actually work as-is, or does the leftover --jars reference to nonexistent local Snowflake jars still cause a failure?
+Hi Tagore — following up on this (I'd asked in the team chat earlier today): I created the staging table yesterday as part of the ingest job setup, and the metadata ticket is now complete. I realized I still hadn't submitted the change ticket for it — could I submit it today? Let me know when you get a chance.
