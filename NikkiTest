@@ -9,3 +9,4 @@ ls -la /home/hadoop/jars/ | grep snowflake
 
 
 I created the staging table yesterday as part of getting the ingest job set up, and submitted the metadata ticket and all related tickets — the metadata ticket is now complete. I realized I still haven't submitted the change ticket for this. I know I'm late on it — could I submit it today?
+deply_DTVNTRTPM_MRA.txts
