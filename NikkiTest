@@ -5,5 +5,5 @@ ORDER BY EDL_LOAD_DTM DESC;
 
 aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/mcaid_chase_all_lob_s3_to_snflk_load.sh - | grep -- "--packages\|--jars"
 
-I created the staging table yesterday as part of getting the ingest job set up, and submitted the metadata ticket and all related tickets — the metadata ticket is now complete. I realized I still haven't submitted the change ticket for this. I know I'm late on it — could I submit it today?
-deply_DTVNTRTPM_MRA.txts
+[hadoop@ip-10-127-204-166 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/mcaid_chase_all_lob_s3_to_snflk_load.sh - | grep -- "--packages\|--jars"
+  --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar,/home/hadoop/jars/snowflake-jdbc-3.14.4.jar,/home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar \
