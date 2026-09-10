@@ -1,2 +1,1 @@
-SHOW VIEWS LIKE 'DEPLY_DTVNTRTPM_MRA_STG%' IN SCHEMA D01_RAA.RAA_RAWZ_STG;
-SHOW VIEWS LIKE 'DEPLY_DTVNTRTPM_MRA_STG%' IN SCHEMA T01_RAA.RAA_RAWZ_STG;
+Hi Akhil — quick one: Tagore mentioned there might be an option to run this as part of SDLC directly from prod, given the lead time on the normal change process. Given the client's 14th deadline, is that something we can do here? Let me know your thoughts when you get a chance.
