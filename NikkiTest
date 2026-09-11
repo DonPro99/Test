@@ -13,13 +13,58 @@ this is from the rad-lob one divya shared  for 2nd job but make sure we have tha
 {   "clusternm": "RAA",   "jobargs": [     {       "jobname": "RAA-DEPLOY-LOADER",       "job": [         "java",         "-cp",         "/home/hadoop/jars/intervention-loader-1.0-jar-with-dependencies.jar:/home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar",         "com.anthem.hca.chaselist.automation.DeployLoadDriver",         "OPTMRTT",         "MRA",         "/home/hadoop/config/application_${env}.properties",         "/home/hadoop/config/",         "db.properties",         "${edl_run_id}"       ]     }   ],   "createcluster": "YES",   "application": "RAA",   "configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/files/snowpark/config/STANDARD_S.json",   "maxconcurrency": 1,   "clusterid": "na",   "bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast1",   "bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh",   "emrenv": "${env}",   "logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/logs/",   "terminationwaittime": 10,   "terminateoption": "NO" }
 
 
-find /home/hadoop -iname "datavantmbrprov-etl_uat.properties" 2>/dev/null
-find / -iname "datavantmbrprov-etl_uat.properties" 2>/dev/null
-grep "processID.MRA" /home/hadoop/config/datavantmbrprov-etl_uat.properties
+#Hive DB configuration
+#PROD
+intervention.hive.database=U01_RAA.RAA_RAWZ
+intervention.hive.nogbddatabase=U01_RAA.RAA_RAWZ
 
-cd ~
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties .
+#Master Mbrs table.
+intervention.master.hive.table.mbrs=S01_RAA.RAA_RAWZ.rad_master_charts_all_lob
+# rad_master_member_all_lob is changed to rad_master_mbrs_all_lob
+intervention.master.hive.table.nogbdmbrs=rad_master_charts_all_lob
 
-nano datavantmbrprov-etl_uat.properties
+#Deploy table.
+intervention.master.hive.table.deploy=rad_deploy_all_lob
+intervention.master.hive.table.nogbddeploy=rad_deploy_all_lob
+
+#Deploy temp table.
+intervention.dtvntrt.mcare.deploy.temp.hive.table=raa_rawz_stg.deply_dtvntrt_mra_stg
+
+# Centauri files intervention code
+intervention.datavantmbrprov.code=DTVNTRT
+
+# Centauri files delimiter
+intervention.dtvntrt.delimiter=|
+
+#Intervention table.
+intervention.master.hive.table.datavantmbrprov=rad_cioxrt_all_lob
+intervention.master.hive.table.nogbddatavantmbrprov=rad_cioxrt_all_lob
+
+# Datavant Pre-Match (RBICA-14070)
+intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
+intervention.datavantprematch.code=DTVNTRTPM
+
+# Outbound location on s3
+Outbound_Location:@RAA_SF_SSMOUTBOUND_GBD_PHI
+
+# Email and Load Log key parameters
+riskadjustment.hive.table.loadlog=load_log_key
+source=DTVNTRT
+processname1=DatavantMbrProv Outbound File Generation
+processname2=DatavantMbrProv Outbound File Generation
+step1=Insert to Persistant Table
+step2=Insert and Outbound File Generation
+processID.MCR=255
+processID.MRA=10500
+stepID1=10
+stepID2=20
+status1=Completed
+status2=Failed
+emailFrom=dtvntrt.etl.aws@anthem.com
+emailTo=dl-RAAETLDevelopers@anthem.com
+emailToList=dl-RAAETLDevelopers@anthem.com
+
+#CPL table
+intervention.master.hive.table.datavantcpl=U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL
 
 aws s3 cp datavantmbrprov-etl_uat.properties s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
