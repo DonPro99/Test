@@ -4,3 +4,6 @@ git add snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/dat
 git diff --cached
 git commit -m "RBICA-14070: Temporarily hardcode processid=4500 for UAT testing"
 git push origin feature/RBICA-14070-datavant-prematch
+
+
+grep "processID.MRA" /home/hadoop/config/datavantmbrprov-etl_uat.properties
