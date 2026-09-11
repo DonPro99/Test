@@ -1,2 +1,3 @@
-aws s3 cp deply_dtvntrtpm_mra.txt \
-  s3://crln-070864595727-ssm-uat-filetransfer/inbound/raa/medicare/na/deply_dtvntrtpm_mra_stg/deply_dtvntrtpm_mra.txt
+[hadoop@ip-10-127-204-29 ~]$ aws s3 ls  s3://crln-070864595727-ssm-uat-filetransfer/
+
+An error occurred (AccessDenied) when calling the ListObjectsV2 operation: User: arn:aws:sts::652798729258:assumed-role/CRLN-RAA-uat-EC2EMR-Role/i-0f9062617dd7ece8e is not authorized to perform: s3:ListBucket on resource: "arn:aws:s3:::crln-070864595727-ssm-uat-filetransfer" because no resource-based policy allows the s3:ListBucket action
