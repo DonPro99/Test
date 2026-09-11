@@ -1,2 +1,5 @@
 vi /hcaaapck/backup/IT/SIT/scripts/validateArguments.py
 vi /hcaaapck/backup/IT/PROD/scripts/validateArguments.py
+
+
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/ --recursive
