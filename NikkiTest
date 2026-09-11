@@ -1,2 +1,1 @@
-grep -ri "dtvntrt" /home/hadoop/config/*.properties
-find /home/hadoop/config/ -iname "*.properties" 2>/dev/null | head -20
+s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260911_161957/incr/
