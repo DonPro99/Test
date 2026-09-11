@@ -1,4 +1,21 @@
-SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
-SLF4J: Defaulting to no-operation (NOP) logger implementation
-SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
-Command exiting with ret '0'
+2026-09-11 14:31:13.587	5f08dcb5-ae09-11f1-a702-1f3399624220	NA	NA	NA	NA	856826ab-af62-46ba-891d-183d60ff1877	0	DTVNTRTPM	DatavantPreMatch: @RAA_SF_SSMOUTBOUND_GBD_PHI/DTVNTRTPM_MRA	0	DatavantMbrProv Outbound File GenerationMRA	10500	Insert and Outbound File GenerationMRA	20	Failed	2026-09-11 18:31:06.099	2026-09-11 18:31:13.446
+
+column_name
+EDL_LOAD_DTM
+EDL_RUN_ID
+EDL_SCRTY_LVL_CD
+EDL_LOB_CD
+EDL_EXTRNL_LOAD_CD
+EDL_SOR_CD
+ID
+BATCHID
+SOURCE
+PATH
+RECCNT
+PROCESSNAME
+PROCESSID
+STEP
+STEPID
+STATUS
+CREATEDATETIME
+ENDDATETIME
