@@ -1,1 +1,2 @@
-find /hcaaapck/backup/IT/ -iname "copyDeploySASDatasetsToHDFS.sh" 2>/dev/null
+./start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
+
