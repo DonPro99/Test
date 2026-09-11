@@ -1,4 +1,3 @@
-cd ~
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala .
-# edit with vi/nano to add DTVNTRTPM
-aws s3 cp DeployLoadDriver.scala s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala
+ChartData_ANT_Virtix_Chase_IN_20260827.txt
+ChartData_ANT_Virtix_Chase_VA_20260827.txt
+ChartData_ANT_Virtix_Chase_WV_20260818.txt
