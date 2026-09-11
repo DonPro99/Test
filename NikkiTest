@@ -10,3 +10,5 @@ WHERE intervention = 'DTVNTRTPM'
 
 SELECT * 
 FROM DEPLY_DTVNTRTPM_MRA_STG;
+
+grep -i "riskadjustment.hive.table.loadlog" /home/hadoop/config/datavantmbrprov-etl_uat.properties
