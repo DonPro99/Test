@@ -1,1 +1,4 @@
-ChartData_ANT_TN_Q32026_08SEP26.txt 
+cd ~
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala .
+# edit with vi/nano to add DTVNTRTPM
+aws s3 cp DeployLoadDriver.scala s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala
