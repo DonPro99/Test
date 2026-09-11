@@ -4,7 +4,15 @@ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/intervention-
 aws s3 cp DeployLoadDriver.scala s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala
 
 
+Source file pattern	ChartData_ANT_*.txt (excluding ChartData_ANT_Virtix_Chase_*.txt, which belongs to Virtix)
+Source path (SAS)	/raa2/backup/prodenvironment/rev_opt/chasefiles/
+Properties file	rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+Properties section	schema_epi
+Target table	rad_episrcrt_chase_all_lob
+LOB	MCAID (not ACA)
+
+ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep "ChartData_ANT_"
+
 ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep "ChartData_ANT_" | grep -v "Virtix"
-Table name: rad_episrcrt_chase_all_lob
-This is an MCAID table (not ACA)
-Schema section in the properties file: schema_epi
+
+grep -A 10 "\[schema_epi\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
