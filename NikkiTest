@@ -1,2 +1,18 @@
-dtvntrtpm.mra.processname=DTVNTRTPM_MRA_DEPLOY_LOAD
-dtvntrtpm.mra.processid=<pick unique number>
+{
+  "clusternm": "RAA",
+  "jobargs": [{
+    "jobname": "RAA-DEPLOY-LOADER",
+    "job": ["java", "-cp", "/home/hadoop/jars/intervention-loader-1.0-jar-with-dependencies.jar", "com.anthem.hca.chaselist.automation.DeployLoadDriver", "dtvntrtpm", "mra", "/home/hadoop/config/application_${env}.properties", "/home/hadoop/config/", "db.properties", "${edl_run_id}"]
+  }],
+  "createcluster": "YES",
+  "application": "RAA",
+  "configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast2/files/snowpark/config/STANDARD_S.json",
+  "maxconcurrency": 1,
+  "clusterid": "na",
+  "bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast2",
+  "bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh",
+  "emrenv": "${env}",
+  "logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast2/logs/",
+  "terminationwaittime": 10,
+  "terminateoption": "NO"
+}
