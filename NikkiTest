@@ -25,7 +25,7 @@
       "--account": "652798729258",
       "--del_tbl_nm": "DEPLY_DTVNTRTPM_MRA_STG_ETL_del",
       "--prcsng_type": "etl",
-      "--edl_load_dtm": "2026-09-11 15:59:36",
+      "--edl_load_dtm": "2026-09-11 16:08:37",
       "--retry": "no",
       "--s3_cnsmptn_bkt": "crln-sf-uat-dataz-gbd-phi-useast1",
       "--lightson_handover_flag": "n",
@@ -35,22 +35,22 @@
       "--trgt_tbl_nm": "deply_dtvntrtpm_mra_stg_etl",
       "--region_name": "us-east-1",
       "--stg_tbl_nm": "DEPLY_DTVNTRTPM_MRA_STG_ETL_stg",
-      "--s3_bkt_key_cmbntn": "crln-070864595727-ssm-uat-filetransfer/inbound/raa/medicare/na/DEPLY_DTVNTRTPM_MRA_STG_ETL",
-      "--execution_name": "RAA-etl-deply_dtvntrtpm_mra_stg_etl-na-Rundt-20260911_155936",
+      "--s3_bkt_key_cmbntn": "crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/DEPLY_DTVNTRTPM_MRA_STG_ETL",
+      "--execution_name": "RAA-etl-deply_dtvntrtpm_mra_stg_etl-na-Rundt-20260911_160837",
       "--load_type": "full",
       "--unld_file_type": "gzip",
-      "--edl_run_id": "50d7661e-ae1b-11f1-b58b-ffb689c78968"
+      "--edl_run_id": "934b8cb1-ae1c-11f1-b5a1-5b537d58b391"
     },
     "Attempt": 0,
-    "CompletedOn": 1789156807552,
+    "CompletedOn": 1789157349939,
     "ErrorMessage": "Exception: There are errors in the steps ['1'] , SFN CRLN-raa-uat-Sfn-DTVNTRTPM_RAA-DEPLOY-LOADER Failed",
-    "ExecutionTime": 22,
+    "ExecutionTime": 23,
     "GlueVersion": "1.0",
-    "Id": "jr_b29c0f664582980715eb37e5007564c042ea605ce1d7dfc15aec2283ede5eb47",
+    "Id": "jr_fce790d0708f91e6feaa8e32a6d54efecf3a08a1b51a6d583432f5e2f0a76909",
     "JobMode": "SCRIPT",
     "JobName": "CRLN-EDL-uat-Gj-EtlOrchestrator",
     "JobRunState": "FAILED",
-    "LastModifiedOn": 1789156807552,
+    "LastModifiedOn": 1789157349939,
     "LogGroupName": "/aws-glue/python-jobs/CRLN-EDL-uat-glue-security-configuration-16-role/CRLN-EDL-uat-Glue-S3-Full-Access-Role",
     "MaxCapacity": 0.0625,
     "NotificationProperty": {
@@ -58,7 +58,7 @@
     },
     "PredecessorRuns": [],
     "SecurityConfiguration": "CRLN-EDL-uat-glue-security-configuration-16",
-    "StartedOn": 1789156778965,
+    "StartedOn": 1789157319942,
     "Timeout": 4320
   }
 }
