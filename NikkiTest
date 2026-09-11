@@ -1,11 +1,7 @@
-dtvntrtpm.mra.processname=DTVNTRTPM_MRA_DEPLOY_LOAD
-dtvntrtpm.mra.processid=4500
+Update on RBICA-14070 UAT:
 
+Job 1 (ingest → staging) — confirmed working, data loading successfully
+Job 2 (staging → RAD_DEPLOY_ALL_LOB) — just fixed a config issue (with Divya's help) and re-triggered; running now in EMR
+Job 3 (outbound → Pre-Match file) — ready to trigger once Job 2 confirms data landed
 
-cd ~
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/intervention-loader/conf/application_uat.properties .
-
-
-nano application_uat.properties
-
-aws s3 cp application_uat.properties s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/intervention-loader/conf/application_uat.properties
+Will have a full UAT update for you within 30-40 minutes, once Job 2 completes and I can confirm Job 3 produces the actual output file.
