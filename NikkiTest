@@ -1,1 +1,1 @@
-   https://console.aws.amazon.com/states/home?region=us-east-1#/executions/details/arn:aws:states:us-east-1:652798729258:execution:CRLN-EDL-uat-Sfn-ETLOrchestrator:RAA-780009122-4145-b301-11ac35b6522b
+   SELECT * FROM RAD_DEPLOY_ALL_LOB WHERE <intervention/source column> = 'DTVNTRTPM' ORDER BY <load date> DESC;
