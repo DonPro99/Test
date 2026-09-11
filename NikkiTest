@@ -1,64 +1,47 @@
-{
-  "resourceType": "glue",
-  "resource": "startJobRun.sync",
-  "error": "States.TaskFailed",
-  "cause": {
-    "AllocatedCapacity": 0,
-    "Arguments": {
-      "--trgt_schma": "raa_rawz_stg",
-      "--job_id": "780009122",
-      "--s3_cnsmptn_key": "medicare/na/DEPLY_DTVNTRTPM_MRA_STG_ETL",
-      "--del_file_cnt": "0",
-      "--warehouse_size_suffix": "_M",
-      "--del_key_list": "na",
-      "--post_load_mthd": "na",
-      "--stg_schma": "edl_stg",
-      "--blncg_flag_ind": "Y",
-      "--src_rcrd_cnt": "-1",
-      "--etl_sfn_parms": "{}",
-      "--unld_type": "na",
-      "--key_list": "{\"filter\":\"NA\",\"default\":[\"*\"],\"orderby\":[\"NA\"],\"partitionby\":[\"NA\"]}",
-      "--etl_stp_nbr_lst": "na",
-      "--oprtn_type": "etl",
-      "--src_load_prfx": "na",
-      "--env": "uat",
-      "--account": "652798729258",
-      "--del_tbl_nm": "DEPLY_DTVNTRTPM_MRA_STG_ETL_del",
-      "--prcsng_type": "etl",
-      "--edl_load_dtm": "2026-09-11 16:08:37",
-      "--retry": "no",
-      "--s3_cnsmptn_bkt": "crln-sf-uat-dataz-gbd-phi-useast1",
-      "--lightson_handover_flag": "n",
-      "--unld_partn_key": "na",
-      "--aplctn_cd": "RAA",
-      "--audt_clmns_ind": "Y",
-      "--trgt_tbl_nm": "deply_dtvntrtpm_mra_stg_etl",
-      "--region_name": "us-east-1",
-      "--stg_tbl_nm": "DEPLY_DTVNTRTPM_MRA_STG_ETL_stg",
-      "--s3_bkt_key_cmbntn": "crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/DEPLY_DTVNTRTPM_MRA_STG_ETL",
-      "--execution_name": "RAA-etl-deply_dtvntrtpm_mra_stg_etl-na-Rundt-20260911_160837",
-      "--load_type": "full",
-      "--unld_file_type": "gzip",
-      "--edl_run_id": "934b8cb1-ae1c-11f1-b5a1-5b537d58b391"
-    },
-    "Attempt": 0,
-    "CompletedOn": 1789157349939,
-    "ErrorMessage": "Exception: There are errors in the steps ['1'] , SFN CRLN-raa-uat-Sfn-DTVNTRTPM_RAA-DEPLOY-LOADER Failed",
-    "ExecutionTime": 23,
-    "GlueVersion": "1.0",
-    "Id": "jr_fce790d0708f91e6feaa8e32a6d54efecf3a08a1b51a6d583432f5e2f0a76909",
-    "JobMode": "SCRIPT",
-    "JobName": "CRLN-EDL-uat-Gj-EtlOrchestrator",
-    "JobRunState": "FAILED",
-    "LastModifiedOn": 1789157349939,
-    "LogGroupName": "/aws-glue/python-jobs/CRLN-EDL-uat-glue-security-configuration-16-role/CRLN-EDL-uat-Glue-S3-Full-Access-Role",
-    "MaxCapacity": 0.0625,
-    "NotificationProperty": {
-      "NotifyDelayAfter": 1
-    },
-    "PredecessorRuns": [],
-    "SecurityConfiguration": "CRLN-EDL-uat-glue-security-configuration-16",
-    "StartedOn": 1789157319942,
-    "Timeout": 4320
+package com.anthem.hca.chaselist.automation
+import com.anthem.utils.ConfigurationConstants
+
+/**
+ *
+ * @author Dikshith Shetty
+ * @version 1.0
+ * RRR Test
+ * Driver program to load deploy datasets based on the intervention and the line of business provided.
+ */
+
+object DeployLoadDriver {
+
+  def main (args : Array[String]) {
+
+    if( args.length != 6 ) {
+      System.err.println("Incorrect arguments. Please provide the intervention, line of business and properties file.")
+      System.exit(1)
+    }
+
+    val intervention = args(0)
+    val lob = args(1)
+    val propertiesFileName = ConfigurationConstants.sanitizeFileName(args(2).split("/").reverse(0))
+    val propFilePath = ConfigurationConstants.CONFIG_FOLDER + "/" + propertiesFileName
+    val configFolder = ConfigurationConstants.CONFIG_FOLDER
+    val configFile = ConfigurationConstants.sanitizeFileName(args(4).split("/").reverse(0))
+    val runId: String = args(5)
+    //Valid interventions
+    val interventionSet = Set("ALLSRCRT","INVRTSP","INVPRSP","INVPRSP_MMDM","AVAILPRSP","PCMS","CARPRSP","CTVIRT","INVRTSP_OOA",
+      "EPISRCRT","CRA_HIGHPROB","GBDMCAID_TN","DIRCONRT","INTMEDRT","ALTEGRT","PLAYBOOKPRSP","CHCSMAS","MDXMPRSP","CIOXRT","COBCPRSP",
+      "BCBSMNRT","MTRXPRSP","OPTUMRT","AHGPRSP","EMLCMPN", "SHRCRRT", "MROCPRT","OPTUMPRSP", "CRAPCVDR","CRASYDR","SURSCRPRSP","CENTRT","DTVNTMBRRT","DTVNTRTPM","DTVNTRT","VRTXRT","VRTXRT_OOA","OPTMRT","OPTMRTT","VRSMART","CENTPRVRT")
+
+    if (!interventionSet.contains(intervention.toUpperCase())) {
+      System.err.println("Please provide a valid intervention.")
+      System.exit(1)
+    }
+
+    val linesOfBusinessSet = Set("ACA", "RADV_ACA", "MCAID", "MCARE", "ALLLOB", "MRA", "MCR")
+    if (!linesOfBusinessSet.contains(lob.toUpperCase)) {
+      System.err.println(s"Please provide a valid line of business. Either ${interventionSet.mkString(", ")}")
+      System.exit(1)
+    }
+
+    new DeployLoader(propFilePath, configFolder, configFile, runId)
+      .loadDeployData(intervention.toUpperCase, lob.toUpperCase())
   }
 }
