@@ -1,30 +1,47 @@
-package com.anthem.hca.intervention.datavantmbr
+package com.anthem.hca.chaselist.automation
 import com.anthem.utils.ConfigurationConstants
 
-object DatavantMbrETLDriver {
+/**
+ *
+ * @author Dikshith Shetty
+ * @version 1.0
+ * RRR Test
+ * Driver program to load deploy datasets based on the intervention and the line of business provided.
+ */
 
-  def main( args : Array[String] ) {
+object DeployLoadDriver {
 
-    if( args.length != 5 ) {
-      System.err.println("Please provide the line of Business and properties file ")
+  def main (args : Array[String]) {
+
+    if( args.length != 6 ) {
+      System.err.println("Incorrect arguments. Please provide the intervention, line of business and properties file.")
       System.exit(1)
     }
 
-    val lob: String = args(0)
-    val propertiesFileName = ConfigurationConstants.sanitizeFileName(args(1).split("/").reverse(0))
+    val intervention = args(0)
+    val lob = args(1)
+    val propertiesFileName = ConfigurationConstants.sanitizeFileName(args(2).split("/").reverse(0))
     val propFilePath = ConfigurationConstants.CONFIG_FOLDER + "/" + propertiesFileName
     val configFolder = ConfigurationConstants.CONFIG_FOLDER
-    val configFile = ConfigurationConstants.sanitizeFileName(args(3).split("/").reverse(0))
-    val runId: String = args(4)
-    if(!lob.equals("MRA") ) {
-      System.err.println("Please provide valid line of business as MRA")
+    val configFile = ConfigurationConstants.sanitizeFileName(args(4).split("/").reverse(0))
+    val runId: String = args(5)
+    //Valid interventions
+    val interventionSet = Set("ALLSRCRT","INVRTSP","INVPRSP","INVPRSP_MMDM","AVAILPRSP","PCMS","CARPRSP","CTVIRT","INVRTSP_OOA",
+      "EPISRCRT","CRA_HIGHPROB","GBDMCAID_TN","DIRCONRT","INTMEDRT","ALTEGRT","PLAYBOOKPRSP","CHCSMAS","MDXMPRSP","CIOXRT","COBCPRSP",
+      "BCBSMNRT","MTRXPRSP","OPTUMRT","AHGPRSP","EMLCMPN", "SHRCRRT", "MROCPRT","OPTUMPRSP", "CRAPCVDR","CRASYDR","SURSCRPRSP","CENTRT","DTVNTMBRRT","DTVNTRT","VRTXRT","VRTXRT_OOA","OPTMRT","OPTMRTT","VRSMART","CENTPRVRT")
+
+    if (!interventionSet.contains(intervention.toUpperCase())) {
+      System.err.println("Please provide a valid intervention.")
       System.exit(1)
     }
 
-    if( lob.nonEmpty ) {
-      val datavantMbrFileETL = new DatavantMbrFileETL(propFilePath, configFolder, configFile, runId)
-      datavantMbrFileETL.generateDatavantMbrOutboundFile(lob)
+    val linesOfBusinessSet = Set("ACA", "RADV_ACA", "MCAID", "MCARE", "ALLLOB", "MRA", "MCR")
+    if (!linesOfBusinessSet.contains(lob.toUpperCase)) {
+      System.err.println(s"Please provide a valid line of business. Either ${interventionSet.mkString(", ")}")
+      System.exit(1)
     }
 
+    new DeployLoader(propFilePath, configFolder, configFile, runId)
+      .loadDeployData(intervention.toUpperCase, lob.toUpperCase())
   }
 }
