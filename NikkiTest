@@ -1,2 +1,11 @@
 dtvntrtpm.mra.processname=DTVNTRTPM_MRA_DEPLOY_LOAD
 dtvntrtpm.mra.processid=4500
+
+
+cd ~
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/intervention-loader/conf/application_uat.properties .
+
+
+nano application_uat.properties
+
+aws s3 cp application_uat.properties s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/intervention-loader/conf/application_uat.properties
