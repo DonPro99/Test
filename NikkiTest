@@ -1,14 +1,189 @@
-SELECT batchid, status, reccnt 
-FROM <loadlog_table> 
-WHERE processid = 10500 AND stepid = 10
-ORDER BY batchid DESC;
+INFO:root:AWS Environment:uat
+INFO:root:Execution for line of business : medicare
+INFO:root:Executing for vendor:DATAVANT
+INFO:root:Getting configuration for uat environment for vendor named DATAVANT
+INFO:botocore.credentials:Found credentials from IAM Role: CRLN-RAA-uat-EC2EMR-Role
+INFO:root:s3_bucket, s3_zip_src,zip_regex crln-raa-uat-sf-dataz-gbd-phi-useast1 inbound/raa/chartsprocess/mcare/ Datavant.*\.zip
+INFO:root:zip_to_process_list: []
+INFO:root:Total number of zip files to be processed: 0
+INFO:root:No zip match provided pattern
+INFO:root:AWS Environment:uat
+INFO:root:Execution for line of business : medicare
+INFO:root:Executing for vendor:SHARECARE
+INFO:root:Getting configuration for uat environment for vendor named SHARECARE
+INFO:root:s3_bucket, s3_zip_src,zip_regex crln-raa-uat-sf-dataz-gbd-phi-useast1 inbound/raa/chartsprocess/mcare/ Sharecare_Medicare.*\.zip
+INFO:root:zip_to_process_list: []
+INFO:root:Total number of zip files to be processed: 0
+INFO:root:No zip match provided pattern
+INFO:root:AWS Environment:uat
+INFO:root:Execution for line of business : medicare
+INFO:root:Executing for vendor:CENTAURI
+INFO:root:Getting configuration for uat environment for vendor named CENTAURI
+INFO:root:s3_bucket, s3_zip_src,zip_regex crln-raa-uat-sf-dataz-gbd-phi-useast1 inbound/raa/chartsprocess/mcare/ Centauri_Medicare.*\.zip
+INFO:root:zip_to_process_list: ['inbound/raa/chartsprocess/mcare/Centauri_Medicare_AGP_20260101051829.zip', 'inbound/raa/chartsprocess/mcare/Centauri_Medicare_AGP_20260101052006.zip']
+INFO:root:Total number of zip files to be processed: 2
+INFO:root:Processing batch from file 1 to file 2
+INFO:cra_transact_notification:[RRR] Creating Snowpark session for env=uat, app=RAA
+INFO:botocore.credentials:Found credentials from IAM Role: CRLN-RAA-uat-EC2EMR-Role
+INFO:cra_transact_notification:Warehouse ='U01_LOAD_02_WH_XL', User ='SRCRAADU' and Database ='U01_RAA' will be used for current session.
+INFO:snowflake.connector.connection:Snowflake Connector for Python Version: 4.7.3, Python Version: 3.11.15, Platform: Linux-6.12.94-123.190.amzn2023.aarch64-aarch64-with-glibc2.34
+INFO:snowflake.connector.connection:Connecting to GLOBAL Snowflake domain
+INFO:snowflake.snowpark.session:Snowpark Session information: 
+"version" : 1.55.0,
+"python.version" : 3.11.15,
+"python.connector.version" : 4.7.3,
+"python.connector.session.id" : 15658176886424690,
+"os.name" : Linux
 
-SELECT * 
-FROM RAD_DEPLOY_ALL_LOB 
-WHERE intervention = 'DTVNTRTPM' 
-  AND lob = 'MRA';
-
-SELECT * 
-FROM DEPLY_DTVNTRTPM_MRA_STG;
-
-grep -i "riskadjustment.hive.table.loadlog" /home/hadoop/config/datavantmbrprov-etl_uat.properties
+INFO:cra_transact_notification:Snowpark session established for Application ='raa', UserType ='lduser' and Warehouse_Size_Suffix ='_xl': {'session': <snowflake.snowpark.session.Session object at 0xffff96533690>, 'database': 'U01_RAA', 'warehouse': 'U01_LOAD_02_WH_XL', 'lduser': 'SRCRAADU'}
+INFO:cra_transact_notification:[RRR] Snowpark session created successfully for program='Transact_load'
+INFO:root:Batch id 2292
+INFO:root:Executing zip validation and transact file extraction for CENTAURI with regex pattern: Centauri_Medicare.*\.zip
+2026-09-11 16:24:49.785277 - Execution
+Uploaded Centauri_Medicare_AGP_20260101051829.txt to crln-652798729258-ssm-uat-filetransfer/inbound/raa/mcaretransactload/Centauri_Medicare_AGP_20260101051829_TRANSACT.txt
+Total processing time for inbound/raa/chartsprocess/mcare/Centauri_Medicare_AGP_20260101051829.zip:-1 day, 23:59:53.038648
+2026-09-11 16:24:56.886825 - Execution
+Uploaded Centauri_Medicare_AGP_20260101052006.txt to crln-652798729258-ssm-uat-filetransfer/inbound/raa/mcaretransactload/Centauri_Medicare_AGP_20260101052006_TRANSACT.txt
+Total processing time for inbound/raa/chartsprocess/mcare/Centauri_Medicare_AGP_20260101052006.zip:-1 day, 23:59:51.563945
+INFO:root:Executing Transaction file load for CENTAURI with transact file pattern: Centauri_Medicare.*\.txt
+INFO:root:s3_bucket_txn,s3_txn,txn_file_pattern crln-652798729258-ssm-uat-filetransfer inbound/raa/mcaretransactload/ Centauri_Medicare.*\.txt
+INFO:root:transact_list (count=2): ['inbound/raa/mcaretransactload/Centauri_Medicare_AGP_20260101051829_TRANSACT.txt', 'inbound/raa/mcaretransactload/Centauri_Medicare_AGP_20260101052006_TRANSACT.txt']
+INFO:root:transact_reject_key: {}
+INFO:root:transact_reject_key: {}
+INFO:root:Checking for PDF mismatches between manifest and actual ZIP contents
+INFO:root:Error calculating manifest mismatches: (1304): 01c700b9-0a17-f1a6-37a1-0703fe5e0697: 000904 (42000): 01c700b9-0a17-f1a6-37a1-0703fe5e0697: SQL compilation error: error line 12 at position 26
+invalid identifier 'M.IMAGEFILENAMES'
+INFO:root:valid_zip: ['inbound/raa/chartsprocess/mcare/Centauri_Medicare_AGP_20260101051829.zip', 'inbound/raa/chartsprocess/mcare/Centauri_Medicare_AGP_20260101052006.zip']
+INFO:root:Moving valid zip's to chart view
+Completed 8.0 MiB/269.4 MiB (15.2 MiB/s) with 1 file(s) remaining
+Completed 16.0 MiB/269.4 MiB (29.8 MiB/s) with 1 file(s) remaining
+Completed 24.0 MiB/269.4 MiB (41.4 MiB/s) with 1 file(s) remaining
+Completed 32.0 MiB/269.4 MiB (53.6 MiB/s) with 1 file(s) remaining
+Completed 40.0 MiB/269.4 MiB (66.8 MiB/s) with 1 file(s) remaining
+Completed 48.0 MiB/269.4 MiB (79.2 MiB/s) with 1 file(s) remaining
+Completed 56.0 MiB/269.4 MiB (88.0 MiB/s) with 1 file(s) remaining
+Completed 64.0 MiB/269.4 MiB (97.1 MiB/s) with 1 file(s) remaining
+Completed 72.0 MiB/269.4 MiB (103.6 MiB/s) with 1 file(s) remaining
+Completed 80.0 MiB/269.4 MiB (97.3 MiB/s) with 1 file(s) remaining 
+Completed 88.0 MiB/269.4 MiB (105.6 MiB/s) with 1 file(s) remaining
+Completed 96.0 MiB/269.4 MiB (114.7 MiB/s) with 1 file(s) remaining
+Completed 104.0 MiB/269.4 MiB (121.8 MiB/s) with 1 file(s) remaining
+Completed 112.0 MiB/269.4 MiB (122.0 MiB/s) with 1 file(s) remaining
+Completed 120.0 MiB/269.4 MiB (127.9 MiB/s) with 1 file(s) remaining
+Completed 128.0 MiB/269.4 MiB (134.5 MiB/s) with 1 file(s) remaining
+Completed 136.0 MiB/269.4 MiB (139.8 MiB/s) with 1 file(s) remaining
+Completed 144.0 MiB/269.4 MiB (147.4 MiB/s) with 1 file(s) remaining
+Completed 152.0 MiB/269.4 MiB (155.2 MiB/s) with 1 file(s) remaining
+Completed 160.0 MiB/269.4 MiB (142.0 MiB/s) with 1 file(s) remaining
+Completed 168.0 MiB/269.4 MiB (148.7 MiB/s) with 1 file(s) remaining
+Completed 176.0 MiB/269.4 MiB (151.2 MiB/s) with 1 file(s) remaining
+Completed 184.0 MiB/269.4 MiB (152.3 MiB/s) with 1 file(s) remaining
+Completed 192.0 MiB/269.4 MiB (155.8 MiB/s) with 1 file(s) remaining
+Completed 200.0 MiB/269.4 MiB (158.4 MiB/s) with 1 file(s) remaining
+Completed 208.0 MiB/269.4 MiB (154.0 MiB/s) with 1 file(s) remaining
+Completed 216.0 MiB/269.4 MiB (157.1 MiB/s) with 1 file(s) remaining
+Completed 224.0 MiB/269.4 MiB (160.9 MiB/s) with 1 file(s) remaining
+Completed 232.0 MiB/269.4 MiB (166.5 MiB/s) with 1 file(s) remaining
+Completed 240.0 MiB/269.4 MiB (167.0 MiB/s) with 1 file(s) remaining
+Completed 248.0 MiB/269.4 MiB (168.3 MiB/s) with 1 file(s) remaining
+Completed 256.0 MiB/269.4 MiB (160.0 MiB/s) with 1 file(s) remaining
+Completed 261.4 MiB/269.4 MiB (158.5 MiB/s) with 1 file(s) remaining
+Completed 269.4 MiB/269.4 MiB (86.5 MiB/s) with 1 file(s) remaining 
+move: s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcare/Centauri_Medicare_AGP_20260101051829.zip to s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartview/zip/centauri/Centauri_Medicare_AGP_20260101051829.zip
+INFO:root:Moving valid zip's to chart view
+Completed 8.0 MiB/309.2 MiB (17.3 MiB/s) with 1 file(s) remaining
+Completed 16.0 MiB/309.2 MiB (30.7 MiB/s) with 1 file(s) remaining
+Completed 24.0 MiB/309.2 MiB (41.7 MiB/s) with 1 file(s) remaining
+Completed 32.0 MiB/309.2 MiB (53.4 MiB/s) with 1 file(s) remaining
+Completed 40.0 MiB/309.2 MiB (64.9 MiB/s) with 1 file(s) remaining
+Completed 48.0 MiB/309.2 MiB (76.0 MiB/s) with 1 file(s) remaining
+Completed 56.0 MiB/309.2 MiB (88.3 MiB/s) with 1 file(s) remaining
+Completed 64.0 MiB/309.2 MiB (97.9 MiB/s) with 1 file(s) remaining
+Completed 72.0 MiB/309.2 MiB (106.5 MiB/s) with 1 file(s) remaining
+Completed 80.0 MiB/309.2 MiB (112.5 MiB/s) with 1 file(s) remaining
+Completed 88.0 MiB/309.2 MiB (112.2 MiB/s) with 1 file(s) remaining
+Completed 96.0 MiB/309.2 MiB (119.2 MiB/s) with 1 file(s) remaining
+Completed 104.0 MiB/309.2 MiB (123.3 MiB/s) with 1 file(s) remaining
+Completed 112.0 MiB/309.2 MiB (124.4 MiB/s) with 1 file(s) remaining
+Completed 120.0 MiB/309.2 MiB (132.9 MiB/s) with 1 file(s) remaining
+Completed 128.0 MiB/309.2 MiB (139.0 MiB/s) with 1 file(s) remaining
+Completed 136.0 MiB/309.2 MiB (141.6 MiB/s) with 1 file(s) remaining
+Completed 144.0 MiB/309.2 MiB (149.6 MiB/s) with 1 file(s) remaining
+Completed 152.0 MiB/309.2 MiB (142.0 MiB/s) with 1 file(s) remaining
+Completed 160.0 MiB/309.2 MiB (148.1 MiB/s) with 1 file(s) remaining
+Completed 168.0 MiB/309.2 MiB (155.0 MiB/s) with 1 file(s) remaining
+Completed 176.0 MiB/309.2 MiB (161.7 MiB/s) with 1 file(s) remaining
+Completed 184.0 MiB/309.2 MiB (162.7 MiB/s) with 1 file(s) remaining
+Completed 192.0 MiB/309.2 MiB (169.1 MiB/s) with 1 file(s) remaining
+Completed 200.0 MiB/309.2 MiB (169.0 MiB/s) with 1 file(s) remaining
+Completed 208.0 MiB/309.2 MiB (172.2 MiB/s) with 1 file(s) remaining
+Completed 216.0 MiB/309.2 MiB (178.4 MiB/s) with 1 file(s) remaining
+Completed 224.0 MiB/309.2 MiB (173.2 MiB/s) with 1 file(s) remaining
+Completed 232.0 MiB/309.2 MiB (170.5 MiB/s) with 1 file(s) remaining
+Completed 240.0 MiB/309.2 MiB (174.8 MiB/s) with 1 file(s) remaining
+Completed 248.0 MiB/309.2 MiB (179.8 MiB/s) with 1 file(s) remaining
+Completed 256.0 MiB/309.2 MiB (182.0 MiB/s) with 1 file(s) remaining
+Completed 264.0 MiB/309.2 MiB (181.4 MiB/s) with 1 file(s) remaining
+Completed 272.0 MiB/309.2 MiB (184.5 MiB/s) with 1 file(s) remaining
+Completed 280.0 MiB/309.2 MiB (179.4 MiB/s) with 1 file(s) remaining
+Completed 288.0 MiB/309.2 MiB (184.0 MiB/s) with 1 file(s) remaining
+Completed 296.0 MiB/309.2 MiB (186.7 MiB/s) with 1 file(s) remaining
+Completed 301.2 MiB/309.2 MiB (189.0 MiB/s) with 1 file(s) remaining
+Completed 309.2 MiB/309.2 MiB (190.4 MiB/s) with 1 file(s) remaining
+move: s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcare/Centauri_Medicare_AGP_20260101052006.zip to s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartview/zip/centauri/Centauri_Medicare_AGP_20260101052006.zip
+INFO:root:reject_zip: []
+INFO:root:updating CHART_PDFNM_BYZIP with zip information
+INFO:root:No rejected zips
+INFO:root:Transact process completed for CENTAURI
+final_transaction_list_len: 2
+Email sent successfully!
+INFO:root:Cleaning up Transact text files
+all clean
+INFO:root:Batch processing complete. Starting next batch.
+INFO:root:AWS Environment:uat
+INFO:root:Execution for line of business : medicare
+INFO:root:Executing for vendor:VIRTIXHEALTH
+INFO:root:Getting configuration for uat environment for vendor named VIRTIXHEALTH
+INFO:root:s3_bucket, s3_zip_src,zip_regex crln-raa-uat-sf-dataz-gbd-phi-useast1 inbound/raa/chartsprocess/mcare/ VirtixHealth_Medicare.*\.zip
+INFO:root:zip_to_process_list: []
+INFO:root:Total number of zip files to be processed: 0
+INFO:root:No zip match provided pattern
+INFO:root:AWS Environment:uat
+INFO:root:Execution for line of business : medicare
+INFO:root:Executing for vendor:OPTUM
+INFO:root:Getting configuration for uat environment for vendor named OPTUM
+INFO:root:s3_bucket, s3_zip_src,zip_regex crln-raa-uat-sf-dataz-gbd-phi-useast1 inbound/raa/chartsprocess/mcare/ OPTUM_AGP.*\.zip
+INFO:root:zip_to_process_list: []
+INFO:root:Total number of zip files to be processed: 0
+INFO:root:No zip match provided pattern
+INFO:root:AWS Environment:uat
+INFO:root:Execution for line of business : medicare
+INFO:root:Executing for vendor:EPISOURCE
+INFO:root:Getting configuration for uat environment for vendor named EPISOURCE
+INFO:root:s3_bucket, s3_zip_src,zip_regex crln-raa-uat-sf-dataz-gbd-phi-useast1 inbound/raa/chartsprocess/mcare/ Episource_AGP.*\.zip
+INFO:root:zip_to_process_list: []
+INFO:root:Total number of zip files to be processed: 0
+INFO:root:No zip match provided pattern
+INFO:root:AWS Environment:uat
+INFO:root:Execution for line of business : medicare
+INFO:root:Executing for vendor:COTIVITI
+INFO:root:Getting configuration for uat environment for vendor named COTIVITI
+INFO:root:s3_bucket, s3_zip_src,zip_regex crln-raa-uat-sf-dataz-gbd-phi-useast1 inbound/raa/chartsprocess/mcare/ COTIVITI_Medicare.*\.zip
+INFO:root:zip_to_process_list: []
+INFO:root:Total number of zip files to be processed: 0
+INFO:root:No zip match provided pattern
+INFO:root:AWS Environment:uat
+INFO:root:Execution for line of business : medicare
+INFO:root:Executing for vendor:MRO
+INFO:root:Getting configuration for uat environment for vendor named MRO
+INFO:root:s3_bucket, s3_zip_src,zip_regex crln-raa-uat-sf-dataz-gbd-phi-useast1 inbound/raa/chartsprocess/mcare/ MRO_Medicare.*\.zip
+INFO:root:zip_to_process_list: []
+INFO:root:Total number of zip files to be processed: 0
+INFO:root:No zip match provided pattern
+INFO:root:<<<<< move_not_needed_files operation has ben started ...!>>>>>>>>>>>>>>
+INFO:root:AWS Current Environment:uat
+INFO:root:<< Total number of zip_to_move in the Source location: s3://crln-raa-uat-sf-dataz-nogbd-phi-useast1/inbound/raa/chartsprocess/aca/test/ for .*COTIVITI_AGP_HEDIS_.*\.zip are : 0 >>>
+INFO:root:<<< There are no zip files exists w.r.t the pattern: .*COTIVITI_AGP_HEDIS_.*\.zip to move to destination: s3://crln-raa-uat-sf-dataz-nogbd-phi-useast1/inbound/raa/chartextraction/aca/cotiviti_hedis >>>>
+INFO:snowflake.snowpark.session:Closing session: 15658176886424690
+INFO:snowflake.snowpark.session:Canceling all running queries
+INFO:snowflake.snowpark.session:Closed session: 15658176886424690
