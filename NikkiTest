@@ -1,1 +1,2 @@
 grep -ri "dtvntrt" /home/hadoop/config/*.properties
+find /home/hadoop/config/ -iname "*.properties" 2>/dev/null | head -20
