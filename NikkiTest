@@ -1,18 +1,30 @@
-{
-  "clusternm": "RAA",
-  "jobargs": [{
-    "jobname": "RAA-DEPLOY-LOADER",
-    "job": ["java", "-cp", "/home/hadoop/jars/intervention-loader-1.0-jar-with-dependencies.jar", "com.anthem.hca.chaselist.automation.DeployLoadDriver", "dtvntrtpm", "mra", "/home/hadoop/config/application_${env}.properties", "/home/hadoop/config/", "db.properties", "${edl_run_id}"]
-  }],
-  "createcluster": "YES",
-  "application": "RAA",
-  "configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast2/files/snowpark/config/STANDARD_S.json",
-  "maxconcurrency": 1,
-  "clusterid": "na",
-  "bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast2",
-  "bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh",
-  "emrenv": "${env}",
-  "logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast2/logs/",
-  "terminationwaittime": 10,
-  "terminateoption": "NO"
+package com.anthem.hca.intervention.datavantmbr
+import com.anthem.utils.ConfigurationConstants
+
+object DatavantMbrETLDriver {
+
+  def main( args : Array[String] ) {
+
+    if( args.length != 5 ) {
+      System.err.println("Please provide the line of Business and properties file ")
+      System.exit(1)
+    }
+
+    val lob: String = args(0)
+    val propertiesFileName = ConfigurationConstants.sanitizeFileName(args(1).split("/").reverse(0))
+    val propFilePath = ConfigurationConstants.CONFIG_FOLDER + "/" + propertiesFileName
+    val configFolder = ConfigurationConstants.CONFIG_FOLDER
+    val configFile = ConfigurationConstants.sanitizeFileName(args(3).split("/").reverse(0))
+    val runId: String = args(4)
+    if(!lob.equals("MRA") ) {
+      System.err.println("Please provide valid line of business as MRA")
+      System.exit(1)
+    }
+
+    if( lob.nonEmpty ) {
+      val datavantMbrFileETL = new DatavantMbrFileETL(propFilePath, configFolder, configFile, runId)
+      datavantMbrFileETL.generateDatavantMbrOutboundFile(lob)
+    }
+
+  }
 }
