@@ -1,2 +1,2 @@
-./start_sas_deploy_copy_hdfs_MN.sh DTVNTRTPM MRA
-
+vi /hcaaapck/backup/IT/SIT/scripts/validateArguments.py
+vi /hcaaapck/backup/IT/PROD/scripts/validateArguments.py
