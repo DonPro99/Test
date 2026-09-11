@@ -11,3 +11,13 @@ this is 780009056
 this is from the rad-lob one divya shared  for 2nd job but make sure we have that reduce_reuse_recycle jar that caused my prev errors
 
 {   "clusternm": "RAA",   "jobargs": [     {       "jobname": "RAA-DEPLOY-LOADER",       "job": [         "java",         "-cp",         "/home/hadoop/jars/intervention-loader-1.0-jar-with-dependencies.jar:/home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar",         "com.anthem.hca.chaselist.automation.DeployLoadDriver",         "OPTMRTT",         "MRA",         "/home/hadoop/config/application_${env}.properties",         "/home/hadoop/config/",         "db.properties",         "${edl_run_id}"       ]     }   ],   "createcluster": "YES",   "application": "RAA",   "configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/files/snowpark/config/STANDARD_S.json",   "maxconcurrency": 1,   "clusterid": "na",   "bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast1",   "bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh",   "emrenv": "${env}",   "logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/logs/",   "terminationwaittime": 10,   "terminateoption": "NO" }
+
+
+grep "processID.MRA" /home/hadoop/config/datavantmbrprov-etl_uat.properties
+
+cd ~
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties .
+
+nano datavantmbrprov-etl_uat.properties
+
+aws s3 cp datavantmbrprov-etl_uat.properties s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
