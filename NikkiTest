@@ -1,7 +1,2 @@
-s3 key combination: crln-313460006431-ssm-dev-filetransfer/inbound/raa/medicare/na/deply_dtvntrtpm_mra_stg
-
-inbound bucket : crln-313460006431-ssm-dev-filetransfer
-s3 inbounf key: inbound/raa/medicare/na/deply_dtvntrtpm_mra_stg
-s3 arch bucket :crln-raa-dev-archz-gbd-phi-useast2
-
-
+aws s3 cp deply_dtvntrtpm_mra.txt \
+  s3://crln-070864595727-ssm-uat-filetransfer/inbound/raa/medicare/na/deply_dtvntrtpm_mra_stg/deply_dtvntrtpm_mra.txt
