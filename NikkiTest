@@ -1,5 +1,10 @@
-SELECT COUNT(*) FROM S01_RAA.RAA_RAWZ.rad_master_charts_all_lob
-WHERE trim(recordid) = trim('898685815')
-  AND trim(filedatetime) = trim('20260810141917')
-  AND trim(chartid) = trim('306846396200_1')
-  AND trim(chartdatetime) = trim('20260810200524');
+SELECT recordid, filedatetime, chartid, chartdatetime, lob
+FROM S01_RAA.RAA_RAWZ.rad_master_charts_all_lob
+WHERE lob = 'MRA'
+LIMIT 5;
+
+SELECT recordid, filedatetime, chartid, chartdatetime, lob
+FROM S01_RAA.RAA_RAWZ.rad_master_charts_all_lob
+WHERE lob = 'MRA'
+  AND intervention = 'DTVNTRT'
+LIMIT 5;
