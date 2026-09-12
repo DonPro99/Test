@@ -6,4 +6,8 @@ git commit -m "RBICA-14070: Temporarily hardcode processid=4500 for UAT testing"
 git push origin feature/RBICA-14070-datavant-prematch
 
 
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/ --recursive | grep -i "datavantmbr-etl"
+vi /home/hadoop/config/datavantmbrprov-etl_uat.properties
+
+processID.MRA=4500
+
+grep "processID.MRA" /home/hadoop/config/datavantmbrprov-etl_uat.properties
