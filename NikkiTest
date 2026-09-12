@@ -1,1 +1,3 @@
-grep -A20 "generateDatavantPreMatchOutboundFile" snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala | grep -i "join\|recordid\|chartid"
+grep -n "generateDatavantPreMatchOutboundFile" snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala
+
+sed -n '540,620p' snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala
