@@ -2,3 +2,14 @@ val joinLob = if (lob.equalsIgnoreCase("MRA")) "MCR" else lob
 
 
   and trim(b.lob)          = '$joinLob'
+
+
+grep -n "and trim(b.lob)          = '\$lob'" snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala
+
+git add snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala
+git diff --cached
+git commit -m "RBICA-14070: Map MRA to MCR for RAD_DEPLOY_ALL_LOB join comparison in Pre-Match outbound"
+git push origin feature/RBICA-14070-datavant-prematch
+
+
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/ --recursive | grep -i "datavantmbr-etl"
