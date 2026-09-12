@@ -1,1 +1,4 @@
-following up on what you flagged earlier. I've traced it to some files that got prematurely merged into master. I'm reverting that and submitting a clean fix. Will update you once it's done, likely Monday.
+val joinLob = if (lob.equalsIgnoreCase("MRA")) "MCR" else lob
+
+
+  and trim(b.lob)          = '$joinLob'
