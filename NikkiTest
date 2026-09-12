@@ -9,3 +9,11 @@ EOF
 
 aws s3 cp deply_dtvntrtpm_mra.txt \
   s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/$(date +%Y%m%d_%H%M%S)/incr/deply_dtvntrtpm_mra.txt
+
+[hadoop@ip-10-127-204-56 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/ --recursive
+2026-09-11 16:19:58       3666 srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260911_161957/incr/deply_dtvntrtpm_mra.txt
+2026-09-11 16:29:27       4398 srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260911_162926/incr/deply_dtvntrtpm_mra.txt
+2026-09-11 18:11:54       4398 srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260911_181153/incr/deply_dtvntrtpm_mra.txt
+2026-09-12 02:42:11       1827 srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260912_024210/incr/deply_dtvntrtpm_mra.txt
+2026-09-12 02:39:51       1827 srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/deply_dtvntrtpm_mra.txt
+[hadoop@ip-10-127-204-56 ~]$ rm aws s3 cp deply_dtvntrtpm_mra.txt \
