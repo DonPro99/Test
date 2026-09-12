@@ -7,9 +7,4 @@ cat > deply_dtvntrtpm_mra_stg.txt << 'EOF'
 EOF
 
 
-						
-QUERY_ID	QUERY_TEXT	ERROR_MESSAGE	START_TIME
-01c70781-0a17-f068-37a1-070403044913	TRUNCATE TABLE raa_rawz_stg.deply_dtvntrtpm_mra_stg_stg	SQL compilation error:
-Table 'U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRTPM_MRA_STG_STG' does not exist or not authorized.	2026-09-12 17:21:33.422 -0400
-01c7077f-0a17-f4ac-37a1-0704030349ab	TRUNCATE TABLE raa_rawz_stg.deply_dtvntrtpm_mra_stg_stg	SQL compilation error:
-Table 'U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRTPM_MRA_STG_STG' does not exist or not authorized.	2026-09-12 17:19:46.848 -0400
+SHOW TABLES LIKE '%_STG_STG' IN SCHEMA U01_RAA.RAA_RAWZ_STG;
