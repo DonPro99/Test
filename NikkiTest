@@ -1,13 +1,16 @@
-cd ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn
-git status
-git add snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala
-git diff --cached
-git commit -m "RBICA-14070: Temporarily hardcode processid=4500 for UAT testing"
-git push origin feature/RBICA-14070-datavant-prematch
-
-
-vi /home/hadoop/config/datavantmbrprov-etl_uat.properties
-
-processID.MRA=4500
-
-grep "processID.MRA" /home/hadoop/config/datavantmbrprov-etl_uat.properties
+INFO: Session 15658176887454838 opened in 981 ms.
+Sep 12, 2026 12:07:46 AM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
+INFO: Connection initialized successfully in 1,099 ms. Session id: 15658176887454838
+Sep 12, 2026 12:07:49 AM net.snowflake.client.jdbc.internal.apache.arrow.memory.BaseAllocator <clinit>
+INFO: Debug mode disabled. Enable with the VM option -Darrow.memory.debug.allocator=true.
+Sep 12, 2026 12:07:49 AM net.snowflake.client.jdbc.internal.apache.arrow.memory.DefaultAllocationManagerOption getDefaultAllocationManagerFactory
+INFO: allocation manager type not specified, using netty as the default type
+Sep 12, 2026 12:07:49 AM net.snowflake.client.jdbc.internal.apache.arrow.memory.CheckAllocator reportResult
+INFO: Using DefaultAllocationManager at memory/unsafe/DefaultAllocationManagerFactory.class
+Exception in thread "main" java.lang.RuntimeException: Error while Generating the DatavantPreMatch outbound files!
+	at com.anthem.hca.intervention.datavantmbr.DatavantMbrProvFileETL.generateDatavantPreMatchOutboundFile(DatavantMbrProvETL.scala:788)
+	at com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver$.main(DatavantPreMatchETLDriver.scala:26)
+	at com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver.main(DatavantPreMatchETLDriver.scala)
+Caused by: java.lang.Exception: Empty dataframe for Pre-Match â€” no data to generate for DTVNTRTPM and MRA
+	at com.anthem.hca.intervention.datavantmbr.DatavantMbrProvFileETL.generateDatavantPreMatchOutboundFile(DatavantMbrProvETL.scala:612)
+	... 2 more
