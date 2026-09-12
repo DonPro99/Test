@@ -1,15 +1,105 @@
-aws s3 cp deply_dtvntrtpm_mra.txt \
-  s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/$(date +%Y%m%d_%H%M%S)/incr/deply_dtvntrtpm_mra.txt
+{
+  "resourceType": "glue",
+  "resource": "startJobRun.sync",
+  "error": "States.TaskFailed",
+  "cause": {
+    "AllocatedCapacity": 0,
+    "Arguments": {
+      "--job_step": "AuditDataPipeline-Start-Complete",
+      "--trgt_pltfrm": "snowflake",
+      "--s3_cnsmptn_key": "medicare/na/deply_dtvntrtpm_mra_stg",
+      "--sf_config_json": "{\"app_db_names\": \"u01_RAA\"}",
+      "--trgt_tbl_nm_desc": "prematch staging table",
+      "--trgt_db_nm": "u01_raa",
+      "--apm_id": "APM1009978",
+      "--ownrshp_team": "AEDL",
+      "--del_key_list": "na",
+      "--s3_app_key": "raa/medicare/na/deply_dtvntrtpm_mra_stg",
+      "--stg_schma": "raa_rawz_stg",
+      "--src_rcrd_cnt": "-1",
+      "--load_frmt_parms": "{}",
+      "--unld_trgt_pltfrm": "snowflake",
+      "--unld_type": "na",
+      "--job_nm": "cfx-ingest-etl-deply_dtvntrtpm_mra_stg",
+      "--vrnc_alwd_pct": "1.0000",
+      "--fwk_config_json": "{}",
+      "--sys_job_parms": "{}",
+      "--domain_cd": "medicare",
+      "--err_rsn_desc": "None",
+      "--src_file_type": "txt",
+      "--del_tbl_nm": "deply_dtvntrtpm_mra_stg_del",
+      "--rqstr_id": "AM71511",
+      "--pre_load_mthd": "na",
+      "--service_config_json": "{\"tags\": {\"apm-id\": \"APM1009978\", \"company\": \"CRLN\", \"workspace\": \"NA\", \"PatchGroup\": \"default\", \"compliance\": \"PHI\", \"costcenter\": \"6590211200\", \"PatchWindow\": \"default\", \"elvh-apm-id\": \"APM1009978\", \"environment\": \"uat\", \"elvh-app-env\": \"test\", \"elvh-company\": \"Anthem\", \"elvh-ci-owner\": \"DSOUZNG\", \"app-support-dl\": \"dl-raaetldevelopers@anthem.com\", \"elvh-infra-env\": \"test\", \"elvh-workspace\": \"NA\", \"elvh-costcenter\": \"6590211200\", \"application-name\": \"RAA\", \"rubicon-migrated\": \"PE-57NL14QK05\", \"business-division\": \"corp\", \"elvh-app-support-dl\": \"dl-raaetldevelopers@anthem.com\", \"app-servicenow-group\": \"RAA IT Support\", \"elvh-application-name\": \"Risk Adjustment Analytics - AWS\", \"elvh-business-division\": \"corp\", \"aws-migration-project-id\": \"MPE19072\", \"elvh-app-servicenow-group\": \"RAA IT Support\"}, \"vpc_name\": \"aws-landing-zone-VPC\", \"ec2_subnet\": [\"aws-landing-zone-PrivateSubnet1A\"], \"emr_subnet\": [\"aws-landing-zone-PrivateSubnet1A\"], \"glue_subnet\": [\"aws-landing-zone-PrivateSubnet1A\"], \"overridable_tags\": [\"PatchWindow\", \"PatchGroup\"], \"ServiceAccessSecurityGroup\": \"ElasticMapReduce-ServiceAccess\", \"EmrManagedSlaveSecurityGroup\": \"ElasticMapReduce-Slave-Private\", \"EmrManagedMasterSecurityGroup\": \"ElasticMapReduce-Master-Private\"}",
+      "--edl_load_dtm": "2026-09-12 17:18:50",
+      "--job_stts": "IN-PROGRESS",
+      "--s3_archv_bkt": "crln-raa-uat-archz-gbd-phi-useast1",
+      "--job_type": "glue",
+      "--s3_cnsmptn_bkt": "crln-sf-uat-dataz-gbd-phi-useast1",
+      "--tnnt_id": "1",
+      "--lightson_handover_flag": "n",
+      "--aplctn_cd": "RAA",
+      "--support_snow_grp_nm": "None",
+      "--trgt_tbl_nm": "deply_dtvntrtpm_mra_stg",
+      "--region_name": "us-east-1",
+      "--stg_tbl_nm": "deply_dtvntrtpm_mra_stg_stg",
+      "--edl_sor_cd": "9",
+      "--load_type": "full",
+      "--unld_file_type": "parquet",
+      "--trgt_schma": "raa_rawz_stg",
+      "--cfx_ftp_dtls": "{}",
+      "--s3_archv_key": "raa/medicare/na/deply_dtvntrtpm_mra_stg",
+      "--application_contact_id": "AB36609",
+      "--job_id": "780009123",
+      "--del_file_cnt": "0",
+      "--edl_incrmntl_load_dtm": "2026-09-12 17:18:50",
+      "--etl_job_parms": "{}",
+      "--warehouse_size_suffix": "_M",
+      "--s3_inbnd_key": "inbound/raa/medicare/na/deply_dtvntrtpm_mra_stg",
+      "--post_load_mthd": "na",
+      "--key_list": "{\"filter\":\"NA\",\"default\":[\"*\"],\"orderby\":[\"NA\"],\"partitionby\":[\"NA\"]}",
+      "--support_email_lst": "dl-raaetldevelopers@anthem.com",
+      "--s3_inbnd_bkt": "crln-652798729258-ssm-uat-filetransfer",
+      "--file_cnt": "1",
+      "--oprtn_type": "incr",
+      "--src_load_prfx": "20260912_211748882",
+      "--job_dtls": "{}",
+      "--env": "uat",
+      "--eks_config_json": "{}",
+      "--s3_app_bkt": "crln-raa-uat-dataz-gbd-phi-useast1",
+      "--account": "652798729258",
+      "--rcrd_stts_cd": "ACT",
+      "--support_alwd_flag": "y",
+      "--account_name": "DNA2",
+      "--unld_partn_key": "na",
+      "--dlmtr": "|",
+      "--app_config_json": "{}",
+      "--dscvr_schma_flag": "n",
+      "--s3_bkt_key_cmbntn": "crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/deply_dtvntrtpm_mra_stg",
+      "--execution_name": "RAA-780009123-8da67bc9-aeef-11f1-a231-ddc4ae550471-deply_dtvntrtpm_mra_stg",
+      "--edl_creat_dtm": "2026-09-12 17:18:50",
+      "--clnt_id": "1",
+      "--edl_run_id": "8da67bc9-aeef-11f1-a231-ddc4ae550471"
+    },
+    "Attempt": 0,
+    "CompletedOn": 1789247997619,
+    "ErrorMessage": "ProgrammingError: 002003 (42S02): 01c7077f-0a17-f4ac-37a1-0704030349ab: SQL compilation error:",
+    "ExecutionTime": 26,
+    "GlueVersion": "1.0",
+    "Id": "jr_7323f3cf8c446910f23611b980b37913670f0edb54e0fb332d04a3cc77b5d89e",
+    "JobMode": "SCRIPT",
+    "JobName": "CRLN-EDL-uat-Gj-SnowflakeCopy",
+    "JobRunState": "FAILED",
+    "LastModifiedOn": 1789247997619,
+    "LogGroupName": "/aws-glue/python-jobs/CRLN-EDL-uat-glue-security-configuration-35-role/CRLN-EDL-uat-Glue-Redshift-Full-Access-Role",
+    "MaxCapacity": 0.0625,
+    "NotificationProperty": {
+      "NotifyDelayAfter": 1
+    },
+    "PredecessorRuns": [],
+    "SecurityConfiguration": "CRLN-EDL-uat-glue-security-configuration-35",
+    "StartedOn": 1789247956198,
+    "Timeout": 2880
+  }
+}
 
-cat > deply_dtvntrtpm_mra.txt << 'EOF'
-902457016|20260514145424|R2X26_902457016_1770524753_1|DTVNTRTPM|2026-09-09|AM37177|MCR|ChartID|308248670100_1|ChartDateTime|20260514194419|Chase_ID|R2X26V0200477075DVT|R2X_2026|ROUND_YEAR|MULTI-BCBS|LETTER|OFFSHORE|ONOFFSHORE|CIOX_RAMRA_IC20260909112830_308248670100_1|Image_Name_Convention|N|FTP_To_Vndr|1/1/2025|START_DT|12/31/2026|END_DT||||||||||||20260909112830
-3417337|20260514145424|R2X26_3417337_1831310606_1|DTVNTRTPM|2026-09-09|AM37177|MCR|ChartID|308248664500_1|ChartDateTime|20260514194419|Chase_ID|R2X26V0200534661DVT|R2X_2026|ROUND_YEAR|MULTI-BCBS|LETTER|OFFSHORE|ONOFFSHORE|CIOX_RAMRA_IC20260909112830_308248664500_1|Image_Name_Convention|N|FTP_To_Vndr|1/1/2025|START_DT|12/31/2026|END_DT||||||||||||20260909112830
-28958320|20260514145424|R2X26_28958320_1104519586_1|DTVNTRTPM|2026-09-09|AM37177|MCR|ChartID|308248658100_1|ChartDateTime|20260514194419|Chase_ID|R2X26V0200442934DVT|R2X_2026|ROUND_YEAR|MULTI-BCBS|LETTER|OFFSHORE|ONOFFSHORE|CIOX_RAMRA_IC20260909112830_308248658100_1|Image_Name_Convention|N|FTP_To_Vndr|1/1/2025|START_DT|12/31/2026|END_DT||||||||||||20260909112830
-236966934|20260514145424|R2X26_236966934_1184208878_1|DTVNTRTPM|2026-09-09|AM37177|MCR|ChartID|308248682100_1|ChartDateTime|20260514194419|Chase_ID|R2X26V0200494276DVT|R2X_2026|ROUND_YEAR|MULTI-BCBS|LETTER|OFFSHORE|ONOFFSHORE|CIOX_RAMRA_IC20260909112830_308248682100_1|Image_Name_Convention|N|FTP_To_Vndr|1/1/2025|START_DT|12/31/2026|END_DT||||||||||||20260909112830
-33516493|20260514145424|R2X26_33516493_1588104905_1|DTVNTRTPM|2026-09-09|AM37177|MCR|ChartID|308248675900_1|ChartDateTime|20260514194419|Chase_ID|R2X26V0200534659DVT|R2X_2026|ROUND_YEAR|MULTI-BCBS|LETTER|OFFSHORE|ONOFFSHORE|CIOX_RAMRA_IC20260909112830_308248675900_1|Image_Name_Convention|N|FTP_To_Vndr|1/1/2025|START_DT|12/31/2026|END_DT||||||||||||20260909112830
-EOF
-
-
-aws s3 rm s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260912_024210/ --recursive
-aws s3 rm s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260912_025000/ --recursive
-aws s3 rm s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260912_025542/ --recursive
