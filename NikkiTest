@@ -1,3 +1,1 @@
-Hi Raju — followed up on the merge you flagged. Turns out the PR included 47 files (not just mine) that were only meant to go through UAT, not pre-prod/prod — looks like they got prematurely included in the merge.
-
-Planning to revert the full merge to pull all of those back out, then submit a separate small PR with just my 3 files, which are the ones actually meant for this deployment. Will update you on Monday once it's done.
+following up on what you flagged earlier. I've traced it to some files that got prematurely merged into master. I'm reverting that and submitting a clean fix. Will update you once it's done, likely Monday.
