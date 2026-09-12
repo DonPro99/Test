@@ -7,10 +7,11 @@ cat > deply_dtvntrtpm_mra_stg.txt << 'EOF'
 EOF
 
 
-SHOW TABLES LIKE 'DEPLY_DTVNTRTPM_MRA_STG' IN SCHEMA U01_RAA.RAA_RAWZ_STG;
-
-SELECT query_text, error_message 
-FROM TABLE(INFORMATION_SCHEMA.QUERY_HISTORY())
-WHERE error_message IS NOT NULL
+SELECT query_text, error_message, start_time
+FROM SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY
+WHERE query_text ILIKE '%deply_dtvntrtpm_mra_stg%'
+  AND error_message IS NOT NULL
 ORDER BY start_time DESC
 LIMIT 5;
+
+DESCRIBE TABLE U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRTPM_MRA_STG;
