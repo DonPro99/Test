@@ -1,3 +1,81 @@
-grep -n "generateDatavantPreMatchOutboundFile" snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala
+ val dt = new DateTime(ts.toString())
+    val processname2 = cfg.getString("processname2") + lineOfBusiness
+    val processid = 4500 //temp
+    val step2 = cfg.getString("step2") + lineOfBusiness
+    val stepId1 = cfg.getString("stepID1").toInt
+    val stepId2 = cfg.getString("stepID2").toInt
+    val status1 = cfg.getString("status1")
+    val status2 = cfg.getString("status2")
+    val emailFrom = cfg.getString("emailFrom")
+    val emailTo = cfg.getString("emailTo")
+    val emailToList = cfg.getString("emailToList")
+    val email = new Email()
+    var batchId = 0L
+    var deplyRecordCnt = 0L
+    var fFlag = ""
 
-sed -n '540,620p' snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala
+    try {
+
+      spark.sql(s""" use SCHEMA $hiveDBName """).count()
+
+      var res = spark.sql(
+        s"""SELECT batchid, status, reccnt from ${cfg.getString("riskadjustment.hive.table.loadlog")}
+          where processid = ${processid} and stepid = ${stepId1}
+          order by batchid desc limit 1""")
+
+      if (res.count > 0) {
+        batchId = res.first.get.getLong(0)
+        deplyRecordCnt = res.first().get.getLong(2)
+      }
+
+      if (res.count == 0 || res.first.get.getString(1) != status1 || deplyRecordCnt == 0) {
+        throw new Exception(
+          s"No load_log_key entry or failed status or 0 deploy record for processid = $processid and stepid = $stepId1")
+      }
+
+      runId = spark.sql("select md5(current_timestamp)").first().get.getString(0)
+
+      // Build Pre-Match DataFrame
+      val preMatchDplyDf = spark.sql(
+        s""" select
+              b.add_val4,
+              b.add_val6    as ONOFFSHORE,
+              b.add_val11   as FTPFLAG,
+              b.rundatetime,
+              b.add_val3,
+              a.CHART_PROV_ADRS1,
+              a.CHART_PROV_ADRS2,
+              a.CHART_PROV_CITY,
+              a.CHART_PROV_ST,
+              a.CHART_PROV_ZIP,
+              a.INPAT_CD,
+              a.chart_taxid,
+              a.CHART_NPI,
+              a.CHART_PROV_PHONE_NBR,
+              a.CHART_PROV_FAX,
+              a.MBR_ZIP,
+              a.HC_ID,
+              a.PAT_ACCT_NBR
+          from $deployTable b
+          inner join $chrtsMasterTable a
+              on trim(a.recordid)      = trim(b.recordid)
+              and trim(a.filedatetime) = trim(b.filedatetime)
+              and trim(chartid)        = trim(add_val1)
+              and trim(chartdatetime)  = trim(add_val2)
+              and trim(a.lob)          = trim(b.lob)
+              and trim(b.intervention) = '$intervention'
+              and trim(b.lob)          = '$lob'
+              and b.batch_id           = '$batchId'
+      """)
+
+      if (preMatchDplyDf.first(1).isEmpty) {
+        throw new Exception(
+          s"Empty dataframe for Pre-Match — no data to generate for $intervention and $lob")
+      }
+
+      preMatchDplyDf.dropDuplicates().createOrReplaceTempView("PREMATCH_DPLY_DATA")
+
+      // Transform Pre-Match columns per finalized mapping doc
+      val preMatchFileTempDf = spark.sql(
+        s""" select
+              trim(CHART_PROV_ADRS1)                          as "AddressLine1",
