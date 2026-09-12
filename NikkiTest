@@ -1,20 +1,3 @@
-{
-  "clusternm": "RAA",
-  "jobargs": [
-    {
-      "jobname": "RAA-DATAVANTPREMATCH-ETL",
-      "job": ["java", "-cp", "/home/hadoop/jars/datavantmbr-etl-1.0-jar-with-dependencies.jar:/home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar", "com.anthem.hca.intervention.datavantmbr.DatavantPreMatchETLDriver", "MCR", "/home/hadoop/config/datavantmbrprov-etl_${env}.properties", "/home/hadoop/config/", "db.properties", "${edl_run_id}"]
-    }
-  ],
-  "createcluster": "YES",
-  "application": "RAA",
-  "configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/files/snowpark/config/STANDARD_L.json",
-  "maxconcurrency": 1,
-  "clusterid": "na",
-  "bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast1",
-  "bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh",
-  "emrenv": "${env}",
-  "logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/logs/risk-adjustment-adl/",
-  "terminationwaittime": 10,
-  "terminateoption": "NO"
-}
+Hi Raju — followed up on the merge you flagged. Turns out the PR included 47 files (not just mine) that were only meant to go through UAT, not pre-prod/prod — looks like they got prematurely included in the merge.
+
+Planning to revert the full merge to pull all of those back out, then submit a separate small PR with just my 3 files, which are the ones actually meant for this deployment. Will update you on Monday once it's done.
