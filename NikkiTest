@@ -8,9 +8,8 @@ EOF
 
 
 						
-SELECT query_id, query_text, error_message, start_time
-FROM TABLE(INFORMATION_SCHEMA.QUERY_HISTORY_BY_USER('SRCRAADU'))
-WHERE start_time >= DATEADD(hour, -1, CURRENT_TIMESTAMP())
-  AND error_message IS NOT NULL
-ORDER BY start_time DESC
-LIMIT 10;			
+QUERY_ID	QUERY_TEXT	ERROR_MESSAGE	START_TIME
+01c70781-0a17-f068-37a1-070403044913	TRUNCATE TABLE raa_rawz_stg.deply_dtvntrtpm_mra_stg_stg	SQL compilation error:
+Table 'U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRTPM_MRA_STG_STG' does not exist or not authorized.	2026-09-12 17:21:33.422 -0400
+01c7077f-0a17-f4ac-37a1-0704030349ab	TRUNCATE TABLE raa_rawz_stg.deply_dtvntrtpm_mra_stg_stg	SQL compilation error:
+Table 'U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRTPM_MRA_STG_STG' does not exist or not authorized.	2026-09-12 17:19:46.848 -0400
