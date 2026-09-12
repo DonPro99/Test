@@ -8,3 +8,5 @@ FROM S01_RAA.RAA_RAWZ.rad_master_charts_all_lob
 WHERE lob = 'MRA'
   AND intervention = 'DTVNTRT'
 LIMIT 5;
+
+SELECT DISTINCT lob FROM RAD_DEPLOY_ALL_LOB WHERE intervention = 'DTVNTRTPM';
