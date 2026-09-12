@@ -1,2 +1,1 @@
-SELECT COUNT(*) FROM rad_master_charts_all_lob 
-WHERE CLIENTCHARTID IN ('306846396200_1', '318638830500_1', '306364035700_1');
+grep -A20 "generateDatavantPreMatchOutboundFile" snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala | grep -i "join\|recordid\|chartid"
