@@ -1,3 +1,3 @@
-2026-09-11 18:33:10.051	45afdb9760f912cbb2fd464b1d227982	NA	NA	NA	NA	f5bf236c-de27-4023-b719-24c9c7254d88	1	DTVNTRTPM	No Path : Inserting into Persistent Table	12	DTVNTRTPM_MRA_DEPLOY_LOAD	4500	Inserting to Persistent Table 	10	Completed	2026-09-11 22:32:59.545	2026-09-11 22:33:09.981
-2026-09-11 19:42:28.538	7d23bd0e9ad0f82bbe91e74fa0e1d441	NA	NA	NA	NA	e8f0b8bf-d6ad-48b6-9666-9c5c00708344	2	DTVNTRTPM	No Path : Inserting into Persistent Table	12	DTVNTRTPM_MRA_DEPLOY_LOAD	4500	Inserting to Persistent Table 	10	Completed	2026-09-11 23:42:20.437	2026-09-11 23:42:28.378
-2026-09-11 20:07:53.385	b6996459b15109218ed26e585854980f	NA	NA	NA	NA	208f0b07-d238-4421-86d7-7c69b3e84d53	2	DTVNTRTPM	DatavantPreMatch: @RAA_SF_SSMOUTBOUND_GBD_PHI/DTVNTRTPM_MRA	0	DatavantMbrProv Outbound File GenerationMRA	4500	Insert and Outbound File GenerationMRA	20	Failed	2026-09-12 00:07:47.120	2026-09-12 00:07:53.288
+aws s3 rm s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260912_024210/ --recursive
+aws s3 rm s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260912_025000/ --recursive
+aws s3 rm s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/20260912_025542/ --recursive
