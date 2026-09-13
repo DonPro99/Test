@@ -1,11 +1,11 @@
-Quick note for anyone testing RBICA-14070 (Datavant Pre-Match) in UAT:
-
-To trigger the pipeline, just place the deploy file here:
-s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra_stg/<timestamp>/incr/
-
-Once it lands there, everything runs automatically:
-
-Job 780009123 (ingest) auto-triggers on file arrival
-ETL scheduler chains it into Job 780009122 (all-LOB) → then Job 790009120 (outbound)
-
-No need to manually trigger anything else. Final output lands in RAD_DATAVANT_CHASE_PREMATCH (filter EDL_LOB_CD = 'MRA').
+$ git log --oneline -10
+210c4d864 (HEAD -> feature/RBICA-14070-datavant-prematch, origin/feature/RBICA-14070-datavant-prematch) dummy commit
+98683ac60 RBICA-14070: Map MRA to MCR for RAD_DEPLOY_ALL_LOB join comparison in Pre-Match outbound
+8a306de21  Add dummy change to props file
+024b5fab1  Add name change to props file
+cf67675f5  Add dummy change to props file
+a5a270658  Add dummy change to driver
+65a78e7e6  Add Datacant prematch intervention to driver
+98a954fcf Added preMatch ETL driver for job exec
+c7ee16786 CentauriRetroLoad.scala edited online with Bitbucket
+519436dbe CentauriRetroLoad.scala edited online with Bitbucket
