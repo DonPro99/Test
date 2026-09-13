@@ -1,11 +1,1 @@
-$ git log --oneline -10
-210c4d864 (HEAD -> feature/RBICA-14070-datavant-prematch, origin/feature/RBICA-14070-datavant-prematch) dummy commit
-98683ac60 RBICA-14070: Map MRA to MCR for RAD_DEPLOY_ALL_LOB join comparison in Pre-Match outbound
-8a306de21  Add dummy change to props file
-024b5fab1  Add name change to props file
-cf67675f5  Add dummy change to props file
-a5a270658  Add dummy change to driver
-65a78e7e6  Add Datacant prematch intervention to driver
-98a954fcf Added preMatch ETL driver for job exec
-c7ee16786 CentauriRetroLoad.scala edited online with Bitbucket
-519436dbe CentauriRetroLoad.scala edited online with Bitbucket
+"I'm about to open a PR for my DTVNTRTPM changes in [repo name], but I noticed some of your changes are also present on this branch/file. Are those meant to go to prod as part of this PR too, or should I exclude them and only push my DTVNTRTPM-related changes? Wanted to check before merging anything."
