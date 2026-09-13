@@ -1,91 +1,28 @@
-Hi Sandy,
+Hi Pranaya,
 
- 
+RBICA-14070 (Datavant Pre-Match) is ready for UAT validation. Please find the end-to-end test details below.
 
-User story RBICA-14141 is ready for UAT validation. Please find below details for Hcc_Dx process.
+Data note: The original test deploy file did not have any matching records in rad_master_charts_all_lob, so I pulled 5 real matching chart records directly from S01 (prod replica) to properly validate the join logic end-to-end.
 
- 
+Deploy file used (manually staged to S3, since CFX inbound automation is still pending approval):
+Path: s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra_stg/
+File: deply_dtvntrtpm_mra_stg.txt
+Record count: 5
 
-Path: /hcaaapck/backup/ProdEnvironment/MMAStage1/ACA/data/2026/archive/20260828
+Jobs created and run (in order):
+1. Job 780009123 - Ingest job: loads deploy file from S3 into staging table DEPLY_DTVNTRTPM_MRA_STG
+2. Job 780009122 - All-LOB job: loads staging table into RAD_DEPLOY_ALL_LOB
+3. Job 790009120 (RAA-DATAVANTPREMATCH-ETL) - Outbound job: joins RAD_DEPLOY_ALL_LOB with rad_master_charts_all_lob and generates the Pre-Match output, inserting into RAD_DATAVANT_CHASE_PREMATCH
 
-Source Files:
+Snowflake environment: UAT
+Database: U01_RAA
+Schema: RAA_RAWZ
+Table Name: RAD_DATAVANT_CHASE_PREMATCH
+Filter: EDL_LOB_CD = 'MRA'
 
-hcc_dx_2025.txt à count 109352120
+All three jobs ran successfully, and 5 rows are now present in RAD_DATAVANT_CHASE_PREMATCH confirming the full pipeline (ingest -> staging -> all-LOB -> outbound join -> Pre-Match table) works correctly end-to-end.
 
-hcc_dx_2026.txt à count 65921629
+Please let me know if you'd like me to walk through any of the field values, or if you need anything else for validation.
 
- 
-
-Merged file for uat testing.
-
-Path: /hcaaapck/backup/IT/PROD/work
-
-Source Files:
-
-hcc_dx_2026.txt à count 175273748
-
- 
-
-Snowflake environment : UAT
-
-Database : U01_RAA
-
-Schema : RAA_RAWZ_ALLPHI
-
-Table Name: RAD_ADL_HCC_DX
-
-Filter: edl_load_dtm = '2026-09-03 03:11:31.535'
-
- 
-
-To compare the uat data with production you can use below details.
-
- 
-
-Snowflake environment : PROD
-
-Database : P01_RAA
-
-Schema : RAA_RAWZ_ALLPHI
-
-Table Name: RAD_ADL_HCC_DX
-
-Filter: edl_load_dtm like '2026-08-31 08:03:49.311'
-
- 
-
-Thanks & Regards,
-
-Meghana Kurakula, Software Engineer
-
-Icon
-
-Description automatically generated
-
-Email: Meghana.Kurakula@carelon.com
-
-Mobile: 9542097116
-
-From: Sameni, Pranaya <pranaya.sameni@elevancehealth.com>
-Sent: Thursday, September 10, 2026 4:51 PM
-To: Kurakula, Meghana <Meghana.Kurakula@carelon.com>; Cyr, Sandra J. <sandra.cyr@elevancehealth.com>
-Cc: Netala, Tagore <tagore.netala@elevancehealth.com>; Prakash, Ravi <Ravi.Prakash@carelon.com>
-Subject: RE: UAT Hand Over : RBICA - 14141
-
- 
-
-Hi Meghana,
-
- 
-
-The UAT for the story RBICA-14141 looks good. The MBR_BRTH_DT column was validated in the UAT SF table, and the values are tokenized as expected.
-
- 
-
-Please note that this validation is specific to the requirement for the story RBICA-14141 and is not an E2E UAT. I will continue to perform UAT for each HCC_DX story based on the specific requirement for that story. The overall E2E UAT for HCC_DX will be performed once all HCC_DX related stories are completed.
-
- 
-
-Thanks
-
-Pranaya
+Thanks,
+Don
