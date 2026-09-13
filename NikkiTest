@@ -2,5 +2,3 @@ SELECT lob FROM S01_RAA.RAA_RAWZ.rad_master_charts_all_lob
 WHERE recordid = '902457016' AND chartid = '308248670100_1';
 
 ls -la /home/hadoop/jars/datavantmbr-etl-1.0-jar-with-dependencies.jar
-[hadoop@ip-10-127-204-69 ~]$ ls -la /home/hadoop/jars/datavantmbr-etl-1.0-jar-with-dependencies.jar
--rwxrwxrwx. 1 root root 321307032 Sep 12 00:03 /home/hadoop/jars/datavantmbr-etl-1.0-jar-with-dependencies.jar
