@@ -1,28 +1,11 @@
-Hi Pranaya,
+Quick note for anyone testing RBICA-14070 (Datavant Pre-Match) in UAT:
 
-RBICA-14070 (Datavant Pre-Match) is ready for UAT validation. Please find the end-to-end test details below.
+To trigger the pipeline, just place the deploy file here:
+s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra_stg/<timestamp>/incr/
 
-Data note: The original test deploy file did not have any matching records in rad_master_charts_all_lob, so I pulled 5 real matching chart records directly from S01 (prod replica) to properly validate the join logic end-to-end.
+Once it lands there, everything runs automatically:
 
-Deploy file used (manually staged to S3, since CFX inbound automation is still pending approval):
-Path: s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra_stg/
-File: deply_dtvntrtpm_mra_stg.txt
-Record count: 5
+Job 780009123 (ingest) auto-triggers on file arrival
+ETL scheduler chains it into Job 780009122 (all-LOB) → then Job 790009120 (outbound)
 
-Jobs created and run (in order):
-1. Job 780009123 - Ingest job: loads deploy file from S3 into staging table DEPLY_DTVNTRTPM_MRA_STG
-2. Job 780009122 - All-LOB job: loads staging table into RAD_DEPLOY_ALL_LOB
-3. Job 790009120 (RAA-DATAVANTPREMATCH-ETL) - Outbound job: joins RAD_DEPLOY_ALL_LOB with rad_master_charts_all_lob and generates the Pre-Match output, inserting into RAD_DATAVANT_CHASE_PREMATCH
-
-Snowflake environment: UAT
-Database: U01_RAA
-Schema: RAA_RAWZ
-Table Name: RAD_DATAVANT_CHASE_PREMATCH
-Filter: EDL_LOB_CD = 'MRA'
-
-All three jobs ran successfully, and 5 rows are now present in RAD_DATAVANT_CHASE_PREMATCH confirming the full pipeline (ingest -> staging -> all-LOB -> outbound join -> Pre-Match table) works correctly end-to-end.
-
-Please let me know if you'd like me to walk through any of the field values, or if you need anything else for validation.
-
-Thanks,
-Don
+No need to manually trigger anything else. Final output lands in RAD_DATAVANT_CHASE_PREMATCH (filter EDL_LOB_CD = 'MRA').
