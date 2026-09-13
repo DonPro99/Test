@@ -1,27 +1,27 @@
-sanitizeFileName:: datavantmbrprov-etl_uat.properties
+sanitizeFileName:: application_uat.properties
 sanitizeFileName:: db.properties
 WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
-Sep 13, 2026 4:32:07 PM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
+Sep 13, 2026 4:34:20 PM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
 INFO: Initializing new connection
-Sep 13, 2026 4:32:07 PM net.snowflake.client.core.SFSession open
+Sep 13, 2026 4:34:20 PM net.snowflake.client.core.SFSession open
 INFO: Opening session with server: https://carelon-eda-preprod.privatelink.snowflakecomputing.com:443/, account: carelon-eda-preprod, user: SRCRAADU, password is not provided, role: SRCRAADU_PRIVS, database: U01_RAA, schema: , warehouse: U01_LOAD_02_WH_XL, validate default parameters: null, authenticator: null, ocsp mode: FAIL_OPEN, passcode in password: null, passcode is not provided, private key is provided, disable socks proxy: null, application: null, app id: Snowpark, app version: 1.15.0, login timeout: null, retry timeout: null, network timeout: null, query timeout: null, connection timeout: null, socket timeout: null, tracing: null, private key file: null, private key pwd is not provided, enable_diagnostics: not provided, diagnostics_allowlist_path: null, session parameters: client store temporary credential: null, gzip disabled: null, browser response timeout: null
-Sep 13, 2026 4:32:07 PM net.snowflake.client.core.SFBaseSession logHttpClientInitInfo
+Sep 13, 2026 4:34:20 PM net.snowflake.client.core.SFBaseSession logHttpClientInitInfo
 INFO: Driver OCSP mode: FAIL_OPEN, gzip disabled: false and no proxy
-Sep 13, 2026 4:32:07 PM net.snowflake.client.core.SFSession open
+Sep 13, 2026 4:34:20 PM net.snowflake.client.core.SFSession open
 INFO: Connecting to GLOBAL Snowflake domain
-Sep 13, 2026 4:32:07 PM net.snowflake.client.core.FileUtil logFileUsage
+Sep 13, 2026 4:34:20 PM net.snowflake.client.core.FileUtil logFileUsage
 INFO: Cache file creation: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
-Sep 13, 2026 4:32:08 PM net.snowflake.client.core.FileUtil logFileUsage
+Sep 13, 2026 4:34:20 PM net.snowflake.client.core.FileUtil logFileUsage
 INFO: Read cache: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
-Sep 13, 2026 4:32:08 PM net.snowflake.client.core.FileUtil logFileUsage
+Sep 13, 2026 4:34:21 PM net.snowflake.client.core.FileUtil logFileUsage
 INFO: Write to cache: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
-Sep 13, 2026 4:32:08 PM net.snowflake.client.core.SFSession open
-INFO: Session 15658176892088626 opened in 960 ms.
-Sep 13, 2026 4:32:08 PM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
-INFO: Connection initialized successfully in 1,150 ms. Session id: 15658176892088626
-Sep 13, 2026 4:32:11 PM net.snowflake.client.jdbc.internal.apache.arrow.memory.BaseAllocator <clinit>
+Sep 13, 2026 4:34:21 PM net.snowflake.client.core.SFSession open
+INFO: Session 15658176892097098 opened in 1,026 ms.
+Sep 13, 2026 4:34:21 PM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
+INFO: Connection initialized successfully in 1,216 ms. Session id: 15658176892097098
+Sep 13, 2026 4:34:22 PM net.snowflake.client.jdbc.internal.apache.arrow.memory.BaseAllocator <clinit>
 INFO: Debug mode disabled. Enable with the VM option -Darrow.memory.debug.allocator=true.
-Sep 13, 2026 4:32:11 PM net.snowflake.client.jdbc.internal.apache.arrow.memory.DefaultAllocationManagerOption getDefaultAllocationManagerFactory
+Sep 13, 2026 4:34:22 PM net.snowflake.client.jdbc.internal.apache.arrow.memory.DefaultAllocationManagerOption getDefaultAllocationManagerFactory
 INFO: allocation manager type not specified, using netty as the default type
-Sep 13, 2026 4:32:11 PM net.snowflake.client.jdbc.internal.apache.arrow.memory.CheckAllocator reportResult
+Sep 13, 2026 4:34:22 PM net.snowflake.client.jdbc.internal.apache.arrow.memory.CheckAllocator reportResult
 INFO: Using DefaultAllocationManager at memory/unsafe/DefaultAllocationManagerFactory.class
