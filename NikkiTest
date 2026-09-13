@@ -1,1 +1,3 @@
-"I'm about to open a PR for my DTVNTRTPM changes in [repo name], but I noticed some of your changes are also present on this branch/file. Are those meant to go to prod as part of this PR too, or should I exclude them and only push my DTVNTRTPM-related changes? Wanted to check before merging anything."
+# Datavant Pre-Match (RBICA-14070)
+intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
+intervention.datavantprematch.code=DTVNTRTPM
