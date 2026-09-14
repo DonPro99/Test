@@ -20,9 +20,6 @@ find /hcaaapck/backup -iname "*PREMATCH*" -mtime -1 2>/dev/null
 find /hcaaapck/backup -iname "*ELV*" -mtime -1 2>/dev/null
 find /hcaaapck/backup -iname "*DTVNT*" -mtime -1 2>/dev/null
 $ find /hcaaapck/backup -iname "*DTVNT*" -mtime -1 2>/dev/null
-/hcaaapck/backup/IT/SIT/log/sas_deploy_copy_dtvntrtpm_mra_2026_09_14_10:36:02.log
-/hcaaapck/backup/IT/SIT/log/deply_dtvntrtpm_mra-SFTP-SAS-S3-20260914103631.log
-/hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntrtpm_mra_20260914_10.36.02.log
-/hcaaapck/backup/IT/SIT/work/trigger_dtvntrtpm_mra.txt
-/hcaaapck/backup/IT/SIT/work/deply_dtvntrtpm_mra.txt
-/hcaaapck/backup/IT/PROD/log/sas_deploy_copy_dtvntrtpm_mra_2026_09_14_10:35:03.log
+
+
+ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | head -20
