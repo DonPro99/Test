@@ -1,1 +1,4 @@
-'m not asking you to rename anything in S3. The bucket folder is already correctly named datavantprematch-etl. I just need your CFX connection's source-path config updated to match that (since I originally gave you the misspelled version, dtvntprematch-etl, when I set the ticket up). Is that something you can update on your end?"
+- Outbound file generation: confirmed working - the Pre-Match file generated successfully in UAT (real output with provider/address data, matching the expected naming pattern).
+- SFTP/delivery to SaaS: still in progress - working through a CFX path configuration issue on our end right now. Once that's resolved, the file should land on the SaaS side as expected.
+
+Will update you as soon as delivery is confirmed.
