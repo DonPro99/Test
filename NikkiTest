@@ -8,3 +8,5 @@ find /hcaaapck/backup/SIT -iname "*DTVNT*PREMATCH*" -mmin -60 2>/dev/null
 find /hcaaapck/backup/PROD -iname "*DTVNT*PREMATCH*" -mmin -60 2>/dev/null
 
 find /hcaaapck/backup -iname "*DTVNT*PREMATCH*" -mmin -90 2>/dev/null
+
+ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG 2>&1 | head -5
