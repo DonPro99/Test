@@ -1,1 +1,1 @@
- I know you're busy, but this one's a bit time-sensitive on my end since it's blocking testing for RBICA-14070. Would really appreciate it if you could make the folder name correction (dtvntprematch-etl -> datavantprematch-etl) when you get a chance. Thanks so much for your help!
+So you want to push the file into this updated path ---> s3://cfx-antm-preprod-raaetl-outbound/datavantprematch-etl/
