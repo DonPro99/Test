@@ -24,6 +24,8 @@ $ find /hcaaapck/backup -iname "*DTVNT*" -mtime -1 2>/dev/null
 
 ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | head -20
 
-I checked the SaaS-side location (/hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG, confirmed correct by both Akhil and Divya) and I'm not seeing the reprocessed files land there. Most recent files in that folder are from April 16-17 — nothing from today.
+Hi Pranaya,
 
-Could you confirm the exact destination path you're seeing the files delivered to on your end? Want to make sure we're both looking at the same location before troubleshooting further.
+Quick update on the Pre-Match test file — the outbound file generation is confirmed working, but I'm still working through a CFX delivery/destination confirmation issue with the CFX team before I can hand you a verified test file.
+
+Given today was the target for prod deployment, wanted to flag that this CFX piece may push that timeline. I'll follow up with the CFX team first thing tomorrow — let me know if there's any flexibility on timing, or if you'd want to explore an alternative path in the meantime.
