@@ -1,5 +1,461 @@
-SELECT DISTINCT EDL_LOAD_DTM FROM U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRTPM_MRA_STG ORDER BY EDL_LOAD_DTM DESC;
-
-SELECT DISTINCT EDL_LOAD_DTM FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB WHERE INTERVENTION = 'DTVNTRTPM' ORDER BY EDL_LOAD_DTM DESC;
-
-SELECT DISTINCT EDL_LOAD_DTM FROM U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_PREMATCH WHERE EDL_LOB_CD = 'MRA' ORDER BY EDL_LOAD_DTM DESC;
+Running for schema: schema_virtix and runid: 1234
+:: loading settings :: url = jar:file:/usr/lib/spark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
+/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:25: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+0000000000000000000000000["FileName", "MemberId", "MemberFirstName", "MemberLastName", "MemberDOB", "EnrollmentDate", "EnrollmentEndDate", "ESRDIndicator", "ProjectName", "ClientRequestId", "RecordTypeId", "OnshoreIndicator", "Gender", "ProviderLastName", "ProviderFirstName", "ProviderNPI", "MemberMiddle", "ProviderId", "UserDefinedText1", "UserDefinedText2", "UserDefinedText3", "UserDefinedText4"]000000000000000000000000
+INFO:__main__:Found column list converting from str to list
+INFO:botocore.credentials:Found credentials from IAM Role: CRLN-RAA-prod-EC2EMR-Role
+=====================P01_RAA.RAA_RAWZ.rad_virtix_chase_mcaid_load==============================
+Bucket: crln-raa-prod-sf-dataz-gbd-phi-useast1
+Prefix: inbound/raa/chartsprocess/mcaid/
+Looking for files matching: ChartData_ANT_Virtix_Chase_*.txt
+Found file: CENT_ANTH_20240911.zip
+Found file: CENT_ANTH_KY_A_S_20240626.zip
+Found file: CENT_ANTH_KY_A_S_Image_Delivery_Crosswalk_20240807.txt
+Found file: CENT_ANTH_NV_A_C_20260204.zip
+Found file: CENT_ANTH_NV_A_C_Image_Delivery_Crosswalk_20260311.txt
+Found file: CENT_ANTH_NV_A_C_extract_20251217
+Found file: CENT_ANTH_NV_A_C_extract_20260107
+Found file: CENT_ANTH_NV_A_C_extract_20260128
+Found file: CENT_ANTH_NV_A_C_extract_20260204_Final
+Found file: CENT_ANTH_NV_A_C_extract_20260311
+Found file: CENT_ANTH_NV_A_M_20241114.zip
+Found file: CENT_ANTH_NV_A_M_20251203.zip
+Found file: CENT_ANTH_NV_A_M_20260204.zip
+Found file: CENT_ANTH_NV_A_M_Image_Delivery_Crosswalk_20241113.txt
+Found file: CENT_ANTH_NV_A_M_extract_20251203_Final
+Found file: CENT_ANTH_NV_A_M_extract_20251217
+Found file: CENT_ANTH_NV_A_M_extract_20260107
+Found file: CENT_ANTH_NV_A_M_extract_20260128
+Found file: CENT_ANTH_NV_A_M_extract_20260204_Final
+Found file: CENT_ANTH_NV_A_M_extract_20260311
+Found file: CENT_ANTH_NV_A_S_20241114.zip
+Found file: CENT_ANTH_NV_A_S_20250204.zip
+Found file: CENT_ANTH_NV_A_S_20260204.zip
+Found file: CENT_ANTH_NV_A_S_Image_Delivery_Crosswalk_20241113.txt
+Found file: CENT_ANTH_NV_A_S_Image_Delivery_Crosswalk_20260311.txt
+Found file: CENT_ANTH_NV_A_S_extract_20251217
+Found file: CENT_ANTH_NV_A_S_extract_20260107
+Found file: CENT_ANTH_NV_A_S_extract_20260128
+Found file: CENT_ANTH_NV_A_S_extract_20260204_Final
+Found file: CENT_ANTH_NV_A_S_extract_20260212_CA_R
+Found file: CENT_ANTH_NV_A_S_extract_20260311
+Found file: CENT_ANTH_WI _A_S_extract_20260302_CA_R
+Found file: CENT_ANTH_WI_A_C_20250402.zip
+Found file: CENT_ANTH_WI_A_C_20260311.zip
+Found file: CENT_ANTH_WI_A_C_extract_20250208
+Found file: CENT_ANTH_WI_A_C_extract_20250326
+Found file: CENT_ANTH_WI_A_C_extract_20250326_Final
+Found file: CENT_ANTH_WI_A_C_extract_20250402_Final
+Found file: CENT_ANTH_WI_A_C_extract_20250411
+Found file: CENT_ANTH_WI_A_C_extract_20251203
+Found file: CENT_ANTH_WI_A_C_extract_20260107
+Found file: CENT_ANTH_WI_A_C_extract_20260128
+Found file: CENT_ANTH_WI_A_C_extract_20260311_Final
+Found file: CENT_ANTH_WI_A_M_20250130.zip
+Found file: CENT_ANTH_WI_A_M_20250402.zip
+Found file: CENT_ANTH_WI_A_M_20260311.zip
+Found file: CENT_ANTH_WI_A_M_extract_20250208
+Found file: CENT_ANTH_WI_A_M_extract_20250326
+Found file: CENT_ANTH_WI_A_M_extract_20250326_Final
+Found file: CENT_ANTH_WI_A_M_extract_20250402_Final
+Found file: CENT_ANTH_WI_A_M_extract_20250411
+Found file: CENT_ANTH_WI_A_M_extract_20251203
+Found file: CENT_ANTH_WI_A_M_extract_20251217
+Found file: CENT_ANTH_WI_A_M_extract_20260107
+Found file: CENT_ANTH_WI_A_M_extract_20260128
+Found file: CENT_ANTH_WI_A_M_extract_20260311_Final
+Found file: CENT_ANTH_WI_A_S_20250402.zip
+Found file: CENT_ANTH_WI_A_S_20260311.zip
+Found file: CENT_ANTH_WI_A_S_Image_Delivery_Crosswalk_20250411.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250208
+Found file: CENT_ANTH_WI_A_S_extract_20250326
+Found file: CENT_ANTH_WI_A_S_extract_20250326_Final
+Found file: CENT_ANTH_WI_A_S_extract_20250402_Final
+Found file: CENT_ANTH_WI_A_S_extract_20250411
+Found file: CENT_ANTH_WI_A_S_extract_20251203
+Found file: CENT_ANTH_WI_A_S_extract_20260107
+Found file: CENT_ANTH_WI_A_S_extract_20260128
+Found file: CENT_ANTH_WI_A_S_extract_20260311_Final
+Found file: ChartData_ANT_Virtix_Chase_IN_20260827.txt
+File matches pattern: ChartData_ANT_Virtix_Chase_IN_20260827.txt
+Found file: ChartData_ANT_Virtix_Chase_IN_20260831.txt
+File matches pattern: ChartData_ANT_Virtix_Chase_IN_20260831.txt
+Found file: ChartData_CIX_KY_Q22024_10APR24.txt
+Found file: ChartData_CIX_NV_Q42024_09OCT24.txt
+Found file: ChartData_CIX_TN_Q42024_09OCT24.txt
+Found file: ChartData_CIX_WI_Q42024_09DEC24.txt
+Found file: ChartData_WLP_KY_Q22024_OEC_10APR24.txt
+Found file: ChartData_WLP_NV_Q42024_OEC_09OCT24.txt
+Found file: ChartData_WLP_WI_Q42024_OEC_09DEC24.txt
+Found file: ChartData_WLP_WI_Q42025_MBR_11NOV25.txt
+Found file: ChartData_WLP_WI_Q42025_PROV_11NOV25.txt
+Found file: EPI_ANTH_IA_A_C_20240724.zip
+Found file: EPI_ANTH_IA_A_C_20240911.zip
+Found file: EPI_ANTH_IA_A_M_20240626.zip
+Found file: EPI_ANTH_IA_A_M_20240724.zip
+Found file: EPI_ANTH_IA_A_M_20240911.zip
+Found file: EPI_ANTH_IA_A_M_20250730.zip
+Found file: EPI_ANTH_IA_A_R_20250513_1.zip
+Found file: EPI_ANTH_IA_A_S_20240626.zip
+Found file: EPI_ANTH_IA_A_S_20240724.zip
+Found file: EPI_ANTH_IA_A_S_20241003.zip
+Found file: EPI_ANTH_IA_A_S_20251001.zip
+Found file: EPI_ANTH_IA_A_S_Image_Delivery_Crosswalk_20241003.txt
+Found file: EPI_ANTH_IA_A_S_Image_Delivery_Crosswalk_20250611.txt
+Found file: EPI_ANTH_IA_A_V_20230920.zip
+Found file: EPI_ANTH_IN_A_C_20240821.zip.zip
+Found file: EPI_ANTH_IN_A_M_20240710.zip
+Found file: EPI_ANTH_IN_A_S_20240710.zip
+Found file: EPI_ANTH_IN_A_S_20251105.zip
+Found file: EPI_ANTH_IN_A_S_20251125.zip
+Found file: EPI_ANTH_IN_A_S_20260715.zip
+Found file: EPI_ANTH_IN_A_S_Image_Delivery_Crosswalk_20241009.txt
+Found file: EPI_ANTH_IN_A_S_Image_Delivery_Crosswalk_20260715.txt
+Found file: EPI_ANTH_IN_A_S_Image_Delivery_Crosswalk_20260826_Final.txt
+Found file: EPI_ANTH_IN_W_S_20241113.zip
+Found file: EPI_ANTH_IN_W_S_Image_Delivery_Crosswalk_20241113.txt
+Found file: EPI_ANTH_JES.zip
+Found file: EPI_ANTH_NY_A_C_20240410.zip
+Found file: EPI_ANTH_NY_A_C_20240529.zip
+Found file: EPI_ANTH_NY_A_C_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_A_C_20260325-2.zip
+Found file: EPI_ANTH_NY_A_C_20260429_FINAL.zip
+Found file: EPI_ANTH_NY_A_C_Image_Delivery_Crosswalk_20260219.txt
+Found file: EPI_ANTH_NY_A_C_Image_Delivery_Crosswalk_20260325-2.txt
+Found file: EPI_ANTH_NY_A_M_20240410.zip
+Found file: EPI_ANTH_NY_A_M_20240529.zip
+Found file: EPI_ANTH_NY_A_M_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_A_M_20260429_FINAL.zip
+Found file: EPI_ANTH_NY_A_M_Image_Delivery_Crosswalk_20260219.txt
+Found file: EPI_ANTH_NY_A_M_Image_Delivery_Crosswalk_20260325-2.txt
+Found file: EPI_ANTH_NY_A_R_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_A_S_20240410.zip
+Found file: EPI_ANTH_NY_A_S_20240529.zip
+Found file: EPI_ANTH_NY_A_S_20240628.zip
+Found file: EPI_ANTH_NY_A_S_20241024.zip
+Found file: EPI_ANTH_NY_A_S_20241124.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_1.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_10.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_11.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_12.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_13.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_14.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_15.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_16.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_17.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_18.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_19.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_2.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_3.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_4.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_5.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_6.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_7.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_8.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_9.zip
+Found file: EPI_ANTH_NY_A_S_Image_Delivery_Crosswalk_20241024.txt
+Found file: EPI_ANTH_NY_A_S_Image_Delivery_Crosswalk_20250416.txt
+Found file: EPI_ANTH_NY_A_S_Image_Delivery_Crosswalk_20250610.txt
+Found file: EPI_ANTH_NY_A_S_Wave_2_20240410.zip
+Found file: EPI_ANTH_NY_A_S_Wave_2_20240529.zip
+Found file: EPI_ANTH_NY_S_20240228.zip
+Found file: EPI_ANTH_NY_W_C_20240228.zip
+Found file: EPI_ANTH_NY_W_C_20240410.zip
+Found file: EPI_ANTH_NY_W_C_20240529.zip
+Found file: EPI_ANTH_NY_W_C_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_W_C_20260325-2.zip
+Found file: EPI_ANTH_NY_W_C_20260429_FINAL.zip
+Found file: EPI_ANTH_NY_W_C_Image_Delivery_Crosswalk_20260219.txt
+Found file: EPI_ANTH_NY_W_C_Image_Delivery_Crosswalk_20260325-2.txt
+Found file: EPI_ANTH_NY_W_R_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_W_S_20240228.zip
+Found file: EPI_ANTH_NY_W_S_20240410.zip
+Found file: EPI_ANTH_NY_W_S_20240529.zip
+Found file: EPI_ANTH_NY_W_S_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_W_S_20260325-2.zip
+Found file: EPI_ANTH_NY_W_S_20260429_FINAL.zip
+Found file: EPI_ANTH_NY_W_S_20260527.zip
+Found file: EPI_ANTH_NY_W_S_Image_Delivery_Crosswalk_20250610.txt
+Found file: EPI_ANTH_NY_W_S_Image_Delivery_Crosswalk_20260219.txt
+Found file: EPI_ANTH_NY_W_S_Image_Delivery_Crosswalk_20260325-2.txt
+Found file: EPI_ANTH_NY_W_S_Wave_2_20240410.zip
+Found file: EPI_ANTH_NY_W_S_Wave_2_20240529.zip
+Found file: EPI_ANTH_OH_A_C_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_OH_A_M_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_OH_A_S_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_TN_A_C_20251125.zip
+Found file: EPI_ANTH_TN_A_C_Image_Delivery_Crosswalk_20251125.txt
+Found file: EPI_ANTH_TN_A_C_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_TN_A_M_20240206.zip.zip
+Found file: EPI_ANTH_TN_A_M_20251125.zip
+Found file: EPI_ANTH_TN_A_M_Image_Delivery_Crosswalk_20251125.txt
+Found file: EPI_ANTH_TN_A_M_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_TN_A_PPF_20240228.zip
+Found file: EPI_ANTH_TN_A_P_20251125.zip
+Found file: EPI_ANTH_TN_A_P_Image_Delivery_Crosswalk_20251125.txt
+Found file: EPI_ANTH_TN_A_S_20241218_1_TEST3_1.zip
+Found file: EPI_ANTH_TN_A_S_20241218_1_TEST_4.zip
+Found file: EPI_ANTH_TN_A_S_20241218_1_TEST_5.zip
+Found file: EPI_ANTH_TN_A_S_20250404.zip
+Found file: EPI_ANTH_TN_A_S_20251125.zip
+Found file: EPI_ANTH_TN_A_S_Image_Delivery_Crosswalk_20250129.txt
+Found file: EPI_ANTH_TN_A_S_Image_Delivery_Crosswalk_20251125.txt
+Found file: EPI_ANTH_TN_A_S_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_WV_A_C_20240619.zip
+Found file: EPI_ANTH_WV_A_C_20240731.zip
+Found file: EPI_ANTH_WV_A_C_20250730_FINAL.zip
+Found file: EPI_ANTH_WV_A_R_20250730_FINAL.zip
+Found file: EPI_ANTH_WV_A_R_Image_Delivery_Crosswalk_20250521.txt
+Found file: EPI_ANTH_WV_A_S_20240501.zip
+Found file: EPI_ANTH_WV_A_S_20240619.zip
+Found file: EPI_ANTH_WV_A_S_20240731.zip
+Found file: EPI_ANTH_WV_A_S_Image_Delivery_Crosswalk_20240830.txt.txt
+Found file: EPI_ANTH_WV_A_S_Image_Delivery_Crosswalk_20250625.txt
+Found file: EPI_ANTH_WV_A_S_Image_Delivery_Crosswalk_20250730.txt
+Found file: EPI_ANTH_WV_A_S_Image_Delivery_Crosswalk_20250827.txt
+Found file: MCDIHC_20250722172815.txt
+Found file: REV_ANTH_WV_A_M_extract_20230727.txt
+Found file: VIRTIX_ANTH_VA_A_S_20260828.txt
+Found file: CENT_ANTH_KY_A_S_extract_20240807.txt
+Found file: CENT_ANTH_NV_A_C_extract_20250115.txt
+Found file: CENT_ANTH_NV_A_C_extract_20250129.txt
+Found file: CENT_ANTH_NV_A_C_extract_20250204_Final.txt
+Found file: CENT_ANTH_NV_A_C_extract_20251217.txt
+Found file: CENT_ANTH_NV_A_C_extract_20260107.txt
+Found file: CENT_ANTH_NV_A_C_extract_20260128.txt
+Found file: CENT_ANTH_NV_A_C_extract_20260204_Final.txt
+Found file: CENT_ANTH_NV_A_C_extract_20260311.txt
+Found file: CENT_ANTH_NV_A_M_extract_20241113.txt
+Found file: CENT_ANTH_NV_A_M_extract_20241218.txt
+Found file: CENT_ANTH_NV_A_M_extract_20250115.txt
+Found file: CENT_ANTH_NV_A_M_extract_20250129.txt
+Found file: CENT_ANTH_NV_A_M_extract_20250204_Final.txt
+Found file: CENT_ANTH_NV_A_M_extract_20251203.txt
+Found file: CENT_ANTH_NV_A_M_extract_20251203_Final.txt
+Found file: CENT_ANTH_NV_A_M_extract_20251217.txt
+Found file: CENT_ANTH_NV_A_M_extract_20260107.txt
+Found file: CENT_ANTH_NV_A_M_extract_20260128.txt
+Found file: CENT_ANTH_NV_A_M_extract_20260204_Final.txt
+Found file: CENT_ANTH_NV_A_M_extract_20260311.txt
+Found file: CENT_ANTH_NV_A_S_extract_20241113.txt
+Found file: CENT_ANTH_NV_A_S_extract_20241218.txt
+Found file: CENT_ANTH_NV_A_S_extract_20250115.txt
+Found file: CENT_ANTH_NV_A_S_extract_20250129.txt
+Found file: CENT_ANTH_NV_A_S_extract_20250204_Final.txt
+Found file: CENT_ANTH_NV_A_S_extract_20251217.txt
+Found file: CENT_ANTH_NV_A_S_extract_20260107.txt
+Found file: CENT_ANTH_NV_A_S_extract_20260128.txt
+Found file: CENT_ANTH_NV_A_S_extract_20260204_Final.txt
+Found file: CENT_ANTH_NV_A_S_extract_20260212_CA_R.txt
+Found file: CENT_ANTH_NV_A_S_extract_20260311.txt
+Found file: CENT_ANTH_WI_A_C_extract_20250208.txt
+Found file: CENT_ANTH_WI_A_C_extract_20250326.txt
+Found file: CENT_ANTH_WI_A_C_extract_20250326_Final.txt
+Found file: CENT_ANTH_WI_A_C_extract_20250402_Final.txt
+Found file: CENT_ANTH_WI_A_C_extract_20250411.txt
+Found file: CENT_ANTH_WI_A_C_extract_20251203.txt
+Found file: CENT_ANTH_WI_A_C_extract_20260107.txt
+Found file: CENT_ANTH_WI_A_C_extract_20260128.txt
+Found file: CENT_ANTH_WI_A_C_extract_20260323_Final.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250204.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250208.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250326.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250326_Final.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250402_Final.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250411.txt
+Found file: CENT_ANTH_WI_A_M_extract_20251203.txt
+Found file: CENT_ANTH_WI_A_M_extract_20251217.txt
+Found file: CENT_ANTH_WI_A_M_extract_20260107.txt
+Found file: CENT_ANTH_WI_A_M_extract_20260128.txt
+Found file: CENT_ANTH_WI_A_M_extract_20260323_Final.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250208.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250326.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250326_Final.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250402_Final.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250411.txt
+Found file: CENT_ANTH_WI_A_S_extract_20251203.txt
+Found file: CENT_ANTH_WI_A_S_extract_20260107.txt
+Found file: CENT_ANTH_WI_A_S_extract_20260128.txt
+Found file: CENT_ANTH_WI_A_S_extract_20260302_CA_R.txt
+Found file: CENT_ANTH_WI_A_S_extract_20260323_Final.txt
+Found file: EPI_ANTH_IA_A_C_extract_20240911.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250611.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250730.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250825.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250902.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250902_FINAL.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250916_FINAL.csv
+Found file: EPI_ANTH_IA_A_M_extract_20240911.csv
+Found file: EPI_ANTH_IA_A_M_extract_20250611.csv
+Found file: EPI_ANTH_IA_A_M_extract_20250730.csv
+Found file: EPI_ANTH_IA_A_M_extract_20250902.csv
+Found file: EPI_ANTH_IA_A_M_extract_20250902_FINAL.csv
+Found file: EPI_ANTH_IA_A_M_extract_20250916_FINAL.csv
+Found file: EPI_ANTH_IA_A_R_extract_20250513.csv
+Found file: EPI_ANTH_IA_A_R_extract_20250730.csv
+Found file: EPI_ANTH_IA_A_R_extract_20250902.csv
+Found file: EPI_ANTH_IA_A_R_extract_20250902_FINAL.csv
+Found file: EPI_ANTH_IA_A_R_extract_20250916_FINAL.csv
+Found file: EPI_ANTH_IA_A_S_extract_20240724.csv
+Found file: EPI_ANTH_IA_A_S_extract_20240911.csv
+Found file: EPI_ANTH_IA_A_S_extract_20250611.csv
+Found file: EPI_ANTH_IA_A_S_extract_20250730.csv
+Found file: EPI_ANTH_IA_A_S_extract_20250902.csv
+Found file: EPI_ANTH_IA_A_S_extract_20250902_FINAL.csv
+Found file: EPI_ANTH_IA_A_S_extract_20250916_FINAL.csv
+Found file: EPI_ANTH_IA_A_S_extract_20251001.csv
+Found file: EPI_ANTH_IN_A_C_extract_20240821.csv.csv
+Found file: EPI_ANTH_IN_A_C_extract_20241009.csv
+Found file: EPI_ANTH_IN_A_C_extract_20250716.csv
+Found file: EPI_ANTH_IN_A_C_extract_20250827.csv
+Found file: EPI_ANTH_IN_A_C_extract_20251001_FINAL.csv
+Found file: EPI_ANTH_IN_A_M_extract_20240821.csv.csv
+Found file: EPI_ANTH_IN_A_M_extract_20241009.csv
+Found file: EPI_ANTH_IN_A_S_extract_20240821.csv.csv
+Found file: EPI_ANTH_IN_A_S_extract_20241009.csv
+Found file: EPI_ANTH_IN_A_S_extract_20250716.csv
+Found file: EPI_ANTH_IN_A_S_extract_20250827.csv
+Found file: EPI_ANTH_IN_A_S_extract_20251001_FINAL.csv
+Found file: EPI_ANTH_IN_A_S_extract_20251105.csv
+Found file: EPI_ANTH_IN_A_S_extract_20260715.csv
+Found file: EPI_ANTH_IN_A_S_extract_20260826_Final.csv
+Found file: EPI_ANTH_NY_A_C_Image_Delivery_Crosswalk_20260429_FINAL.txt
+Found file: EPI_ANTH_NY_A_C_extract_20250416.csv
+Found file: EPI_ANTH_NY_A_C_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_A_C_extract_20260219.csv
+Found file: EPI_ANTH_NY_A_C_extract_20260325.csv
+Found file: EPI_ANTH_NY_A_C_extract_20260429_FINAL.csv
+Found file: EPI_ANTH_NY_A_M_Image_Delivery_Crosswalk_20260429_FINAL.txt
+Found file: EPI_ANTH_NY_A_M_extract_20250401.csv
+Found file: EPI_ANTH_NY_A_M_extract_20250416.csv
+Found file: EPI_ANTH_NY_A_M_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_A_M_extract_20260219.csv
+Found file: EPI_ANTH_NY_A_M_extract_20260325.csv
+Found file: EPI_ANTH_NY_A_M_extract_20260429_FINAL.csv
+Found file: EPI_ANTH_NY_A_R_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_A_S_extract_20250401.csv
+Found file: EPI_ANTH_NY_A_S_extract_20250416.csv
+Found file: EPI_ANTH_NY_A_S_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_A_extract_20260429_CA_R.csv
+Found file: EPI_ANTH_NY_W_C_Image_Delivery_Crosswalk_20260429_FINAL.txt
+Found file: EPI_ANTH_NY_W_C_extract_20250416.csv
+Found file: EPI_ANTH_NY_W_C_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_W_C_extract_20260219.csv
+Found file: EPI_ANTH_NY_W_C_extract_20260325.csv
+Found file: EPI_ANTH_NY_W_C_extract_20260429_FINAL.csv
+Found file: EPI_ANTH_NY_W_M_extract_20250401.csv
+Found file: EPI_ANTH_NY_W_M_extract_20250416.csv
+Found file: EPI_ANTH_NY_W_R_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_W_S_Image_Delivery_Crosswalk_20260429_FINAL.txt
+Found file: EPI_ANTH_NY_W_S_extract_20250401.csv
+Found file: EPI_ANTH_NY_W_S_extract_20250416.csv
+Found file: EPI_ANTH_NY_W_S_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_W_S_extract_20260219.csv
+Found file: EPI_ANTH_NY_W_S_extract_20260325.csv
+Found file: EPI_ANTH_NY_W_S_extract_20260429_FINAL.csv
+Found file: EPI_ANTH_OH_A_C_extract_20251203.csv
+Found file: EPI_ANTH_OH_A_C_extract_20260107.csv
+Found file: EPI_ANTH_OH_A_C_extract_20260206_FINAL.csv
+Found file: EPI_ANTH_OH_A_M_extract_20251203.csv
+Found file: EPI_ANTH_OH_A_M_extract_20260107.csv
+Found file: EPI_ANTH_OH_A_M_extract_20260206_FINAL.csv
+Found file: EPI_ANTH_OH_A_S_extract_20251203.csv
+Found file: EPI_ANTH_OH_A_S_extract_20260107.csv
+Found file: EPI_ANTH_OH_A_S_extract_20260206_FINAL.csv
+Found file: EPI_ANTH_OH_A_extract_20240710_CA_R.csv
+Found file: EPI_ANTH_OH_A_extract_20260204_CA_R.csv
+Found file: EPI_ANTH_TN_A_C_extract_20241218.csv
+Found file: EPI_ANTH_TN_A_C_extract_20250129.csv
+Found file: EPI_ANTH_TN_A_C_extract_20250204_FINAL.csv
+Found file: EPI_ANTH_TN_A_C_extract_20251125.csv
+Found file: EPI_ANTH_TN_A_C_extract_20260107.csv
+Found file: EPI_ANTH_TN_A_C_extract_20260128_FINAL.csv
+Found file: EPI_ANTH_TN_A_M_extract_20241113.csv
+Found file: EPI_ANTH_TN_A_M_extract_20241218.csv
+Found file: EPI_ANTH_TN_A_M_extract_20250129.csv
+Found file: EPI_ANTH_TN_A_M_extract_20250204_FINAL.csv
+Found file: EPI_ANTH_TN_A_M_extract_20251125.csv
+Found file: EPI_ANTH_TN_A_M_extract_20260107.csv
+Found file: EPI_ANTH_TN_A_M_extract_20260128_FINAL.csv
+Found file: EPI_ANTH_TN_A_P_extract_20251125.csv
+Found file: EPI_ANTH_TN_A_S_extract_20241113.csv
+Found file: EPI_ANTH_TN_A_S_extract_20241218.csv
+Found file: EPI_ANTH_TN_A_S_extract_20250129.csv
+Found file: EPI_ANTH_TN_A_S_extract_20250204_FINAL.csv
+Found file: EPI_ANTH_TN_A_S_extract_20250404.csv
+Found file: EPI_ANTH_TN_A_S_extract_20251125.csv
+Found file: EPI_ANTH_TN_A_S_extract_20260107.csv
+Found file: EPI_ANTH_TN_A_S_extract_20260128_FINAL.csv
+Found file: EPI_ANTH_TN_A_extract_20260126_CA_R.csv
+Found file: EPI_ANTH_TN_A_extract_20260127_CA_R.csv
+Found file: EPI_ANTH_WV_A_C_extract_20250521.csv
+Found file: EPI_ANTH_WV_A_C_extract_20250625.csv
+Found file: EPI_ANTH_WV_A_C_extract_20250730.csv
+Found file: EPI_ANTH_WV_A_C_extract_20250730_FINAL.csv
+Found file: EPI_ANTH_WV_A_R_extract_20250521.csv
+Found file: EPI_ANTH_WV_A_R_extract_20250625.csv
+Found file: EPI_ANTH_WV_A_R_extract_20250730.csv
+Found file: EPI_ANTH_WV_A_R_extract_20250730_FINAL.csv
+Found file: EPI_ANTH_WV_A_S_extract_20250521.csv
+Found file: EPI_ANTH_WV_A_S_extract_20250625.csv
+Found file: EPI_ANTH_WV_A_S_extract_20250730.csv
+Found file: EPI_ANTH_WV_A_S_extract_20250730_FINAL.csv
+Found file: VIRTIX_ANTH_IN_A_C_extract_20260715.txt
+Found file: VIRTIX_ANTH_IN_A_C_extract_20260807.txt
+Found file: VIRTIX_ANTH_IN_A_C_extract_20260811.txt
+Found file: VIRTIX_ANTH_IN_A_M_extract_20260715.txt
+Found file: VIRTIX_ANTH_IN_A_M_extract_20260807.txt
+Found file: VIRTIX_ANTH_IN_A_M_extract_20260811.txt
+Found file: VIRTIX_ANTH_TEST_06122026.txt
+Found file: VIRTIX_ANTH_TEST_06162026.txt
+Found file: VIRTIX_ANTH_TEST_JES_extract_05282026.txt
+Found file: VIRTIX_ANTH_VA_C_extract_20260826.txt
+Found file: VIRTIX_ANTH_VA_M_extract_20260826.txt
+Found file: VIRTIX_ANTH_VA_S_extract_20260826.txt
+Found file: VIRTIX_ANTH_WV_A_C_extract_20260513.txt
+Found file: VIRTIX_ANTH_WV_A_C_extract_20260624.txt
+Found file: VIRTIX_ANTH_WV_A_C_extract_20260728.txt
+Found file: VIRTIX_ANTH_WV_A_C_extract_20260729.txt
+Found file: VIRTIX_ANTH_WV_A_C_extract_20260729_FINAL.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260513.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260527.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260624.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260728.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260729.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260729_FINAL.txt
+Found file: EPI_ANTH_IN_A_C_extract_20240821.csv.csv
+Found file: EPI_ANTH_IN_A_M_extract_20240821.csv.csv
+Found file: EPI_ANTH_IN_A_S_extract_20240821.csv.csv
+Total matching files found: 2
+=====================['ChartData_ANT_Virtix_Chase_IN_20260827.txt', 'ChartData_ANT_Virtix_Chase_IN_20260831.txt']==============================
+-------1----------
+INFO:__main__:Running Load for {step}: InProgress
+-+-+-+-+-+-+s3a://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260827.txt-+-+-+-+
++----------------------------------------------------+---------+--------+--------+----------+--------------+-----------------+-------------+-------------------------+--------------------------------+------------+----------------+------+----------------+-----------------+-----------+------------+----------+----------------+----------------+----------------+----------------+
+|FileName                                            |MBRID    |MBRFNAME|MBRLNAME|MBRDOB    |EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName              |ClientRequestId                 |RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4|
++----------------------------------------------------+---------+--------+--------+----------+--------------+-----------------+-------------+-------------------------+--------------------------------+------------+----------------+------+----------------+-----------------+-----------+------------+----------+----------------+----------------+----------------+----------------+
+|IN_26Q2_20250101_20251231_000A65504_1952629644_1.pdf|BJB4F8B01|PDMA    |B2HX    |07/24/1962|NULL          |NULL             |NULL         |ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000A65504P1952629644|NULL        |Y               |M     |MCMILLEN        |BROCK            |1952629644 |NULL        |NULL      |NULL            |NULL            |NULL            |NULL            |
+|IN_26Q2_20250101_20251231_000M63589_1922075084_1.pdf|EMY1WZQGY|TVO5KDD |UVVWUXD |10/17/1986|NULL          |NULL             |NULL         |ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000M63589P1922075084|NULL        |Y               |F     |RINGWALD        |KAREN            |1922075084 |NULL        |NULL      |NULL            |NULL            |NULL            |NULL            |
+|IN_26Q2_20250101_20251231_000M65128_1992154686_1.pdf|0DPG0KEFJ|CVP8    |D5RL2G4 |05/04/1985|NULL          |NULL             |NULL         |ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000M65128P1992154686|NULL        |Y               |F     |WEIRICH         |JUSTIN           |1992154686 |NULL        |NULL      |NULL            |NULL            |NULL            |NULL            |
+|IN_26Q2_20250101_20251231_000M66673_1083923866_1.pdf|QKV0D7UJ6|LZWNE   |LY9DPNQR|01/31/1964|NULL          |NULL             |NULL         |ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000M66673P1083923866|NULL        |Y               |F     |BATSON          |ANNE             |1083923866 |NULL        |NULL      |NULL            |NULL            |NULL            |NULL            |
+|IN_26Q2_20250101_20251231_000M71276_1558505131_1.pdf|S2OLA09A9|2MOSL   |919B    |12/22/1964|NULL          |NULL             |NULL         |ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000M71276P1558505131|NULL        |Y               |F     |DANTZER         |BRANDY           |1558505131 |NULL        |NULL      |NULL            |NULL            |NULL            |NULL            |
++----------------------------------------------------+---------+--------+--------+----------+--------------+-----------------+-------------+-------------------------+--------------------------------+------------+----------------+------+----------------+-----------------+-----------+------------+----------+----------------+----------------+----------------+----------------+
+only showing top 5 rows
+INFO:__main__:File s3a://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260827.txt read with format txt
+INFO:__main__:Inside File ChartData_ANT_Virtix_Chase_*.txt for date conversion in Virtix
+Traceback (most recent call last):
+  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 478, in <module>
+    process_and_load_data(config_file, config_path, schema, run_id)
+  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 397, in process_and_load_data
+    df = read_source_file(file_path, delimiter, file_format, schema_name, file_name, run_id, columns_list)
+  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 131, in read_source_file
+    df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM/dd/yyyy"))) \
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/sql/dataframe.py", line 5177, in withColumn
+  File "/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1322, in __call__
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/errors/exceptions/captured.py", line 185, in deco
+pyspark.errors.exceptions.captured.AnalysisException: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column or function parameter with name `MemberDOB` cannot be resolved. Did you mean one of the following? [`Gender`, `MBRDOB`, `MBRID`, `MemberMiddle`, `FileName`].;
+'Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#101, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, to_date(trim('MemberDOB, None), Some(MM/dd/yyyy), Some(UTC), false) AS MemberDOB#253]
++- Relation [FileName#97,MBRID#98,MBRFNAME#99,MBRLNAME#100,MBRDOB#101,EnrollmentDate#102,EnrollmentEndDate#103,ESRDIndicator#104,ProjectName#105,ClientRequestId#106,RecordTypeId#107,OnshoreIndicator#108,Gender#109,ProviderLastName#110,ProviderFirstName#111,ProviderNPI#112,MemberMiddle#113,ProviderId#114,UserDefinedText1#115,UserDefinedText2#116,UserDefinedText3#117,UserDefinedText4#118] csv
+INFO:py4j.clientserver:Closing down clientserver connection
+has context menu
