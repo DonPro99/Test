@@ -1,2 +1,1 @@
-aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260914_151603/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt \
-  s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/dtvntprematch-etl/20260914_151603/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt
+ I know you're busy, but this one's a bit time-sensitive on my end since it's blocking testing for RBICA-14070. Would really appreciate it if you could make the folder name correction (dtvntprematch-etl -> datavantprematch-etl) when you get a chance. Thanks so much for your help!
