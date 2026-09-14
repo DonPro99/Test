@@ -1,1 +1,1 @@
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py - | grep -n "MBRDOB"
+s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra_stg/<timestamp>/incr/deply_dtvntrtpm_mra_stg.txt
