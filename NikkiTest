@@ -1,10 +1,10 @@
-AddressLine1|AddressLine2|City|State|Zipcode|FacilityType|FacilityNPI|FacilityTIN|PracticionerNPI|ProviderPhone|ProviderFax|MemberZip|MemberInsuranceId|ClaimId
-121 DIVISADERO ST||SAN FRANCISCO|CA|94117|Inpatient||842252103|1932425303|6282391329|4155631544|94124|47OCGW1M2|20250731920060200245
-1720 NICHOLASVILLE RD STE 602||LEXINGTON|KY|40503|Outpatient||611178691|1942566807|8592774005|8592782507|40515|82V7J8JLW|719741-01
-1720 NICHOLASVILLE RD STE 602||LEXINGTON|KY|40503|Inpatient||611178691|1891796298|8592774005|8592782507|40515|82V7J8JLW|732482-01
-2420 LAKE AVE||ASHTABULA|OH|44004|Inpatient||201891777|1275926271|4409976328|4409947685|44076|WDNBKCLLW|83540734735040
-5100 W BROAD ST||COLUMBUS|OH|43228|Outpatient||310985669|1437865235|6145441000|6145666080|43140|QV3BLAXLD|65400025560
-12951 S FWY||HOUSTON|TX|77047|Outpatient||741680498|1538107875|8323554092|8323552591|77546|9PDD46ND7|SAPA32972317C
-755 N BROADWAY||SLEEPY HOLLOW|NY|10591|Outpatient||453023019|1790101764|9143663677|9143661459|10591|BX26JF0IZ|PB2015286450
-1720 NICHOLASVILLE RD STE 602||LEXINGTON|KY|40503|Outpatient||611178691|1437150703|8592774005|8592782507|40515|82V7J8JLW|719742-01
-2420 LAKE AVE||ASHTABULA|OH|44004|Inpatient||201891777|1366483190|4409976960|4409947685|44076|WDNBKCLLW|83540734735010
+Hey Akhil,
+
+Following up from the call earlier - I understand the vendor-side CFX outbound ticket for Pre-Match is already approved, but I still need to submit a separate CFX ticket for the SaaS-side outbound staging location (per the mapping doc, where the flag value routes to SaaS instead of the vendor).
+
+Before I submit it, can you help me confirm:
+- The exact file/pattern requirements for this staging destination (header/footer row count validation, naming pattern, etc.)
+- Whether this reuses any existing SaaS staging CFX setup, or needs to be fully new
+- Any AWS account/path details specific to this destination (similar to what we had to add for the vendor one)
+
+Want to get this submitted correctly the first time rather than have it bounce back for missing info. Let me know when you have a few minutes.
