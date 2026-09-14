@@ -1,1 +1,3 @@
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/dtvntprematch-etl/ --recursive
+ELV_DTVNT_R#_MRA_[ONSHORE|OFFSHORE]_YYYYMMDDhhmmss.txt
+
+ELV_DTVNT_R#_MRA_PREMATCH_[ONSHORE|OFFSHORE]_[n]_YYYYMMDDhhmmss.txt
