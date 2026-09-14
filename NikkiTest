@@ -2,3 +2,9 @@ ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATC
 
 
 find /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG -iname "*DTVNT*" -newer /tmp -mmin -60
+
+
+find /hcaaapck/backup/SIT -iname "*DTVNT*PREMATCH*" -mmin -60 2>/dev/null
+find /hcaaapck/backup/PROD -iname "*DTVNT*PREMATCH*" -mmin -60 2>/dev/null
+
+find /hcaaapck/backup -iname "*DTVNT*PREMATCH*" -mmin -90 2>/dev/null
