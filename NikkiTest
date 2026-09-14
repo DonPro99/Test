@@ -7,3 +7,9 @@ WHERE recordid IN (898685815, 941916972, 870405906, 905053054, 613836653, 942183
 
 The ones you pulled from S01 yourself (used to build your successful test file): 902457016, 3417337, 28958320, 236966934, 33516493
 Pranaya's record IDs (just extracted above, the ones that didn't match): 898685815, 941916972, 870405906, 905053054, 613836653, 942183166
+
+
+SELECT recordid, filedatetime, chartid, chartdatetime, lob
+FROM U01_RAA.RAA_RAWZ.rad_master_charts_all_lob
+WHERE filedatetime = '20260810141917'
+  AND recordid IN (898685815, 941916972, 870405906, 905053054, 613836653, 942183166);
