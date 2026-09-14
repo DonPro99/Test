@@ -1,4 +1,1 @@
-one more thing I wanted to check. I pushed a test file through to see if it lands on the SaaS side, but I'm not finding it where I expected 
-/hcaaapck/backup/devenvironment/sas_repository/cfx_stg and the prod equivalent, no luck for today's file).
-
-Can you confirm the actual destination/landing location from your end? Want to make sure I'm looking in the right place before assuming it hasn't landed yet.
+'m not asking you to rename anything in S3. The bucket folder is already correctly named datavantprematch-etl. I just need your CFX connection's source-path config updated to match that (since I originally gave you the misspelled version, dtvntprematch-etl, when I set the ticket up). Is that something you can update on your end?"
