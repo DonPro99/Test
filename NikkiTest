@@ -13,3 +13,9 @@ find /hcaaapck/backup -iname "*DTVNT*PREMATCH*" -mmin -90 2>/dev/null
 
 I checked /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG — the most recent files there are from April 9th/10th, nothing today. This confirms it's not where the reprocessed files are landing. Can you give me the exact, full destination path you're actually delivering to?
 ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG 2>&1 | head -5
+
+
+find /hcaaapck/backup -iname "*PREMATCH*" -mtime -1 2>/dev/null
+
+find /hcaaapck/backup -iname "*ELV*" -mtime -1 2>/dev/null
+find /hcaaapck/backup -iname "*DTVNT*" -mtime -1 2>/dev/null
