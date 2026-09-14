@@ -1,5 +1,1 @@
-[hadoop@ip-10-197-212-20 ~]$ grep -n "MemberDOB\|MemberFirstName\|MemberLastName\|MemberId\b\|MemberMiddle" /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
-114:            df = df.withColumn("MemberDOB", when(col("MemberDOB").rlike(r"\d{2}[A-Za-z]{3}\d{4}"),
-116:                                          .when(col("MemberDOB").rlike(r"\d{2}/\d{2}/\d{4}"), to_date(col("MemberDOB"),"MM/dd/yyyy")).otherwise(None))
-131:            df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM/dd/yyyy"))) \
-143:            df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM/dd/yyyy"))) \
+sed -n '125,150p' /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
