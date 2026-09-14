@@ -1,1 +1,4 @@
 ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH"
+
+
+find /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG -iname "*DTVNT*" -newer /tmp -mmin -60
