@@ -1,10 +1,7 @@
-Hey Akhil,
+Could you please correct the folder name in both paths:
 
-Following up from the call earlier - I understand the vendor-side CFX outbound ticket for Pre-Match is already approved, but I still need to submit a separate CFX ticket for the SaaS-side outbound staging location (per the mapping doc, where the flag value routes to SaaS instead of the vendor).
+1. Origin (source) path:
+s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/
 
-Before I submit it, can you help me confirm:
-- The exact file/pattern requirements for this staging destination (header/footer row count validation, naming pattern, etc.)
-- Whether this reuses any existing SaaS staging CFX setup, or needs to be fully new
-- Any AWS account/path details specific to this destination (similar to what we had to add for the vendor one)
-
-Want to get this submitted correctly the first time rather than have it bounce back for missing info. Let me know when you have a few minutes.
+2. Delivery (destination) path:
+outbound/raa/datavantprematch-etl/
