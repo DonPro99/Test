@@ -1,13 +1,1 @@
-Hi Team,
-
-Thanks for confirming the outbound UAT CFX ticket is complete.
-
-I have one more ask - for the vendor-side delivery (separate from the SaaS-side setup), could you share the original RITM used for the existing DTVNTRT (Datavant MBR+Prov) vendor CFX setup? Per Akhil, I need to add a new file pattern to that same existing setup for the new Datavant Pre-Match process, rather than submitting a brand-new ticket from scratch.
-
-Existing file pattern (DTVNTRT):
-ELV_DTVNT_R#_MRA_[ONSHORE|OFFSHORE]_YYYYMMDDhhmmss.txt
-
-New file pattern to add (DTVNTRTPM, Pre-Match):
-ELV_DTVNT_R1_MRA_PREMATCH_[ONSHORE|OFFSHORE]_[n]_YYYYMMDDhhmmss.txt
-
-Let me know the RITM and I'll follow up from there.
+s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260914_151603/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt
