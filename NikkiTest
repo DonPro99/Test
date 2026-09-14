@@ -1,7 +1,2 @@
-Could you please correct the folder name in both paths:
-
-1. Origin (source) path:
-s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/
-
-2. Delivery (destination) path:
-outbound/raa/datavantprematch-etl/
+aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260914_151603/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt \
+  s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/dtvntprematch-etl/20260914_151603/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt
