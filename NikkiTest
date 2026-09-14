@@ -1,1 +1,1 @@
-/hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG
+ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH"
