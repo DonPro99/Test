@@ -1,4 +1,4 @@
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra_stg/ --recursive
-
-
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/dtvntprematch-etl/ --recursive
+SELECT recordid, filedatetime, chartid, chartdatetime, lob
+FROM S01_RAA.RAA_RAWZ.rad_master_charts_all_lob
+WHERE lob = 'MRA'
+LIMIT 5;
