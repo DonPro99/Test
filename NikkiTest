@@ -1,2 +1,1 @@
-in template ELV_DTVNT_*_MRA_PREMATCH_*.txt
- 
+Hey, quick separate one for you - noticed something while we were troubleshooting the pattern overlap. In the original CFX template request I submitted, I used the wildcard format ELV_DTVNT_*_MRA_PREMATCH_*.txt (with plain *), but on your screen it showed up as ELV_DTVNT_.*_MRA_PREMATCH_.*.txt (with .*). Just want to check - is that an expected conversion on your end, or should I have submitted it differently? Not urgent, just want to make sure the format's right going forward.
