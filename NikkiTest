@@ -23,3 +23,7 @@ $ find /hcaaapck/backup -iname "*DTVNT*" -mtime -1 2>/dev/null
 
 
 ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | head -20
+
+I checked the SaaS-side location (/hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG, confirmed correct by both Akhil and Divya) and I'm not seeing the reprocessed files land there. Most recent files in that folder are from April 16-17 — nothing from today.
+
+Could you confirm the exact destination path you're seeing the files delivered to on your end? Want to make sure we're both looking at the same location before troubleshooting further.
