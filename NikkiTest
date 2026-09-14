@@ -1,1 +1,1 @@
-s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260914_151603/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt
+aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260914_151603/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt .
