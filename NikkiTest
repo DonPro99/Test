@@ -63,3 +63,6 @@ chmod: changing permissions of '/raa1/backup/prodenvironment/sas_repository/outb
 2026-09-15 12:23:05 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/MCARE_2026_TGT_CLI_OFFSHR_20260605_044026_TEST.DAT.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
 2026-09-15 12:23:05 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/mcd_hos_fnf_rpt_data.txt.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
 2026-09-15 12:23:05 - PGP Decryption Process Completed.
+
+
+/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt
