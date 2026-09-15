@@ -16,3 +16,13 @@ ls -la /raa1/backup/prodenvironment/sas_repository/outbound | grep MCARE_2026_TG
 mv /raa1/backup/prodenvironment/sas_repository/outbound/MCARE_2026_TGT_CLI_ONSHR_20260915_121028.DAT /raa1/backup/devenvironment/sas_repository/outbound/
 
 mv /raa1/backup/prodenvironment/sas_repository/outbound/MCARE_2026_TGT_CLI_OFFSHR_20260915_121028.DAT /raa1/backup/devenvironment/sas_repository/outbound/
+
+
+========hey nikhitha when you are free can you please move this deploy file to uat s3 
+ 
+Location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
+DEPLY_AHGPRSP_ACA_20260915
+ 
+/bin/sh /hcaaapck/backup/IT/PROD/scripts/start_sas_deploy_copy_hdfs_MN.sh ALL ACA
+
+
