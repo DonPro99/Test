@@ -32,3 +32,5 @@ cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R1_MRA_PREMA
    /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
 
 ./pgp_decrypt_and_archive.sh MRA "ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp"
+
+/hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh MRA "ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp"
