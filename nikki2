@@ -1,1 +1,1 @@
-cat /hcaaapck/backup/IT/PROD/conf/deploy.properties | grep -i "ACA\|AHGPRSP"
+/raa1/backup/devenvironment/sas_repository/deploy_in
