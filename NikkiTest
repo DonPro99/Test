@@ -25,6 +25,9 @@ DEPLY_AHGPRSP_ACA_20260915
  
 /bin/sh /hcaaapck/backup/IT/PROD/scripts/start_sas_deploy_copy_hdfs_MN.sh ALL ACA
 
+
+
+find /hcaaapck/backup -iname "pgp_decrypt_and_archive*"
 cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp \
    /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
 
