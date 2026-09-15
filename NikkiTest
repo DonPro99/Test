@@ -1,6 +1,1 @@
-Hi Nikhitha, There is a new requirement from the MRA team regarding splitting the pre-match file for onshore and offshore so Brad confirmed there is no urgency for now to send the test file to the vendor, and this can be delayed until the next sprint or until other higher priority work is completed. 
- 
-And regarding the new requirement that we just received from MRA team, we should be able to reuse the same existing deploy (backup\devenvironment\sas_repository\deploy_in\archive\20260914\deply_dtvntrtpm_mra_20260812.sas7bdat) for the UAT and vendor testing after the onshore/offshore split is removed. So, there is no need for a new deploy for this updated requirement.
- 
-Please let me know if you find any issues in using the existing test deploy to reuse for the updated requirement. thanks
- 
+Thanks Pranaya, that's helpful to know - good to have some breathing room on this. I'll plan to update the code to remove the onshore/offshore split, and will reuse the existing deploy file for UAT and vendor testing as you mentioned. Will pick this back up and keep you posted.
