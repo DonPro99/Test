@@ -33,4 +33,33 @@ cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R1_MRA_PREMA
 
 ./pgp_decrypt_and_archive.sh MRA "ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp"
 
-/hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh MRA "ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp"
+[SAS@dc04plpsas104-srcradcoolbthpr]/raa1/backup/prodenvironment/sas_repository/outbound>RA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp"                 <
+-ksh: ./pgp_decrypt_and_archive.sh: not found
+[SAS@dc04plpsas104-srcradcoolbthpr]/raa1/backup/prodenvironment/sas_repository/outbound>FSHORE_1_20260914151603.txt.pgp"                               <
+2026-09-15 12:23:04 - Starting PGP Decryption Process...
+2026-09-15 12:23:04 - Processing LOB: MRA
+2026-09-15 12:23:04 - Pattern: ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp
+2026-09-15 12:23:04 - Custom Output Directory: 
+2026-09-15 12:23:04 - Processing directory: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/Anthem_Carilion_Comm_Risk_Assessment_20260317.csv.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/Anthem_Carilion_Comm_Risk_Assessment_20260415.csv.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/Anthem_Carilion_Comm_Risk_Assessment_20260516.csv.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/Anthem_Carilion_Comm_Risk_Assessment_20260617.csv.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/Anthem_Carilion_Comm_Risk_Assessment_20260716.csv.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/Anthem_Carilion_Comm_Risk_Assessment_20260815.csv.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/Anthem_Carilion_Comm_Risk_Assessment_20260911.csv.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ANTHEM_INV_PRIORITYLIST_SL_20260911.005455.txt.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ANTHEM_INV_PROVIDER_20260218.txt.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/Commerical_File_Found_NotFound_PDF.csv.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/CRA_Prosp_Tracking_20251201.csv.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ELEVANCE_20260605.control.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ELEVANCE_20260701.control.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:04 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ELEVANCE_20260716.control.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+chmod: changing permissions of '/raa1/backup/prodenvironment/sas_repository/outbound': Operation not permitted
+2026-09-15 12:23:04 - Processing: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp
+2026-09-15 12:23:04 - Decrypting to: /raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt (Overwrite enabled)
+2026-09-15 12:23:05 - Successfully decrypted: /raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt
+2026-09-15 12:23:05 - Archived to: /hcaaapck/backup/ProdEnvironment/SAS_Repository/DrConnect_PGP_Archive/SEP2026/MRA/
+2026-09-15 12:23:05 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/MCARE_2026_TGT_CLI_OFFSHR_20260605_044026_TEST.DAT.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:05 - Skipping: /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/mcd_hos_fnf_rpt_data.txt.pgp (No match for pattern 'ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp')
+2026-09-15 12:23:05 - PGP Decryption Process Completed.
