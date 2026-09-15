@@ -25,33 +25,7 @@ DEPLY_AHGPRSP_ACA_20260915
  
 /bin/sh /hcaaapck/backup/IT/PROD/scripts/start_sas_deploy_copy_hdfs_MN.sh ALL ACA
 
-# Usage:
-# 1. Process ACA files (default):
-#    ./pgp_decrypt_and_archive.sh ACA
-#
-# 2. Process MRA files (default):
-#    ./pgp_decrypt_and_archive.sh MRA
-#
-# 3. Process specific pattern for ACA or MRA:
-#    ./pgp_decrypt_and_archive.sh ACA "Anthem_INV_CHASES_*"
-#
-# 4. Process files based on LOB, Pattern, and custom output directory:
-#    ./pgp_decrypt_and_archive.sh ACA "Anthem_INV_CHASES_*" /custom/output/
-#
-# 5. Process Lookups files for ACA:
-#    ./pgp_decrypt_and_archive.sh ACA "ad_patient_encounter_all_lob*"
-#
-# 6. Process Lookups files for MRA:
-#    ./pgp_decrypt_and_archive.sh MRA "rad_patient_encounter_all_lobmra*"
-# ==================================================================================================
+cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp \
+   /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
 
-INPUT_DIR="/hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG"
-ARCHIVE_DIR="/hcaaapck/backup/ProdEnvironment/SAS_Repository/DrConnect_PGP_Archive"
-LOG_DIR="/hcaaapck/backup/ProdEnvironment/PGP_Decrypt"
-LOG_FILE="$LOG_DIR/decrypt_debug.log"
-
-OUTPUT_DIR_ACA="/hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND"
-OUTPUT_DIR_MRA="/raa1/backup/prodenvironment/sas_repository/outbound"
-LOOKUP_DIR_ACA="/hcaaapck/backup/ProdEnvironment/Lookups"
-LOOKUP_DIR_MRA="/raa1/backup/prodenvironment/lookups"
-LOOKUP_DIR_MRA1="/raa1/backup/prodenvironment/hedis"
+./pgp_decrypt_and_archive.sh MRA "ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp"
