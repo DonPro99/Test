@@ -1,1 +1,1 @@
-/raa1/backup/devenvironment/sas_repository/deploy_in
+grep -i "dtvntrt" snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
