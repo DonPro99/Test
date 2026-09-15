@@ -55,15 +55,4 @@ cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/MCARE_2026_TGT_CLI_OFF
 /hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh MRA "MCARE_2026_TGT_CLI_OFFSHR_20260915_121028.DAT.pgp"
 
 
-Hi Tagore,
-
-Following up on the job we discussed this morning - here's what's going on.
-
-The SAS side (merge, tokenization, Snowflake load) was fully tested end to end for 14159 and passed with no issues. The job itself kept failing before, but that was a separate jar issue - so it never actually got far enough to hit this next problem until today, which is why we're only seeing it now.
-
-Root cause: the properties file's column list still has the old header names (before the 14159 rename), which is what's causing today's failure. Fix is straightforward - update it to match the new headers.
-
-Keeping the job inactive for now per PRC until this is resolved. Let me know if you want to discuss.
-
-Thanks,
-Nikhitha
+crln-652798729258-ssm-uat-nogbd-filetransfer/inbound/raa/commercial/na/deply_ahgprsp_aca_stg
