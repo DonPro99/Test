@@ -1,1 +1,7 @@
-grep -i "dtvntrt" snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
+Quick question the CFX team needs answered to move forward on the Pre-Match inbound connection.
+
+We know the S3 destination location where CFX delivers the file after pickup. What we don't know is the source location CFX picks up from - i.e., where the vendor places the file before CFX moves it to S3.
+
+I have an example from an Optum file location, but I'm not sure if all MRA vendors place their files in the same source location, or if it varies by vendor. Can you confirm the correct source/pickup location CFX should use for this new Pre-Match connection?
+
+This is blocking the CFX setup, so any help pinning this down would be great.
