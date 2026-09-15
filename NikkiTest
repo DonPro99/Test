@@ -25,4 +25,6 @@ DEPLY_AHGPRSP_ACA_20260915
  
 /bin/sh /hcaaapck/backup/IT/PROD/scripts/start_sas_deploy_copy_hdfs_MN.sh ALL ACA
 
+/hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh MRA "<exact filename or pattern>"
+
 
