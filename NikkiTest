@@ -56,3 +56,10 @@ cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/MCARE_2026_TGT_CLI_OFF
 
 
 crln-652798729258-ssm-uat-nogbd-filetransfer/inbound/raa/commercial/na/deply_ahgprsp_aca_stg
+
+
+aws s3 ls s3://crln-652798729258-ssm-uat-nogbd-filetransfer/inbound/raa/commercial/na/deply_ahgprsp_aca_stg/
+
+aws s3 ls s3://crln-652798729258-ssm-uat-nogbd-filetransfer/inbound/raa/ --recursive | grep -i ahgprsp
+
+aws s3 cp /path/to/converted/DEPLY_AHGPRSP_ACA_20260915.txt s3://crln-652798729258-ssm-uat-nogbd-filetransfer/inbound/raa/commercial/na/deply_ahgprsp_aca_stg/
