@@ -1,1 +1,1166 @@
-Thanks Pranaya, that's helpful to know - good to have some breathing room on this. I'll plan to update the code to remove the onshore/offshore split, and will reuse the existing deploy file for UAT and vendor testing as you mentioned. Will pick this back up and keep you posted.
+Ivy Default Cache set to: /home/hadoop/.ivy2/cache
+The jars for the packages stored in: /home/hadoop/.ivy2/jars
+net.snowflake#snowflake-jdbc added as a dependency
+net.snowflake#spark-snowflake_2.12 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-743cf147-8b2d-44a2-900c-a6e94a0bc87b;1.0
+	confs: [default]
+	found net.snowflake#snowflake-jdbc;3.28.0 in central
+	found net.snowflake#spark-snowflake_2.12;3.1.6 in central
+	found org.apache.parquet#parquet-avro;1.15.2 in central
+	found org.apache.parquet#parquet-column;1.15.2 in central
+	found org.apache.parquet#parquet-common;1.15.2 in central
+	found org.apache.parquet#parquet-format-structures;1.15.2 in central
+	found javax.annotation#javax.annotation-api;1.3.2 in central
+	found org.slf4j#slf4j-api;1.7.33 in central
+	found org.apache.parquet#parquet-encoding;1.15.2 in central
+	found org.apache.parquet#parquet-hadoop;1.15.2 in central
+	found org.xerial.snappy#snappy-java;1.1.10.7 in central
+	found io.airlift#aircompressor;2.0.2 in central
+	found commons-pool#commons-pool;1.6 in central
+	found com.github.luben#zstd-jni;1.5.6-6 in central
+	found org.apache.avro#avro;1.11.4 in central
+	found com.fasterxml.jackson.core#jackson-core;2.14.3 in central
+	found com.fasterxml.jackson.core#jackson-databind;2.14.3 in central
+	found com.fasterxml.jackson.core#jackson-annotations;2.14.3 in central
+	found org.apache.commons#commons-compress;1.26.2 in central
+	found commons-codec#commons-codec;1.17.0 in central
+	found commons-io#commons-io;2.16.1 in central
+	found org.apache.commons#commons-lang3;3.14.0 in central
+	found org.apache.parquet#parquet-jackson;1.15.2 in central
+downloading https://repo1.maven.org/maven2/net/snowflake/snowflake-jdbc/3.28.0/snowflake-jdbc-3.28.0.jar ...
+	[SUCCESSFUL ] net.snowflake#snowflake-jdbc;3.28.0!snowflake-jdbc.jar (786ms)
+downloading https://repo1.maven.org/maven2/net/snowflake/spark-snowflake_2.12/3.1.6/spark-snowflake_2.12-3.1.6.jar ...
+	[SUCCESSFUL ] net.snowflake#spark-snowflake_2.12;3.1.6!spark-snowflake_2.12.jar (43ms)
+downloading https://repo1.maven.org/maven2/org/apache/parquet/parquet-avro/1.15.2/parquet-avro-1.15.2.jar ...
+	[SUCCESSFUL ] org.apache.parquet#parquet-avro;1.15.2!parquet-avro.jar (54ms)
+downloading https://repo1.maven.org/maven2/org/apache/parquet/parquet-column/1.15.2/parquet-column-1.15.2.jar ...
+	[SUCCESSFUL ] org.apache.parquet#parquet-column;1.15.2!parquet-column.jar (59ms)
+downloading https://repo1.maven.org/maven2/org/apache/parquet/parquet-hadoop/1.15.2/parquet-hadoop-1.15.2.jar ...
+	[SUCCESSFUL ] org.apache.parquet#parquet-hadoop;1.15.2!parquet-hadoop.jar (56ms)
+downloading https://repo1.maven.org/maven2/org/apache/parquet/parquet-common/1.15.2/parquet-common-1.15.2.jar ...
+	[SUCCESSFUL ] org.apache.parquet#parquet-common;1.15.2!parquet-common.jar (50ms)
+downloading https://repo1.maven.org/maven2/org/apache/avro/avro/1.11.4/avro-1.11.4.jar ...
+	[SUCCESSFUL ] org.apache.avro#avro;1.11.4!avro.jar(bundle) (57ms)
+downloading https://repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.33/slf4j-api-1.7.33.jar ...
+	[SUCCESSFUL ] org.slf4j#slf4j-api;1.7.33!slf4j-api.jar (59ms)
+downloading https://repo1.maven.org/maven2/org/apache/parquet/parquet-encoding/1.15.2/parquet-encoding-1.15.2.jar ...
+	[SUCCESSFUL ] org.apache.parquet#parquet-encoding;1.15.2!parquet-encoding.jar (49ms)
+downloading https://repo1.maven.org/maven2/org/apache/parquet/parquet-format-structures/1.15.2/parquet-format-structures-1.15.2.jar ...
+	[SUCCESSFUL ] org.apache.parquet#parquet-format-structures;1.15.2!parquet-format-structures.jar (49ms)
+downloading https://repo1.maven.org/maven2/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar ...
+	[SUCCESSFUL ] javax.annotation#javax.annotation-api;1.3.2!javax.annotation-api.jar (55ms)
+downloading https://repo1.maven.org/maven2/org/xerial/snappy/snappy-java/1.1.10.7/snappy-java-1.1.10.7.jar ...
+	[SUCCESSFUL ] org.xerial.snappy#snappy-java;1.1.10.7!snappy-java.jar(bundle) (65ms)
+downloading https://repo1.maven.org/maven2/io/airlift/aircompressor/2.0.2/aircompressor-2.0.2.jar ...
+	[SUCCESSFUL ] io.airlift#aircompressor;2.0.2!aircompressor.jar (53ms)
+downloading https://repo1.maven.org/maven2/commons-pool/commons-pool/1.6/commons-pool-1.6.jar ...
+	[SUCCESSFUL ] commons-pool#commons-pool;1.6!commons-pool.jar (39ms)
+downloading https://repo1.maven.org/maven2/com/github/luben/zstd-jni/1.5.6-6/zstd-jni-1.5.6-6.jar ...
+	[SUCCESSFUL ] com.github.luben#zstd-jni;1.5.6-6!zstd-jni.jar (64ms)
+downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.14.3/jackson-core-2.14.3.jar ...
+	[SUCCESSFUL ] com.fasterxml.jackson.core#jackson-core;2.14.3!jackson-core.jar(bundle) (38ms)
+downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.14.3/jackson-databind-2.14.3.jar ...
+	[SUCCESSFUL ] com.fasterxml.jackson.core#jackson-databind;2.14.3!jackson-databind.jar(bundle) (46ms)
+downloading https://repo1.maven.org/maven2/org/apache/commons/commons-compress/1.26.2/commons-compress-1.26.2.jar ...
+	[SUCCESSFUL ] org.apache.commons#commons-compress;1.26.2!commons-compress.jar (40ms)
+downloading https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.14.3/jackson-annotations-2.14.3.jar ...
+	[SUCCESSFUL ] com.fasterxml.jackson.core#jackson-annotations;2.14.3!jackson-annotations.jar(bundle) (38ms)
+downloading https://repo1.maven.org/maven2/commons-codec/commons-codec/1.17.0/commons-codec-1.17.0.jar ...
+	[SUCCESSFUL ] commons-codec#commons-codec;1.17.0!commons-codec.jar (47ms)
+downloading https://repo1.maven.org/maven2/commons-io/commons-io/2.16.1/commons-io-2.16.1.jar ...
+	[SUCCESSFUL ] commons-io#commons-io;2.16.1!commons-io.jar (43ms)
+downloading https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.14.0/commons-lang3-3.14.0.jar ...
+	[SUCCESSFUL ] org.apache.commons#commons-lang3;3.14.0!commons-lang3.jar (39ms)
+downloading https://repo1.maven.org/maven2/org/apache/parquet/parquet-jackson/1.15.2/parquet-jackson-1.15.2.jar ...
+	[SUCCESSFUL ] org.apache.parquet#parquet-jackson;1.15.2!parquet-jackson.jar (55ms)
+:: resolution report :: resolve 7050ms :: artifacts dl 1900ms
+	:: modules in use:
+	com.fasterxml.jackson.core#jackson-annotations;2.14.3 from central in [default]
+	com.fasterxml.jackson.core#jackson-core;2.14.3 from central in [default]
+	com.fasterxml.jackson.core#jackson-databind;2.14.3 from central in [default]
+	com.github.luben#zstd-jni;1.5.6-6 from central in [default]
+	commons-codec#commons-codec;1.17.0 from central in [default]
+	commons-io#commons-io;2.16.1 from central in [default]
+	commons-pool#commons-pool;1.6 from central in [default]
+	io.airlift#aircompressor;2.0.2 from central in [default]
+	javax.annotation#javax.annotation-api;1.3.2 from central in [default]
+	net.snowflake#snowflake-jdbc;3.28.0 from central in [default]
+	net.snowflake#spark-snowflake_2.12;3.1.6 from central in [default]
+	org.apache.avro#avro;1.11.4 from central in [default]
+	org.apache.commons#commons-compress;1.26.2 from central in [default]
+	org.apache.commons#commons-lang3;3.14.0 from central in [default]
+	org.apache.parquet#parquet-avro;1.15.2 from central in [default]
+	org.apache.parquet#parquet-column;1.15.2 from central in [default]
+	org.apache.parquet#parquet-common;1.15.2 from central in [default]
+	org.apache.parquet#parquet-encoding;1.15.2 from central in [default]
+	org.apache.parquet#parquet-format-structures;1.15.2 from central in [default]
+	org.apache.parquet#parquet-hadoop;1.15.2 from central in [default]
+	org.apache.parquet#parquet-jackson;1.15.2 from central in [default]
+	org.slf4j#slf4j-api;1.7.33 from central in [default]
+	org.xerial.snappy#snappy-java;1.1.10.7 from central in [default]
+	:: evicted modules:
+	net.snowflake#snowflake-jdbc;3.24.2 by [net.snowflake#snowflake-jdbc;3.28.0] in [default]
+	org.slf4j#slf4j-api;1.7.36 by [org.slf4j#slf4j-api;1.7.33] in [default]
+	---------------------------------------------------------------------
+	|                  |            modules            ||   artifacts   |
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+	---------------------------------------------------------------------
+	|      default     |   25  |   23  |   23  |   2   ||   23  |   23  |
+	---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-743cf147-8b2d-44a2-900c-a6e94a0bc87b
+	confs: [default]
+	23 artifacts copied, 0 already retrieved (109057kB/52ms)
+26/09/15 12:29:27 INFO EMRParamSideChannel: Setting FGAC mode to false
+26/09/15 12:29:27 INFO SparkContext: Running Spark version 3.5.5-amzn-1
+26/09/15 12:29:27 INFO SparkContext: OS info Linux, 6.12.94-123.190.amzn2023.aarch64, aarch64
+26/09/15 12:29:27 INFO SparkContext: Java version 17.0.19
+26/09/15 12:29:27 INFO ResourceUtils: ==============================================================
+26/09/15 12:29:27 INFO ResourceUtils: No custom resources configured for spark.driver.
+26/09/15 12:29:27 INFO ResourceUtils: ==============================================================
+26/09/15 12:29:27 INFO SparkContext: Submitted application: Mcaid Chase files S3 to Snowflake Load
+26/09/15 12:29:27 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 3, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: , memoryOverhead -> name: memoryOverhead, amount: 2048, script: , vendor: , executorType -> name: executorType, amount: 1, script: , vendor: , memory -> name: memory, amount: 7168, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+26/09/15 12:29:27 INFO ResourceProfile: Limiting resource is cpus at 3 tasks per executor
+26/09/15 12:29:27 INFO ResourceProfileManager: Added ResourceProfile id: 0
+26/09/15 12:29:27 INFO ResourceProfile: User executor ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 3, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: , memoryOverhead -> name: memoryOverhead, amount: 2048, script: , vendor: , executorType -> name: executorType, amount: 1, script: , vendor: , memory -> name: memory, amount: 7168, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+26/09/15 12:29:27 INFO ResourceProfile: Limiting resource is cpus at 3 tasks per executor
+26/09/15 12:29:27 INFO ResourceProfileManager: Added ResourceProfile id: 1
+26/09/15 12:29:27 INFO SecurityManager: Changing view acls to: hadoop
+26/09/15 12:29:27 INFO SecurityManager: Changing modify acls to: hadoop
+26/09/15 12:29:27 INFO SecurityManager: Changing view acls groups to: 
+26/09/15 12:29:27 INFO SecurityManager: Changing modify acls groups to: 
+26/09/15 12:29:27 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: hadoop; groups with view permissions: EMPTY; users with modify permissions: hadoop; groups with modify permissions: EMPTY
+26/09/15 12:29:27 INFO Utils: Successfully started service 'sparkDriver' on port 34979.
+26/09/15 12:29:27 INFO SparkEnv: Registering MapOutputTracker
+26/09/15 12:29:27 INFO SparkEnv: Registering BlockManagerMaster
+26/09/15 12:29:27 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+26/09/15 12:29:27 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+26/09/15 12:29:27 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+26/09/15 12:29:27 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-b510eae6-45dc-4389-a566-d38132d9c4da
+26/09/15 12:29:27 INFO MemoryStore: MemoryStore started with capacity 5.8 GiB
+26/09/15 12:29:27 INFO SparkEnv: Registering OutputCommitCoordinator
+26/09/15 12:29:27 INFO SubResultCacheManager: Sub-result caches are disabled.
+26/09/15 12:29:27 INFO JettyUtils: Start Jetty 0.0.0.0:4040 for SparkUI
+26/09/15 12:29:27 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+26/09/15 12:29:27 INFO Utils: Using effectiveMaxExecutors = 20, (spark.dynamicAllocation.maxExecutors * spark.dynamicAllocation.maxExecutorsRatio)
+26/09/15 12:29:27 INFO Utils: Using initial executors = 4, min of effectiveMaxExecutors, (max of spark.dynamicAllocation.initialExecutors, spark.dynamicAllocation.minExecutors and spark.executor.instances)
+26/09/15 12:29:27 INFO DefaultNoHARMFailoverProxyProvider: Connecting to ResourceManager at ip-10-197-212-44.163391535226.awsdns.internal.das/10.197.212.44:8032
+26/09/15 12:29:28 INFO Configuration: resource-types.xml not found
+26/09/15 12:29:28 INFO ResourceUtils: Unable to find 'resource-types.xml'.
+26/09/15 12:29:28 INFO Client: Verifying our application has not requested more than the maximum memory capability of the cluster (11712 MB per container)
+26/09/15 12:29:28 INFO Client: Will allocate AM container, with 896 MB memory including 384 MB overhead
+26/09/15 12:29:28 INFO Client: Setting up container launch context for our AM
+26/09/15 12:29:28 INFO Client: Setting up the launch environment for our AM container
+26/09/15 12:29:28 INFO Client: Preparing resources for our AM container
+26/09/15 12:29:28 WARN Client: Neither spark.yarn.jars nor spark.yarn.archive is set, falling back to uploading libraries under SPARK_HOME.
+26/09/15 12:29:30 INFO Client: Uploading resource file:/tmp/spark-77876129-5c1a-4872-86d6-972e59142d93/__spark_libs__5086563679372426481.zip -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/__spark_libs__5086563679372426481.zip
+26/09/15 12:29:32 INFO Client: Uploading resource file:/home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/reduce_reuse_recycle-0.1-SNAPSHOT.jar
+26/09/15 12:29:33 INFO Client: Uploading resource file:/home/hadoop/jars/snowflake-jdbc-3.14.4.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/snowflake-jdbc-3.14.4.jar
+26/09/15 12:29:34 INFO Client: Uploading resource file:/home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/spark-snowflake_2.12-2.12.0-spark_3.4.jar
+26/09/15 12:29:34 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/net.snowflake_snowflake-jdbc-3.28.0.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/net.snowflake_snowflake-jdbc-3.28.0.jar
+26/09/15 12:29:34 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/net.snowflake_spark-snowflake_2.12-3.1.6.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/net.snowflake_spark-snowflake_2.12-3.1.6.jar
+26/09/15 12:29:35 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.apache.parquet_parquet-avro-1.15.2.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.apache.parquet_parquet-avro-1.15.2.jar
+26/09/15 12:29:35 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.apache.parquet_parquet-column-1.15.2.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.apache.parquet_parquet-column-1.15.2.jar
+26/09/15 12:29:35 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.apache.parquet_parquet-hadoop-1.15.2.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.apache.parquet_parquet-hadoop-1.15.2.jar
+26/09/15 12:29:36 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.apache.parquet_parquet-common-1.15.2.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.apache.parquet_parquet-common-1.15.2.jar
+26/09/15 12:29:36 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.apache.avro_avro-1.11.4.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.apache.avro_avro-1.11.4.jar
+26/09/15 12:29:36 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.slf4j_slf4j-api-1.7.33.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.slf4j_slf4j-api-1.7.33.jar
+26/09/15 12:29:37 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.apache.parquet_parquet-encoding-1.15.2.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.apache.parquet_parquet-encoding-1.15.2.jar
+26/09/15 12:29:37 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.apache.parquet_parquet-format-structures-1.15.2.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.apache.parquet_parquet-format-structures-1.15.2.jar
+26/09/15 12:29:38 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/javax.annotation_javax.annotation-api-1.3.2.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/javax.annotation_javax.annotation-api-1.3.2.jar
+26/09/15 12:29:38 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.xerial.snappy_snappy-java-1.1.10.7.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.xerial.snappy_snappy-java-1.1.10.7.jar
+26/09/15 12:29:39 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/io.airlift_aircompressor-2.0.2.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/io.airlift_aircompressor-2.0.2.jar
+26/09/15 12:29:39 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/commons-pool_commons-pool-1.6.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/commons-pool_commons-pool-1.6.jar
+26/09/15 12:29:39 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/com.github.luben_zstd-jni-1.5.6-6.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/com.github.luben_zstd-jni-1.5.6-6.jar
+26/09/15 12:29:40 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/com.fasterxml.jackson.core_jackson-core-2.14.3.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/com.fasterxml.jackson.core_jackson-core-2.14.3.jar
+26/09/15 12:29:40 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/com.fasterxml.jackson.core_jackson-databind-2.14.3.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/com.fasterxml.jackson.core_jackson-databind-2.14.3.jar
+26/09/15 12:29:41 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.apache.commons_commons-compress-1.26.2.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.apache.commons_commons-compress-1.26.2.jar
+26/09/15 12:29:41 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/com.fasterxml.jackson.core_jackson-annotations-2.14.3.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/com.fasterxml.jackson.core_jackson-annotations-2.14.3.jar
+26/09/15 12:29:42 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/commons-codec_commons-codec-1.17.0.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/commons-codec_commons-codec-1.17.0.jar
+26/09/15 12:29:42 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/commons-io_commons-io-2.16.1.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/commons-io_commons-io-2.16.1.jar
+26/09/15 12:29:42 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.apache.commons_commons-lang3-3.14.0.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.apache.commons_commons-lang3-3.14.0.jar
+26/09/15 12:29:43 INFO Client: Uploading resource file:/home/hadoop/.ivy2/jars/org.apache.parquet_parquet-jackson-1.15.2.jar -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/org.apache.parquet_parquet-jackson-1.15.2.jar
+26/09/15 12:29:43 INFO Client: Uploading resource file:/etc/hudi/conf.dist/hudi-defaults.conf -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/hudi-defaults.conf
+26/09/15 12:29:44 INFO Client: Uploading resource file:/usr/lib/spark/python/lib/pyspark.zip -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/pyspark.zip
+26/09/15 12:29:44 INFO Client: Uploading resource file:/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/py4j-0.10.9.7-src.zip
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/net.snowflake_snowflake-jdbc-3.28.0.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/net.snowflake_spark-snowflake_2.12-3.1.6.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-avro-1.15.2.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-column-1.15.2.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-hadoop-1.15.2.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-common-1.15.2.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.apache.avro_avro-1.11.4.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.slf4j_slf4j-api-1.7.33.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-encoding-1.15.2.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-format-structures-1.15.2.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/javax.annotation_javax.annotation-api-1.3.2.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.xerial.snappy_snappy-java-1.1.10.7.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/io.airlift_aircompressor-2.0.2.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/commons-pool_commons-pool-1.6.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/com.github.luben_zstd-jni-1.5.6-6.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/com.fasterxml.jackson.core_jackson-core-2.14.3.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/com.fasterxml.jackson.core_jackson-databind-2.14.3.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.apache.commons_commons-compress-1.26.2.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/com.fasterxml.jackson.core_jackson-annotations-2.14.3.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/commons-codec_commons-codec-1.17.0.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/commons-io_commons-io-2.16.1.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.apache.commons_commons-lang3-3.14.0.jar added multiple times to distributed cache.
+26/09/15 12:29:45 WARN Client: Same path resource file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-jackson-1.15.2.jar added multiple times to distributed cache.
+26/09/15 12:29:45 INFO Client: Uploading resource file:/tmp/spark-77876129-5c1a-4872-86d6-972e59142d93/__spark_conf__12704936865635135588.zip -> hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/hadoop/.sparkStaging/application_1789475067920_0001/__spark_conf__.zip
+26/09/15 12:29:45 INFO SecurityManager: Changing view acls to: hadoop
+26/09/15 12:29:45 INFO SecurityManager: Changing modify acls to: hadoop
+26/09/15 12:29:45 INFO SecurityManager: Changing view acls groups to: 
+26/09/15 12:29:45 INFO SecurityManager: Changing modify acls groups to: 
+26/09/15 12:29:45 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: hadoop; groups with view permissions: EMPTY; users with modify permissions: hadoop; groups with modify permissions: EMPTY
+26/09/15 12:29:45 INFO Client: Submitting application application_1789475067920_0001 to ResourceManager
+26/09/15 12:29:46 INFO YarnClientImpl: Submitted application application_1789475067920_0001
+26/09/15 12:29:47 INFO Client: Application report for application_1789475067920_0001 (state: ACCEPTED)
+26/09/15 12:29:47 INFO Client: 
+	 client token: N/A
+	 diagnostics: AM container is launched, waiting for AM container to Register with RM
+	 ApplicationMaster host: N/A
+	 ApplicationMaster RPC port: -1
+	 queue: root.default
+	 start time: 1789475385726
+	 final status: UNDEFINED
+	 tracking URL: http://ip-10-197-212-44.163391535226.awsdns.internal.das:20888/proxy/application_1789475067920_0001/
+	 user: hadoop
+26/09/15 12:29:57 INFO Client: Application report for application_1789475067920_0001 (state: RUNNING)
+26/09/15 12:29:57 INFO Client: 
+	 client token: N/A
+	 diagnostics: N/A
+	 ApplicationMaster host: 10.197.212.129
+	 ApplicationMaster RPC port: -1
+	 queue: root.default
+	 start time: 1789475385726
+	 final status: UNDEFINED
+	 tracking URL: http://ip-10-197-212-44.163391535226.awsdns.internal.das:20888/proxy/application_1789475067920_0001/
+	 user: hadoop
+26/09/15 12:29:57 INFO YarnClientSchedulerBackend: Application application_1789475067920_0001 has started running.
+26/09/15 12:29:57 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 34829.
+26/09/15 12:29:57 INFO NettyBlockTransferService: Server created on ip-10-197-212-44.163391535226.awsdns.internal.das:34829
+26/09/15 12:29:57 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+26/09/15 12:29:57 INFO BlockManager: external shuffle service port = 7337
+26/09/15 12:29:57 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, ip-10-197-212-44.163391535226.awsdns.internal.das, 34829, None)
+26/09/15 12:29:57 INFO BlockManagerMasterEndpoint: Registering block manager ip-10-197-212-44.163391535226.awsdns.internal.das:34829 with 5.8 GiB RAM, BlockManagerId(driver, ip-10-197-212-44.163391535226.awsdns.internal.das, 34829, None)
+26/09/15 12:29:57 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, ip-10-197-212-44.163391535226.awsdns.internal.das, 34829, None)
+26/09/15 12:29:57 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, ip-10-197-212-44.163391535226.awsdns.internal.das, 34829, None)
+26/09/15 12:29:57 INFO YarnClientSchedulerBackend: Add WebUI Filter. org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter, Map(PROXY_HOSTS -> ip-10-197-212-44.163391535226.awsdns.internal.das, PROXY_URI_BASES -> http://ip-10-197-212-44.163391535226.awsdns.internal.das:20888/proxy/application_1789475067920_0001), /proxy/application_1789475067920_0001
+26/09/15 12:29:57 INFO SingleEventLogFileWriter: Logging events to hdfs:/var/log/spark/apps/application_1789475067920_0001.inprogress
+26/09/15 12:29:57 INFO Utils: Using effectiveMaxExecutors = 20, (spark.dynamicAllocation.maxExecutors * spark.dynamicAllocation.maxExecutorsRatio)
+26/09/15 12:29:57 INFO Utils: Using initial executors = 4, min of effectiveMaxExecutors, (max of spark.dynamicAllocation.initialExecutors, spark.dynamicAllocation.minExecutors and spark.executor.instances)
+26/09/15 12:29:57 WARN YarnSchedulerBackend$YarnSchedulerEndpoint: Attempted to request executors before the AM has registered!
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /jobs: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /jobs/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /jobs/job: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /jobs/job/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /stages: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /stages/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /stages/stage: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /stages/stage/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /stages/pool: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /stages/pool/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /storage: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /storage/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /storage/rdd: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /storage/rdd/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /environment: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /environment/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /executors: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /executors/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /executors/threadDump: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /executors/threadDump/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /executors/heapHistogram: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /executors/heapHistogram/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /static: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /api: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /jobs/job/kill: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /stages/stage/kill: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO ServerInfo: Adding filter to /metrics/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:57 INFO YarnClientSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+26/09/15 12:29:57 INFO YarnSchedulerBackend$YarnSchedulerEndpoint: ApplicationMaster registered as NettyRpcEndpointRef(spark-client://YarnAM)
+26/09/15 12:29:58 INFO SharedState: Setting hive.metastore.warehouse.dir ('null') to the value of spark.sql.warehouse.dir.
+26/09/15 12:29:58 INFO SharedState: Warehouse path is 'hdfs://ip-10-197-212-44.163391535226.awsdns.internal.das:8020/user/spark/warehouse'.
+26/09/15 12:29:58 INFO ServerInfo: Adding filter to /SQL: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:58 INFO ServerInfo: Adding filter to /SQL/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:58 INFO ServerInfo: Adding filter to /SQL/execution: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:58 INFO ServerInfo: Adding filter to /SQL/execution/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:58 INFO ServerInfo: Adding filter to /static/sql: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/09/15 12:29:59 WARN SnowflakeConnectorUtils$: Query pushdown is not supported because you are using Spark 3.5.5-amzn-1 with a connector designed to support Spark 3.4. Either use the version of Spark supported by the connector or install a version of the connector that supports your version of Spark.
+26/09/15 12:29:59 WARN ServerConnection$: JDBC 3.14.4 is being used. But the certified JDBC version 3.13.30 is recommended.
+26/09/15 12:30:00 INFO ServerConnection$: Create ServerConnection with new JDBC connection: 5377868609822159667
+26/09/15 12:30:00 INFO SparkConnectorContext$: Spark Connector system config: {
+  "spark_connector_version" : "2.12.0",
+  "spark_version" : "3.5.5-amzn-1",
+  "application_name" : "Mcaid Chase files S3 to Snowflake Load",
+  "scala_version" : "2.12.18",
+  "java_version" : "17.0.19",
+  "jdbc_version" : "3.14.4",
+  "certified_jdbc_version" : "3.13.30",
+  "os_name" : "Linux",
+  "max_memory_in_mb" : 10240,
+  "total_memory_in_mb" : 352,
+  "free_memory_in_mb" : 129,
+  "cpu_cores" : 4,
+  "spark_application_id" : "application_1789475067920_0001",
+  "spark_language" : "Scala",
+  "is_pyspark" : false,
+  "spark_config" : {
+    "spark.submit.pyFiles" : "N/A",
+    "spark.python.dependencyVersion.supportinfo" : "N/A",
+    "spark.yarn.secondary.jars" : "N/A",
+    "spark.python.dependencyVersion.dnf-plugin-support-info" : "N/A",
+    "spark.python.dependencyVersion.pyrsistent" : "N/A",
+    "spark.python.dependencyVersion.jsonschema" : "N/A",
+    "spark.sql.parquet.output.committer.class" : "N/A",
+    "spark.python.dependencyVersion.soupsieve" : "N/A",
+    "spark.python.dependencyVersion.packaging" : "N/A",
+    "spark.emr.releaseLabel" : "N/A",
+    "spark.python.dependencyVersion.idna" : "N/A",
+    "spark.network.timeout" : "N/A",
+    "spark.dynamicAllocation.initialExecutors" : "4",
+    "spark.python.dependencyVersion.mysqlclient" : "N/A",
+    "spark.python.dependencyVersion.awscrt" : "N/A",
+    "spark.python.dependencyVersion.distlib" : "N/A",
+    "spark.executor.memory" : "7G",
+    "spark.python.dependencyVersion.wcwidth" : "N/A",
+    "spark.yarn.heterogeneousExecutors.enabled" : "N/A",
+    "spark.python.dependencyVersion.MarkupSafe" : "N/A",
+    "spark.history.fs.logDirectory" : "N/A",
+    "spark.python.dependencyVersion.PySocks" : "N/A",
+    "spark.org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter.param.PROXY_HOSTS" : "N/A",
+    "spark.yarn.tags" : "N/A",
+    "spark.driver.port" : "N/A",
+    "spark.python.dependencyVersion.elementpath" : "N/A",
+    "spark.dynamicAllocation.maxExecutors" : "20",
+    "spark.emr.default.executor.memory" : "N/A",
+    "spark.driver.memory" : "10G",
+    "spark.python.dependencyVersion.dbus-python" : "N/A",
+    "spark.hadoop.mapreduce.output.fs.optimized.committer.enabled" : "N/A",
+    "spark.decommissioning.timeout.threshold" : "N/A",
+    "spark.yarn.appMasterEnv.AWS_SPARK_REDSHIFT_CONNECTOR_SERVICE_NAME" : "N/A",
+    "spark.aws.accountId" : "N/A",
+    "spark.python.dependencyVersion.aws-cfn-bootstrap" : "N/A",
+    "spark.python.dependencyVersion.seaborn" : "N/A",
+    "spark.hadoop.fs.s3a.committer.magic.enabled" : "N/A",
+    "spark.dynamicAllocation.minExecutors" : "4",
+    "spark.org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter.param.PROXY_URI_BASES" : "N/A",
+    "spark.yarn.dist.pyFiles" : "N/A",
+    "spark.emr.clusterId" : "N/A",
+    "spark.python.dependencyVersion.botocore" : "N/A",
+    "spark.python.dependencyVersion.lxml" : "N/A",
+    "spark.driver.extraLibraryPath" : "N/A",
+    "spark.python.dependencyVersion.nose" : "N/A",
+    "spark.executor.heartbeatInterval" : "N/A",
+    "spark.driver.memoryOverhead" : "6144",
+    "spark.python.dependencyVersion.prompt-toolkit" : "N/A",
+    "spark.hadoop.fs.s3a.committer.name" : "N/A",
+    "spark.python.dependencyVersion.pandas" : "N/A",
+    "spark.python.dependencyVersion.nltk" : "N/A",
+    "spark.python.dependencyVersion.tqdm" : "N/A",
+    "spark.app.startTime" : "N/A",
+    "spark.python.dependencyVersion.distro" : "N/A",
+    "spark.python.dependencyVersion.sepolicy" : "N/A",
+    "spark.submit.deployMode" : "client",
+    "spark.python.dependencyVersion.ruamel.yaml" : "N/A",
+    "spark.python.dependencyVersion.virtualenv" : "N/A",
+    "spark.python.dependencyVersion.regex" : "N/A",
+    "spark.yarn.appMasterEnv.PYSPARK_PYTHON" : "N/A",
+    "spark.dynamicAllocation.shuffleTracking.enabled" : "N/A",
+    "spark.python.dependencyVersion.Jinja2" : "N/A",
+    "spark.python.dependencyVersion.setools" : "N/A",
+    "spark.executor.extraLibraryPath" : "N/A",
+    "spark.python.dependencyVersion.selinux" : "N/A",
+    "spark.resourceManager.cleanupExpiredHost" : "N/A",
+    "spark.executor.defaultJavaOptions" : "N/A",
+    "spark.python.dependencyVersion.windmill" : "N/A",
+    "spark.yarn.appMasterEnv.JAVA_HOME" : "N/A",
+    "spark.python.dependencyVersion.jsonpatch" : "N/A",
+    "spark.files.fetchFailure.unRegisterOutputOnHost" : "N/A",
+    "spark.sql.warehouse.dir" : "N/A",
+    "spark.python.dependencyVersion.matplotlib" : "N/A",
+    "spark.python.dependencyVersion.boto3" : "N/A",
+    "spark.sql.hive.metastore.sharedPrefixes" : "N/A",
+    "spark.master" : "yarn",
+    "spark.yarn.historyServer.address" : "N/A",
+    "spark.python.dependencyVersion.boto" : "N/A",
+    "spark.python.dependencyVersion.prettytable" : "N/A",
+    "spark.python.dependencyVersion.lockfile" : "N/A",
+    "spark.eventLog.enabled" : "N/A",
+    "spark.python.dependencyVersion.python-dateutil" : "N/A",
+    "spark.driver.extraClassPath" : "N/A",
+    "spark.python.dependencyVersion.awscli" : "N/A",
+    "spark.blacklist.decommissioning.timeout" : "N/A",
+    "spark.executorEnv.PYSPARK_PYTHON" : "N/A",
+    "spark.python.dependencyVersion.ply" : "N/A",
+    "spark.yarn.appMasterEnv.SPARK_PUBLIC_DNS" : "N/A",
+    "spark.python.dependencyVersion.release-notification" : "N/A",
+    "spark.sql.emr.internal.extensions" : "N/A",
+    "spark.hadoop.fs.s3a.committer.magic.track.commits.in.memory.enabled" : "N/A",
+    "spark.python.dependencyVersion.libcomps" : "N/A",
+    "spark.yarn.dist.jars" : "N/A",
+    "spark.python.dependencyVersion.ruamel.yaml.clib" : "N/A",
+    "spark.eventLog.dir" : "N/A",
+    "spark.executor.cores" : "3",
+    "spark.python.dependencyVersion.oauthlib" : "N/A",
+    "spark.ui.filters" : "N/A",
+    "spark.python.dependencyVersion.chevron" : "N/A",
+    "spark.python.dependencyVersion.pycparser" : "N/A",
+    "spark.driver.extraJavaOptions" : "-Djava.net.preferIPv6Addresses=false -XX:OnOutOfMemoryError='kill -9 %p' -XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/jdk.internal.ref=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/sun.nio.cs=ALL-UNNAMED --add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.util.calendar=ALL-UNNAMED --add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED -Djdk.reflect.useDirectMethodHandle=false -XX:OnOutOfMemoryError='kill -9 %p'",
+    "spark.python.dependencyVersion.colorama" : "N/A",
+    "spark.python.dependencyVersion.netifaces" : "N/A",
+    "spark.repl.local.jars" : "file:///home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar,file:///home/hadoop/jars/snowflake-jdbc-3.14.4.jar,file:///home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar,file:///home/hadoop/.ivy2/jars/net.snowflake_snowflake-jdbc-3.28.0.jar,file:///home/hadoop/.ivy2/jars/net.snowflake_spark-snowflake_2.12-3.1.6.jar,file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-avro-1.15.2.jar,file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-column-1.15.2.jar,file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-hadoop-1.15.2.jar,file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-common-1.15.2.jar,file:///home/hadoop/.ivy2/jars/org.apache.avro_avro-1.11.4.jar,file:///home/hadoop/.ivy2/jars/org.slf4j_slf4j-api-1.7.33.jar,file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-encoding-1.15.2.jar,file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-format-structures-1.15.2.jar,file:///home/hadoop/.ivy2/jars/javax.annotation_javax.annotation-api-1.3.2.jar,file:///home/hadoop/.ivy2/jars/org.xerial.snappy_snappy-java-1.1.10.7.jar,file:///home/hadoop/.ivy2/jars/io.airlift_aircompressor-2.0.2.jar,file:///home/hadoop/.ivy2/jars/commons-pool_commons-pool-1.6.jar,file:///home/hadoop/.ivy2/jars/com.github.luben_zstd-jni-1.5.6-6.jar,file:///home/hadoop/.ivy2/jars/com.fasterxml.jackson.core_jackson-core-2.14.3.jar,file:///home/hadoop/.ivy2/jars/com.fasterxml.jackson.core_jackson-databind-2.14.3.jar,file:///home/hadoop/.ivy2/jars/org.apache.commons_commons-compress-1.26.2.jar,file:///home/hadoop/.ivy2/jars/com.fasterxml.jackson.core_jackson-annotations-2.14.3.jar,file:///home/hadoop/.ivy2/jars/commons-codec_commons-codec-1.17.0.jar,file:///home/hadoop/.ivy2/jars/commons-io_commons-io-2.16.1.jar,file:///home/hadoop/.ivy2/jars/org.apache.commons_commons-lang3-3.14.0.jar,file:///home/hadoop/.ivy2/jars/org.apache.parquet_parquet-jackson-1.15.2.jar",
+    "spark.hadoop.yarn.timeline-service.enabled" : "N/A",
+    "spark.python.dependencyVersion.rpm" : "N/A",
+    "spark.python.dependencyVersion.ec2-hibinit-agent" : "N/A",
+    "spark.executor.id" : "driver",
+    "spark.python.dependencyVersion.pytz" : "N/A",
+    "spark.python.dependencyVersion.systemd-python" : "N/A",
+    "spark.python.dependencyVersion.cloud-init" : "N/A",
+    "spark.stage.attempt.ignoreOnDecommissionFetchFailure" : "N/A",
+    "spark.python.dependencyVersion.s3transfer" : "N/A",
+    "spark.executor.memoryOverhead" : "2048",
+    "spark.python.dependencyVersion.click" : "N/A",
+    "spark.executorEnv.PYTHONPATH" : "N/A",
+    "spark.hadoop.fs.s3.getObject.initialSocketTimeoutMilliseconds" : "N/A",
+    "spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version.emr_internal_use_only.EmrFileSystem" : "N/A",
+    "spark.app.submitTime" : "N/A",
+    "spark.python.dependencyVersion.six" : "N/A",
+    "spark.python.dependencyVersion.PyYAML" : "N/A",
+    "spark.default.parallelism" : "200",
+    "spark.python.dependencyVersion.beautifulsoup4" : "N/A",
+    "spark.yarn.dist.files" : "N/A",
+    "spark.python.dependencyVersion.python-daemon" : "N/A",
+    "spark.app.id" : "application_1789475067920_0001",
+    "spark.python.dependencyVersion.chardet" : "N/A",
+    "spark.python.dependencyVersion.configobj" : "N/A",
+    "spark.python.dependencyVersion.appdirs" : "N/A",
+    "spark.python.dependencyVersion.attrs" : "N/A",
+    "spark.serializer.objectStreamReset" : "N/A",
+    "spark.driver.appUIAddress" : "N/A",
+    "spark.python.dependencyVersion.joblib" : "N/A",
+    "spark.python.dependencyVersion.gpg" : "N/A",
+    "spark.python.dependencyVersion.filelock" : "N/A",
+    "spark.python.dependencyVersion.pip" : "N/A",
+    "spark.sql.parquet.fs.optimized.committer.optimization-enabled" : "N/A",
+    "spark.python.dependencyVersion.pyarrow" : "N/A",
+    "spark.hadoop.mapreduce.fileoutputcommitter.cleanup-failures.ignored.emr_internal_use_only.EmrFileSystem" : "N/A",
+    "spark.executorEnv.AWS_SPARK_REDSHIFT_CONNECTOR_SERVICE_NAME" : "N/A",
+    "spark.executor.extraClassPath" : "N/A",
+    "spark.history.ui.port" : "N/A",
+    "spark.shuffle.service.enabled" : "N/A",
+    "spark.driver.host" : "ip-10-197-212-44.163391535226.awsdns.internal.das",
+    "spark.python.dependencyVersion.requests" : "N/A",
+    "spark.driver.defaultJavaOptions" : "N/A",
+    "spark.python.dependencyVersion.cryptography" : "N/A",
+    "spark.python.dependencyVersion.jsonpointer" : "N/A",
+    "spark.python.dependencyVersion.py-dateutil" : "N/A",
+    "spark.python.dependencyVersion.docutils" : "N/A",
+    "spark.python.dependencyVersion.pyparsing" : "N/A",
+    "spark.emr.stepId" : "N/A",
+    "spark.python.dependencyVersion.cffi" : "N/A",
+    "spark.python.dependencyVersion.urllib3" : "N/A",
+    "spark.python.dependencyVersion.jmespath" : "N/A",
+    "spark.python.dependencyVersion.Babel" : "N/A",
+    "spark.rdd.compress" : "N/A",
+    "spark.sql.broadcastTimeout" : "N/A",
+    "spark.python.dependencyVersion.setuptools" : "N/A",
+    "spark.executor.extraJavaOptions" : "-Djava.net.preferIPv6Addresses=false -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:OnOutOfMemoryError='kill -9 %p' -XX:+IgnoreUnrecognizedVMOptions --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/jdk.internal.ref=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-opens=java.base/sun.nio.cs=ALL-UNNAMED --add-opens=java.base/sun.security.action=ALL-UNNAMED --add-opens=java.base/sun.util.calendar=ALL-UNNAMED --add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED -Djdk.reflect.useDirectMethodHandle=false -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:OnOutOfMemoryError='kill -9 %p' -XX:+UseTransparentHugePages",
+    "spark.yarn.isPython" : "N/A",
+    "spark.dynamicAllocation.enabled" : "true",
+    "spark.app.name" : "Mcaid Chase files S3 to Snowflake Load",
+    "spark.executorEnv.JAVA_HOME" : "N/A",
+    "spark.python.version" : "N/A",
+    "spark.python.dependencyVersion.pyserial" : "N/A",
+    "spark.emr.default.executor.cores" : "N/A",
+    "spark.python.dependencyVersion.xmlschema" : "N/A",
+    "spark.blacklist.decommissioning.enabled" : "N/A"
+  },
+  "libraries" : [ "py4j", "py4j.commands", "py4j.reflection" ],
+  "dependencies" : [ ],
+  "cluster_node_count" : 1,
+  "spark_default_parallelism" : 200,
+  "deploy_mode" : "client"
+}
+26/09/15 12:30:00 INFO SnowflakeSQLStatement: Spark Connector Master: execute query with bind variable: select * from P01_RAA.RAA_RAWZ.rad_virtix_chase_mcaid_load where 1 = 0 
+26/09/15 12:30:01 INFO YarnSchedulerBackend$YarnDriverEndpoint: Registered executor NettyRpcEndpointRef(spark-client://Executor) (10.197.212.129:58138) with ID 2,  ResourceProfileId 0
+26/09/15 12:30:01 INFO ExecutorMonitor: New executor 2 has registered (new total is 1)
+26/09/15 12:30:01 INFO BlockManagerMasterEndpoint: Registering block manager ip-10-197-212-129.163391535226.awsdns.internal.das:37097 with 3.6 GiB RAM, BlockManagerId(2, ip-10-197-212-129.163391535226.awsdns.internal.das, 37097, None)
+26/09/15 12:30:01 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
+26/09/15 12:30:02 INFO ServerConnection$: Create ServerConnection with cached JDBC connection: 5377868609822159667
+26/09/15 12:30:02 INFO SnowflakeSQLStatement: Spark Connector Master: execute query without bind variable: alter session set timezone = 'UTC' , timestamp_ntz_output_format = 'YYYY-MM-DD HH24:MI:SS.FF3', timestamp_ltz_output_format = 'TZHTZM YYYY-MM-DD HH24:MI:SS.FF3', timestamp_tz_output_format = 'TZHTZM YYYY-MM-DD HH24:MI:SS.FF3' ; 
+26/09/15 12:30:02 INFO SnowflakeRelation: Now executing below command to read from snowflake:
+SELECT "BATCH_ID" FROM P01_RAA.RAA_RAWZ.rad_virtix_chase_mcaid_load
+26/09/15 12:30:02 INFO SnowflakeSQLStatement: Spark Connector Master: execute query without bind variable: SELECT "BATCH_ID" FROM P01_RAA.RAA_RAWZ.rad_virtix_chase_mcaid_load 
+26/09/15 12:30:02 INFO SnowflakeRelation: The query ID for async reading from snowflake is: 01c7164e-0318-10cc-4aa2-07149d4599ff; The query ID URL is:
+https://carelon-edaprod1.privatelink.snowflakecomputing.com:443/console#/monitoring/queries/detail?queryId=01c7164e-0318-10cc-4aa2-07149d4599ff
+26/09/15 12:30:02 INFO SparkConnectorContext$: Spark connector register listener for: application_1789475067920_0001
+26/09/15 12:30:02 INFO SparkConnectorContext$: Add running query for application_1789475067920_0001 session: 5377868609822159667 queryId: 01c7164e-0318-10cc-4aa2-07149d4599ff
+26/09/15 12:30:07 INFO SparkConnectorContext$: Remove running query for application_1789475067920_0001 session: 5377868609822159667 queryId: 01c7164e-0318-10cc-4aa2-07149d4599ff
+26/09/15 12:30:07 INFO SnowflakeRelation: Spark Connector Master: Total statistics: partitionCount=1 rowCount=14011 compressSize=18.96 KB unCompressSize=18.96 KB QueryTime=5.09 seconds QueryID=01c7164e-0318-10cc-4aa2-07149d4599ff
+26/09/15 12:30:07 INFO SnowflakeRelation: Spark Connector Master: Average statistics per partition: rowCount=14011 compressSize=18.96 KB unCompressSize=18.96 KB
+26/09/15 12:30:07 INFO YarnSchedulerBackend$YarnDriverEndpoint: Registered executor NettyRpcEndpointRef(spark-client://Executor) (10.197.212.247:47808) with ID 3,  ResourceProfileId 0
+26/09/15 12:30:07 INFO ExecutorMonitor: New executor 3 has registered (new total is 2)
+26/09/15 12:30:07 INFO BlockManagerMasterEndpoint: Registering block manager ip-10-197-212-247.163391535226.awsdns.internal.das:33365 with 3.6 GiB RAM, BlockManagerId(3, ip-10-197-212-247.163391535226.awsdns.internal.das, 33365, None)
+26/09/15 12:30:08 INFO YarnSchedulerBackend$YarnDriverEndpoint: Registered executor NettyRpcEndpointRef(spark-client://Executor) (10.197.212.188:50852) with ID 1,  ResourceProfileId 0
+26/09/15 12:30:08 INFO ExecutorMonitor: New executor 1 has registered (new total is 3)
+26/09/15 12:30:08 INFO CodeGenerator: Code generated in 154.818767 ms
+26/09/15 12:30:08 INFO DAGScheduler: Registering RDD 3 (collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58) as input to shuffle 0
+26/09/15 12:30:08 INFO DAGScheduler: Got map stage job 0 (collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58) with 1 output partitions
+26/09/15 12:30:08 INFO DAGScheduler: Final stage: ShuffleMapStage 0 (collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58)
+26/09/15 12:30:08 INFO DAGScheduler: Parents of final stage: List()
+26/09/15 12:30:08 INFO DAGScheduler: Missing parents: List()
+26/09/15 12:30:08 INFO DAGScheduler: Submitting ShuffleMapStage 0 (MapPartitionsRDD[3] at collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58), which has no missing parents
+26/09/15 12:30:08 INFO BlockManagerMasterEndpoint: Registering block manager ip-10-197-212-188.163391535226.awsdns.internal.das:36441 with 3.6 GiB RAM, BlockManagerId(1, ip-10-197-212-188.163391535226.awsdns.internal.das, 36441, None)
+26/09/15 12:30:08 INFO MemoryStore: Block broadcast_0 stored as values in memory (estimated size 65.6 KiB, free 5.8 GiB)
+26/09/15 12:30:08 INFO MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 17.4 KiB, actual size: 17.4 KiB, free 5.8 GiB)
+26/09/15 12:30:08 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on ip-10-197-212-44.163391535226.awsdns.internal.das:34829 (size: 17.4 KiB, free: 5.8 GiB)
+26/09/15 12:30:08 INFO SparkContext: Created broadcast 0 from broadcast at DAGScheduler.scala:1664
+26/09/15 12:30:08 INFO DAGScheduler: Submitting 1 missing tasks from ShuffleMapStage 0 (MapPartitionsRDD[3] at collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58) (first 15 tasks are for partitions Vector(0))
+26/09/15 12:30:08 INFO YarnScheduler: Adding task set 0.0 with 1 tasks resource profile 0
+26/09/15 12:30:08 INFO TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0) (ip-10-197-212-247.163391535226.awsdns.internal.das, executor 3, partition 0, PROCESS_LOCAL, 48267 bytes) 
+26/09/15 12:30:08 INFO BlockManagerInfo: Added broadcast_0_piece0 in memory on ip-10-197-212-247.163391535226.awsdns.internal.das:33365 (size: 17.4 KiB, free: 3.6 GiB)
+26/09/15 12:30:09 ERROR Inbox: Ignoring error
+java.io.NotSerializableException: org.apache.spark.storage.StorageStatus
+Serialization stack:
+	- object not serializable (class: org.apache.spark.storage.StorageStatus, value: org.apache.spark.storage.StorageStatus@56bd670e)
+	- element of array (index: 0)
+	- array (class [Lorg.apache.spark.storage.StorageStatus;, size 4)
+	at org.apache.spark.serializer.SerializationDebugger$.improveException(SerializationDebugger.scala:41) ~[spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.serializer.JavaSerializationStream.writeObject(JavaSerializer.scala:49) ~[spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.serializer.JavaSerializerInstance.serialize(JavaSerializer.scala:115) ~[spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.rpc.netty.NettyRpcEnv.serialize(NettyRpcEnv.scala:291) ~[spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.rpc.netty.RemoteNettyRpcCallContext.send(NettyRpcCallContext.scala:64) ~[spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.rpc.netty.NettyRpcCallContext.reply(NettyRpcCallContext.scala:32) ~[spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:172) ~[spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:103) [spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:213) [spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:100) [spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:75) [spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:41) [spark-core_2.12-3.5.5-amzn-1.jar:3.5.5-amzn-1]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.lang.Thread.run(Thread.java:840) [?:?]
+26/09/15 12:30:11 INFO TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 3040 ms on ip-10-197-212-247.163391535226.awsdns.internal.das (executor 3) (1/1)
+26/09/15 12:30:11 INFO YarnScheduler: Removed TaskSet 0.0, whose tasks have all completed, from pool 
+26/09/15 12:30:11 INFO DAGScheduler: ShuffleMapStage 0 (collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58) finished in 3.226 s
+26/09/15 12:30:11 INFO DAGScheduler: looking for newly runnable stages
+26/09/15 12:30:11 INFO DAGScheduler: running: Set()
+26/09/15 12:30:11 INFO DAGScheduler: waiting: Set()
+26/09/15 12:30:11 INFO DAGScheduler: failed: Set()
+26/09/15 12:30:11 INFO CodeGenerator: Code generated in 13.606358 ms
+26/09/15 12:30:11 INFO SparkContext: Starting job: collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58
+26/09/15 12:30:11 INFO DAGScheduler: Got job 1 (collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58) with 1 output partitions
+26/09/15 12:30:11 INFO DAGScheduler: Final stage: ResultStage 2 (collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58)
+26/09/15 12:30:11 INFO DAGScheduler: Parents of final stage: List(ShuffleMapStage 1)
+26/09/15 12:30:11 INFO DAGScheduler: Missing parents: List()
+26/09/15 12:30:11 INFO DAGScheduler: Submitting ResultStage 2 (MapPartitionsRDD[6] at collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58), which has no missing parents
+26/09/15 12:30:11 INFO MemoryStore: Block broadcast_1 stored as values in memory (estimated size 14.9 KiB, free 5.8 GiB)
+26/09/15 12:30:11 INFO MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 7.0 KiB, actual size: 7.0 KiB, free 5.8 GiB)
+26/09/15 12:30:11 INFO BlockManagerInfo: Added broadcast_1_piece0 in memory on ip-10-197-212-44.163391535226.awsdns.internal.das:34829 (size: 7.0 KiB, free: 5.8 GiB)
+26/09/15 12:30:11 INFO SparkContext: Created broadcast 1 from broadcast at DAGScheduler.scala:1664
+26/09/15 12:30:11 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 2 (MapPartitionsRDD[6] at collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58) (first 15 tasks are for partitions Vector(0))
+26/09/15 12:30:11 INFO YarnScheduler: Adding task set 2.0 with 1 tasks resource profile 0
+26/09/15 12:30:11 INFO TaskSetManager: Starting task 0.0 in stage 2.0 (TID 1) (ip-10-197-212-247.163391535226.awsdns.internal.das, executor 3, partition 0, NODE_LOCAL, 9159 bytes) 
+26/09/15 12:30:11 INFO BlockManagerInfo: Removed broadcast_0_piece0 on ip-10-197-212-44.163391535226.awsdns.internal.das:34829 in memory (size: 17.4 KiB, free: 5.8 GiB)
+26/09/15 12:30:11 INFO BlockManagerInfo: Removed broadcast_0_piece0 on ip-10-197-212-247.163391535226.awsdns.internal.das:33365 in memory (size: 17.4 KiB, free: 3.6 GiB)
+26/09/15 12:30:11 INFO BlockManagerInfo: Added broadcast_1_piece0 in memory on ip-10-197-212-247.163391535226.awsdns.internal.das:33365 (size: 7.0 KiB, free: 3.6 GiB)
+26/09/15 12:30:11 INFO MapOutputTrackerMasterEndpoint: Asked to send map output locations for shuffle 0 to 10.197.212.247:47808
+26/09/15 12:30:11 INFO TaskSetManager: Finished task 0.0 in stage 2.0 (TID 1) in 215 ms on ip-10-197-212-247.163391535226.awsdns.internal.das (executor 3) (1/1)
+26/09/15 12:30:11 INFO YarnScheduler: Removed TaskSet 2.0, whose tasks have all completed, from pool 
+26/09/15 12:30:11 INFO DAGScheduler: ResultStage 2 (collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58) finished in 0.259 s
+26/09/15 12:30:11 INFO DAGScheduler: Job 1 is finished. Cancelling potential speculative or zombie tasks for this job
+26/09/15 12:30:11 INFO YarnScheduler: Killing all running tasks in stage 2: Stage finished
+26/09/15 12:30:11 INFO DAGScheduler: Job 1 finished: collect at /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:58, took 0.277988 s
+26/09/15 12:30:11 INFO SQLExecution: Generating and posting SparkListenerSQLExecutionObfuscatedInfo...
+26/09/15 12:30:11 INFO SQLExecution: Posted SparkListenerSQLExecutionObfuscatedInfo in 8 ms
+26/09/15 12:30:12 INFO EMRFSToS3AConfigMapping: Mapping EMRFS config fs.s3.sts.endpoint to S3A config fs.s3a.assumed.role.sts.endpoint
+26/09/15 12:30:12 INFO EMRFSToS3AConfigMapping: Mapping EMRFS config fs.s3.buffer.dir to S3A config fs.s3a.buffer.dir
+26/09/15 12:30:12 INFO MetricsConfig: Loaded properties from hadoop-metrics2.properties
+26/09/15 12:30:12 INFO MetricsSystemImpl: Scheduled Metric snapshot period at 300 second(s).
+26/09/15 12:30:12 INFO MetricsSystemImpl: s3a-file-system metrics system started
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+26/09/15 12:30:13 INFO BlockManagerInfo: Removed broadcast_1_piece0 on ip-10-197-212-44.163391535226.awsdns.internal.das:34829 in memory (size: 7.0 KiB, free: 5.8 GiB)
+26/09/15 12:30:13 INFO BlockManagerInfo: Removed broadcast_1_piece0 on ip-10-197-212-247.163391535226.awsdns.internal.das:33365 in memory (size: 7.0 KiB, free: 3.6 GiB)
+26/09/15 12:30:13 INFO InMemoryFileIndex: It took 56 ms to list leaf files for 1 paths.
+26/09/15 12:30:13 INFO InMemoryFileIndex: It took 22 ms to list leaf files for 1 paths.
+26/09/15 12:30:14 INFO FileSourceStrategy: Pushed Filters: 
+26/09/15 12:30:14 INFO FileSourceStrategy: Post-Scan Filters: (length(trim(value#79, None)) > 0)
+26/09/15 12:30:14 INFO MemoryStore: Block broadcast_2 stored as values in memory (estimated size 295.6 KiB, free 5.8 GiB)
+26/09/15 12:30:14 INFO MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 54.4 KiB, actual size: 54.4 KiB, free 5.8 GiB)
+26/09/15 12:30:14 INFO BlockManagerInfo: Added broadcast_2_piece0 in memory on ip-10-197-212-44.163391535226.awsdns.internal.das:34829 (size: 54.4 KiB, free: 5.8 GiB)
+26/09/15 12:30:14 INFO SparkContext: Created broadcast 2 from csv at NativeMethodAccessorImpl.java:0
+26/09/15 12:30:14 INFO GPLNativeCodeLoader: Loaded native gpl library
+26/09/15 12:30:14 INFO LzoCodec: Successfully loaded & initialized native-lzo library [hadoop-lzo rev 049362b7cf53ff5f739d6b1532457f2c6cd495e8]
+26/09/15 12:30:14 INFO FileSourceScanExec: Planning scan with bin packing, max size: 4194304 bytes, open cost is considered as scanning 4194304 bytes, number of split files: 3, prefetch: false
+26/09/15 12:30:14 INFO FileSourceScanExec: relation: None, fileSplitsInPartitionHistogram: Vector((1 fileSplits,3))
+26/09/15 12:30:14 INFO CodeGenerator: Code generated in 24.010669 ms
+26/09/15 12:30:14 INFO SparkContext: Starting job: csv at NativeMethodAccessorImpl.java:0
+26/09/15 12:30:14 INFO DAGScheduler: Got job 2 (csv at NativeMethodAccessorImpl.java:0) with 1 output partitions
+26/09/15 12:30:14 INFO DAGScheduler: Final stage: ResultStage 3 (csv at NativeMethodAccessorImpl.java:0)
+26/09/15 12:30:14 INFO DAGScheduler: Parents of final stage: List()
+26/09/15 12:30:14 INFO DAGScheduler: Missing parents: List()
+26/09/15 12:30:14 INFO DAGScheduler: Submitting ResultStage 3 (MapPartitionsRDD[10] at csv at NativeMethodAccessorImpl.java:0), which has no missing parents
+26/09/15 12:30:14 INFO MemoryStore: Block broadcast_3 stored as values in memory (estimated size 17.3 KiB, free 5.8 GiB)
+26/09/15 12:30:14 INFO MemoryStore: Block broadcast_3_piece0 stored as bytes in memory (estimated size 8.5 KiB, actual size: 8.5 KiB, free 5.8 GiB)
+26/09/15 12:30:14 INFO BlockManagerInfo: Added broadcast_3_piece0 in memory on ip-10-197-212-44.163391535226.awsdns.internal.das:34829 (size: 8.5 KiB, free: 5.8 GiB)
+26/09/15 12:30:14 INFO SparkContext: Created broadcast 3 from broadcast at DAGScheduler.scala:1664
+26/09/15 12:30:14 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 3 (MapPartitionsRDD[10] at csv at NativeMethodAccessorImpl.java:0) (first 15 tasks are for partitions Vector(0))
+26/09/15 12:30:14 INFO YarnScheduler: Adding task set 3.0 with 1 tasks resource profile 0
+26/09/15 12:30:14 INFO TaskSetManager: Starting task 0.0 in stage 3.0 (TID 2) (ip-10-197-212-129.163391535226.awsdns.internal.das, executor 2, partition 0, RACK_LOCAL, 9990 bytes) 
+26/09/15 12:30:14 INFO BlockManagerInfo: Added broadcast_3_piece0 in memory on ip-10-197-212-129.163391535226.awsdns.internal.das:37097 (size: 8.5 KiB, free: 3.6 GiB)
+26/09/15 12:30:15 INFO BlockManagerInfo: Added broadcast_2_piece0 in memory on ip-10-197-212-129.163391535226.awsdns.internal.das:37097 (size: 54.4 KiB, free: 3.6 GiB)
+26/09/15 12:30:16 INFO TaskSetManager: Finished task 0.0 in stage 3.0 (TID 2) in 2070 ms on ip-10-197-212-129.163391535226.awsdns.internal.das (executor 2) (1/1)
+26/09/15 12:30:16 INFO YarnScheduler: Removed TaskSet 3.0, whose tasks have all completed, from pool 
+26/09/15 12:30:16 INFO DAGScheduler: ResultStage 3 (csv at NativeMethodAccessorImpl.java:0) finished in 2.096 s
+26/09/15 12:30:16 INFO DAGScheduler: Job 2 is finished. Cancelling potential speculative or zombie tasks for this job
+26/09/15 12:30:16 INFO YarnScheduler: Killing all running tasks in stage 3: Stage finished
+26/09/15 12:30:16 INFO DAGScheduler: Job 2 finished: csv at NativeMethodAccessorImpl.java:0, took 2.104743 s
+26/09/15 12:30:16 INFO CodeGenerator: Code generated in 11.003555 ms
+26/09/15 12:30:16 INFO SQLExecution: Generating and posting SparkListenerSQLExecutionObfuscatedInfo...
+26/09/15 12:30:16 INFO SQLExecution: Posted SparkListenerSQLExecutionObfuscatedInfo in 1 ms
+26/09/15 12:30:16 INFO FileSourceStrategy: Pushed Filters: 
+26/09/15 12:30:16 INFO FileSourceStrategy: Post-Scan Filters: 
+26/09/15 12:30:16 INFO MemoryStore: Block broadcast_4 stored as values in memory (estimated size 295.6 KiB, free 5.8 GiB)
+26/09/15 12:30:16 INFO MemoryStore: Block broadcast_4_piece0 stored as bytes in memory (estimated size 54.4 KiB, actual size: 54.4 KiB, free 5.8 GiB)
+26/09/15 12:30:16 INFO BlockManagerInfo: Added broadcast_4_piece0 in memory on ip-10-197-212-44.163391535226.awsdns.internal.das:34829 (size: 54.4 KiB, free: 5.8 GiB)
+26/09/15 12:30:16 INFO SparkContext: Created broadcast 4 from csv at NativeMethodAccessorImpl.java:0
+26/09/15 12:30:16 INFO FileSourceScanExec: Planning scan with bin packing, max size: 4194304 bytes, open cost is considered as scanning 4194304 bytes, number of split files: 3, prefetch: false
+26/09/15 12:30:16 INFO FileSourceScanExec: relation: None, fileSplitsInPartitionHistogram: Vector((1 fileSplits,3))
+26/09/15 12:30:16 INFO FileSourceStrategy: Pushed Filters: 
+26/09/15 12:30:16 INFO FileSourceStrategy: Post-Scan Filters: 
+26/09/15 12:30:16 INFO CodeGenerator: Code generated in 30.70827 ms
+26/09/15 12:30:16 INFO MemoryStore: Block broadcast_5 stored as values in memory (estimated size 295.6 KiB, free 5.8 GiB)
+26/09/15 12:30:16 INFO MemoryStore: Block broadcast_5_piece0 stored as bytes in memory (estimated size 54.5 KiB, actual size: 54.5 KiB, free 5.8 GiB)
+26/09/15 12:30:16 INFO BlockManagerInfo: Added broadcast_5_piece0 in memory on ip-10-197-212-44.163391535226.awsdns.internal.das:34829 (size: 54.5 KiB, free: 5.8 GiB)
+26/09/15 12:30:16 INFO SparkContext: Created broadcast 5 from showString at NativeMethodAccessorImpl.java:0
+26/09/15 12:30:16 INFO FileSourceScanExec: Planning scan with bin packing, max size: 4194304 bytes, open cost is considered as scanning 4194304 bytes, number of split files: 3, prefetch: false
+26/09/15 12:30:16 INFO FileSourceScanExec: relation: None, fileSplitsInPartitionHistogram: Vector((1 fileSplits,3))
+26/09/15 12:30:16 INFO SparkContext: Starting job: showString at NativeMethodAccessorImpl.java:0
+26/09/15 12:30:16 INFO DAGScheduler: Got job 3 (showString at NativeMethodAccessorImpl.java:0) with 1 output partitions
+26/09/15 12:30:16 INFO DAGScheduler: Final stage: ResultStage 4 (showString at NativeMethodAccessorImpl.java:0)
+26/09/15 12:30:16 INFO DAGScheduler: Parents of final stage: List()
+26/09/15 12:30:16 INFO DAGScheduler: Missing parents: List()
+26/09/15 12:30:16 INFO DAGScheduler: Submitting ResultStage 4 (MapPartitionsRDD[20] at showString at NativeMethodAccessorImpl.java:0), which has no missing parents
+26/09/15 12:30:16 INFO MemoryStore: Block broadcast_6 stored as values in memory (estimated size 29.9 KiB, free 5.8 GiB)
+26/09/15 12:30:16 INFO MemoryStore: Block broadcast_6_piece0 stored as bytes in memory (estimated size 11.6 KiB, actual size: 11.6 KiB, free 5.8 GiB)
+26/09/15 12:30:16 INFO BlockManagerInfo: Added broadcast_6_piece0 in memory on ip-10-197-212-44.163391535226.awsdns.internal.das:34829 (size: 11.6 KiB, free: 5.8 GiB)
+26/09/15 12:30:16 INFO SparkContext: Created broadcast 6 from broadcast at DAGScheduler.scala:1664
+26/09/15 12:30:16 INFO DAGScheduler: Submitting 1 missing tasks from ResultStage 4 (MapPartitionsRDD[20] at showString at NativeMethodAccessorImpl.java:0) (first 15 tasks are for partitions Vector(0))
+26/09/15 12:30:16 INFO YarnScheduler: Adding task set 4.0 with 1 tasks resource profile 0
+26/09/15 12:30:16 INFO TaskSetManager: Starting task 0.0 in stage 4.0 (TID 3) (ip-10-197-212-188.163391535226.awsdns.internal.das, executor 1, partition 0, RACK_LOCAL, 9990 bytes) 
+26/09/15 12:30:17 INFO BlockManagerInfo: Added broadcast_6_piece0 in memory on ip-10-197-212-188.163391535226.awsdns.internal.das:36441 (size: 11.6 KiB, free: 3.6 GiB)
+26/09/15 12:30:17 INFO BlockManagerInfo: Added broadcast_5_piece0 in memory on ip-10-197-212-188.163391535226.awsdns.internal.das:36441 (size: 54.5 KiB, free: 3.6 GiB)
+26/09/15 12:30:18 INFO TaskSetManager: Finished task 0.0 in stage 4.0 (TID 3) in 1781 ms on ip-10-197-212-188.163391535226.awsdns.internal.das (executor 1) (1/1)
+26/09/15 12:30:18 INFO YarnScheduler: Removed TaskSet 4.0, whose tasks have all completed, from pool 
+26/09/15 12:30:18 INFO DAGScheduler: ResultStage 4 (showString at NativeMethodAccessorImpl.java:0) finished in 1.794 s
+26/09/15 12:30:18 INFO DAGScheduler: Job 3 is finished. Cancelling potential speculative or zombie tasks for this job
+26/09/15 12:30:18 INFO YarnScheduler: Killing all running tasks in stage 4: Stage finished
+26/09/15 12:30:18 INFO DAGScheduler: Job 3 finished: showString at NativeMethodAccessorImpl.java:0, took 1.800167 s
+26/09/15 12:30:18 INFO CodeGenerator: Code generated in 26.806073 ms
+26/09/15 12:30:18 INFO SQLExecution: Generating and posting SparkListenerSQLExecutionObfuscatedInfo...
+26/09/15 12:30:18 INFO SQLExecution: Posted SparkListenerSQLExecutionObfuscatedInfo in 1 ms
+26/09/15 12:30:19 INFO SparkContext: Invoking stop() from shutdown hook
+26/09/15 12:30:19 INFO SparkContext: SparkContext is stopping with exitCode 0.
+26/09/15 12:30:19 WARN SparkConnectorContext$: Finish cancelling all queries for application_1789475067920_0001
+26/09/15 12:30:19 INFO ServerConnection$: Close all 1 cached connection.
+26/09/15 12:30:19 INFO SparkUI: Stopped Spark web UI at http://ip-10-197-212-44.163391535226.awsdns.internal.das:4040
+26/09/15 12:30:19 INFO YarnClientSchedulerBackend: Interrupting monitor thread
+26/09/15 12:30:19 INFO YarnClientSchedulerBackend: Shutting down all executors
+26/09/15 12:30:19 INFO YarnSchedulerBackend$YarnDriverEndpoint: Asking each executor to shut down
+26/09/15 12:30:19 INFO YarnClientSchedulerBackend: YARN client scheduler backend Stopped
+26/09/15 12:30:19 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+26/09/15 12:30:19 INFO MemoryStore: MemoryStore cleared
+26/09/15 12:30:19 INFO BlockManager: BlockManager stopped
+26/09/15 12:30:19 INFO BlockManagerMaster: BlockManagerMaster stopped
+26/09/15 12:30:19 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+26/09/15 12:30:19 INFO SparkContext: Successfully stopped SparkContext
+26/09/15 12:30:19 INFO ShutdownHookManager: Shutdown hook called
+26/09/15 12:30:19 INFO ShutdownHookManager: Deleting directory /tmp/spark-7a3f1f26-1da7-464c-bf0e-1534b197adb3
+26/09/15 12:30:19 INFO ShutdownHookManager: Deleting directory /tmp/spark-77876129-5c1a-4872-86d6-972e59142d93
+26/09/15 12:30:19 INFO ShutdownHookManager: Deleting directory /tmp/spark-77876129-5c1a-4872-86d6-972e59142d93/pyspark-52619925-7d37-4155-800a-2a7f52b82711
+26/09/15 12:30:19 INFO MetricsSystemImpl: Stopping s3a-file-system metrics system...
+26/09/15 12:30:19 INFO MetricsSystemImpl: s3a-file-system metrics system stopped.
+26/09/15 12:30:19 INFO MetricsSystemImpl: s3a-file-system metrics system shutdown complete.
+Command exiting with ret '1'
+
+
+===============
+
+
+Running for schema: schema_virtix and runid: 1234
+:: loading settings :: url = jar:file:/usr/lib/spark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
+/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:25: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+0000000000000000000000000["FileName", "MemberId", "MemberFirstName", "MemberLastName", "MemberDOB", "EnrollmentDate", "EnrollmentEndDate", "ESRDIndicator", "ProjectName", "ClientRequestId", "RecordTypeId", "OnshoreIndicator", "Gender", "ProviderLastName", "ProviderFirstName", "ProviderNPI", "MemberMiddle", "ProviderId", "UserDefinedText1", "UserDefinedText2", "UserDefinedText3", "UserDefinedText4"]000000000000000000000000
+INFO:__main__:Found column list converting from str to list
+INFO:botocore.credentials:Found credentials from IAM Role: CRLN-RAA-prod-EC2EMR-Role
+=====================P01_RAA.RAA_RAWZ.rad_virtix_chase_mcaid_load==============================
+Bucket: crln-raa-prod-sf-dataz-gbd-phi-useast1
+Prefix: inbound/raa/chartsprocess/mcaid/
+Looking for files matching: ChartData_ANT_Virtix_Chase_*.txt
+Found file: CENT_ANTH_20240911.zip
+Found file: CENT_ANTH_KY_A_S_20240626.zip
+Found file: CENT_ANTH_KY_A_S_Image_Delivery_Crosswalk_20240807.txt
+Found file: CENT_ANTH_NV_A_C_20260204.zip
+Found file: CENT_ANTH_NV_A_C_Image_Delivery_Crosswalk_20260311.txt
+Found file: CENT_ANTH_NV_A_C_extract_20251217
+Found file: CENT_ANTH_NV_A_C_extract_20260107
+Found file: CENT_ANTH_NV_A_C_extract_20260128
+Found file: CENT_ANTH_NV_A_C_extract_20260204_Final
+Found file: CENT_ANTH_NV_A_C_extract_20260311
+Found file: CENT_ANTH_NV_A_M_20241114.zip
+Found file: CENT_ANTH_NV_A_M_20251203.zip
+Found file: CENT_ANTH_NV_A_M_20260204.zip
+Found file: CENT_ANTH_NV_A_M_Image_Delivery_Crosswalk_20241113.txt
+Found file: CENT_ANTH_NV_A_M_extract_20251203_Final
+Found file: CENT_ANTH_NV_A_M_extract_20251217
+Found file: CENT_ANTH_NV_A_M_extract_20260107
+Found file: CENT_ANTH_NV_A_M_extract_20260128
+Found file: CENT_ANTH_NV_A_M_extract_20260204_Final
+Found file: CENT_ANTH_NV_A_M_extract_20260311
+Found file: CENT_ANTH_NV_A_S_20241114.zip
+Found file: CENT_ANTH_NV_A_S_20250204.zip
+Found file: CENT_ANTH_NV_A_S_20260204.zip
+Found file: CENT_ANTH_NV_A_S_Image_Delivery_Crosswalk_20241113.txt
+Found file: CENT_ANTH_NV_A_S_Image_Delivery_Crosswalk_20260311.txt
+Found file: CENT_ANTH_NV_A_S_extract_20251217
+Found file: CENT_ANTH_NV_A_S_extract_20260107
+Found file: CENT_ANTH_NV_A_S_extract_20260128
+Found file: CENT_ANTH_NV_A_S_extract_20260204_Final
+Found file: CENT_ANTH_NV_A_S_extract_20260212_CA_R
+Found file: CENT_ANTH_NV_A_S_extract_20260311
+Found file: CENT_ANTH_WI _A_S_extract_20260302_CA_R
+Found file: CENT_ANTH_WI_A_C_20250402.zip
+Found file: CENT_ANTH_WI_A_C_20260311.zip
+Found file: CENT_ANTH_WI_A_C_extract_20250208
+Found file: CENT_ANTH_WI_A_C_extract_20250326
+Found file: CENT_ANTH_WI_A_C_extract_20250326_Final
+Found file: CENT_ANTH_WI_A_C_extract_20250402_Final
+Found file: CENT_ANTH_WI_A_C_extract_20250411
+Found file: CENT_ANTH_WI_A_C_extract_20251203
+Found file: CENT_ANTH_WI_A_C_extract_20260107
+Found file: CENT_ANTH_WI_A_C_extract_20260128
+Found file: CENT_ANTH_WI_A_C_extract_20260311_Final
+Found file: CENT_ANTH_WI_A_M_20250130.zip
+Found file: CENT_ANTH_WI_A_M_20250402.zip
+Found file: CENT_ANTH_WI_A_M_20260311.zip
+Found file: CENT_ANTH_WI_A_M_extract_20250208
+Found file: CENT_ANTH_WI_A_M_extract_20250326
+Found file: CENT_ANTH_WI_A_M_extract_20250326_Final
+Found file: CENT_ANTH_WI_A_M_extract_20250402_Final
+Found file: CENT_ANTH_WI_A_M_extract_20250411
+Found file: CENT_ANTH_WI_A_M_extract_20251203
+Found file: CENT_ANTH_WI_A_M_extract_20251217
+Found file: CENT_ANTH_WI_A_M_extract_20260107
+Found file: CENT_ANTH_WI_A_M_extract_20260128
+Found file: CENT_ANTH_WI_A_M_extract_20260311_Final
+Found file: CENT_ANTH_WI_A_S_20250402.zip
+Found file: CENT_ANTH_WI_A_S_20260311.zip
+Found file: CENT_ANTH_WI_A_S_Image_Delivery_Crosswalk_20250411.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250208
+Found file: CENT_ANTH_WI_A_S_extract_20250326
+Found file: CENT_ANTH_WI_A_S_extract_20250326_Final
+Found file: CENT_ANTH_WI_A_S_extract_20250402_Final
+Found file: CENT_ANTH_WI_A_S_extract_20250411
+Found file: CENT_ANTH_WI_A_S_extract_20251203
+Found file: CENT_ANTH_WI_A_S_extract_20260107
+Found file: CENT_ANTH_WI_A_S_extract_20260128
+Found file: CENT_ANTH_WI_A_S_extract_20260311_Final
+Found file: ChartData_ANT_TN_Q32026_08SEP26.txt
+Found file: ChartData_ANT_Virtix_Chase_IN_20260827.txt
+File matches pattern: ChartData_ANT_Virtix_Chase_IN_20260827.txt
+Found file: ChartData_ANT_Virtix_Chase_IN_20260831.txt
+File matches pattern: ChartData_ANT_Virtix_Chase_IN_20260831.txt
+Found file: ChartData_CIX_KY_Q22024_10APR24.txt
+Found file: ChartData_CIX_NV_Q42024_09OCT24.txt
+Found file: ChartData_CIX_TN_Q42024_09OCT24.txt
+Found file: ChartData_CIX_WI_Q42024_09DEC24.txt
+Found file: ChartData_WLP_KY_Q22024_OEC_10APR24.txt
+Found file: ChartData_WLP_NV_Q42024_OEC_09OCT24.txt
+Found file: ChartData_WLP_WI_Q42024_OEC_09DEC24.txt
+Found file: ChartData_WLP_WI_Q42025_MBR_11NOV25.txt
+Found file: ChartData_WLP_WI_Q42025_PROV_11NOV25.txt
+Found file: EPI_ANTH_IA_A_C_20240724.zip
+Found file: EPI_ANTH_IA_A_C_20240911.zip
+Found file: EPI_ANTH_IA_A_M_20240626.zip
+Found file: EPI_ANTH_IA_A_M_20240724.zip
+Found file: EPI_ANTH_IA_A_M_20240911.zip
+Found file: EPI_ANTH_IA_A_M_20250730.zip
+Found file: EPI_ANTH_IA_A_R_20250513_1.zip
+Found file: EPI_ANTH_IA_A_S_20240626.zip
+Found file: EPI_ANTH_IA_A_S_20240724.zip
+Found file: EPI_ANTH_IA_A_S_20241003.zip
+Found file: EPI_ANTH_IA_A_S_20251001.zip
+Found file: EPI_ANTH_IA_A_S_Image_Delivery_Crosswalk_20241003.txt
+Found file: EPI_ANTH_IA_A_S_Image_Delivery_Crosswalk_20250611.txt
+Found file: EPI_ANTH_IA_A_V_20230920.zip
+Found file: EPI_ANTH_IN_A_C_20240821.zip.zip
+Found file: EPI_ANTH_IN_A_M_20240710.zip
+Found file: EPI_ANTH_IN_A_S_20240710.zip
+Found file: EPI_ANTH_IN_A_S_20251105.zip
+Found file: EPI_ANTH_IN_A_S_20251125.zip
+Found file: EPI_ANTH_IN_A_S_20260715.zip
+Found file: EPI_ANTH_IN_A_S_Image_Delivery_Crosswalk_20241009.txt
+Found file: EPI_ANTH_IN_A_S_Image_Delivery_Crosswalk_20260715.txt
+Found file: EPI_ANTH_IN_A_S_Image_Delivery_Crosswalk_20260826_Final.txt
+Found file: EPI_ANTH_IN_W_S_20241113.zip
+Found file: EPI_ANTH_IN_W_S_Image_Delivery_Crosswalk_20241113.txt
+Found file: EPI_ANTH_JES.zip
+Found file: EPI_ANTH_NY_A_C_20240410.zip
+Found file: EPI_ANTH_NY_A_C_20240529.zip
+Found file: EPI_ANTH_NY_A_C_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_A_C_20260325-2.zip
+Found file: EPI_ANTH_NY_A_C_20260429_FINAL.zip
+Found file: EPI_ANTH_NY_A_C_Image_Delivery_Crosswalk_20260219.txt
+Found file: EPI_ANTH_NY_A_C_Image_Delivery_Crosswalk_20260325-2.txt
+Found file: EPI_ANTH_NY_A_M_20240410.zip
+Found file: EPI_ANTH_NY_A_M_20240529.zip
+Found file: EPI_ANTH_NY_A_M_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_A_M_20260429_FINAL.zip
+Found file: EPI_ANTH_NY_A_M_Image_Delivery_Crosswalk_20260219.txt
+Found file: EPI_ANTH_NY_A_M_Image_Delivery_Crosswalk_20260325-2.txt
+Found file: EPI_ANTH_NY_A_R_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_A_S_20240410.zip
+Found file: EPI_ANTH_NY_A_S_20240529.zip
+Found file: EPI_ANTH_NY_A_S_20240628.zip
+Found file: EPI_ANTH_NY_A_S_20241024.zip
+Found file: EPI_ANTH_NY_A_S_20241124.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_1.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_10.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_11.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_12.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_13.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_14.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_15.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_16.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_17.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_18.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_19.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_2.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_3.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_4.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_5.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_6.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_7.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_8.zip
+Found file: EPI_ANTH_NY_A_S_20250513_FINAL_9.zip
+Found file: EPI_ANTH_NY_A_S_Image_Delivery_Crosswalk_20241024.txt
+Found file: EPI_ANTH_NY_A_S_Image_Delivery_Crosswalk_20250416.txt
+Found file: EPI_ANTH_NY_A_S_Image_Delivery_Crosswalk_20250610.txt
+Found file: EPI_ANTH_NY_A_S_Wave_2_20240410.zip
+Found file: EPI_ANTH_NY_A_S_Wave_2_20240529.zip
+Found file: EPI_ANTH_NY_S_20240228.zip
+Found file: EPI_ANTH_NY_W_C_20240228.zip
+Found file: EPI_ANTH_NY_W_C_20240410.zip
+Found file: EPI_ANTH_NY_W_C_20240529.zip
+Found file: EPI_ANTH_NY_W_C_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_W_C_20260325-2.zip
+Found file: EPI_ANTH_NY_W_C_20260429_FINAL.zip
+Found file: EPI_ANTH_NY_W_C_Image_Delivery_Crosswalk_20260219.txt
+Found file: EPI_ANTH_NY_W_C_Image_Delivery_Crosswalk_20260325-2.txt
+Found file: EPI_ANTH_NY_W_R_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_W_S_20240228.zip
+Found file: EPI_ANTH_NY_W_S_20240410.zip
+Found file: EPI_ANTH_NY_W_S_20240529.zip
+Found file: EPI_ANTH_NY_W_S_20250513_FINAL.zip
+Found file: EPI_ANTH_NY_W_S_20260325-2.zip
+Found file: EPI_ANTH_NY_W_S_20260429_FINAL.zip
+Found file: EPI_ANTH_NY_W_S_20260527.zip
+Found file: EPI_ANTH_NY_W_S_Image_Delivery_Crosswalk_20250610.txt
+Found file: EPI_ANTH_NY_W_S_Image_Delivery_Crosswalk_20260219.txt
+Found file: EPI_ANTH_NY_W_S_Image_Delivery_Crosswalk_20260325-2.txt
+Found file: EPI_ANTH_NY_W_S_Wave_2_20240410.zip
+Found file: EPI_ANTH_NY_W_S_Wave_2_20240529.zip
+Found file: EPI_ANTH_OH_A_C_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_OH_A_M_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_OH_A_S_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_TN_A_C_20251125.zip
+Found file: EPI_ANTH_TN_A_C_Image_Delivery_Crosswalk_20251125.txt
+Found file: EPI_ANTH_TN_A_C_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_TN_A_M_20240206.zip.zip
+Found file: EPI_ANTH_TN_A_M_20251125.zip
+Found file: EPI_ANTH_TN_A_M_Image_Delivery_Crosswalk_20251125.txt
+Found file: EPI_ANTH_TN_A_M_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_TN_A_PPF_20240228.zip
+Found file: EPI_ANTH_TN_A_P_20251125.zip
+Found file: EPI_ANTH_TN_A_P_Image_Delivery_Crosswalk_20251125.txt
+Found file: EPI_ANTH_TN_A_S_20241218_1_TEST3_1.zip
+Found file: EPI_ANTH_TN_A_S_20241218_1_TEST_4.zip
+Found file: EPI_ANTH_TN_A_S_20241218_1_TEST_5.zip
+Found file: EPI_ANTH_TN_A_S_20250404.zip
+Found file: EPI_ANTH_TN_A_S_20251125.zip
+Found file: EPI_ANTH_TN_A_S_Image_Delivery_Crosswalk_20250129.txt
+Found file: EPI_ANTH_TN_A_S_Image_Delivery_Crosswalk_20251125.txt
+Found file: EPI_ANTH_TN_A_S_Image_Delivery_Crosswalk_20260107.txt
+Found file: EPI_ANTH_WV_A_C_20240619.zip
+Found file: EPI_ANTH_WV_A_C_20240731.zip
+Found file: EPI_ANTH_WV_A_C_20250730_FINAL.zip
+Found file: EPI_ANTH_WV_A_R_20250730_FINAL.zip
+Found file: EPI_ANTH_WV_A_R_Image_Delivery_Crosswalk_20250521.txt
+Found file: EPI_ANTH_WV_A_S_20240501.zip
+Found file: EPI_ANTH_WV_A_S_20240619.zip
+Found file: EPI_ANTH_WV_A_S_20240731.zip
+Found file: EPI_ANTH_WV_A_S_Image_Delivery_Crosswalk_20240830.txt.txt
+Found file: EPI_ANTH_WV_A_S_Image_Delivery_Crosswalk_20250625.txt
+Found file: EPI_ANTH_WV_A_S_Image_Delivery_Crosswalk_20250730.txt
+Found file: EPI_ANTH_WV_A_S_Image_Delivery_Crosswalk_20250827.txt
+Found file: MCDIHC_20250722172815.txt
+Found file: REV_ANTH_WV_A_M_extract_20230727.txt
+Found file: VIRTIX_ANTH_VA_A_S_20260828.txt
+Found file: CENT_ANTH_KY_A_S_extract_20240807.txt
+Found file: CENT_ANTH_NV_A_C_extract_20250115.txt
+Found file: CENT_ANTH_NV_A_C_extract_20250129.txt
+Found file: CENT_ANTH_NV_A_C_extract_20250204_Final.txt
+Found file: CENT_ANTH_NV_A_C_extract_20251217.txt
+Found file: CENT_ANTH_NV_A_C_extract_20260107.txt
+Found file: CENT_ANTH_NV_A_C_extract_20260128.txt
+Found file: CENT_ANTH_NV_A_C_extract_20260204_Final.txt
+Found file: CENT_ANTH_NV_A_C_extract_20260311.txt
+Found file: CENT_ANTH_NV_A_M_extract_20241113.txt
+Found file: CENT_ANTH_NV_A_M_extract_20241218.txt
+Found file: CENT_ANTH_NV_A_M_extract_20250115.txt
+Found file: CENT_ANTH_NV_A_M_extract_20250129.txt
+Found file: CENT_ANTH_NV_A_M_extract_20250204_Final.txt
+Found file: CENT_ANTH_NV_A_M_extract_20251203.txt
+Found file: CENT_ANTH_NV_A_M_extract_20251203_Final.txt
+Found file: CENT_ANTH_NV_A_M_extract_20251217.txt
+Found file: CENT_ANTH_NV_A_M_extract_20260107.txt
+Found file: CENT_ANTH_NV_A_M_extract_20260128.txt
+Found file: CENT_ANTH_NV_A_M_extract_20260204_Final.txt
+Found file: CENT_ANTH_NV_A_M_extract_20260311.txt
+Found file: CENT_ANTH_NV_A_S_extract_20241113.txt
+Found file: CENT_ANTH_NV_A_S_extract_20241218.txt
+Found file: CENT_ANTH_NV_A_S_extract_20250115.txt
+Found file: CENT_ANTH_NV_A_S_extract_20250129.txt
+Found file: CENT_ANTH_NV_A_S_extract_20250204_Final.txt
+Found file: CENT_ANTH_NV_A_S_extract_20251217.txt
+Found file: CENT_ANTH_NV_A_S_extract_20260107.txt
+Found file: CENT_ANTH_NV_A_S_extract_20260128.txt
+Found file: CENT_ANTH_NV_A_S_extract_20260204_Final.txt
+Found file: CENT_ANTH_NV_A_S_extract_20260212_CA_R.txt
+Found file: CENT_ANTH_NV_A_S_extract_20260311.txt
+Found file: CENT_ANTH_WI_A_C_extract_20250208.txt
+Found file: CENT_ANTH_WI_A_C_extract_20250326.txt
+Found file: CENT_ANTH_WI_A_C_extract_20250326_Final.txt
+Found file: CENT_ANTH_WI_A_C_extract_20250402_Final.txt
+Found file: CENT_ANTH_WI_A_C_extract_20250411.txt
+Found file: CENT_ANTH_WI_A_C_extract_20251203.txt
+Found file: CENT_ANTH_WI_A_C_extract_20260107.txt
+Found file: CENT_ANTH_WI_A_C_extract_20260128.txt
+Found file: CENT_ANTH_WI_A_C_extract_20260323_Final.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250204.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250208.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250326.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250326_Final.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250402_Final.txt
+Found file: CENT_ANTH_WI_A_M_extract_20250411.txt
+Found file: CENT_ANTH_WI_A_M_extract_20251203.txt
+Found file: CENT_ANTH_WI_A_M_extract_20251217.txt
+Found file: CENT_ANTH_WI_A_M_extract_20260107.txt
+Found file: CENT_ANTH_WI_A_M_extract_20260128.txt
+Found file: CENT_ANTH_WI_A_M_extract_20260323_Final.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250208.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250326.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250326_Final.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250402_Final.txt
+Found file: CENT_ANTH_WI_A_S_extract_20250411.txt
+Found file: CENT_ANTH_WI_A_S_extract_20251203.txt
+Found file: CENT_ANTH_WI_A_S_extract_20260107.txt
+Found file: CENT_ANTH_WI_A_S_extract_20260128.txt
+Found file: CENT_ANTH_WI_A_S_extract_20260302_CA_R.txt
+Found file: CENT_ANTH_WI_A_S_extract_20260323_Final.txt
+Found file: EPI_ANTH_IA_A_C_extract_20240911.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250611.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250730.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250825.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250902.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250902_FINAL.csv
+Found file: EPI_ANTH_IA_A_C_extract_20250916_FINAL.csv
+Found file: EPI_ANTH_IA_A_M_extract_20240911.csv
+Found file: EPI_ANTH_IA_A_M_extract_20250611.csv
+Found file: EPI_ANTH_IA_A_M_extract_20250730.csv
+Found file: EPI_ANTH_IA_A_M_extract_20250902.csv
+Found file: EPI_ANTH_IA_A_M_extract_20250902_FINAL.csv
+Found file: EPI_ANTH_IA_A_M_extract_20250916_FINAL.csv
+Found file: EPI_ANTH_IA_A_R_extract_20250513.csv
+Found file: EPI_ANTH_IA_A_R_extract_20250730.csv
+Found file: EPI_ANTH_IA_A_R_extract_20250902.csv
+Found file: EPI_ANTH_IA_A_R_extract_20250902_FINAL.csv
+Found file: EPI_ANTH_IA_A_R_extract_20250916_FINAL.csv
+Found file: EPI_ANTH_IA_A_S_extract_20240724.csv
+Found file: EPI_ANTH_IA_A_S_extract_20240911.csv
+Found file: EPI_ANTH_IA_A_S_extract_20250611.csv
+Found file: EPI_ANTH_IA_A_S_extract_20250730.csv
+Found file: EPI_ANTH_IA_A_S_extract_20250902.csv
+Found file: EPI_ANTH_IA_A_S_extract_20250902_FINAL.csv
+Found file: EPI_ANTH_IA_A_S_extract_20250916_FINAL.csv
+Found file: EPI_ANTH_IA_A_S_extract_20251001.csv
+Found file: EPI_ANTH_IN_A_C_extract_20240821.csv.csv
+Found file: EPI_ANTH_IN_A_C_extract_20241009.csv
+Found file: EPI_ANTH_IN_A_C_extract_20250716.csv
+Found file: EPI_ANTH_IN_A_C_extract_20250827.csv
+Found file: EPI_ANTH_IN_A_C_extract_20251001_FINAL.csv
+Found file: EPI_ANTH_IN_A_M_extract_20240821.csv.csv
+Found file: EPI_ANTH_IN_A_M_extract_20241009.csv
+Found file: EPI_ANTH_IN_A_S_extract_20240821.csv.csv
+Found file: EPI_ANTH_IN_A_S_extract_20241009.csv
+Found file: EPI_ANTH_IN_A_S_extract_20250716.csv
+Found file: EPI_ANTH_IN_A_S_extract_20250827.csv
+Found file: EPI_ANTH_IN_A_S_extract_20251001_FINAL.csv
+Found file: EPI_ANTH_IN_A_S_extract_20251105.csv
+Found file: EPI_ANTH_IN_A_S_extract_20260715.csv
+Found file: EPI_ANTH_IN_A_S_extract_20260826_Final.csv
+Found file: EPI_ANTH_NY_A_C_Image_Delivery_Crosswalk_20260429_FINAL.txt
+Found file: EPI_ANTH_NY_A_C_extract_20250416.csv
+Found file: EPI_ANTH_NY_A_C_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_A_C_extract_20260219.csv
+Found file: EPI_ANTH_NY_A_C_extract_20260325.csv
+Found file: EPI_ANTH_NY_A_C_extract_20260429_FINAL.csv
+Found file: EPI_ANTH_NY_A_M_Image_Delivery_Crosswalk_20260429_FINAL.txt
+Found file: EPI_ANTH_NY_A_M_extract_20250401.csv
+Found file: EPI_ANTH_NY_A_M_extract_20250416.csv
+Found file: EPI_ANTH_NY_A_M_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_A_M_extract_20260219.csv
+Found file: EPI_ANTH_NY_A_M_extract_20260325.csv
+Found file: EPI_ANTH_NY_A_M_extract_20260429_FINAL.csv
+Found file: EPI_ANTH_NY_A_R_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_A_S_extract_20250401.csv
+Found file: EPI_ANTH_NY_A_S_extract_20250416.csv
+Found file: EPI_ANTH_NY_A_S_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_A_extract_20260429_CA_R.csv
+Found file: EPI_ANTH_NY_W_C_Image_Delivery_Crosswalk_20260429_FINAL.txt
+Found file: EPI_ANTH_NY_W_C_extract_20250416.csv
+Found file: EPI_ANTH_NY_W_C_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_W_C_extract_20260219.csv
+Found file: EPI_ANTH_NY_W_C_extract_20260325.csv
+Found file: EPI_ANTH_NY_W_C_extract_20260429_FINAL.csv
+Found file: EPI_ANTH_NY_W_M_extract_20250401.csv
+Found file: EPI_ANTH_NY_W_M_extract_20250416.csv
+Found file: EPI_ANTH_NY_W_R_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_W_S_Image_Delivery_Crosswalk_20260429_FINAL.txt
+Found file: EPI_ANTH_NY_W_S_extract_20250401.csv
+Found file: EPI_ANTH_NY_W_S_extract_20250416.csv
+Found file: EPI_ANTH_NY_W_S_extract_20250513_FINAL.csv
+Found file: EPI_ANTH_NY_W_S_extract_20260219.csv
+Found file: EPI_ANTH_NY_W_S_extract_20260325.csv
+Found file: EPI_ANTH_NY_W_S_extract_20260429_FINAL.csv
+Found file: EPI_ANTH_OH_A_C_extract_20251203.csv
+Found file: EPI_ANTH_OH_A_C_extract_20260107.csv
+Found file: EPI_ANTH_OH_A_C_extract_20260206_FINAL.csv
+Found file: EPI_ANTH_OH_A_M_extract_20251203.csv
+Found file: EPI_ANTH_OH_A_M_extract_20260107.csv
+Found file: EPI_ANTH_OH_A_M_extract_20260206_FINAL.csv
+Found file: EPI_ANTH_OH_A_S_extract_20251203.csv
+Found file: EPI_ANTH_OH_A_S_extract_20260107.csv
+Found file: EPI_ANTH_OH_A_S_extract_20260206_FINAL.csv
+Found file: EPI_ANTH_OH_A_extract_20240710_CA_R.csv
+Found file: EPI_ANTH_OH_A_extract_20260204_CA_R.csv
+Found file: EPI_ANTH_TN_A_C_extract_20241218.csv
+Found file: EPI_ANTH_TN_A_C_extract_20250129.csv
+Found file: EPI_ANTH_TN_A_C_extract_20250204_FINAL.csv
+Found file: EPI_ANTH_TN_A_C_extract_20251125.csv
+Found file: EPI_ANTH_TN_A_C_extract_20260107.csv
+Found file: EPI_ANTH_TN_A_C_extract_20260128_FINAL.csv
+Found file: EPI_ANTH_TN_A_M_extract_20241113.csv
+Found file: EPI_ANTH_TN_A_M_extract_20241218.csv
+Found file: EPI_ANTH_TN_A_M_extract_20250129.csv
+Found file: EPI_ANTH_TN_A_M_extract_20250204_FINAL.csv
+Found file: EPI_ANTH_TN_A_M_extract_20251125.csv
+Found file: EPI_ANTH_TN_A_M_extract_20260107.csv
+Found file: EPI_ANTH_TN_A_M_extract_20260128_FINAL.csv
+Found file: EPI_ANTH_TN_A_P_extract_20251125.csv
+Found file: EPI_ANTH_TN_A_S_extract_20241113.csv
+Found file: EPI_ANTH_TN_A_S_extract_20241218.csv
+Found file: EPI_ANTH_TN_A_S_extract_20250129.csv
+Found file: EPI_ANTH_TN_A_S_extract_20250204_FINAL.csv
+Found file: EPI_ANTH_TN_A_S_extract_20250404.csv
+Found file: EPI_ANTH_TN_A_S_extract_20251125.csv
+Found file: EPI_ANTH_TN_A_S_extract_20260107.csv
+Found file: EPI_ANTH_TN_A_S_extract_20260128_FINAL.csv
+Found file: EPI_ANTH_TN_A_extract_20260126_CA_R.csv
+Found file: EPI_ANTH_TN_A_extract_20260127_CA_R.csv
+Found file: EPI_ANTH_WV_A_C_extract_20250521.csv
+Found file: EPI_ANTH_WV_A_C_extract_20250625.csv
+Found file: EPI_ANTH_WV_A_C_extract_20250730.csv
+Found file: EPI_ANTH_WV_A_C_extract_20250730_FINAL.csv
+Found file: EPI_ANTH_WV_A_R_extract_20250521.csv
+Found file: EPI_ANTH_WV_A_R_extract_20250625.csv
+Found file: EPI_ANTH_WV_A_R_extract_20250730.csv
+Found file: EPI_ANTH_WV_A_R_extract_20250730_FINAL.csv
+Found file: EPI_ANTH_WV_A_S_extract_20250521.csv
+Found file: EPI_ANTH_WV_A_S_extract_20250625.csv
+Found file: EPI_ANTH_WV_A_S_extract_20250730.csv
+Found file: EPI_ANTH_WV_A_S_extract_20250730_FINAL.csv
+Found file: VIRTIX_ANTH_IN_A_C_extract_20260715.txt
+Found file: VIRTIX_ANTH_IN_A_C_extract_20260807.txt
+Found file: VIRTIX_ANTH_IN_A_C_extract_20260811.txt
+Found file: VIRTIX_ANTH_IN_A_M_extract_20260715.txt
+Found file: VIRTIX_ANTH_IN_A_M_extract_20260807.txt
+Found file: VIRTIX_ANTH_IN_A_M_extract_20260811.txt
+Found file: VIRTIX_ANTH_TEST_06122026.txt
+Found file: VIRTIX_ANTH_TEST_06162026.txt
+Found file: VIRTIX_ANTH_TEST_JES_extract_05282026.txt
+Found file: VIRTIX_ANTH_VA_C_extract_20260826.txt
+Found file: VIRTIX_ANTH_VA_M_extract_20260826.txt
+Found file: VIRTIX_ANTH_VA_S_extract_20260826.txt
+Found file: VIRTIX_ANTH_WV_A_C_extract_20260513.txt
+Found file: VIRTIX_ANTH_WV_A_C_extract_20260624.txt
+Found file: VIRTIX_ANTH_WV_A_C_extract_20260728.txt
+Found file: VIRTIX_ANTH_WV_A_C_extract_20260729.txt
+Found file: VIRTIX_ANTH_WV_A_C_extract_20260729_FINAL.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260513.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260527.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260624.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260728.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260729.txt
+Found file: VIRTIX_ANTH_WV_A_S_extract_20260729_FINAL.txt
+Found file: EPI_ANTH_IN_A_C_extract_20240821.csv.csv
+Found file: EPI_ANTH_IN_A_M_extract_20240821.csv.csv
+Found file: EPI_ANTH_IN_A_S_extract_20240821.csv.csv
+Total matching files found: 2
+=====================['ChartData_ANT_Virtix_Chase_IN_20260827.txt', 'ChartData_ANT_Virtix_Chase_IN_20260831.txt']==============================
+-------1----------
+INFO:__main__:Running Load for {step}: InProgress
+-+-+-+-+-+-+s3a://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260827.txt-+-+-+-+
++----------------------------------------------------+---------+--------+--------+----------+--------------+-----------------+-------------+-------------------------+--------------------------------+------------+----------------+------+----------------+-----------------+-----------+------------+----------+----------------+----------------+----------------+----------------+
+|FileName                                            |MBRID    |MBRFNAME|MBRLNAME|MBRDOB    |EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName              |ClientRequestId                 |RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4|
++----------------------------------------------------+---------+--------+--------+----------+--------------+-----------------+-------------+-------------------------+--------------------------------+------------+----------------+------+----------------+-----------------+-----------+------------+----------+----------------+----------------+----------------+----------------+
+|IN_26Q2_20250101_20251231_000A65504_1952629644_1.pdf|BJB4F8B01|PDMA    |B2HX    |07/24/1962|NULL          |NULL             |NULL         |ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000A65504P1952629644|NULL        |Y               |M     |MCMILLEN        |BROCK            |1952629644 |NULL        |NULL      |NULL            |NULL            |NULL            |NULL            |
+|IN_26Q2_20250101_20251231_000M63589_1922075084_1.pdf|EMY1WZQGY|TVO5KDD |UVVWUXD |10/17/1986|NULL          |NULL             |NULL         |ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000M63589P1922075084|NULL        |Y               |F     |RINGWALD        |KAREN            |1922075084 |NULL        |NULL      |NULL            |NULL            |NULL            |NULL            |
+|IN_26Q2_20250101_20251231_000M65128_1992154686_1.pdf|0DPG0KEFJ|CVP8    |D5RL2G4 |05/04/1985|NULL          |NULL             |NULL         |ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000M65128P1992154686|NULL        |Y               |F     |WEIRICH         |JUSTIN           |1992154686 |NULL        |NULL      |NULL            |NULL            |NULL            |NULL            |
+|IN_26Q2_20250101_20251231_000M66673_1083923866_1.pdf|QKV0D7UJ6|LZWNE   |LY9DPNQR|01/31/1964|NULL          |NULL             |NULL         |ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000M66673P1083923866|NULL        |Y               |F     |BATSON          |ANNE             |1083923866 |NULL        |NULL      |NULL            |NULL            |NULL            |NULL            |
+|IN_26Q2_20250101_20251231_000M71276_1558505131_1.pdf|S2OLA09A9|2MOSL   |919B    |12/22/1964|NULL          |NULL             |NULL         |ANT_Virtix_IN_Q22026_CIOX|ANTIN2026Q2M000M71276P1558505131|NULL        |Y               |F     |DANTZER         |BRANDY           |1558505131 |NULL        |NULL      |NULL            |NULL            |NULL            |NULL            |
++----------------------------------------------------+---------+--------+--------+----------+--------------+-----------------+-------------+-------------------------+--------------------------------+------------+----------------+------+----------------+-----------------+-----------+------------+----------+----------------+----------------+----------------+----------------+
+only showing top 5 rows
+
+INFO:__main__:File s3a://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_IN_20260827.txt read with format txt
+INFO:__main__:Inside File ChartData_ANT_Virtix_Chase_*.txt for date conversion in Virtix
+Traceback (most recent call last):
+  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 482, in <module>
+    process_and_load_data(config_file, config_path, schema, run_id)
+  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 401, in process_and_load_data
+    df = read_source_file(file_path, delimiter, file_format, schema_name, file_name, run_id, columns_list)
+  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 193, in read_source_file
+    df = df.select(*column_sequence)
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/sql/dataframe.py", line 3230, in select
+  File "/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1322, in __call__
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/errors/exceptions/captured.py", line 185, in deco
+pyspark.errors.exceptions.captured.AnalysisException: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column or function parameter with name `MemberId` cannot be resolved. Did you mean one of the following? [`Gender`, `MemberMiddle`, `KF_TMS`, `MBRDOB`, `MBRID`].;
+'Project [EDL_LOAD_DTM#378, EDL_RUN_ID#406, EDL_SCRTY_LVL_CD#435, EDL_LOB_CD#465, EDL_EXTRNL_LOAD_CD#496, EDL_SOR_CD#528, KF_TMS#300, EDL_CREAT_DTM#325, EDL_INCRMNTL_LOAD_DTM#351, FileName#97, 'MemberId, 'MemberFirstName, 'MemberLastName, 'MemberDOB, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ... 8 more fields]
++- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, STATE#276, KF_TMS#300, ... 8 more fields]
+   +- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, STATE#276, KF_TMS#300, ... 7 more fields]
+      +- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, STATE#276, KF_TMS#300, ... 6 more fields]
+         +- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, STATE#276, KF_TMS#300, ... 5 more fields]
+            +- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, STATE#276, KF_TMS#300, ... 4 more fields]
+               +- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, STATE#276, KF_TMS#300, ... 3 more fields]
+                  +- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, STATE#276, KF_TMS#300, ... 2 more fields]
+                     +- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, STATE#276, KF_TMS#300, current_timestamp() AS EDL_CREAT_DTM#325]
+                        +- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, STATE#276, cast(null as timestamp) AS KF_TMS#300]
+                           +- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118, regexp_extract(input_file_name(), ChartData_ANT_Virtix_Chase_([A-Za-z]{2})_\d{8}\.txt, 1) AS STATE#276]
+                              +- Project [FileName#97, MBRID#98, MBRFNAME#99, MBRLNAME#100, to_date(trim(MBRDOB#101, None), Some(MM/dd/yyyy), Some(UTC), false) AS MBRDOB#253, EnrollmentDate#102, EnrollmentEndDate#103, ESRDIndicator#104, ProjectName#105, ClientRequestId#106, RecordTypeId#107, OnshoreIndicator#108, Gender#109, ProviderLastName#110, ProviderFirstName#111, ProviderNPI#112, MemberMiddle#113, ProviderId#114, UserDefinedText1#115, UserDefinedText2#116, UserDefinedText3#117, UserDefinedText4#118]
+                                 +- Relation [FileName#97,MBRID#98,MBRFNAME#99,MBRLNAME#100,MBRDOB#101,EnrollmentDate#102,EnrollmentEndDate#103,ESRDIndicator#104,ProjectName#105,ClientRequestId#106,RecordTypeId#107,OnshoreIndicator#108,Gender#109,ProviderLastName#110,ProviderFirstName#111,ProviderNPI#112,MemberMiddle#113,ProviderId#114,UserDefinedText1#115,UserDefinedText2#116,UserDefinedText3#117,UserDefinedText4#118] csv
+
+INFO:py4j.clientserver:Closing down clientserver connection
