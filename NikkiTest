@@ -1,4 +1,1 @@
-./pgp_decrypt_and_archive.sh MRA "MCARE_2026_TGT_CLI_ONSHR_20260915_121028.DAT"
-./pgp_decrypt_and_archive.sh MRA "MCARE_2026_TGT_CLI_OFFSHR_20260915_121028.DAT"
-
-/hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND for ACA vs /raa1/backup/prodenvironment/sas_repository/outbound for MRA.
+cat /hcaaapck/backup/ProdEnvironment/PGP_Decrypt/decrypt_debug.log
