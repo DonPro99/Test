@@ -1,7 +1,1 @@
-find /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260826/ -iname "*VA*" 2>/dev/null
-
-find /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/ -mtime -30 -iname "*VIRTIX*VA*" 2>/dev/null
-$ find /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/ -mtime -30 -iname "*VIRTIX*VA*" 2>/dev/null
-/raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260817/Anthem_VirtixHealth_VAQ32026_Chase_CFXTEST_1.txt
-/raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260827/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
-/raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260827/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+find /raa2/backup/ -iname "*VIRTIX_ANTH*" 2>/dev/null
