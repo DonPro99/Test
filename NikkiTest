@@ -33,3 +33,9 @@ if count == 1:
 else:
     print("ABORTED - anchor not found exactly once")
 PYEOF
+
+
+
+
+
+aws s3 cp /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
