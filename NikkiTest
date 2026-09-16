@@ -1,13 +1,6 @@
-Running for schema: schema_virtix and runid: 1234
-:: loading settings :: url = jar:file:/usr/lib/spark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
-/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:51: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
-  import imp
-Traceback (most recent call last):
-  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 493, in <module>
-    process_and_load_data(config_file, config_path, schema, run_id)
-  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 328, in process_and_load_data
-    s3_file_path = config[schema]['s3_file_path']
-  File "/usr/lib64/python3.9/configparser.py", line 965, in __getitem__
-    raise KeyError(key)
-KeyError: 'schema_virtix'
-INFO:py4j.clientserver:Closing down clientserver connection
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
+grep -c "\[schema_virtix\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+
+
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py /home/hadoop/scripts/
+grep -c "MBRDOB" /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
