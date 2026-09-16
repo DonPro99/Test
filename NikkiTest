@@ -1,3 +1,5 @@
-java-17-amazon-corretto.aarch64
-jre-17
-jre-17-openjdk
+export JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto.aarch64
+export PATH=$JAVA_HOME/bin:$PATH
+export HADOOP_CONF_DIR=/etc/hadoop/conf.empty
+export YARN_CONF_DIR=/etc/hadoop/conf.empty
+java -version
