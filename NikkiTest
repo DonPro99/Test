@@ -1,5 +1,4 @@
-export JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto.aarch64
-export PATH=$JAVA_HOME/bin:$PATH
-export HADOOP_CONF_DIR=/etc/hadoop/conf.empty
-export YARN_CONF_DIR=/etc/hadoop/conf.empty
-java -version
+[hadoop@ip-10-127-204-94 ~]$ java -version
+openjdk version "17.0.19" 2026-04-21 LTS
+OpenJDK Runtime Environment Corretto-17.0.19.10.1 (build 17.0.19+10-LTS)
+OpenJDK 64-Bit Server VM Corretto-17.0.19.10.1 (build 17.0.19+10-LTS, mixed mode, sharing)
