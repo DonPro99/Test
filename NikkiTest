@@ -1,5 +1,34 @@
-MCaid Virtix Chase files: Merging of C, M and S formats in the SAS
+Mapping Doc:
 
-Three layouts of Virtix chase files must be loaded into same Snowflake table.
-Test and reload in production.
- 
+Target (22-col layout)	Source (_S) 54-col	Notes / Confirmed by James	
+FileName		Possibly ReturnFileName, needs confirmation	Need this as this is the imagename
+MemberId	MemberId		This should be a direct match as the subscriber_id, e.g., 00000011881
+MemberFirstName	MemberFirstName	Direct match	
+MemberLastName	MemberLastName	Direct match	
+MemberDOB	MemberDOB	Direct match	
+EnrollmentDate	not populated 	Empty placeholder field, business never sends this data	
+EnrollmentEndDate	not populated 	Empty placeholder field, business never sends this data	
+ESRDIndicator		Not present in _S layout	
+ProjectName	ProjectName	Direct match	
+ClientRequestId	ClientRequestid	Confirmed : "the chase ID"	
+RecordTypeId		Not present in _S layout	
+OnshoreIndicator	OnshoreIndicator (col 53)		
+Gender	Gender (col 40)	 direct match	
+ProviderLastName	ProviderLastName	Direct match	
+ProviderFirstName	ProviderFirstName	Direct match	
+ProviderNPI	ProviderNPI		
+MemberMiddle	MemberMI		
+ProviderId	ProviderId	Direct match	
+UserDefinedText1	UserDefinedText1	Direct match	
+UserDefinedText2	UserDefinedText2	Direct match 	
+UserDefinedText3	UserDefinedText3	Direct match	
+UserDefinedText4	(no direct match  _S only has UserDefinedText1-3)	Needs confirmation , may just be blank for _S-derived rows ???	no need for this Column
+
+=======
+
+FileName : is this ReturnFileName in the _S layout, or a different column?
+Yes, this is the ReturnFileName
+
+       2.   ESRDIndicator and RecordTypeId : I don't see matching fields in the _S layout at all. Is it okay to leave these blank for _S-derived rows?
+
+                                Yes, leave these blank.
