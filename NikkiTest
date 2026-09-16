@@ -1,2 +1,2 @@
-$ cat  Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
-ProjectId|ProjectName|ClientRequestid|MemberLastName|MemberFirstName|MemberMI|MemberId|MemberDOB|ProviderGroupName|ProviderGroupTIN|ProviderNPI|ProviderId|ProviderLastName|ProviderFirstName|ProviderAddress1|ProviderAddress2|ProviderCity|ProviderState|ProviderZip|ProviderPhone|ProviderFax|ProviderContactName|CentralContactName|CentralContactPhone|CentralContactFax|MemberZip|ClaimNumber|RecordRank|SSN|MemberAddress1|MemberAddress2|MemberCity|MemberState|HomePhone|MobilePhone|InsuranceID|ClaimID|Gender|BeginDOS|EndDOS|ReturnFileName|BusinessUnit|LOB|RecordType|ContractNumber|CodingVendor|AltCodingVendor|UserDefinedText1|UserDefinedText2|UserDefinedText3|OnshoreIndicator|ClientCode|HealthPlanProduct|MBI
+do you have any info on the SAS file path for the below virtix SRC file
+s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/archive/VIRTIX_ANTH_VA_S_extract_20260826.txt
