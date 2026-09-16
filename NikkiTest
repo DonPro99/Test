@@ -1,8 +1,217 @@
-Hi Nazir,
+#!/usr/bin/env python3
+"""
+virtix_chase_transform.py
 
-Working on getting the Virtix job (790009519) ready for Friday's prod push - fixing a column name mismatch from the 14159 header rename. Confirmed the fix works with a manual test (loaded fine, batch 10).
+RBICA-14060 - MCaid Virtix Chase Files: _S (54-col) -> 22-col standard layout
 
-But when I trigger the actual job, it just stops right after "SchedulerBackend is ready for scheduling" - no error, just exits with ret 1. Rajesh hasn't seen this one before either. Any idea what could cause that?
+Purpose:
+    Reshape the _S "Standard" Virtix chase file down to the same 22-column
+    structure already used by _C / _M, so all three file types can flow
+    through the EXISTING merge_virtix_chase_files.sh unchanged, and land in
+    the single target table:
 
-Thanks,
-Nikhitha
+        U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD   (UAT)
+        P01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD   (PROD)
+
+Where this runs in the pipeline:
+    1. THIS MODULE runs first - reshapes any raw _S files in INPUT_DIR down
+       to the 22-column layout, in place, keeping the same filename.
+    2. merge_virtix_chase_files.sh runs next, completely unchanged - its
+       existing glob now sees _S files that already look like _C/_M files,
+       so they merge in correctly. STATE derivation continues to work
+       unchanged, because it comes from the FILENAME (both before and after
+       merge), never from file contents.
+    3. rad_mcaid_chase_all_lob_s3_to_snflk_load.py runs last, also unchanged -
+       it only ever sees the final merged, uniformly-shaped file.
+
+This is a single shared module (not duplicated logic) so the reshape rule
+lives in one readable place, callable either:
+    - as a CLI step from merge_virtix_chase_files.sh (see __main__ below), or
+    - by importing transform_file() / transform_all() directly, if some
+      other step ever needs the same logic.
+
+Mapping source: Don/James mapping doc (confirmed columns below)
+NOTE: <<< marks values you'll need to confirm/replace for your environment
+"""
+
+import csv
+import glob
+import os
+import sys
+
+# Confirmed: Virtix chase files (all types) are pipe-delimited, matching the
+# "delimiter" value in rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+# for the Virtix schema section.
+DELIMITER = "|"
+
+# Target 22-column layout, in order. Matches the _C/_M layout BEFORE
+# merge_virtix_chase_files.sh's header sed step (MemberId -> MBRID, etc.) -
+# that rename keeps happening downstream in the merge script, unchanged,
+# for all three file types alike.
+TARGET_COLUMNS = [
+    "FileName",
+    "MemberId",
+    "MemberFirstName",
+    "MemberLastName",
+    "MemberDOB",
+    "EnrollmentDate",
+    "EnrollmentEndDate",
+    "ESRDIndicator",
+    "ProjectName",
+    "ClientRequestId",
+    "RecordTypeId",
+    "OnshoreIndicator",
+    "Gender",
+    "ProviderLastName",
+    "ProviderFirstName",
+    "ProviderNPI",
+    "MemberMiddle",
+    "ProviderId",
+    "UserDefinedText1",
+    "UserDefinedText2",
+    "UserDefinedText3",
+    "UserDefinedText4",
+]
+
+# Confirmed direct-match source column names in the _S (54-col) layout.
+# Verified against an actual _S file header row:
+#   ProjectId|ProjectName|ClientRequestid|MemberLastName|MemberFirstName|MemberMI|
+#   MemberId|MemberDOB|ProviderGroupName|ProviderGroupTIN|ProviderNPI|ProviderId|
+#   ProviderLastName|ProviderFirstName|ProviderAddress1|ProviderAddress2|ProviderCity|
+#   ProviderState|ProviderZip|ProviderPhone|ProviderFax|ProviderContactName|
+#   CentralContactName|CentralContactPhone|CentralContactFax|MemberZip|ClaimNumber|
+#   RecordRank|SSN|MemberAddress1|MemberAddress2|MemberCity|MemberState|HomePhone|
+#   MobilePhone|InsuranceID|ClaimID|Gender|BeginDOS|EndDOS|ReturnFileName|
+#   BusinessUnit|LOB|RecordType|ContractNumber|CodingVendor|AltCodingVendor|
+#   UserDefinedText1|UserDefinedText2|UserDefinedText3|OnshoreIndicator|ClientCode|
+#   HealthPlanProduct|MBI
+# (from Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt)
+# Every mapped column below was confirmed present in that header.
+SOURCE_COLUMN_MAP = {
+    "FileName": "ReturnFileName",          # confirmed by James
+    "MemberId": "MemberId",
+    "MemberFirstName": "MemberFirstName",
+    "MemberLastName": "MemberLastName",
+    "MemberDOB": "MemberDOB",
+    "ProjectName": "ProjectName",
+    "ClientRequestId": "ClientRequestid",  # confirmed: "the chase ID"
+    "OnshoreIndicator": "OnshoreIndicator",  # _S col 53
+    "Gender": "Gender",                      # _S col 40
+    "ProviderLastName": "ProviderLastName",
+    "ProviderFirstName": "ProviderFirstName",
+    "ProviderNPI": "ProviderNPI",
+    "MemberMiddle": "MemberMI",
+    "ProviderId": "ProviderId",
+    "UserDefinedText1": "UserDefinedText1",
+    "UserDefinedText2": "UserDefinedText2",
+    "UserDefinedText3": "UserDefinedText3",
+}
+
+# Confirmed blank fields - no match in _S layout, or business placeholder never populated
+BLANK_COLUMNS = {
+    "EnrollmentDate",    # placeholder, business never populates (matches _C/_M)
+    "EnrollmentEndDate", # placeholder, business never populates (matches _C/_M)
+    "ESRDIndicator",     # confirmed: not present in _S layout at all
+    "RecordTypeId",      # confirmed: not present in _S layout at all
+    "UserDefinedText4",  # confirmed: no direct match, not needed for _S rows
+}
+
+# NOTE: STATE is intentionally NOT handled by this module. Per the RBICA-13935
+# pattern, merge_virtix_chase_files.sh groups files by state (parsed from the
+# INPUT filename) and rad_mcaid_chase_all_lob_s3_to_snflk_load.py extracts
+# STATE from the MERGED output filename via input_file_name() + regex - never
+# from file contents. As long as this module preserves the existing
+# Anthem_VirtixHealth_<STATE>..._Chase_S_....txt naming convention on its
+# output, STATE derivation continues to work unchanged for _S-derived rows.
+
+
+def transform_file(source_path: str, dest_path: str) -> tuple[int, int]:
+    """Reshape one _S file from 54 columns down to the 22-column target layout.
+    Returns (input_record_count, output_record_count) for validation, matching
+    the record-count check merge_virtix_chase_files.sh already does for its
+    own merge step.
+    """
+    with open(source_path, newline="", encoding="utf-8") as src:
+        reader = csv.DictReader(src, delimiter=DELIMITER)
+        input_header = reader.fieldnames or []
+
+        missing = [
+            src_col
+            for src_col in SOURCE_COLUMN_MAP.values()
+            if src_col not in input_header
+        ]
+        if missing:
+            raise ValueError(
+                f"{source_path}: expected _S source column(s) not found in header: {missing}"
+            )
+
+        rows_out = []
+        input_count = 0
+        for row in reader:
+            input_count += 1
+            new_row = {}
+            for target_col in TARGET_COLUMNS:
+                if target_col in BLANK_COLUMNS:
+                    new_row[target_col] = ""
+                else:
+                    source_col = SOURCE_COLUMN_MAP[target_col]
+                    new_row[target_col] = row.get(source_col, "")
+            rows_out.append(new_row)
+
+    with open(dest_path, "w", newline="", encoding="utf-8") as dst:
+        writer = csv.DictWriter(dst, fieldnames=TARGET_COLUMNS, delimiter=DELIMITER)
+        writer.writeheader()
+        writer.writerows(rows_out)
+
+    return input_count, len(rows_out)
+
+
+def transform_all(input_dir: str) -> int:
+    """Find every raw _S file in input_dir and reshape it in place.
+    Returns 0 on success, 1 if any file fails (mirrors shell exit-code
+    conventions so merge_virtix_chase_files.sh can check $? directly).
+    """
+    # Matches the _S part of the same naming convention merge_virtix_chase_files.sh expects:
+    # Anthem_VirtixHealth_<STATE>Q<YEAR>_Chase_S_<TIMESTAMP>.txt
+    pattern = os.path.join(input_dir, "Anthem_VirtixHealth_*_Chase_S_*.txt")
+    s_files = sorted(glob.glob(pattern))
+
+    if not s_files:
+        print("No _S files found - nothing to transform.")
+        return 0
+
+    for source_path in s_files:
+        # Overwrite in place so merge_virtix_chase_files.sh's existing glob
+        # picks it up unchanged, with the same filename (state/timestamp
+        # already embedded in it).
+        # <<< confirm whether in-place overwrite is acceptable, or whether
+        #     you'd rather write to a temp file then move, to avoid partial
+        #     writes if this step is interrupted mid-run
+        tmp_path = source_path + ".transformed"
+        try:
+            in_count, out_count = transform_file(source_path, tmp_path)
+        except ValueError as e:
+            print(f"ERROR: {e}", file=sys.stderr)
+            return 1
+
+        if in_count != out_count:
+            print(
+                f"ERROR: record count mismatch for {source_path}: "
+                f"input={in_count} output={out_count}",
+                file=sys.stderr,
+            )
+            return 1
+
+        os.replace(tmp_path, source_path)
+        print(f"Transformed {source_path}: {in_count} records, 54-col -> 22-col.")
+
+    return 0
+
+
+if __name__ == "__main__":
+    # Invoked from merge_virtix_chase_files.sh as:
+    #   python3 virtix_chase_transform.py "${INPUT_DIR}"
+    # right before its "Discover Available States" step.
+    # <<< replace with actual INPUT_DIR default if you want a fallback for local testing
+    _input_dir = sys.argv[1] if len(sys.argv) > 1 else "/raa2/backup/prodenvironment/rev_opt/chasefiles"
+    sys.exit(transform_all(_input_dir))
