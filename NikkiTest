@@ -2,3 +2,6 @@ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingest
 
 
 aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep "columns_list" | grep "MBRID"
+[hadoop@ip-10-127-204-94 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep "columns_list" | grep "MBRID"
+columns_list=["CLIENTCHASEID", "MBRID", "MBRFNAME", "MBRMI", "MBRLNAME", "MBRGender", "HLTHPLN", "MBRDOB", "HICN", "PRVID", "NPI", "PRVSPEC", "PRVSPECDESC", "TIN", "PRVFNAME", "PRVLNAME", "BILLNPI", "BILLTIN", "PRVADDR1", "PRVADDR2", "PRVCITY", "PRVST", "PRVZIP", "PRVPHONE", "PRVFAX", "CONTACT", "CONTACTPHN", "CONTACTFAX", "CONTACTEMAIL", "PRVGRPID", "PRVGROUP", "REVIEWPERIODBEG", "REVIEWPERIODEND", "IMAGENAME", "CHASEWEIGHT", "PROJECTGROUP", "SPECHANDLINGCOMMENT"]
+columns_list=["FileName", "MBRID", "MBRFNAME", "MBRLNAME", "MBRDOB", "EnrollmentDate", "EnrollmentEndDate", "ESRDIndicator", "ProjectName", "ClientRequestId", "RecordTypeId", "OnshoreIndicator", "Gender", "ProviderLastName", "ProviderFirstName", "ProviderNPI", "MemberMiddle", "ProviderId", "UserDefinedText1", "UserDefinedText2", "UserDefinedText3", "UserDefinedText4"]
