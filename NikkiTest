@@ -1,1 +1,24 @@
-10	2026-09-16 18:12:17.987
+{
+    "clusternm": "MCAID-VIRTIX-CHASE-FILES-LOAD",
+    "jobargs": [
+        {
+            "jobname": "VIRTIX-CHASE-FILES-LOAD",
+            "job": [
+                "sh",
+                "/home/hadoop/scripts/mcaid_chase_all_lob_s3_to_snflk_load.sh",
+                "schema_virtix",
+                "1234"
+            ]
+        }
+    ],
+    "createcluster": "YES",
+    "application": "RAA",
+    "configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/files/snowpark/config/STANDARD_M.json",
+    "maxconcurrency": 1,
+    "clusterid": "na",
+    "bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast1",
+    "bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh",
+    "emrenv": "${env}",
+    "logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast1/logs/",
+    "terminateoption": "YES"
+}
