@@ -1,1 +1,35 @@
-/usr/local/bin/spark-submit --master yarn --deploy-mode client --driver-cores 2 --driver-memory 5G --executor-cores 6 --executor-memory 10G --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar --packages net.snowflake:snowflake-jdbc:3.20.1,net.snowflake:spark-snowflake_2.12:2.12.0-spark_3.4 --conf spark.kryoserializer.buffer.max=128 --conf yarn.nodemanager.resource.memory-mb=36G --conf spark.driver.memoryOverhead=1536 --conf spark.executor.memoryOverhead=1536 --conf spark.dynamicAllocation.enabled=true --conf spark.shuffle.service.enabled=true --conf spark.sql.broadcastTimeout=4800 --conf spark.mail.conf=/home/hadoop/config/mail-prod.conf --conf spark.network.timeout=10000000 --conf spark.executor.heartbeatInterval=10000000 --conf spark.default.parallelism=1000 /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py -c rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config schema_virtix 1234
+Traceback (most recent call last):
+  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 67, in <module>
+    spark = SparkSession.builder \
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/sql/session.py", line 497, in getOrCreate
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/context.py", line 535, in getOrCreate
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/context.py", line 206, in __init__
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/context.py", line 299, in _do_init
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/context.py", line 432, in _initialize_context
+  File "/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/java_gateway.py", line 1587, in __call__
+  File "/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip/py4j/protocol.py", line 326, in get_return_value
+py4j.protocol.Py4JJavaError: An error occurred while calling None.org.apache.spark.api.java.JavaSparkContext.
+: java.lang.IllegalArgumentException: Required executor memory (10240 MB), offHeap memory (0) MB, overhead (1536 MB), and PySpark memory (0 MB) is above the max threshold (11712 MB) of this cluster! Please check the values of 'yarn.scheduler.maximum-allocation-mb' and/or 'yarn.nodemanager.resource.memory-mb'.
+        at org.apache.spark.deploy.yarn.Client.verifyClusterResources(Client.scala:452)
+        at org.apache.spark.deploy.yarn.Client.submitApplication(Client.scala:214)
+        at org.apache.spark.scheduler.cluster.YarnClientSchedulerBackend.start(YarnClientSchedulerBackend.scala:66)
+        at org.apache.spark.scheduler.TaskSchedulerImpl.start(TaskSchedulerImpl.scala:235)
+        at org.apache.spark.SparkContext.<init>(SparkContext.scala:640)
+        at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:58)
+        at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+        at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+        at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+        at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+        at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+        at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:247)
+        at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+        at py4j.Gateway.invoke(Gateway.java:238)
+        at py4j.commands.ConstructorCommand.invokeConstructor(ConstructorCommand.java:80)
+        at py4j.commands.ConstructorCommand.execute(ConstructorCommand.java:69)
+        at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)
+        at py4j.ClientServerConnection.run(ClientServerConnection.java:106)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+
+26/09/16 17:59:30 INFO ShutdownHookManager: Shutdown hook called
+26/09/16 17:59:30 INFO ShutdownHookManager: Deleting directory /tmp/spark-b7edf4b5-9636-4535-8fa7-18a52c81b8fa
+26/09/16 17:59:30 INFO ShutdownHookManager: Deleting directory /tmp/spark-bf903c45-7dfe-4da2-b12a-505041a5005d
