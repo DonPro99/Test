@@ -1,6 +1,11 @@
-/hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG
+/hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh
 
--rw-r--r-- 1 srcradcoolbthpr ahpck  30900684 Sep 16 16:58 MRDM_ACA_GAP_20260916191050.txt.pgp
--rw-r--r-- 1 srcradcoolbthpr ahpck 181468544 Sep 16 17:00 MRDM_Medicaid_GAP_20260916194252.txt.pgp
+./pgp_decrypt_and_archive.sh ACA "MRDM_ACA_GAP_20260916191050.txt.pgp"
 
-/hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND
+
+ls -la /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND/ | grep MRDM_ACA_GAP
+
+cp /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND/MRDM_ACA_GAP_20260916191050.txt /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/
+
+ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/ | grep MRDM_ACA_GAP
+
