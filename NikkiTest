@@ -1,10 +1,12 @@
-export JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto.x86_64
-export PATH=$JAVA_HOME/bin:$PATH
-export HADOOP_CONF_DIR=/etc/hadoop/conf.empty
-export YARN_CONF_DIR=/etc/hadoop/conf.empty
-java -version
-
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py /home/hadoop/scripts/
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
-grep -c "MBRDOB" /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
-grep -c "\[schema_virtix\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+[hadoop@ip-10-127-204-219 ~]$ java -version
+openjdk version "17.0.19" 2026-04-21 LTS
+OpenJDK Runtime Environment Corretto-17.0.19.10.1 (build 17.0.19+10-LTS)
+OpenJDK 64-Bit Server VM Corretto-17.0.19.10.1 (build 17.0.19+10-LTS, mixed mode, sharing)
+[hadoop@ip-10-127-204-219 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py /home/hadoop/scripts/
+download: s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py to scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+[hadoop@ip-10-127-204-219 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
+download: s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties to config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+[hadoop@ip-10-127-204-219 ~]$ grep -c "MBRDOB" /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+3
+[hadoop@ip-10-127-204-219 ~]$ grep -c "\[schema_virtix\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+1
