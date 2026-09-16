@@ -1,3 +1,10 @@
-java-17-amazon-corretto.x86_64
-jre-17
-jre-17-openjdk
+export JAVA_HOME=/usr/lib/jvm/java-17-amazon-corretto.x86_64
+export PATH=$JAVA_HOME/bin:$PATH
+export HADOOP_CONF_DIR=/etc/hadoop/conf.empty
+export YARN_CONF_DIR=/etc/hadoop/conf.empty
+java -version
+
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py /home/hadoop/scripts/
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
+grep -c "MBRDOB" /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py
+grep -c "\[schema_virtix\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
