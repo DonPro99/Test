@@ -1,1 +1,4 @@
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/mcaid_chase_all_lob_s3_to_snflk_load.sh - | grep -- "--executor-memory\|--executor-cores\|--driver-memory"
+[hadoop@ip-10-127-204-205 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/mcaid_chase_all_lob_s3_to_snflk_load.sh - | grep -- "--executor-memory\|--executor-cores\|--driver-memory"
+  --driver-memory 10G \
+  --executor-cores 3 \
+  --executor-memory 7G \
