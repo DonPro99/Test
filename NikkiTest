@@ -1,138 +1,61 @@
+columns_list=["FileName", "MBRID", "MBRFNAME", "MBRLNAME", "MBRDOB", "EnrollmentDate", "EnrollmentEndDate", "ESRDIndicator", "ProjectName", "ClientRequestId", "RecordTypeId", "OnshoreIndicator", "Gender", "ProviderLastName", "ProviderFirstName", "ProviderNPI", "MemberMiddle", "ProviderId", "UserDefinedText1", "UserDefinedText2", "UserDefinedText3", "UserDefinedText4"]
+
+=====
 
 
+git checkout master
+git pull origin master
+git checkout -b feature/RBICA-14159-headerfix-09XX2026
+
+columns_list=["FileName", "MBRID", "MBRFNAME", "MBRLNAME", "MBRDOB", "EnrollmentDate", "EnrollmentEndDate", "ESRDIndicator", "ProjectName", "ClientRequestId", "RecordTypeId", "OnshoreIndicator", "Gender", "ProviderLastName", "ProviderFirstName", "ProviderNPI", "MemberMiddle", "ProviderId", "UserDefinedText1", "UserDefinedText2", "UserDefinedText3", "UserDefinedText4"]
 
 
- your actual file lives in DevEnvironment/SAS_Repository/CFX_STG/, but this script only ever looks in ProdEnvironment/SAS_Repository/CFX_STG/.
+git add <path-to-py-file> <path-to-properties-file>
+git commit -m "RBICA-14159: Fix column name mismatch - update Python transformation logic and properties columns_list to use MBRID/MBRFNAME/MBRLNAME/MBRDOB matching the SAS header rename"
+git push origin feature/RBICA-14159-headerfix-09XX2026
 
-mv /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/MCARE_2026_TGT_CLI_ONSHR_20260915_121028.DAT.pgp /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
+==========
 
-mv /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/MCARE_2026_TGT_CLI_OFFSHR_20260915_121028.DAT.pgp /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
-
-./pgp_decrypt_and_archive.sh MRA "MCARE_2026_TGT_CLI_ONSHR_20260915_121028.DAT"
-./pgp_decrypt_and_archive.sh MRA "MCARE_2026_TGT_CLI_OFFSHR_20260915_121028.DAT"
-
-ls -la /raa1/backup/prodenvironment/sas_repository/outbound | grep MCARE_2026_TGT_CLI
-
-mv /raa1/backup/prodenvironment/sas_repository/outbound/MCARE_2026_TGT_CLI_ONSHR_20260915_121028.DAT /raa1/backup/devenvironment/sas_repository/outbound/
-
-mv /raa1/backup/prodenvironment/sas_repository/outbound/MCARE_2026_TGT_CLI_OFFSHR_20260915_121028.DAT /raa1/backup/devenvironment/sas_repository/outbound/
-
-
-========hey nikhitha when you are free can you please move this deploy file to uat s3 
- 
-Location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
-DEPLY_AHGPRSP_ACA_20260915
- 
-/bin/sh /hcaaapck/backup/IT/PROD/scripts/start_sas_deploy_copy_hdfs_MN.sh ALL ACA
+        elif "ChartData_ANT_Virtix" in file_name:
+            # --- MODIFIED (RBICA-13935): Renamed Virtix merged filename from
+            # ChartData_CAID_Virtix_Chase_* to ChartData_ANT_Virtix_Chase_* 
+            logger.info(f"Inside File {file_name} for date conversion in Virtix")
+            df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM/dd/yyyy"))) \
+                   .withColumn("STATE", regexp_extract(input_file_name(), r'ChartData_ANT_Virtix_Chase_([A-Za-z]{2})_\d{8}\.txt', 1)) \
+                   .withColumn("KF_TMS", lit(None).cast("timestamp")) \
+                   .withColumn("EDL_CREAT_DTM", current_timestamp()) \
+                   .withColumn("EDL_INCRMNTL_LOAD_DTM", lit("8888-12-31 00:00:00").cast("timestamp"))
 
 
+        elif "ChartData_ANT_Virtix" in file_name:
+            # --- MODIFIED (RBICA-13935): Renamed Virtix merged filename from
+            # ChartData_CAID_Virtix_Chase_* to ChartData_ANT_Virtix_Chase_* 
+            # --- MODIFIED (RBICA-14159): Virtix's MemberDOB column was renamed to
+            # MBRDOB (matching Episource's naming convention, for tokenization)
+            logger.info(f"Inside File {file_name} for date conversion in Virtix")
+            df = df.withColumn("MBRDOB", lit(to_date(trim(col("MBRDOB")), "MM/dd/yyyy"))) \
+                   .withColumn("STATE", regexp_extract(input_file_name(), r'ChartData_ANT_Virtix_Chase_([A-Za-z]{2})_\d{8}\.txt', 1)) \
+                   .withColumn("KF_TMS", lit(None).cast("timestamp")) \
+                   .withColumn("EDL_CREAT_DTM", current_timestamp()) \
+                   .withColumn("EDL_INCRMNTL_LOAD_DTM", lit("8888-12-31 00:00:00").cast("timestamp"))
 
-find /hcaaapck/backup -iname "pgp_decrypt_and_archive*"
-cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp \
-   /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
+========
 
-./pgp_decrypt_and_archive.sh MRA "ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt.pgp"
+        elif "ChartData_CAID_Virtix" in file_name:
+            logger.info(f"Inside File {file_name} for date conversion in Virtix")
+           
+            df = df.withColumn("MemberDOB", lit(to_date(trim(col("MemberDOB")), "MM/dd/yyyy"))) \
+                   .withColumn("STATE", regexp_extract(input_file_name(), r'ChartData_CAID_Virtix_Chase_([A-Za-z]{2})_\d{8}\.txt', 1)) \
+                   .withColumn("KF_TMS", lit(None).cast("timestamp")) \
+                   .withColumn("EDL_CREAT_DTM", current_timestamp()) \
+                   .withColumn("EDL_INCRMNTL_LOAD_DTM", lit("8888-12-31 00:00:00").cast("timestamp"))
 
-Hi Tagore,
-
-Wanted to flag this directly given it's urgent - PRC asked to keep the Virtix job (790009519) inactive until resolved.
-
-Found the root cause: RBICA-14159 renamed Virtix's columns to match Episource's tokenization pattern. The properties file's column list still has the old header names, which is what's been causing the failures - it needs to be updated to match the new headers.
-
-Will hold off on any further changes until we've aligned on next steps. Let me know if you want to discuss.
-
-Thanks,
-Nikhitha
-
-
-cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/MCARE_2026_TGT_CLI_ONSHR_20260915_121028.DAT.pgp \
-   /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
-
-cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/MCARE_2026_TGT_CLI_OFFSHR_20260915_121028.DAT.pgp \
-   /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
-
-/hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh MRA "MCARE_2026_TGT_CLI_ONSHR_20260915_121028.DAT.pgp"
-/hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh MRA "MCARE_2026_TGT_CLI_OFFSHR_20260915_121028.DAT.pgp"
-
-
-crln-652798729258-ssm-uat-nogbd-filetransfer/inbound/raa/commercial/na/deply_ahgprsp_aca_stg
-
-
-aws s3 ls s3://crln-652798729258-ssm-uat-nogbd-filetransfer/inbound/raa/commercial/na/deply_ahgprsp_aca_stg/
-
-aws s3 ls s3://crln-652798729258-ssm-uat-nogbd-filetransfer/inbound/raa/ --recursive | grep -i ahgprsp
-
-aws s3 cp /path/to/converted/DEPLY_AHGPRSP_ACA_20260915.txt s3://crln-652798729258-ssm-uat-nogbd-filetransfer/inbound/raa/commercial/na/deply_ahgprsp_aca_stg/
-
-cat /hcaaapck/backup/IT/PROD/scripts/start_sas_deploy_copy_hdfs_MN.sh
-
-Source the Deploy configuration file - /hcaaapck/backup/IT/SIT/conf/deploy.properties
-Using deploy location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
-Using output location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT
-Intervention provided is ALL;Line of Business is ACA
-------------------------------------------------------------
-Starting deploy run for INTERVENTION=ALLSRCRT; LOB=ACA
-Deploy File Name pattern: deply_allsrcrt_aca
-Deploy file for intervention ALLSRCRT and line of business ACA does not exist at deploy location /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
-No SAS Deploy dataset with intervention ALLSRCRT and line of business ACA available for copy to HDFS..
-------------------------------------------------------------
-Starting deploy run for INTERVENTION=AHGPRSP; LOB=ACA
-Deploy File Name pattern: deply_ahgprsp_aca
-Deploy file for intervention AHGPRSP and line of business ACA present at deploy location /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
-Copying SAS Deploy dataset for intervention AHGPRSP and line of business ACA to Hadoop
-Latest Deploy file available is /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/deply_ahgprsp_aca_20260915.sas7bdat
-Using standard deploy path: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
------------------------------- ------------------------------
-/hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
-********entering ACA no gbd path ******************
-SAS Dataset - Deploy ;Deploy Table - deply_ahgprsp_aca ; Deploy file - deply_ahgprsp_aca_20260915; Intervention - AHGPRSP ; Line of Business - ACA ; USER - srcradcoolbthts ; Environment - ts ; SAS Config file - /hcaaapck/backup/IT/SIT/conf/sas.properties
-Submitting the SAS program for Deploy dataset - AHGPRSP and ACA
-Creating Trigger file for AHGPRSP and ACA 
-Running SAS code for file AHGPRSP and ACA 
-SUCESS : Job submission sucessful with return code 0
- 
-SAS Grid Manager Client Utility Version 9.48 (build date: Jan 18 2023)
-Copyright (C) 2009-2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved
- 
-Job <840300> is submitted to default queue <normal>.
-Job ID:         840300
-Job directory: "/sasconfig/gridshare/srcradcoolbthts/SASGSUB-2026-09-15_15.42.29.362_RAA_Deploy_write_hdfs_v1"
-Job log file:  "/sasconfig/gridshare/srcradcoolbthts/SASGSUB-2026-09-15_15.42.29.362_RAA_Deploy_write_hdfs_v1/RAA_Deploy_write_hdfs_v1.log"
-Waiting for grid job to complete...
-Grid job complete.
-  840300 (RAA_Deploy_write_hdfs_v1) is Finished:  Submitted: 15Sep2026:15:42:29, Started: 15Sep2026:15:42:29 on Host dc04plpsas105, Ended: 15Sep2026:15:42:33, RC:0
-    Moving job information to "./SASGSUB-2026-09-15_15.42.29.362_RAA_Deploy_write_hdfs_v1"
- 
-    Copying log and output to current directory.
-Grid job return code is 0 (0x0)
-Cleaning up SASGSUB intermediate files
-/tmp/819790.SASSUBMIT.log
- Deploy SAS Dataset for Intervention - AHGPRSP and line of business - ACA successfully copied to Hadoop.
-Exported deploy sas file as pipe delimited to location:/hcaaapck/backup/IT/SIT/work
-Copied the deploy sas file to hdfs location - /ts/hdfsdata/ve2/rad/cool/phi/no_gbd/r000/warehouse/aca/deploy/ahgprsp
-Archiving the deploy sas dataset to hdfs location - /ts/hdfsdata/ve2/rad/cool/phi/no_gbd/r000/archive/deploy/2026-09-15
-Archiving the deploy sas dataset for Intervention - AHGPRSP and lob - ACA to location - /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/archive/20260915
-Cleaning up SAS directories.
-Starting SFTP for deply_ahgprsp_aca
-INFO: SAS Environment - SIT
-Launching sftp-task-runner: Start Time: 2026-09-15 15:42:44: PID: 820744
-sftp.connection.host: efx2.corp.agp.ads
-sftp.connection.host: 22
-sftp.connection.user: hcaaapck_raa_np
-sftp.destination.dir: /hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa
-Source_file_name: /hcaaapck/backup/IT/SIT/work/deply_ahgprsp_aca.txt
-Email File Name: deply_ahgprsp_aca
-Inside Upload method
-Welcome to the Gateway Interchange SSH server.   
-Connected to efx2.corp.agp.ads.
-sftp>     cd /hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa
-sftp>         mput /hcaaapck/backup/IT/SIT/work/deply_ahgprsp_aca.txt
-Uploading /hcaaapck/backup/IT/SIT/work/deply_ahgprsp_aca.txt to /hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa/deply_ahgprsp_aca.txt
-/hcaaapck/backup/IT/SIT/work/deply_ahgprsp_aca.txt                                                                                                                                                      100%   32MB 270.8MB/s   00:00    
-sftp>         quit
-SUCCESS: Sending Email Notification
-Inside Email method
-MGFT file upload action: Completed
-Log Aggregation: deply_ahgprsp_aca-SFTP-SAS-S3-20260915154244.log
-Task Finished: End Time: 2026-09-15 15:42:45, Duration: 1 seconds.
-Deploy file moved to deploy out location - /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT
+        elif "ChartData_CAID_Virtix" in file_name:
+            logger.info(f"Inside File {file_name} for date conversion in Virtix")
+            # --- MODIFIED (RBICA-14159): Virtix's MemberDOB column was renamed to
+            # MBRDOB (matching Episource's naming convention, for tokenization)
+            df = df.withColumn("MBRDOB", lit(to_date(trim(col("MBRDOB")), "MM/dd/yyyy"))) \
+                   .withColumn("STATE", regexp_extract(input_file_name(), r'ChartData_CAID_Virtix_Chase_([A-Za-z]{2})_\d{8}\.txt', 1)) \
+                   .withColumn("KF_TMS", lit(None).cast("timestamp")) \
+                   .withColumn("EDL_CREAT_DTM", current_timestamp()) \
+                   .withColumn("EDL_INCRMNTL_LOAD_DTM", lit("8888-12-31 00:00:00").cast("timestamp"))
