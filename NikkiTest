@@ -1,10 +1,4 @@
-Hi,
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/bin/rad_mcaid_chase_all_lob_s3_to_snflk_load.py - | grep -c "MBRDOB"
 
-Thanks again for your help getting the UAT CFX connection set up recently - it worked out well.
 
-I just submitted a new ticket (RITM #___) for the prod side - same request, SaaS-side outbound staging location for the Datavant Pre-Match file. Since you already handled the UAT version, would you be able to pick this one up too whenever you get a chance? No rush, just wanted to flag it directly in case it doesn't land on your queue automatically.
-
-Let me know if you need anything from me to get started, or if there are any details missing on the ticket.
-
-Thanks,
-Don
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep "columns_list" | grep "MBRID"
