@@ -1,30 +1,13 @@
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /executors/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /executors/threadDump: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /executors/threadDump/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /executors/heapHistogram: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /executors/heapHistogram/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /static: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /api: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /jobs/job/kill: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /stages/stage/kill: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO ServerInfo: Adding filter to /metrics/json: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
-26/09/16 18:43:55 INFO YarnClientSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
-26/09/16 18:43:56 INFO SparkContext: Invoking stop() from shutdown hook
-26/09/16 18:43:56 INFO SparkContext: SparkContext is stopping with exitCode 0.
-26/09/16 18:43:56 INFO SparkUI: Stopped Spark web UI at http://ip-10-127-204-141.652798729258.awsdns.internal.das:4040
-26/09/16 18:43:56 INFO YarnClientSchedulerBackend: Interrupting monitor thread
-26/09/16 18:43:56 INFO YarnClientSchedulerBackend: Shutting down all executors
-26/09/16 18:43:56 INFO YarnSchedulerBackend$YarnDriverEndpoint: Asking each executor to shut down
-26/09/16 18:43:56 INFO YarnClientSchedulerBackend: YARN client scheduler backend Stopped
-26/09/16 18:43:56 INFO MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
-26/09/16 18:43:56 INFO MemoryStore: MemoryStore cleared
-26/09/16 18:43:56 INFO BlockManager: BlockManager stopped
-26/09/16 18:43:56 INFO BlockManagerMaster: BlockManagerMaster stopped
-26/09/16 18:43:56 INFO OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
-26/09/16 18:43:56 INFO SparkContext: Successfully stopped SparkContext
-26/09/16 18:43:56 INFO ShutdownHookManager: Shutdown hook called
-26/09/16 18:43:56 INFO ShutdownHookManager: Deleting directory /tmp/spark-aefa3564-8ed1-472d-ad7f-fa391d46abad
-26/09/16 18:43:56 INFO ShutdownHookManager: Deleting directory /tmp/spark-aefa3564-8ed1-472d-ad7f-fa391d46abad/pyspark-f9d9cebb-8b41-4a1b-9cab-bf095c786254
-26/09/16 18:43:56 INFO ShutdownHookManager: Deleting directory /tmp/spark-20ac4c84-23d0-433c-8467-c1d7437b8b90
-Command exiting with ret '1'
+Running for schema: schema_virtix and runid: 1234
+:: loading settings :: url = jar:file:/usr/lib/spark/jars/ivy-2.5.1.jar!/org/apache/ivy/core/settings/ivysettings.xml
+/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py:51: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+Traceback (most recent call last):
+  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 493, in <module>
+    process_and_load_data(config_file, config_path, schema, run_id)
+  File "/home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py", line 328, in process_and_load_data
+    s3_file_path = config[schema]['s3_file_path']
+  File "/usr/lib64/python3.9/configparser.py", line 965, in __getitem__
+    raise KeyError(key)
+KeyError: 'schema_virtix'
+INFO:py4j.clientserver:Closing down clientserver connection
