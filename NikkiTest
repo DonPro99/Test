@@ -1,4 +1,6 @@
-  --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar,/home/hadoop/jars/snowflake-jdbc-3.14.4.jar,/home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar \
+/hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG
 
-  --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar \
-  --packages net.snowflake:snowflake-jdbc:3.20.1,net.snowflake:spark-snowflake_2.12:2.12.0-spark_3.4 \
+-rw-r--r-- 1 srcradcoolbthpr ahpck  30900684 Sep 16 16:58 MRDM_ACA_GAP_20260916191050.txt.pgp
+-rw-r--r-- 1 srcradcoolbthpr ahpck 181468544 Sep 16 17:00 MRDM_Medicaid_GAP_20260916194252.txt.pgp
+
+/hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND
