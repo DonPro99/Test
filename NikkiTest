@@ -1,1 +1,8 @@
-Quick one - confirmed the header fix works (tested manually, loaded fine). But when I trigger it through the actual job (790009519), it just stops right after "SchedulerBackend is ready for scheduling" - no error, just exits with ret 1. Any idea what could cause that?
+Hi Nazir,
+
+Working on getting the Virtix job (790009519) ready for Friday's prod push - fixing a column name mismatch from the 14159 header rename. Confirmed the fix works with a manual test (loaded fine, batch 10).
+
+But when I trigger the actual job, it just stops right after "SchedulerBackend is ready for scheduling" - no error, just exits with ret 1. Rajesh hasn't seen this one before either. Any idea what could cause that?
+
+Thanks,
+Nikhitha
