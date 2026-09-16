@@ -1,10 +1,1 @@
-[hadoop@ip-10-127-204-219 bin]$ cd ~
-[hadoop@ip-10-127-204-219 ~]$ java -version
-openjdk version "11.0.31" 2026-04-21 LTS
-OpenJDK Runtime Environment Corretto-11.0.31.11.1 (build 11.0.31+11-LTS)
-OpenJDK 64-Bit Server VM Corretto-11.0.31.11.1 (build 11.0.31+11-LTS, mixed mode)
-[hadoop@ip-10-127-204-219 ~]$ which spark-submit
-/usr/local/bin/spark-submit
-[hadoop@ip-10-127-204-219 ~]$ echo $HADOOP_CONF_DIR
-
-[hadoop@ip-10-127-204-219 ~]$ 
+ls /usr/lib/jvm/ | grep 17
