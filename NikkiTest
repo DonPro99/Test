@@ -1,2 +1,4 @@
-$ grep -n -- "--packages\|--jars" snowpark/common-ingestion/bin/mcaid_chase_all_lob_s3_to_snflk_load.sh
-42:  --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar,/home/hadoop/jars/snowflake-jdbc-3.14.4.jar,/home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar \
+  --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar,/home/hadoop/jars/snowflake-jdbc-3.14.4.jar,/home/hadoop/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar \
+
+  --jars /home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar \
+  --packages net.snowflake:snowflake-jdbc:3.20.1,net.snowflake:spark-snowflake_2.12:2.12.0-spark_3.4 \
