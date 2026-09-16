@@ -1,2 +1,3 @@
-do you have any info on the SAS file path for the below virtix SRC file
-s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/archive/VIRTIX_ANTH_VA_S_extract_20260826.txt
+find /raa2/backup/prodenvironment/ -iname "VIRTIX_ANTH_VA_S_extract_20260826.txt" 2>/dev/null
+
+find /raa2/backup/ -iname "*VIRTIX_ANTH_VA_S_extract*" 2>/dev/null
