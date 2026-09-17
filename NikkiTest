@@ -1,11 +1,11 @@
-/hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh
+# from inside the correct repo (likely ncr_dna2_raa_files)
+git checkout master
+git pull origin master
+git checkout -b feature/RBICA-14060
 
-./pgp_decrypt_and_archive.sh ACA "MRDM_ACA_GAP_20260916191050.txt.pgp"
+# copy the script into the repo, alongside merge_virtix_chase_files.sh
+cp /path/to/virtix_chase_transform.py <repo>/path/where/merge_virtix_chase_files.sh/lives/
 
-
-ls -la /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND/ | grep MRDM_ACA_GAP
-
-cp /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND/MRDM_ACA_GAP_20260916191050.txt /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/
-
-ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/ | grep MRDM_ACA_GAP
-
+git add path/to/virtix_chase_transform.py
+git commit -m "RBICA-14060: add _S 54-col to 22-col transform for Virtix chase files"
+git push origin feature/RBICA-14060
