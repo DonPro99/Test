@@ -2,8 +2,23 @@ SELECT batch_id, recordid, add_val6
 FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
 WHERE recordid = '819216039'
   AND filedatetime = '20260514145424';
+BATCH_ID	RECORDID	ADD_VAL6
+7	819216039	ONSHORE
+8	819216039	ONSHORE
+4	819216039	ONSHORE
 
-SELECT batchid, status, reccnt
-FROM <riskadjustment.hive.table.loadlog>
-WHERE processid = 4500 AND stepid = <stepId1>
-ORDER BY batchid DESC LIMIT 1;
+  SELECT batchid, status, reccnt
+FROM U01_RAA.RAA_RAWZ.load_log_key 
+WHERE processid = 4500 
+ORDER BY batchid
+
+BATCHID	STATUS	RECCNT
+4	Completed	10
+4	Completed	10
+4	Completed	10
+3	Completed	5
+3	Failed	0
+3	Completed	5
+2	Completed	12
+2	Failed	0
+1	Completed	12
