@@ -1,5 +1,1 @@
-SELECT *
-FROM U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_PREMATCH
-WHERE EDL_LOB_CD = 'MRA'
-ORDER BY EDL_LOAD_DTM DESC
-LIMIT 20;
+Yes, that's right - I reran it today because I couldn't find the onshore file in SAS from the original run (it never made it through), so I needed to regenerate both files to get a complete set."
