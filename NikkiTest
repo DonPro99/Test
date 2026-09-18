@@ -1,3 +1,14 @@
-Update on the onshore file - confirmed the job itself is generating both onshore and offshore files correctly, they're landing in S3 as expected (checked directly). The gap is downstream - CFX hasn't delivered the onshore file into our SAS environment. This happened on the 15th's run (offshore came through, onshore didn't), and I reran it again today with the same result - onshore still hasn't landed.
+git checkout feature/RBICA-14159-headerfix-0916-2026
+git log --oneline -5
 
-I've flagged this with the CFX contact and I'm waiting on him to confirm what's happening on the pickup side. Will update you as soon as I hear back."
+git checkout master
+git pull origin master
+git checkout -b feature/RBICA-14159-headerfix-clean-0916-2026
+
+git cherry-pick <hash1>
+git cherry-pick <hash2>
+git cherry-pick <hash3>
+
+git diff master --stat
+
+git push origin feature/RBICA-14159-headerfix-clean-0916-2026
