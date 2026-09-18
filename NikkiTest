@@ -1,1 +1,5 @@
-find /hcaaapck/backup -iname "*PREMATCH*ONSHORE*" -mtime -7 2>/dev/null
+Hi Pranaya,
+
+Quick update - I'm hitting an AWS login/SSO outage on my end right now, so I can't get into the job logs to confirm the onshore file status.
+
+I'll check as soon as access is back and confirm either way - if the onshore file exists already, or if I need to rerun the job (30-40 min). Will update you as soon as I can get in.
