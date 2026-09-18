@@ -10,9 +10,9 @@ git checkout master
 git pull origin master
 git checkout -b feature/RBICA-14159-headerfix-clean-0916-2026
 
-git cherry-pick <hash1>
-git cherry-pick <hash2>
-git cherry-pick <hash3>
+git cherry-pick ec336e485
+git cherry-pick 0d86082c9
+git cherry-pick 5a3eb880c
 
 git diff master --stat
 
