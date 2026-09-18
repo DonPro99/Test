@@ -1,2 +1,1 @@
-ONSHORE	1
-OFFSHORE	9
+find /hcaaapck/backup -iname "*PREMATCH*ONSHORE*" -mtime -7 2>/dev/null
