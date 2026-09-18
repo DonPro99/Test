@@ -2,3 +2,13 @@
 
 cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/<exact_onshore_filename>.pgp \
    /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
+
+
+Hi Pranaya,
+
+Just an update - both the onshore and offshore files are available now in [location] if you ever want to take a look.
+
+I'm moving on to working on the updated requirement for the vendor testing now.
+
+Thanks,
+Nikita
