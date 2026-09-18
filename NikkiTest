@@ -1,1 +1,3 @@
-No problem, thanks for the update. Just flagging - this is holding up a business deliverable on my end too (files not landing for 2+ days now), so whenever you get a window today would help a lot. No rush ahead of your P1 though."
+Update on the onshore file - confirmed the job itself is generating both onshore and offshore files correctly, they're landing in S3 as expected (checked directly). The gap is downstream - CFX hasn't delivered the onshore file into our SAS environment. This happened on the 15th's run (offshore came through, onshore didn't), and I reran it again today with the same result - onshore still hasn't landed.
+
+I've flagged this with the CFX contact and I'm waiting on him to confirm what's happening on the pickup side. Will update you as soon as I hear back."
