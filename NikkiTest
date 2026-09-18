@@ -1,1 +1,1 @@
-aws s3 ls s3://<your-outbound-bucket>/datavantprematch-etl/ --recursive | grep -i "$(date +%Y%m%d)"
+s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra_stg/$(date +%Y%m%d_%H%M%S)/incr/deply_dtvntrtpm_mra.txt
