@@ -1,1 +1,20 @@
 ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i ONSHORE
+
+-rw-r--r--  1 srcradcoolbthts ahpck      2202 Jul 11  2025 ELV_DTVNT_R1_MRA_ONSHORE_20250710113342.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      2198 Jul 10  2025 ELV_DTVNT_R1_MRA_ONSHORE_20250710103743.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      2206 Jul  8  2025 ELV_DTVNT_R1_MRA_ONSHORE_20250708084837.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      2198 May 28  2025 ELV_DTVNT_R1_MRA_ONSHORE_20250522115320.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      1788 May 28  2025 ELV_DTVNT_MBR_R1_MRA_ONSHORE_20250519122426.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck  52870996 May 22  2025 ELV_DTVNT_R1_MRA_ONSHORE_20250520070118.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck  52865740 Apr 25  2025 ELV_DTVNT_R1_MRA_ONSHORE_20250408173510.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      1776 Apr 25  2025 ELV_DTVNT_MBR_R1_MRA_ONSHORE_20250408090910.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck   4304609 Apr 25  2025 ELV_EPI_R1_MRA_ONSHORE_20250408093036.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck  52855506 Apr  8  2025 ELV_DTVNT_R1_MRA_ONSHORE_20250408092652.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      1776 Mar 28  2025 ELV_DTVNT_MBR_R1_MRA_ONSHORE_20250328132641.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      1930 Mar 19  2025 ELV_SHCR_R1_MRA_ONSHORE_20250313070221.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      1922 Mar 19  2025 ELV_SHCR_R1_MRA_ONSHORE_20250314053717.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      2454 Mar 19  2025 ELV_EPI_R1_MRA_ONSHORE_20250318092416.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      1776 Mar 19  2025 ELV_DTVNT_MBR_R1_MRA_ONSHORE_20250319091830.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      2202 Mar 13  2025 ELV_DTVNT_R1_MRA_ONSHORE_20250313064249.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      1768 Mar 13  2025 ELV_MRO_R1_MRA_ONSHORE_20250306151309.txt.pgp
+-rw-r--r--  1 srcradcoolbthts ahpck      1544 Feb 27  2025 ELV_DTVNT_MBR_R1_MRA_ONSHORE_20250227100607.csv.pgp
