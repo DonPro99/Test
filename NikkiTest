@@ -1,5 +1,6 @@
-Hi Pranaya,
+find /hcaaapck/backup -iname "*PREMATCH*ONSHORE*" 2>/dev/null
+find /raa1/backup -iname "*PREMATCH*ONSHORE*" 2>/dev/null
 
-Quick update - I'm hitting an AWS login/SSO outage on my end right now, so I can't get into the job logs to confirm the onshore file status.
+find /hcaaapck/backup/IT -iname "*PREMATCH*" -mtime -7 2>/dev/null
 
-I'll check as soon as access is back and confirm either way - if the onshore file exists already, or if I need to rerun the job (30-40 min). Will update you as soon as I can get in.
+find /hcaaapck/backup -iname "*.log" -newer /hcaaapck/backup/ProdEnvironment/SAS_Repository/DrConnect_PGP_Archive/SEP2026/MRA -mtime -7 2>/dev/null | xargs grep -l -i "premat\|onshore" 2>/dev/null
