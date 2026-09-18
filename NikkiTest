@@ -1,1 +1,2 @@
-s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260918_155911/
+hi phani , following up ... it's been about 30 min since both files landed in S3 (app 11:55 and 11:59), and I'm still not seeing either one in CFX_STG or anywhere else on my side. 
+Can you check on your end whether CFX has actually picked up either file from S3 yet? Want to know if it's just a delivery delay or if pickup itself isn't happening.
