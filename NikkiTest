@@ -4,3 +4,5 @@ find /raa1/backup -iname "*PREMATCH*ONSHORE*" 2>/dev/null
 find /hcaaapck/backup/IT -iname "*PREMATCH*" -mtime -7 2>/dev/null
 
 find /hcaaapck/backup -iname "*.log" -newer /hcaaapck/backup/ProdEnvironment/SAS_Repository/DrConnect_PGP_Archive/SEP2026/MRA -mtime -7 2>/dev/null | xargs grep -l -i "premat\|onshore" 2>/dev/null
+
+ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH"
