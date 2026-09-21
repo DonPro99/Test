@@ -1,42 +1,40 @@
-$ ksh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
-2026-09-21 17:46:13 : ====================================================
-2026-09-21 17:46:13 : Virtix Chase Merge Job Started
-2026-09-21 17:46:13 : Environment      : SIT
-2026-09-21 17:46:13 : Input Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles
-2026-09-21 17:46:13 : Output Directory : /raa2/backup/sitenvironment/rev_opt/chasefiles
-2026-09-21 17:46:13 : Archive Directory: /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260921
-2026-09-21 17:46:13 : ====================================================
-2026-09-21 17:46:13 : States Identified : IN
+Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt 
+
+/raa2/backup/prodenvironment/rev_opt/chasefiles 
+
+ProjectId|ProjectName|ClientRequestid|MemberLastName|MemberFirstName|MemberMI|MemberId|MemberDOB|ProviderGroupName|ProviderGroupTIN|ProviderNPI|ProviderId|ProviderLastName|ProviderFirstName|ProviderAddress1|ProviderAddress2|ProviderCity|ProviderState|ProviderZip|ProviderPhone|ProviderFax|ProviderContactName|CentralContactName|CentralContactPhone|CentralContactFax|MemberZip|ClaimNumber|RecordRank|SSN|MemberAddress1|MemberAddress2|MemberCity|MemberState|HomePhone|MobilePhone|InsuranceID|ClaimID|Gender|BeginDOS|EndDOS|ReturnFileName|BusinessUnit|LOB|RecordType|ContractNumber|CodingVendor|AltCodingVendor|UserDefinedText1|UserDefinedText2|UserDefinedText3|OnshoreIndicator|ClientCode|HealthPlanProduct|MBI
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397420P1508857574|PARKER|LACHE||105397420|11/09/1989|Riverside Family Medicine Brentwood|521245746|1508857574|23809079|WILLIAMS|VERNEETA|10510 JEFFERSON AVE|STE D|NEWPORT NEWS|VA|23601|7575943800|7575944735|||||23607||14491134363||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397420_1508857574_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397421P1003812082|HALL|ALICIA||105397421|08/12/1992|Winke Orthopedic Pain Management Center|271328301|1003812082|12882646|WINKE|BETH|808 EDEN WAY N|STE 102|CHESAPEAKE|VA|23320|7572164030|7572164029|||||23434||5155356306||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397421_1003812082_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397422P1629490172|LEACH|KIRSTIN||105397422|03/05/1997|Medplus Medical Group|933215511|1629490172|25529888|AYYAS|SHADI|10721 MAIN ST|STE 204|FAIRFAX|VA|22030|7036068116||||||22407||271665314||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397422_1629490172_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397424P1508049818|SLOAN|AMANDA||105397424|11/08/1990|Ferry Farm Health And Wellness|883836147|1508049818|14732068|BROWN|MONICA|207 KINGS HWY|STE 103|FREDERICKSBURG|VA|22405|5402162183|8883751486|||||22443||687||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397424_1508049818_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397424P1609159821|SLOAN|AMANDA||105397424|11/08/1990|Assessment   Therapy Associates|261827022|1609159821|12857621|STEWART|KAREN|1545 CROSSWAYS BLVD|STE 250|CHESAPEAKE|VA|23320|7572062772|7579610568|||||22443||687||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397424_1609159821_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397425P1669715116|CHAMBLISS|SHELANDA||105397425|12/09/1981|Pulmonary And Critical Care Associates|541885550|1669715116|26592084|MURNEY|SEAN|602 N 6TH AVE||HOPEWELL|VA|23860|8044587781|8044587814|||||23860||63862670097||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397425_1669715116_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397437P1023596947|BARNES|JACQUELINE||105397437|12/06/1978|Dominion Outpatient Services|800160365|1023596947|13590421|SANTALUCIA|ANTHONY|1965 EMANCIPATION HWY|STE 100|FREDERICKSBURG|VA|22401|8042859838|8042722030|||||23227||2779594006||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397437_1023596947_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397462P1265051619|ALSTON|CIMONE||105397462|08/05/1997|Ambulatory Foot & Ankle|541726106|1265051619|25198825|CRANEY|KEVIN|1618 HARDY CASH DR||HAMPTON|VA|23666|7578259658|7578259658|||||23601||5916600586||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397462_1265051619_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397471P1174533129|ETHERIDGE|ASHANTI||105397471|02/17/1993|First Choice Medical Center Llc|510674560|1174533129|12936826|HAMBAZ|NASSER|4876 BAXTER RD|NASSER HAMBAZ MD|VIRGINIA BEACH|VA|23462|7576717777|7576717778|||||23451||3557901464||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397471_1174533129_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397498P1972094837|MAYERS|SPRING||105397498|03/20/1976|Mcv Associated Physicians|541581185|1972094837|22441571|GALLAGHER|MARY|300 MT CLEMENT PARK|STE C|TAPPAHANNOCK|VA|22560|8007626161|8044438610|||||22560||2539142731||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397498_1972094837_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397499P1841237211|ROBERSON|DAVID||105397499|02/18/1969|Mount Rogers Community Services|541395005|1841237211|22703639|CUENCO|NAPOLEON|121 BROAD ST||MARION|VA|24354|2767823948|2767829153|||||24333||1569815225||||||||||M|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397499_1841237211_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397534P1477052603|SIMMS|CARSON||105397534|11/22/1997|Patient First Richmond Medical Group|541677022|1477052603|20377343|GUPTA|CHARU|3031 PLANK RD||FREDERICKSBURG|VA|22401|5407365043|5407365044|||||24502||1557||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397534_1477052603_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397539P1003871989|BOLLING|BRANDI||105397539|09/25/1999|Virginia South Psychiatric   Family Services Pc|541115939|1003871989|25665379|SIMON|THRESA|3900 W BROAD ST||RICHMOND|VA|23230|8048611600|8048684626|||||23666||3103784598||||||||||F|07/01/2025|06/30/2026|VA_26Q3_20250701_20260630_105397539_1003871989_1.pdf||ANT_Medicaid|||||STD||VIRTIX|Y|||
+ANT_Virtix_VA_Q32026_STD|ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397556P1609844398|SPATES|VERONICA||105397556|03/23/1980|Allergy & Asthma Specialists|540883@@@                                                                                                    
+
+
+$ ksh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh                                                                                       
+2026-09-21 17:53:55 : ====================================================
+2026-09-21 17:53:55 : Virtix Chase Merge Job Started
+2026-09-21 17:53:55 : Environment      : SIT
+2026-09-21 17:53:55 : Input Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-09-21 17:53:55 : Output Directory : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-09-21 17:53:55 : Archive Directory: /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260921
+2026-09-21 17:53:55 : ====================================================
+2026-09-21 17:53:55 : States Identified : IN
+VA
 WV
-2026-09-21 17:46:13 : ------------------------------------------------------
-2026-09-21 17:46:13 : Processing State : IN
-2026-09-21 17:46:13 : Input Files
-2026-09-21 17:46:13 :    Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
-2026-09-21 17:46:13 : Transforming _S file: Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
-Transformed /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt: 0 records, 54-col -> 22-col.
-2026-09-21 17:46:13 : Starting Merge Process
-2026-09-21 17:46:13 : Reading File : Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
-2026-09-21 17:46:13 : Copying header and data.
-2026-09-21 17:46:13 : Renaming MemberId header field to MBRID to match Episource layout.
-2026-09-21 17:46:13 : Number of Files Processed : 1
-2026-09-21 17:46:13 : Input Records            : 0
-2026-09-21 17:46:13 : Output Records           : 0
-2026-09-21 17:46:13 : Record Count Validation Successful.
-2026-09-21 17:46:13 : Copying source files to archive.
-2026-09-21 17:46:13 : Archived : Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
-2026-09-21 17:46:13 : Merged File Name : ChartData_CAID_Virtix_Chase_IN_20260921.txt
-2026-09-21 17:46:13 : Merged File Size : 512
-2026-09-21 17:46:13 : State IN processed successfully.
-2026-09-21 17:46:13 : ------------------------------------------------------
-2026-09-21 17:46:13 : ------------------------------------------------------
-2026-09-21 17:46:13 : Processing State : WV
-2026-09-21 17:46:13 : No files found for state WV
-2026-09-21 17:46:13 : 
-2026-09-21 17:46:13 : ====================================================
-2026-09-21 17:46:13 : Virtix Chase Merge Job Completed Successfully.
-2026-09-21 17:46:13 : Environment        : SIT
-2026-09-21 17:46:13 : Processing Date    : 20260921
-2026-09-21 17:46:13 : Output Directory   : /raa2/backup/sitenvironment/rev_opt/chasefiles
-2026-09-21 17:46:13 : Archive Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260921
-2026-09-21 17:46:13 : Output Files Created : 1
-2026-09-21 17:46:13 : ====================================================
+2026-09-21 17:53:55 : ------------------------------------------------------
+2026-09-21 17:53:55 : Processing State : IN
+2026-09-21 17:53:55 : Existing output file found.
+2026-09-21 17:53:55 : Input Files
+2026-09-21 17:53:55 :    Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+2026-09-21 17:53:55 : Transforming _S file: Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+ERROR: /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt: expected _S source column(s) not found in header: ['ReturnFileName', 'ClientRequestid', 'MemberMI']
+2026-09-21 17:53:55 : Failed transforming _S file: Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
