@@ -1,2 +1,5 @@
 MRDM_Medicaid_GAP_20260916194252.txt.pgp
 /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG
+
+
+The PGP decrypt script only accepts ACA or MRA as LOB — I've been running Medicaid-named files through it as ACA since there's no Medicaid option, and it hasn't errored, but wanted to check whether that's actually correct or just happens to not break." That way he can confirm whether it's fine as-is or needs a real fix.
