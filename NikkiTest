@@ -1,4 +1,6 @@
-$ ls -la Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
--rw-rw-r-- 1 ad67688 ahpck 709 Sep 21 17:07 Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
-$ pwd
-/raa2/backup/prodenvironment/rev_opt/chasefiles
+cp /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt /raa2/backup/sitenvironment/rev_opt/chasefiles/
+
+
+cd /raa2/backup/sitenvironment/rev_opt/chasefiles
+ls -la Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+ksh /path/to/merge_virtix_chase_files.sh
