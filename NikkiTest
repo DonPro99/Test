@@ -1,1 +1,42 @@
-/raa2/backup/sitenvironment/rev_opt/chasefiles
+$ ksh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+2026-09-21 17:46:13 : ====================================================
+2026-09-21 17:46:13 : Virtix Chase Merge Job Started
+2026-09-21 17:46:13 : Environment      : SIT
+2026-09-21 17:46:13 : Input Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-09-21 17:46:13 : Output Directory : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-09-21 17:46:13 : Archive Directory: /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260921
+2026-09-21 17:46:13 : ====================================================
+2026-09-21 17:46:13 : States Identified : IN
+WV
+2026-09-21 17:46:13 : ------------------------------------------------------
+2026-09-21 17:46:13 : Processing State : IN
+2026-09-21 17:46:13 : Input Files
+2026-09-21 17:46:13 :    Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+2026-09-21 17:46:13 : Transforming _S file: Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+Transformed /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt: 0 records, 54-col -> 22-col.
+2026-09-21 17:46:13 : Starting Merge Process
+2026-09-21 17:46:13 : Reading File : Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+2026-09-21 17:46:13 : Copying header and data.
+2026-09-21 17:46:13 : Renaming MemberId header field to MBRID to match Episource layout.
+2026-09-21 17:46:13 : Number of Files Processed : 1
+2026-09-21 17:46:13 : Input Records            : 0
+2026-09-21 17:46:13 : Output Records           : 0
+2026-09-21 17:46:13 : Record Count Validation Successful.
+2026-09-21 17:46:13 : Copying source files to archive.
+2026-09-21 17:46:13 : Archived : Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+2026-09-21 17:46:13 : Merged File Name : ChartData_CAID_Virtix_Chase_IN_20260921.txt
+2026-09-21 17:46:13 : Merged File Size : 512
+2026-09-21 17:46:13 : State IN processed successfully.
+2026-09-21 17:46:13 : ------------------------------------------------------
+2026-09-21 17:46:13 : ------------------------------------------------------
+2026-09-21 17:46:13 : Processing State : WV
+2026-09-21 17:46:13 : No files found for state WV
+2026-09-21 17:46:13 : 
+2026-09-21 17:46:13 : ====================================================
+2026-09-21 17:46:13 : Virtix Chase Merge Job Completed Successfully.
+2026-09-21 17:46:13 : Environment        : SIT
+2026-09-21 17:46:13 : Processing Date    : 20260921
+2026-09-21 17:46:13 : Output Directory   : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-09-21 17:46:13 : Archive Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260921
+2026-09-21 17:46:13 : Output Files Created : 1
+2026-09-21 17:46:13 : ====================================================
