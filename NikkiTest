@@ -1,6 +1,1 @@
-cp /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt /raa2/backup/sitenvironment/rev_opt/chasefiles/
-
-
-cd /raa2/backup/sitenvironment/rev_opt/chasefiles
-ls -la Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
-ksh /path/to/merge_virtix_chase_files.sh
+/raa2/backup/sitenvironment/rev_opt/chasefiles
