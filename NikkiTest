@@ -1,3 +1,9 @@
+cat > /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py << 'EOF'
+<paste the entire script content here>
+EOF
+
+
+
 #!/usr/bin/env python3
 """
 virtix_chase_transform.py
