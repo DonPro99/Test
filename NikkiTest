@@ -1,1 +1,13 @@
-i Pranaya — followed up on the FILENAME column question. It's part of a standard tracking trio (FILENAME, INSERT_DT, BATCH_ID) that gets added to these RAA extract tables by convention, for source-file traceability — it wasn't in the Pre-Match mapping doc and isn't copied from CPL specifically (I checked both). Right now none of the three are actually populated by the load job, so it just shows empty. Let me know if you'd like it removed, or if you want it actually wired up going forward — happy to do either.
+-- D01
+ALTER TABLE D01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_PREMATCH DROP COLUMN FILENAME;
+
+-- T01
+ALTER TABLE T01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_PREMATCH DROP COLUMN FILENAME;
+
+-- U01
+ALTER TABLE U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_PREMATCH DROP COLUMN FILENAME;
+
+-- P01
+ALTER TABLE P01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_PREMATCH DROP COLUMN FILENAME;
+
+CALL DBA.APPDEV_PROC.PUBLISH_TABLE('ALTER','DDL_REPOSITORY_01','RAA_RAWZ','RAD_DATAVANT_CHASE_PREMATCH','DROP COLUMN FILENAME');
