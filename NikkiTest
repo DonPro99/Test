@@ -1,5 +1,4 @@
-Hi Pranaya, quick question on the CRA Datavant Member Search (RADV/non-RADV) work before I dive in.
-
-is this just the inbound deploy side (SAS to S3) as I noticed the Story title only mentions "Deploy SAS to S3," so want to confirm before I start.
-
-. Naming - the mapping doc has the RADV deploy dataset as DEPLY_DTVNTMBRRT_RV_ACA_YYYYMMDD (using "RV"), but every other existing RADV file we could find uses "RADV" in the name, not "RV." Can you confirm which one is correct for this file?
+SELECT table_catalog, table_schema, table_name
+FROM information_schema.tables
+WHERE table_name ILIKE '%RADV%'
+ORDER BY table_catalog, table_name;
