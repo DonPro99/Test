@@ -1,13 +1,8 @@
- 
-$ ksh start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV                     
+$ ./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV                       
 Source the Deploy configuration file - /hcaaapck/backup/IT/SIT/conf/deploy.properties
 Using deploy location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
 Using output location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT
 Intervention provided is DTVNTMBRRT;Line of Business is RADV
-start_sas_deploy_copy_hdfs_MN.sh[140]: local: not found [No such file or directory]
-start_sas_deploy_copy_hdfs_MN.sh[141]: local: not found [No such file or directory]
-start_sas_deploy_copy_hdfs_MN.sh[142]: local: not found [No such file or directory]
-start_sas_deploy_copy_hdfs_MN.sh[143]: local: not found [No such file or directory]
 ------------------------------------------------------------
-Starting RADV deploy run for INTERVENTION=; LOB=RADV
-No dataset found for deply_*_rv__*.sas7bdat, skipping...
+Starting RADV deploy run for INTERVENTION=DTVNTMBRRT; LOB=RADV
+No dataset found for deply_dtvntmbrrt*_rv_*_*.sas7bdat, skipping..
