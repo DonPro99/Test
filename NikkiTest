@@ -1,114 +1,16 @@
-[schema_epi]
-s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-s3_archive_file_path=s3://crln-raa-prod-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/episource/
-delimiter=|
-file_format=txt
-file_pattern=ChartData_ANT_*.txt
-tablename=rad_episrcrt_chase_all_lob
-schema_name=
-columns_list=["CLIENTCHASEID", "MBRID", "MBRFNAME", "MBRMI", "MBRLNAME", "MBRGender", "HLTHPLN", "MBRDOB", "HICN", "PRVID", "NPI", "PRVSPEC", "PRVSPECDESC", "TIN", "PRVFNAME", "PRVLNAME", "BILLNPI", "BILLTIN", "PRVADDR1", "PRVADDR2", "PRVCITY", "PRVST", "PRVZIP", "PRVPHONE", "PRVFAX", "CONTACT", "CONTACTPHN", "CONTACTFAX", "CONTACTEMAIL", "PRVGRPID", "PRVGROUP", "REVIEWPERIODBEG", "REVIEWPERIODEND", "IMAGENAME", "CHASEWEIGHT", "PROJECTGROUP", "SPECHANDLINGCOMMENT"]
-step=MCAID EPISOURCE CHASE FILES LOAD
-load_mode=append
-
-[schema_cix]
-s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-s3_archive_file_path=s3://crln-raa-prod-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/ciox/
-delimiter=|
-file_format=txt
-file_pattern=ChartData_CIX_*.txt
-tablename=rad_cioxrt_chase_all_lob
-schema_name=
-columns_list=
-step=MCAID CIOX CHASE FILES LOAD
-load_mode=append
-
-[schema_cent_m360]
-s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-s3_archive_file_path=s3://crln-raa-prod-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/centauri/m360/
-delimiter=|
-file_format=txt
-file_pattern=ChartData_WLP_*_M360_*.txt
-tablename=rad_centuari_M360_chase_all_lob
-schema_name=
-columns_list=
-step=MCAID CENATURI M360 CHASE FILES LOAD
-load_mode=append
-
-[schema_cent_prov]
-s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-s3_archive_file_path=s3://crln-raa-prod-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/centauri/prov/
-delimiter=|
-file_format=txt
-file_pattern=ChartData_WLP_*_PROV_*.txt
-tablename=rad_centuari_PROV_chase_all_lob
-schema_name=
-columns_list=[CustomerProviderID, ProviderNPI, ProviderTaxID, ProviderFullName, ProviderFirstName, ProviderLastName, ProviderAddress1, ProviderAddress2, ProviderCity, ProviderState, ProviderZipCode, ProviderZipCode4, ProviderCounty, ProviderCountryCode, ProviderPhoneNumber, ProviderFax, ProviderNetworkID, NetworkDesc, ProviderGroupID, ProviderGroupName, ProviderPracticeSite, Spec1Code, Spec2Code, SpecialtyCode1Desc, SpecialtyCode2Desc, Taxonomy1, Taxonomy2, Taxonomy3, AmbulanceFlag, AnesthesiologistFlag, CDProviderFlag, ClinicalPharmacistFlag, DentistFlag, DurableMedEquipmentFlag, EyeCareFlag, HospitalFlag, MentalHealthFlag, NephrologistFlag, NursePractFlag, OBGynFlag, PCPFlag, PhysicianAsstFlag, ProviderPrescribingPrivFlag, RegisteredNurseFlag, SNFFlag, SurgeonFlag, CardiologistFlag, GastroenterologistFlag, EndocrinologistFlag, HomeHealthFlag, LabFlag, HospitalistFlag, FQHCFlag, RHCFlag, PodiatristFlag, DermatologistFlag, ClinicFlag, UrgentCareFlag, UnknownNoneFlag, RadiologyFlag, AllergistFlag, ExcludeFromMRR, ContactName, ContactPhone, ContactFax, OfficeEmail, ChartDeliveryOrg, SourceName, UserDefined1, UserDefined2, UserDefined3, UserDefined4, UserDefined5, UserDefined6, UserDefined7, UserDefined8, UserDefined9, UserDefined10]
-step=MCAID CENATURI PROV CHASE FILES LOAD
-load_mode=append
-
-[schema_cent_mbr]
-s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-s3_archive_file_path=s3://crln-raa-prod-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/centauri/mbr/
-delimiter=|
-file_format=txt
-file_pattern=ChartData_WLP_*_MBR_*.txt
-tablename=rad_centuari_MBR_chase_all_lob
-schema_name=
-columns_list=[CustomerMemberID, EdgeID, MBI, HICN, StateMemberID, MRN, SubscriberID, PersonNumber, OtherMemberID1, OtherMemberID2, MemberLastName, MemberFirstName, MemberMiddleName, MemberSuffix, MemberBirthDate, MemberDateOfDeath, MemberGender, MemberPrimaryPhoneNumber, MemberSecondaryPhoneNumber, MemberWorkPhoneNumber, MemberEmail, GuardianFirstName, GuardianLastName, SCC, MemberRaceDesc, MemberRaceSource, MemberAuxRaceCode, MemberAuxRaceDesc, MemberAuxRaceSource, MemberEthnicityCode, MemberEthnicityDesc, MemberEthnicitySource, MemberAuxEthnicityCode, MemberAuxEthnicityDesc, MemberAuxEthnicitySource, MemberSpokenLanguageCode, MemberSpokenLanguageDesc, MemberSpokenLanguageSource, MemberAuxSpokenLanguageCode, MemberAuxSpokenLanguageDesc, MemberAuxSpokenLanguageSource, MemberWrittenLanguageCode, MemberWrittenLanguageDesc, MemberWrittenLanguageSource, MemberAuxWrittenLanguageCode, MemberAuxWrittenLanguageDesc, MemberAuxWrittenLanguageSource, MemberOtherLanguageCode, MemberOtherLanguageDesc, MemberOtherLanguageSource, MemberAuxOtherLanguageCode, MemberAuxOtherLanguageDesc, MemberAuxOtherLanguageSource, SourceName, UserDefined1, UserDefined2, UserDefined3, UserDefined4, UserDefined5, UserDefined6, UserDefined7, UserDefined8, UserDefined9, UserDefined10]
-step=MCAID CENATURI MBR CHASE FILES LOAD
-load_mode=append
-
-[schema_cent_oec]
-s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-s3_archive_file_path=s3://crln-raa-prod-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/centauri/oec/
-delimiter=|
-file_format=txt
-file_pattern=ChartData_WLP_*_OEC_*.txt
-tablename=rad_centuari_oec_chase_all_lob
-schema_name=
-columns_list=
-step=MCAID CENATURI OEC CHASE FILES LOAD
-load_mode=append
-
-[schema_IH_InternalCoding]
-s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-s3_archive_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/raa/chartsprocess/mcaid/archive/
-delimiter=|
-file_format=txt
-file_pattern=IH_MCD_*
-tablename=RISK_RETRO_INTERNALCODING_SRC
-schema_name=
-columns_list=[CHASEID,MEMBERID,MEMBERFIRSTNAME,MEMBERLASTNAME,MEMBERDOB,MEMBERGENDER,CLIENTPROVIDERID,CHASEPROVIDERNPI,DIAGNOSINGPROVIDERLASTNAME,DIAGNOSINGPROVIDERFIRSTNAME,DOSFROM,DOSTHROUGH,DIAGNOSISCODE,DIAG_DESC]
-step=MCAID REVOPT INTERNAL CODING FILE LOAD
-load_mode=append
-
-[schema_virtix]
-s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-s3_archive_file_path=s3://crln-raa-prod-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/virtix/
-delimiter=|
-file_format=txt
-file_pattern=ChartData_CAID_Virtix_Chase_*.txt
-tablename=rad_virtix_chase_mcaid_load
-schema_name=
-columns_list=["FileName", "MemberId", "MemberFirstName", "MemberLastName", "MemberDOB", "EnrollmentDate", "EnrollmentEndDate", "ESRDIndicator", "ProjectName", "ClientRequestId", "RecordTypeId", "OnshoreIndicator", "Gender", "ProviderLastName", "ProviderFirstName", "ProviderNPI", "MemberMiddle", "ProviderId", "UserDefinedText1", "UserDefinedText2", "UserDefinedText3", "UserDefinedText4"]
-step=MCAID VIRTIX CHASE FILES LOAD
-load_mode=append
-
-[snowflake]
-env=prod
-region_name=us-east-1
-secret_path=/snowflake/raa
-usedatabase=P01_RAA
-raaDatabase=P01_RAA.RAA_RAWZ
-warehouse=P01_RAA_LOAD_WH_M
-sf_schema=RAA_RAWZ
-process=MCAID
-
-[email]
-sender_email=raa-do-not-reply@anthem.com
-recipient_email=dl-raaetldevelopers@anthem.com
-smtp_server=smtp.wellpoint.com
-smtp_port=25
-smtp_username=NA
-smtp_password=NA
-
+Notes: Objects migrated to U01_RAA
+create or replace view U01_RAA.RAA_RAWZ_NOGBD.RAD_DATAVANT_CHASE_PREMATCH(
+000904 (42000): SQL compilation error: error line 38 at position 1
+invalid identifier 'RAD_DATAVANT_CHASE_PREMATCH.FILENAME'
+create or replace view U01_RAA.RAA_RAWZ_ALLPHI.RAD_DATAVANT_CHASE_PREMATCH(
+000904 (42000): SQL compilation error: error line 38 at position 1
+invalid identifier 'RAD_DATAVANT_CHASE_PREMATCH.FILENAME'
+create or replace view U01_RAA.RAA_RAWZ_ALLPHI_NOGBD.RAD_DATAVANT_CHASE_PREMATCH(
+000904 (42000): SQL compilation error: error line 38 at position 1
+invalid identifier 'RAD_DATAVANT_CHASE_PREMATCH.FILENAME'
+create or replace view U01_RAA.RAA_RAWZ_NOPHI.RAD_DATAVANT_CHASE_PREMATCH(
+000904 (42000): SQL compilation error: error line 38 at position 1
+invalid identifier 'RAD_DATAVANT_CHASE_PREMATCH.FILENAME'
+create or replace view U01_RAA.RAA_RAWZ_NOPHI_NOGBD.RAD_DATAVANT_CHASE_PREMATCH(
+000904 (42000): SQL compilation error: error line 38 at position 1
+invalid identifier 'RAD_DATAVANT_CHASE_PREMATCH.FILENAME'
