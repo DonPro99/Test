@@ -1,4 +1,3 @@
-# log into srcradcoolbthpr, then:
-chmod g+w /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/September/22
-chmod g+w /hcaaapck/backup/SitEnvironment/PGP_Encrypt/archive/2026/September/22
-chmod g+w /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/September/22
+chmod 775 /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/September
+chmod 775 /hcaaapck/backup/SitEnvironment/PGP_Encrypt/archive/2026/September
+chmod 775 /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/September
