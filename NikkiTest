@@ -1,104 +1,13 @@
-$ ksh start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT ACA
+ksh start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV
 Source the Deploy configuration file - /hcaaapck/backup/IT/SIT/conf/deploy.properties
 Using deploy location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
 Using output location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT
-Intervention provided is DTVNTMBRRT;Line of Business is ACA
-Deploy File Name pattern: deply_dtvntmbrrt_aca
-Deploy file for intervention DTVNTMBRRT and line of business ACA present at deploy location /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
-Copying SAS Deploy dataset for intervention DTVNTMBRRT and line of business ACA to Hadoop
-Latest Deploy file available is /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/deply_dtvntmbrrt_aca_20260918.sas7bdat
-Using standard deploy path: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
------------------------------- ------------------------------
-/hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
-********entering ACA no gbd path ******************
-SAS Dataset - Deploy ;Deploy Table - deply_dtvntmbrrt_aca ; Deploy file - deply_dtvntmbrrt_aca_20260918; Intervention - DTVNTMBRRT ; Line of Business - ACA ; USER - srcradcoolbthts ; Environment - ts ; SAS Config file - /hcaaapck/backup/IT/SIT/conf/sas.properties
-Submitting the SAS program for Deploy dataset - DTVNTMBRRT and ACA
-Creating Trigger file for DTVNTMBRRT and ACA 
-Running SAS code for file DTVNTMBRRT and ACA 
-SUCESS : Job submission sucessful with return code 0
- 
-SAS Grid Manager Client Utility Version 9.48 (build date: Jan 18 2023)
-Copyright (C) 2009-2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved
- 
-Job <850719> is submitted to default queue <normal>.
-Job ID:         850719
-Job directory: "/sasconfig/gridshare/srcradcoolbthts/SASGSUB-2026-09-22_17.30.36.899_RAA_Deploy_write_hdfs_v1"
-Job log file:  "/sasconfig/gridshare/srcradcoolbthts/SASGSUB-2026-09-22_17.30.36.899_RAA_Deploy_write_hdfs_v1/RAA_Deploy_write_hdfs_v1.log"
-Waiting for grid job to complete...
-Grid job complete.
-  850719 (RAA_Deploy_write_hdfs_v1) is Finished:  Submitted: 22Sep2026:17:30:36, Started: 22Sep2026:17:30:37 on Host dc04plpsas113.wellpoint.com, Ended: 22Sep2026:17:30:38, RC:0
-    Moving job information to "./SASGSUB-2026-09-22_17.30.36.899_RAA_Deploy_write_hdfs_v1"
- 
-    Copying log and output to current directory.
-Grid job return code is 0 (0x0)
-Cleaning up SASGSUB intermediate files
-/tmp/3092992.SASSUBMIT.log
- Deploy SAS Dataset for Intervention - DTVNTMBRRT and line of business - ACA successfully copied to Hadoop.
-Exported deploy sas file as pipe delimited to location:/hcaaapck/backup/IT/SIT/work
-Copied the deploy sas file to hdfs location - /ts/hdfsdata/ve2/rad/cool/phi/no_gbd/r000/warehouse/aca/deploy/dtvntmbrrt
-Archiving the deploy sas dataset to hdfs location - /ts/hdfsdata/ve2/rad/cool/phi/no_gbd/r000/archive/deploy/2026-09-22
-Archiving the deploy sas dataset for Intervention - DTVNTMBRRT and lob - ACA to location - /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/archive/20260922
-Cleaning up SAS directories.
-rm: descend into write-protected directory 'SASGSUB-2025-07-14_16.46.12.568_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-07-14_16.50.02.919_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-07-22_14.06.34.028_CRA_Generic1'? 
-rm: descend into write-protected directory 'SASGSUB-2025-07-30_16.20.55.960_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-08-12_15.40.17.643_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-08-22_13.00.03.668_CRA_Generic1'? 
-rm: descend into write-protected directory 'SASGSUB-2025-08-28_12.13.42.866_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-08-28_13.12.18.161_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-03_16.42.37.609_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-11_10.13.26.999_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-11_10.43.46.428_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-11_11.29.15.181_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-11_11.51.28.857_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-11_12.09.58.973_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-11_12.27.15.540_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-11_12.37.15.567_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-11_12.50.11.505_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-11_12.59.45.241_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-09-11_13.53.06.678_convert_to_txt_and_export'? 
-rm: descend into write-protected directory 'SASGSUB-2025-12-12_07.33.24.955_RAA_ICD_CODES_write_hdfs_v1'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.14.12.972_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.14.30.339_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.14.37.430_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.14.49.572_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.15.01.752_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.15.13.985_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.15.21.190_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.22.08.297_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.22.25.497_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.22.37.700_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.22.44.917_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.22.57.232_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.23.09.584_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-02-24_10.23.16.833_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-03-10_11.27.12.795_dynamic_radv'? 
-rm: descend into write-protected directory 'SASGSUB-2026-03-11_15.18.17.517_charts_radv_export'? 
-rm: descend into write-protected directory 'SASGSUB-2026-05-07_11.39.29.843_prov_address_pro_export'? 
-Starting SFTP for deply_dtvntmbrrt_aca
-INFO: SAS Environment - SIT
-Launching sftp-task-runner: Start Time: 2026-09-22 17:31:06: PID: 3093718
-sftp.connection.host: efx2.corp.agp.ads
-sftp.connection.host: 22
-sftp.connection.user: hcaaapck_raa_np
-sftp.destination.dir: /hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa
-Source_file_name: /hcaaapck/backup/IT/SIT/work/deply_dtvntmbrrt_aca.txt
-Email File Name: deply_dtvntmbrrt_aca
-Inside Upload method
-Welcome to the Gateway Interchange SSH server.   
-Connected to efx2.corp.agp.ads.
-sftp>     cd /hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa
-sftp>         mput /hcaaapck/backup/IT/SIT/work/deply_dtvntmbrrt_aca.txt
-Uploading /hcaaapck/backup/IT/SIT/work/deply_dtvntmbrrt_aca.txt to /hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa/deply_dtvntmbrrt_aca.txt
-/hcaaapck/backup/IT/SIT/work/deply_dtvntmbrrt_aca.txt                                                                   100%  456KB  48.1MB/s   00:00    
-sftp>         quit
-SUCCESS: Sending Email Notification
-Inside Email method
-MGFT file upload action: Completed
-Log Aggregation: deply_dtvntmbrrt_aca-SFTP-SAS-S3-20260922173106.log
-Task Finished: End Time: 2026-09-22 17:31:06, Duration: 0 seconds.
-
-
-# RADV test
-start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV
+Intervention provided is DTVNTMBRRT;Line of Business is RADV
+start_sas_deploy_copy_hdfs_MN.sh[140]: local: not found [No such file or directory]
+start_sas_deploy_copy_hdfs_MN.sh[141]: local: not found [No such file or directory]
+start_sas_deploy_copy_hdfs_MN.sh[142]: local: not found [No such file or directory]
+start_sas_deploy_copy_hdfs_MN.sh[143]: local: not found [No such file or directory]
+------------------------------------------------------------
+Starting RADV deploy run for INTERVENTION=; LOB=RADV
+No dataset found for deply_*_rv__*.sas7bdat, skipping...
+$ 
