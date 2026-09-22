@@ -1,1 +1,20 @@
 ./raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt
+gpg: key 3CA603C9287F1146: "raa_charts (These keys are for raa_charts client) <CloudFileExchangeDispatch@elevancehealth.com>" not changed
+gpg: Total number processed: 1
+gpg:              unchanged: 1
+2026-09-22 18:18:36 - PGP Key ID: 4E25745981D458FB
+2026-09-22 18:18:39 - Single file mode
+2026-09-22 18:18:39 - Passed file check: /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt
+2026-09-22 18:18:39 - Encrypting file: /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt
+2026-09-22 18:18:39 - Output file: /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/September/22/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt.pgp
+2026-09-22 18:18:39 - Using key ID: 4E25745981D458FB
+2026-09-22 18:18:39 - Entered encrypt_file function
+2026-09-22 18:18:39 - Encryption successful: /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/September/22/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt.pgp
+2026-09-22 18:18:39 - Encrypted file returned: /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/September/22/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt.pgp
+2026-09-22 18:18:39 - Confirmed for SFTP: Encrypted file to upload: /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/September/22/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt.pgp
+2026-09-22 18:18:39 - Remote destination path: sftp://sftp-raaetl-in-user@sftp.internal.preprod.elevancehealth.com.gld-dig-infoexc.awsdns.internal.das:22/uat/raaetl_developers/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt.pgp
+2026-09-22 18:18:39 - Uploading via SFTP...
+Connected to sftp.internal.preprod.elevancehealth.com.gld-dig-infoexc.awsdns.internal.das.
+2026-09-22 18:18:41 - SFTP Success: DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt.pgp
+2026-09-22 18:18:41 - Archiving encrypted file: /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/September/22/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt.pgp
+2026-09-22 18:18:42 - Script execution completed.
