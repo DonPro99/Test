@@ -1,30 +1,4 @@
- ksh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
-2026-09-22 11:05:34 : ====================================================
-2026-09-22 11:05:34 : Virtix Chase Merge Job Started
-2026-09-22 11:05:34 : Environment      : SIT
-2026-09-22 11:05:34 : Input Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles
-2026-09-22 11:05:34 : Output Directory : /raa2/backup/sitenvironment/rev_opt/chasefiles
-2026-09-22 11:05:34 : Archive Directory: /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260922
-2026-09-22 11:05:34 : ====================================================
-2026-09-22 11:05:34 : States Identified : IN
-VA
-WV
-2026-09-22 11:05:34 : ------------------------------------------------------
-2026-09-22 11:05:34 : Processing State : IN
-2026-09-22 11:05:34 : No files found for state IN
-2026-09-22 11:05:34 : ------------------------------------------------------
-2026-09-22 11:05:34 : Processing State : VA
-2026-09-22 11:05:34 : No files found for state VA
-2026-09-22 11:05:34 : ------------------------------------------------------
-2026-09-22 11:05:34 : Processing State : WV
-2026-09-22 11:05:34 : No files found for state WV
-2026-09-22 11:05:34 : 
-2026-09-22 11:05:34 : ====================================================
-2026-09-22 11:05:34 : Virtix Chase Merge Job Completed Successfully.
-2026-09-22 11:05:34 : Environment        : SIT
-2026-09-22 11:05:34 : Processing Date    : 20260922
-2026-09-22 11:05:34 : Output Directory   : /raa2/backup/sitenvironment/rev_opt/chasefiles
-2026-09-22 11:05:34 : Archive Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260922
-2026-09-22 11:05:34 : Output Files Created : 0
-2026-09-22 11:05:34 : ====================================================
-$ 
+touch Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+touch Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+ls -la Anthem_VirtixHealth_*
+ksh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
