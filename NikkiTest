@@ -1,13 +1,40 @@
-ksh start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV
+$ ./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV  
 Source the Deploy configuration file - /hcaaapck/backup/IT/SIT/conf/deploy.properties
 Using deploy location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
 Using output location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT
 Intervention provided is DTVNTMBRRT;Line of Business is RADV
-start_sas_deploy_copy_hdfs_MN.sh[140]: local: not found [No such file or directory]
-start_sas_deploy_copy_hdfs_MN.sh[141]: local: not found [No such file or directory]
-start_sas_deploy_copy_hdfs_MN.sh[142]: local: not found [No such file or directory]
-start_sas_deploy_copy_hdfs_MN.sh[143]: local: not found [No such file or directory]
 ------------------------------------------------------------
-Starting RADV deploy run for INTERVENTION=; LOB=RADV
-No dataset found for deply_*_rv__*.sas7bdat, skipping...
-$ 
+Starting RADV deploy run for INTERVENTION=DTVNTMBRRT; LOB=RADV
+>>> Processing deply_dtvntmbrrt_rv_aca_20260918
+>>> Intervention extracted: DTVNTMBRRT
+>>> LOB from file: ACA
+>>> Output: DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt
+SUCESS : Job submission sucessful with return code 0
+ 
+SAS Grid Manager Client Utility Version 9.48 (build date: Jan 18 2023)
+Copyright (C) 2009-2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved
+ 
+Job <850721> is submitted to default queue <normal>.
+Job ID:         850721
+Job directory: "/sasconfig/gridshare/srcradcoolbthts/SASGSUB-2026-09-22_17.38.39.666_dynamic_radv"
+Job log file:  "/sasconfig/gridshare/srcradcoolbthts/SASGSUB-2026-09-22_17.38.39.666_dynamic_radv/dynamic_radv.log"
+Waiting for grid job to complete...
+Grid job complete.
+  850721 (dynamic_radv) has Failed:   Submitted: 22Sep2026:17:38:39, Started: 22Sep2026:17:38:39 on Host dc04plpsas105, Ended: 22Sep2026:17:38:40, RC:0
+    Moving job information to "./SASGSUB-2026-09-22_17.38.39.666_dynamic_radv"
+ 
+    Copying log and output to current directory.
+Grid job return code is 0 (0x0)
+Cleaning up SASGSUB intermediate files
+/tmp/3126504.SASSUBMIT.log
+SAS export completed successfully.
+Archiving deply_dtvntmbrrt_rv_aca_20260918.sas7bdat
+Initiating SFTP of /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt
+mkdir: cannot create directory ‘/hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/September/22’: Permission denied
+mkdir: cannot create directory ‘/hcaaapck/backup/SitEnvironment/PGP_Encrypt/archive/2026/September/22’: Permission denied
+mkdir: cannot create directory ‘/hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/September/22’: Permission denied
+tee: /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/September/22/sftp_transfer.log: No such file or directory
+2026-09-22 17:38:54 - Fixing permissions on /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/September/22
+chmod: cannot access '/hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/September/22': No such file or directory
+tee: /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/September/22/sftp_transfer.log: No such file or directory
+2026-09-22 17:38:54 - Still not writable!
