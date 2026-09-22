@@ -1,8 +1,1 @@
-$ ./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV                       
-Source the Deploy configuration file - /hcaaapck/backup/IT/SIT/conf/deploy.properties
-Using deploy location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
-Using output location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT
-Intervention provided is DTVNTMBRRT;Line of Business is RADV
-------------------------------------------------------------
-Starting RADV deploy run for INTERVENTION=DTVNTMBRRT; LOB=RADV
-No dataset found for deply_dtvntmbrrt*_rv_*_*.sas7bdat, skipping..
+./raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt
