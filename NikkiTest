@@ -1,4 +1,4 @@
-touch Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
-touch Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
-ls -la Anthem_VirtixHealth_*
-ksh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+-rw-rw-r-- 1 srcradcoolbthts ahpck     311 Sep 22 11:06 Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+drwxrwxr-x 2 srcradcoolbthts ahpck    4096 Sep 22 11:07 logs
+-rw-rw-r-- 1 srcradcoolbthts ahpck     292 Sep 22 11:07 ChartData_CAID_Virtix_Chase_IN_20260922.txt
+-rw-rw-r-- 1 srcradcoolbthts ahpck 7954995 Sep 22 11:07 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
