@@ -1,16 +1,1 @@
-Notes: Objects migrated to U01_RAA
-create or replace view U01_RAA.RAA_RAWZ_NOGBD.RAD_DATAVANT_CHASE_PREMATCH(
-000904 (42000): SQL compilation error: error line 38 at position 1
-invalid identifier 'RAD_DATAVANT_CHASE_PREMATCH.FILENAME'
-create or replace view U01_RAA.RAA_RAWZ_ALLPHI.RAD_DATAVANT_CHASE_PREMATCH(
-000904 (42000): SQL compilation error: error line 38 at position 1
-invalid identifier 'RAD_DATAVANT_CHASE_PREMATCH.FILENAME'
-create or replace view U01_RAA.RAA_RAWZ_ALLPHI_NOGBD.RAD_DATAVANT_CHASE_PREMATCH(
-000904 (42000): SQL compilation error: error line 38 at position 1
-invalid identifier 'RAD_DATAVANT_CHASE_PREMATCH.FILENAME'
-create or replace view U01_RAA.RAA_RAWZ_NOPHI.RAD_DATAVANT_CHASE_PREMATCH(
-000904 (42000): SQL compilation error: error line 38 at position 1
-invalid identifier 'RAD_DATAVANT_CHASE_PREMATCH.FILENAME'
-create or replace view U01_RAA.RAA_RAWZ_NOPHI_NOGBD.RAD_DATAVANT_CHASE_PREMATCH(
-000904 (42000): SQL compilation error: error line 38 at position 1
-invalid identifier 'RAD_DATAVANT_CHASE_PREMATCH.FILENAME'
+"I previously submitted a metadata ticket for RAD_DATAVANT_CHASE_PREMATCH to set up tokenization metadata and create views (D01/T01/U01). Since then, one column (FILENAME) was dropped from the table. Can you update the existing metadata/view definition to remove FILENAME, so the views can regenerate correctly? I'm hitting 'invalid identifier' errors in U01 because the view still references the dropped column
