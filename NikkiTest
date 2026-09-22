@@ -1,4 +1,4 @@
-$ ls -ld /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/September/
-drwxr-sr-x 6 srcradcoolbthpr ahpck 4096 Sep 15 09:36 /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/September/
-$ ls -ld /hcaaapck/backup/ProdEnvironment/PGP_Encrypt/logs/2026/September/
-drwxrwsr-x 8 srcradcoolbthpr ahpck 4096 Sep 21 08:00 /hcaaapck/backup/ProdEnvironment/PGP_Encrypt/logs/2026/September/
+# log into srcradcoolbthpr, then:
+chmod g+w /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/September/22
+chmod g+w /hcaaapck/backup/SitEnvironment/PGP_Encrypt/archive/2026/September/22
+chmod g+w /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/September/22
