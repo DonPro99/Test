@@ -1,67 +1,8 @@
-$ cat /hcaaapck/backup/IT/SIT/conf/deploy.properties
-#Deploy dataset SAS location
-export DEPLOY_DATASET_SAS_LOCATION=/hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
-export DEPLOY_MRA_DATASET_SAS_LOCATION=/raa1/backup/devenvironment/sas_repository/deploy_in
-export DEPLOY_MCAID_DATASET_SAS_LOCATION=/raa2/backup/devenvironment/sas_repository/deploy_in
-#Deploy dataset SAS out location
-export SAS_OUT_LOCATION=/hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT
-export SAS_MRA_OUT_LOCATION=/raa1/backup/prodenvironment/sas_repository/deploy_out
-export SAS_MCAID_OUT_LOCATION=/raa2/backup/prodenvironment/sas_repository/deploy_out
-#Deploy file extension
-export DEPLOY_FILE_EXT="sas*"
-#Deploy file pattern based on intervention and line of business.
-#Allscripts
-export DEPLOY_ALL_SCRIPTS_ACA=deply_allsrcrt_aca
-export DEPLOY_ALL_SCRIPTS_MCAID=deply_allscrt_mcaid
-export DEPLOY_ALL_SCRIPTS_MCARE=deply_allscrt_mcare
-#InovalonRTSP
-export DEPLOY_INOVALON_RTSP_ACA=deply_invrtsp_aca
-export DEPLOY_INOVALON_RTSP_MCAID=deply_invrtsp_mcaid
-export DEPLOY_INOVALON_RTSP_MCARE=deply_invrtsp_mcare
-#InovalonPRSP
-export DEPLOY_INOVALON_PRSP_ACA=deply_invprsp_aca
-export DEPLOY_INOVALON_PRSP_MCAID=deply_invprsp_mcaid
-export DEPLOY_INOVALONOY_INOVALON_RTSP_MCARE=deply_invrtsp_mcare
-#InovalonPRSP
-export DEPLOY_INOVALON_PRSP_ACA=deply_invprsp_aca
-export DEPLOY_INOVALON_PRSP_MCAID=deply_invprsp_mcaid
-export DEPLOY_INOVALON_PRSP_MCARE=deply_invprsp_mcare
-#AVAILPRSP
-export DEPLOY_AVAILPRSP_ALLLOB=deply_availprsp_alllob
-#PCMS
-export DEPLOY_PCMS_MCAID=deply_pcms_mcaid
-export DEPLOY_PCMS_ACA=deply_pcms_aca
-export DEPLOY_PCMS_MCARE=deply_pcms_mcare
-#CARPRSP
-export DEPLOY_CARPRSP_ACA=deply_carprsp_aca
-export DEPLOY_CARPRSP_MCAID=deply_carprsp_mcaid
-export DEPLOY_CARPRSP_MCARE=deply_carprsp_mcare
-#MMDM
-export DEPLOY_MMDM_ACA=deply_invprsp_mmdm_aca
-export DEPLOY_MMDM_MCAID=deply_invprsp_mmdm_mcaid
-export DEPLOY_MMDM_MCARE=deply_invprsp_mmdm_mcare
-#VERSCEND
-export DEPLOY_VERSCEND_ACA=deply_vrscndrt_aca
-export DEPLOY_VERSCEND_MCAID=deply_vrscndrt_mcaid
-export DEPLOY_VERSCEND_MCARE=deply_vrscndrt_mcare
-#EPISRCRT
-export DEPLOY_EPISOURCE_RETRO_ACA=deply_episrcrt_aca
-export DEPLOY_EPISOURCE_RETRO_MCAID=deply_episrcrt_mcaid
-export DEPLOY_EPISOURCE_RETRO_MCARE=deply_episrcrt_mcare
-#COBCPRSP
-export DEPLOY_COBCPRSP_PRSP_ACA=deply_cobcprsp_aca
-export DEPLOY_COBCPRSP_PRSP_MCAID=deply_cobcprsp_mcaid
-export DEPLOY_COBCPRSP_PRSP_MCARE=deply_cobcprsp_mcare
-#OPTMRTT
-export DEPLOY_OPTMRTT_MRA=deply_optmrtt_mra
-#RADV
-# RADV Batch Interventions
-export BATCH_INTERVENTIONS_RADV=CIOXRT,MROCPRT,SHRCRRT,CTVIRT,VRTXRT_OOA,VRTXRT,CENTPRVRT
-# ACA Interventions
+export BATCH_INTERVENTIONS_ACA=ALLSRCRT,AHGPRSP,CARPRSP,CENTPRVRT,CENTRT,CIOXDDRT,CIOXPMRT,CIOXRT,COBCPRSP,CRA_HIGHPROB,CRAPCVDR,CRASYDR,CTVIRT,DIRCONRT,EMLCMPN,EPISRCRT,INTMEDRT,INVPRSP,INVPRSP_MMDM,INVRTSP,INVRTSP_OOA,MDXMPRSP,MROCPRT,MTRXPRSP,OPTUMPRSP,PCMS,PLAYBOOKPRSP,SHRCRRT,SURSCRPRSP,VRTXRT,VRTXRT_OOA,DTVNTMBRRT
+
+export BATCH_INTERVENTIONS_RADV=CIOXRT,MROCPRT,SHRCRRT,CTVIRT,VRTXRT_OOA,VRTXRT,CENTPRVRT,DTVNTMBRRT
+
+
 export BATCH_INTERVENTIONS_ACA=ALLSRCRT,AHGPRSP,CARPRSP,CENTPRVRT,CENTRT,CIOXDDRT,CIOXPMRT,CIOXRT,COBCPRSP,CRA_HIGHPROB,CRAPCVDR,CRASYDR,CTVIRT,DIRCONRT,EMLCMPN,EPISRCRT,INTMEDRT,INVPRSP,INVPRSP_MMDM,INVRTSP,INVRTSP_OOA,MDXMPRSP,MROCPRT,MTRXPRSP,OPTUMPRSP,PCMS,PLAYBOOKPRSP,SHRCRRT,SURSCRPRSP,VRTXRT,VRTXRT_OOA
 
-# MCAID Interventions
-export BATCH_INTERVENTIONS_MCAID=ALTEGRT,BCBSMNRT,CARPRSP,CHCSMAS,CIOXRT,COBCPRSP,EPISRCRT,GBDMCAID_TN,INVRTSP,OPTUMRT,PCMS
-
-# MRA Interventions
-export BATCH_INTERVENTIONS_MRA=CENTRT,CTVIRT,DTVNTMBRRT,DTVNTRT,EPISRCRT,MROCPRT,OPTMRT,SHRCRRT,VRTXRT,VRTXRT_OOA,OPTMRTT
+export BATCH_INTERVENTIONS_RADV=CIOXRT,MROCPRT,SHRCRRT,CTVIRT,VRTXRT_OOA,VRTXRT,CENTPRVRT
