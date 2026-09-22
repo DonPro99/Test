@@ -1,28 +1,1064 @@
-name	type	kind	null?	default	primary key	unique key	check	expression	comment	policy name	privacy domain	write default
-EDL_LOAD_DTM	TIMESTAMP_NTZ(9)	COLUMN	N	CAST('8888-12-31 00:00:00' AS TIMESTAMP_NTZ(9))	N	N						
-EDL_RUN_ID	VARCHAR(255) COLLATE 'utf8'	COLUMN	N	'NA'	N	N						
-EDL_SCRTY_LVL_CD	VARCHAR(10) COLLATE 'utf8'	COLUMN	Y	'UNK'	N	N						
-EDL_LOB_CD	VARCHAR(10) COLLATE 'utf8'	COLUMN	Y	'NA'	N	N						
-EDL_EXTRNL_LOAD_CD	VARCHAR(10) COLLATE 'utf8'	COLUMN	Y	'NA'	N	N						
-EDL_SOR_CD	VARCHAR(10) COLLATE 'utf8'	COLUMN	Y	'NA'	N	N						
-KF_TMS	TIMESTAMP_NTZ(9)	COLUMN	Y		N	N						
-EDL_CREAT_DTM	TIMESTAMP_NTZ(9)	COLUMN	N	CURRENT_TIMESTAMP()	N	N						
-EDL_INCRMNTL_LOAD_DTM	TIMESTAMP_NTZ(9)	COLUMN	N	CAST('8888-12-31 00:00:00' AS TIMESTAMP_NTZ(9))	N	N						
-PROJECTID	VARCHAR(25) COLLATE 'utf8'	COLUMN	Y		N	N						
-CLIENTCHARTID	VARCHAR(200) COLLATE 'utf8'	COLUMN	Y		N	N						
-RENDERINGPROVIDERGROUPNAME	VARCHAR(50) COLLATE 'utf8'	COLUMN	Y		N	N						
-RENDERINGPROVIDERFIRSTNAME	VARCHAR(50) COLLATE 'utf8'	COLUMN	Y		N	N						
-RENDERINGPROVIDERLASTNAME	VARCHAR(50) COLLATE 'utf8'	COLUMN	Y		N	N						
-SPECIFICLOCATIONOFCAREADDRESS1	VARCHAR(50) COLLATE 'utf8'	COLUMN	Y		N	N						
-SPECIFICLOCATIONOFCAREADDRESS2	VARCHAR(50) COLLATE 'utf8'	COLUMN	Y		N	N						
-SPECIFICLOCATIONOFCARECITY	VARCHAR(50) COLLATE 'utf8'	COLUMN	Y		N	N						
-SPECIFICLOCATIONOFCARESTATE	VARCHAR(2) COLLATE 'utf8'	COLUMN	Y		N	N						
-SPECIFICLOCATIONOFCAREZIP	VARCHAR(10) COLLATE 'utf8'	COLUMN	Y		N	N						
-SPECIFICDOS	VARCHAR(10) COLLATE 'utf8'	COLUMN	Y		N	N						
-CLAIMNUMBER	VARCHAR(20) COLLATE 'utf8'	COLUMN	Y		N	N						
-ACCOUNTNUMBER	VARCHAR(20) COLLATE 'utf8'	COLUMN	Y		N	N						
-LOCATIONCODE	VARCHAR(2) COLLATE 'utf8'	COLUMN	Y		N	N						
-SUPPLEMENTALNPI	VARCHAR(10) COLLATE 'utf8'	COLUMN	Y		N	N						
-SUPPLEMENTALNPISPECIALTYCODE	VARCHAR(2) COLLATE 'utf8'	COLUMN	Y		N	N						
-HMO_PPOFLAG	VARCHAR(20) COLLATE 'utf8'	COLUMN	Y		N	N						
-SPECIFICLOCATIONOFCAREPHONE	VARCHAR(15) COLLATE 'utf8'	COLUMN	Y		N	N						
+package com.anthem.hca.intervention.datavantmbr
+
+import java.io.File
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import com.anthem.hca.availity.email.Email
+import com.anthem.hca.availity.log.{LoadLogKey, LogInfo}
+import com.typesafe.config.{Config, ConfigFactory}
+import org.joda.time.DateTime
+import org.slf4j.LoggerFactory
+import scala.util.control.NonFatal
+import com.snowflake.snowpark._
+import com.snowflake.snowpark.functions._
+
+// A class responsible for generating the outbound datavantprov file based on the lob provided.
+
+class DatavantMbrProvFileETL(propFilePath: String, configFolder: String, configFile: String,var runId: String) extends Utilities with java.io.Serializable {
+
+  case class DataFrameEmptyException(s: String) extends Exception(s) {}
+
+  val cfg = ConfigFactory.parseFile(new File(propFilePath))
+
+  def generateDatavantMbrProvOutboundFile(lineOfBusiness: String) {
+
+    val log = LoggerFactory.getLogger("datavantMbrProvFileETL")
+
+    log.info(s"Starting DatavantMbrProv ETL for line of business:$lineOfBusiness")
+    log.info(s"Application properties file path:$propFilePath")
+
+    val email = new Email()
+    val emailFrom = cfg.getString("emailFrom")
+    val emailTo = cfg.getString("emailTo")
+    val emailToList = cfg.getString("emailToList")
+    val source = cfg.getString("source")
+    val processname2 = cfg.getString("processname2") + lineOfBusiness
+    val processid = cfg.getString(s"processID.$lineOfBusiness").toInt
+    val step2 = cfg.getString("step2") + lineOfBusiness
+    val stepId1 = cfg.getString("stepID1").toInt
+    val stepId2 = cfg.getString("stepID2").toInt
+    val status1 = cfg.getString("status1")
+    val status2 = cfg.getString("status2")
+    var generateFile = true
+    var batchId = 0L
+    var deplyRecordCnt = 0L
+    val loadLogKeyTable: String = cfg.getString("riskadjustment.hive.table.loadlog")
+    val intervention: String = cfg.getString("intervention.datavantmbrprov.code")
+    val deployTempTable: String = cfg.getString("intervention.dtvntrt.mcare.deploy.temp.hive.table")
+    val outBoundLocation: String = cfg.getString("Outbound_Location")
+    val hiveDBName = cfg.getString("intervention.hive.database")
+    val chrtsMasterTable = cfg.getString("intervention.master.hive.table.mbrs")
+    val deployTable = cfg.getString("intervention.master.hive.table.deploy")
+    val datavantprovrtTable = cfg.getString("intervention.master.hive.table.datavantmbrprov")
+    val lob: String = lineOfBusiness
+    val spark = this.getSession(configFolder, configFile)
+    val appId = ""
+    val ts = DateTime.now()
+    val dt = new DateTime(ts.toString())
+    val insert_dt = ts.toString().subSequence(0, 10).toString
+    var fFlag = ""
+
+    try {
+
+      spark.sql(s""" use SCHEMA $hiveDBName """).count()
+
+      var res = spark.sql(s"""SELECT batchid, status, reccnt from ${loadLogKeyTable} where processid = ${processid} and stepid = ${stepId1} order by batchid desc limit 1""")
+
+      if (res.count > 0) {
+        batchId = res.first.get.getLong(0)
+        deplyRecordCnt = res.first().get.getLong(2)
+      }
+
+      if (res.count == 0 || res.first.get.getString(1) != status1 || deplyRecordCnt == 0) {
+        throw new Exception(s"No load_log_key entry or failed status or 0 deploy record for processid = $processid and stepid = $stepId1, So cannot generate Outbound file for " + intervention + " and " + lob)
+      }
+
+      runId = spark.sql("select md5(current_timestamp)").first().get.getString(0)
+
+
+      log.info(s"Fetching the recent filedatetime from datavantmbrprov stage table for line of business - $lob")
+      val deploy_temp = spark.sql(s""" select distinct trim(filedatetime) as filedatetime, trim(add_col1) as add_col1,lob from $deployTempTable """)
+
+      if (deploy_temp.count() == 0) {
+        throw new Exception(s"Failed: Please check $deployTempTable table")
+      }
+      val MbrProvDplyDf = spark.sql(
+        s""" select a.recordid,
+                    a.filedatetime,
+                    b.lob as LOB,
+                    a.CMS_CNTRCT_NBR,
+                    a.MBI,
+                    a.HC_ID,
+                    a.MBR_FRST_NM,
+                    a.MBR_LAST_NM,
+                    a.MBR_GNDR,
+                    a.MBR_BRTH_DT,
+                    a.PLAN_BNFT_PKG_ID,
+                    b.rundatetime,
+                    b.add_val5,
+                    a.INPAT_CD,
+                    a.CHART_NPI,
+                    a.CHART_SPCLTY_CD,
+                    a.CHART_PROV_FRSTNM,
+                    a.CHART_PROV_LASTNM,
+                    a.CHART_PROV_ADRS1,
+                    a.CHART_PROV_ADRS2,
+                    a.CHART_PROV_CITY,
+                    a.CHART_PROV_ST,
+                    a.CHART_PROV_ZIP,
+                    a.CHART_PROV_PHONE_NBR,
+                    a.CHART_PROV_FAX,
+                    a.chart_rndrg_grpnm,
+                    b.add_val1,
+                    b.add_val4,
+                    b.add_val3,
+                    b.add_val7,
+                    a.CMPNY_RGN_NM,
+                    a.SUB_RGN_NM,
+                    b.add_val9,
+                    a.chart_taxid,
+                    a.PAT_ACCT_NBR,
+                    a.MBR_ZIP,
+                    a.MBR_SSNLST4,
+                    a.mbr_adrs1,
+                    a.mbr_adrs2,
+                    a.mbr_adrs3,
+                    a.MBR_CITY,
+                    a.MBR_ADRS_ST,
+                    b.add_val6 as ONOFFSHORE
+                    from
+                    $deployTable b
+                    inner join $chrtsMasterTable a
+                    on trim(a.recordid) = trim(b.recordid) and
+                    trim(a.filedatetime) = trim(b.filedatetime) and
+                    trim(chartid) = trim(add_val1) and
+                    trim(chartdatetime) = trim(add_val2) and
+                    trim(a.lob) = trim(b.lob) and
+                    trim(b.intervention) = '$intervention' and
+                    trim(b.lob) = '$lob' and
+                    b.batch_id='$batchId'
+                  """)
+
+      if (MbrProvDplyDf.first(1).isEmpty) {
+        log.info(s"Batch $batchId: Empty dataframe! No data to generate DatavantProv Retro outbound file.")
+        throw DataFrameEmptyException("Deploy records are not matching with the Charts data based on JOIN criteria, so cannot generate intervention retro Outbound file for " + intervention + " and " + lob)
+      }
+      MbrProvDplyDf.dropDuplicates().createOrReplaceTempView("MBRPROV_DPLY_DATA")
+      /*val currdt = spark.sql(s"""select current_date""")
+      val currtm = spark.sql(s"""select substr(current_timestamp,11,27) as currtmstp""")*/
+
+      val datavantmbrprovFileTempDf = spark.sql(
+        s""" select
+                            trim(CMS_CNTRCT_NBR) as "ContractNumber",
+                            trim(MBI) as "MemberId",
+                            trim(HC_ID) as "MemberHIC",
+                            trim(MBR_FRST_NM) as "MemberFirstName",
+                            trim(MBR_LAST_NM) as "MemberLastName",
+                            trim(MBR_GNDR) as "MemberGender",
+                            TO_VARCHAR(MBR_BRTH_DT,'MM/dd/yyyy') AS "MemberDOB",
+                            '' as "Source",
+                            case when PLAN_BNFT_PKG_ID like '8%' then 'GRS'
+                            ELSE 'IND' END as "BusinessUnit",
+                            trim(add_val5) as "LOB",
+                            case when (trim(INPAT_CD)) = 'Y' then 'Inpatient'
+                            ELSE 'Outpatient' end as "FacilityType",
+                            trim(Chart_NPI) as "ProviderID",
+                            trim(CHART_SPCLTY_CD) as "ProviderSpecialty",
+                            trim(CHART_PROV_FRSTNM) as "ProviderFirstName",
+                            CASE WHEN CHART_PROV_LASTNM='' THEN substr(chart_rndrg_grpnm,1,50)
+                            ELSE substr(CHART_PROV_LASTNM,1,50) END as "ProviderLastName",
+                            trim(CHART_PROV_ADRS1) as "ProviderAddress1",
+                            trim(CHART_PROV_ADRS2) as "ProviderAddress2",
+                            trim(CHART_PROV_CITY) as "ProviderCity",
+                            trim(CHART_PROV_ST) as "ProviderState",
+                            trim(CHART_PROV_ZIP) as "ProviderZip",
+                            trim(CHART_PROV_PHONE_NBR) as "ProviderPhone",
+                            trim(CHART_PROV_FAX) as "ProviderFax",
+                            '' as "ProviderContact",
+                            substr(chart_rndrg_grpnm,1,50) as "ProviderGroupName",
+                            case when trim(ONOFFSHORE) ='ONSHORE' THEN  concat(add_val4,'_1_',rundatetime)
+                            when trim(ONOFFSHORE) = 'OFFSHORE' or trim(ONOFFSHORE) = '' THEN concat(add_val4,'_2_',rundatetime) END as "ProjectID",
+                            case when trim(ONOFFSHORE) ='ONSHORE' THEN concat(add_val4,'_',ONOFFSHORE,'_',rundatetime)
+                            when trim(ONOFFSHORE) ='OFFSHORE' or trim(ONOFFSHORE) = '' THEN concat(add_val4,'_',ONOFFSHORE,'_',rundatetime) END as "ProjectName",
+                            '' as "CentralizedHandling",
+                            '' as "CentralizedHandlingCode",
+                            '' as "CentralizedHandlingContactName",
+                            '' as "CentralizedHandlingContactPhone",
+                            '' as "SpecialHandlingInstructions",
+                            trim(add_val3) as "ClientChartID",
+                            trim(add_val7) as "UserDefinedText1",
+                            trim(PLAN_BNFT_PKG_ID) as "UserDefinedText2",
+                            concat(trim(CMPNY_RGN_NM),'_',trim(SUB_RGN_NM)) as "UserDefinedText3",
+                            'null' as "UserDefinedText4",
+                            '' as "UserDefinedCategory1",
+                            '' as "UserDefinedCategory2",
+                            '' as "UserDefinedDate1",
+                            '' as "UserDefinedDate2",
+                            '' as "UserDefinedNumber1",
+                            '' as "UserDefinedNumber2",
+                            trim(add_val9) as "BegDOS",
+                            '' as "EndDOS",
+                            trim(chart_taxid) as "GroupTIN",
+                            trim(PAT_ACCT_NBR) as "ClaimId",
+                            trim(MBR_ZIP) as "MemberZip",
+                            P01_PROTEGRITY.SCRTY_ACS_CNTRL.ANTM_SSN_DETOK(trim(MBR_SSNLST4)) as "MemberSSN",
+                            trim(CHART_NPI) as "NPI",
+                            trim(MBI) as "MBI",
+                            trim(mbr_adrs1) as "MemberAddress1",
+                            substr (concat(trim(mbr_adrs2),' ',trim(mbr_adrs3)),1,50) as "MemberAddress2",
+                            '' as "MemberAlias",
+                            trim(MBR_CITY) as "MemberCity",
+                            trim(MBR_ADRS_ST) as "MemberState",
+                            trim(HC_ID) as "MemberInsuranceID",
+                            case when trim(ONOFFSHORE) = 'OFFSHORE' then 1 else 0 end as "OSEligible",
+                            ONOFFSHORE
+                            from
+                            MBRPROV_DPLY_DATA
+                        """).cacheResult()
+
+      val row_count = datavantmbrprovFileTempDf.count()
+
+      def generateOutboundFile(finalDataFrame: DataFrame, fileInd:String) : Unit = {
+
+        val Rvalue: String = spark.sql(s"""Select Substr(add_val4,1,2) as Aval from MBRPROV_DPLY_DATA""").first().get.getString(0)
+        val maxRecordsPerFile = 500000L
+        
+        // Filter data for the current ONOFFSHORE value and add row number
+        val filteredDF = finalDataFrame.filter(col("ONOFFSHORE")===fileInd).drop("ONOFFSHORE")
+          .withColumn("row_num", row_number().over(Window.orderBy(lit(1))))
+        
+        val totalRecords = filteredDF.count()
+        val numFiles = Math.ceil(totalRecords.toDouble / maxRecordsPerFile).toInt
+        
+        log.info(s"Creating $numFiles Datavantmbrprov file(s) for line of business - $lob with $totalRecords total records")
+        
+        // Generate files with sequential numbering
+        for (fileNum <- 1 to numFiles) {
+          val startRow = (fileNum - 1) * maxRecordsPerFile + 1
+          val endRow = Math.min(fileNum * maxRecordsPerFile, totalRecords)
+          
+          val datavantmbrprovFilename: String = s"ELV_DTVNT_${Rvalue}_MRA_"+ fileInd + "_" + fileNum + "_" + dt.toString("yyyyMMdd") + dt.toString("HHmmss") + ".txt"
+          val fileOutBoundLocation: String = outBoundLocation + "/datavantprov-retro-etl/" + dt.toString("yyyyMMdd_HHmmss") + "/" + datavantmbrprovFilename
+          
+          log.info(s"Writing file $fileNum of $numFiles: records $startRow to $endRow")
+          
+          filteredDF.filter(col("row_num") >= startRow && col("row_num") <= endRow).drop("row_num")
+            .write
+            .option("header", "true")
+            .option("field_delimiter", "|")
+            .option("empty_field_as_null", false)
+            .option("null_if", "")
+            .option("COMPRESSION", "NONE")
+            .option("SINGLE", "True")
+            .option("MAX_FILE_SIZE", 999999999)
+            .mode("Overwrite")
+            .csv(fileOutBoundLocation)
+          
+          log.info(s"Successfully created file: $datavantmbrprovFilename")
+        }
+
+      }
+
+      /*//Audit check
+      if (datavantmbrprovFileTempDf.first(1).isEmpty || row_count > deplyRecordCnt) {
+        log.info(s"Batch $batchId: No Records matched to generate Datavant Provider outbound file after filter.")
+        email.sendMail(emailFrom, emailTo, s"Batch $batchId : No Datavant Provider Outbound file generated .", s"Batch $batchId : No Records matched to generate Datavant Provider oubound file after filter for the application $appId.")
+        generateFile = false
+        //throw DataFrameEmptyException("Outbound Dataframe might be empty or greater than deploy file count, So cannot generate intervention retro Outbound file for " + intervention + " and " + lob)
+      }*/
+
+      if (generateFile) {
+        datavantmbrprovFileTempDf.createOrReplaceTempView("DATAVANTMBRPROV_FINAL_TABLE")
+        val fileCnt = spark.sql(s"""Select count(distinct ONOFFSHORE) from DATAVANTMBRPROV_FINAL_TABLE where length(ONOFFSHORE) > 0 """).first().get.getLong(0).toInt
+        log.info("Write the transformed results of datavantmbrprov data to file ...")
+
+        if (fileCnt > 1)
+        {
+          fFlag = spark.sql(s"""Select distinct ONOFFSHORE from DATAVANTMBRPROV_FINAL_TABLE where ONOFFSHORE='ONSHORE'""").first().get.getString(0)
+          generateOutboundFile(datavantmbrprovFileTempDf,fFlag)
+          fFlag = spark.sql(s"""Select distinct ONOFFSHORE from DATAVANTMBRPROV_FINAL_TABLE where ONOFFSHORE='OFFSHORE'""").first().get.getString(0)
+          generateOutboundFile(datavantmbrprovFileTempDf,fFlag)
+        }
+        else
+        {
+          fFlag = spark.sql(s"""Select distinct ONOFFSHORE from DATAVANTMBRPROV_FINAL_TABLE""").first().get.getString(0)
+          generateOutboundFile(datavantmbrprovFileTempDf,fFlag)
+        }
+
+        val datavantmbrprovFileTempDf1 = spark.sql(
+          s""" select
+                            trim(CMS_CNTRCT_NBR) as ContractNumber,
+                            trim(MBI) as MemberId,
+                            trim(HC_ID) as MemberHIC,
+                            trim(MBR_FRST_NM) as MemberFirstName,
+                            trim(MBR_LAST_NM) as MemberLastName,
+                            trim(MBR_GNDR) as MemberGender,
+                            TO_VARCHAR(MBR_BRTH_DT,'MM/dd/yyyy') AS MemberDOB,
+                            '' as Source,
+                            case when PLAN_BNFT_PKG_ID like '8%' then 'GRS'
+                            ELSE 'IND' END as BusinessUnit,
+                            trim(add_val5) as LOB,
+                            case when (trim(INPAT_CD)) = 'Y' then 'Inpatient'
+                            ELSE 'Outpatient' end as FacilityType,
+                            trim(Chart_NPI) as ProviderID,
+                            trim(CHART_SPCLTY_CD) as ProviderSpecialty,
+                            trim(CHART_PROV_FRSTNM) as ProviderFirstName,
+                            CASE WHEN CHART_PROV_LASTNM='' THEN substr(chart_rndrg_grpnm,1,50)
+                            ELSE substr(CHART_PROV_LASTNM,1,50) END as ProviderLastName,
+                            trim(CHART_PROV_ADRS1) as ProviderAddress1,
+                            trim(CHART_PROV_ADRS2) as ProviderAddress2,
+                            trim(CHART_PROV_CITY) as ProviderCity,
+                            trim(CHART_PROV_ST) as ProviderState,
+                            trim(CHART_PROV_ZIP) as ProviderZip,
+                            trim(CHART_PROV_PHONE_NBR) as ProviderPhone,
+                            trim(CHART_PROV_FAX) as ProviderFax,
+                            '' as ProviderContact,
+                            substr(chart_rndrg_grpnm,1,50) as ProviderGroupName,
+                            case when trim(ONOFFSHORE) ='ONSHORE' THEN  concat(add_val4,'_1_',rundatetime)
+                            when trim(ONOFFSHORE) ='OFFSHORE' or trim(ONOFFSHORE) = '' THEN concat(add_val4,'_2_',rundatetime) END as ProjectID,
+                            case when trim(ONOFFSHORE) ='ONSHORE' THEN concat(add_val4,'_',ONOFFSHORE,'_',rundatetime)
+                            when trim(ONOFFSHORE) ='OFFSHORE' THEN concat(add_val4,'_',ONOFFSHORE,'_',rundatetime) END as ProjectName,
+                            '' as CentralizedHandling,
+                            '' as CentralizedHandlingCode,
+                            '' as CentralizedHandlingContactName,
+                            '' as CentralizedHandlingContactPhone,
+                            '' as SpecialHandlingInstructions,
+                            trim(add_val3) as ClientChartID,
+                            trim(add_val7) as UserDefinedText1,
+                            trim(PLAN_BNFT_PKG_ID) as UserDefinedText2,
+                            concat(trim(CMPNY_RGN_NM),'_',trim(SUB_RGN_NM)) as UserDefinedText3,
+                            'null' as UserDefinedText4,
+                            '' as UserDefinedCategory1,
+                            '' as UserDefinedCategory2,
+                            '' as UserDefinedDate1,
+                            '' as UserDefinedDate2,
+                            '' as UserDefinedNumber1,
+                            '' as UserDefinedNumber2,
+                            trim(add_val9) as BegDOS,
+                            '' as EndDOS,
+                            trim(chart_taxid) as GroupTIN,
+                            trim(PAT_ACCT_NBR) as ClaimId,
+                            trim(MBR_ZIP) as MemberZip,
+                            trim(MBR_SSNLST4) as MemberSSN,
+                            trim(CHART_NPI) as NPI,
+                            trim(MBI) as MBI,
+                            trim(mbr_adrs1) as MemberAddress1,
+                            substr(concat(trim(mbr_adrs2),' ',trim(mbr_adrs3)),1,50) as MemberAddress2,
+                            '' as MemberAlias,
+                            trim(MBR_CITY) as MemberCity,
+                            trim(MBR_ADRS_ST) as MemberState,
+                            trim(HC_ID) as MemberInsuranceID,
+                            case when trim(ONOFFSHORE) = 'OFFSHORE' then 1 else 0 end as OSEligible,
+                            ONOFFSHORE
+                            from
+                            MBRPROV_DPLY_DATA
+                        """).cacheResult()
+
+        datavantmbrprovFileTempDf1.createOrReplaceTempView("DATAVANTMBRPROV_FINAL_TABLE1")
+
+        log.info(s"Inserting the data into datavantmbrprov table for line of business - $lob")
+
+        spark.sql(
+          s""" insert into $datavantprovrtTable (
+                                    EDL_LOAD_DTM,
+                                    EDL_RUN_ID,
+                                    EDL_SCRTY_LVL_CD,
+                                    EDL_LOB_CD,
+                                    EDL_EXTRNL_LOAD_CD,
+                                    EDL_SOR_CD,
+                                    ContractNumber,
+                                    MemberId,
+                                    MemberHIC,
+                                    MemberFirstName,
+                                    MemberLastName,
+                                    MemberGender,
+                                    MemberDOB,
+                                    Source,
+                                    BusinessUnit,
+                                    FacilityType,
+                                    ProviderID,
+                                    ProviderSpecialty,
+                                    ProviderFirstName,
+                                    ProviderLastName,
+                                    ProviderAddress1,
+                                    ProviderAddress2,
+                                    ProviderCity,
+                                    ProviderState,
+                                    ProviderZip,
+                                    ProviderPhone,
+                                    ProviderFax,
+                                    ProviderContact,
+                                    ProviderGroupName,
+                                    ProjectID,
+                                    ProjectName,
+                                    CentralizedHandling,
+                                    CentralizedHandlingCode,
+                                    CentralizedHandlingContactName,
+                                    CentralizedHandlingContactPhone,
+                                    SpecialHandlingInstructions,
+                                    ClientChartID,
+                                    UserDefinedText1,
+                                    UserDefinedText2,
+                                    UserDefinedText3,
+                                    UserDefinedText4,
+                                    UserDefinedCategory1,
+                                    UserDefinedCategory2,
+                                    UserDefinedDate1,
+                                    UserDefinedDate2,
+                                    UserDefinedNumber1,
+                                    UserDefinedNumber2,
+                                    BegDOS,
+                                    EndDOS,
+                                    GroupTIN,
+                                    ClaimId,
+                                    MemberZip,
+                                    MemberSSN,
+                                    NPI,
+                                    MBI,
+                                    MemberAddress1,
+                                    MemberAddress2,
+                                    MemberAlias,
+                                    MemberCity,
+                                    MemberState,
+                                    MemberInsuranceID,
+                                    INTERVENTION,
+                                    LOB,
+                                    BATCHID,
+                                    OSELIGIBLE)
+                                    select current_timestamp() as EDL_LOAD_DTM,
+                                    '$runId' as EDL_RUN_ID,
+                                    'NA' as EDL_SCRTY_LVL_CD,
+                                    '$lob' as EDL_LOB_CD,
+                                    'NA' as EDL_EXTRNL_LOAD_CD,
+                                    CASE
+                                    WHEN '$lineOfBusiness' LIKE 'MEDICAID%' THEN '1104'
+                                    WHEN '$lineOfBusiness' LIKE 'MCR%' THEN '1104'
+                                    WHEN '$lineOfBusiness' LIKE 'MCAID%' THEN '1104'
+                                    ELSE '9' end as EDL_SOR_CD,
+                                    ContractNumber,
+                                    MemberId,
+                                    MemberHIC,
+                                    MemberFirstName,
+                                    MemberLastName,
+                                    MemberGender,
+                                    MemberDOB,
+                                    Source,
+                                    BusinessUnit,
+                                    FacilityType,
+                                    ProviderID,
+                                    ProviderSpecialty,
+                                    ProviderFirstName,
+                                    ProviderLastName,
+                                    ProviderAddress1,
+                                    ProviderAddress2,
+                                    ProviderCity,
+                                    ProviderState,
+                                    ProviderZip,
+                                    ProviderPhone,
+                                    ProviderFax,
+                                    ProviderContact,
+                                    ProviderGroupName,
+                                    ProjectID,
+                                    ProjectName,
+                                    CentralizedHandling,
+                                    CentralizedHandlingCode,
+                                    CentralizedHandlingContactName,
+                                    CentralizedHandlingContactPhone,
+                                    SpecialHandlingInstructions,
+                                    ClientChartID,
+                                    UserDefinedText1,
+                                    UserDefinedText2,
+                                    UserDefinedText3,
+                                    UserDefinedText4,
+                                    UserDefinedCategory1,
+                                    UserDefinedCategory2,
+                                    UserDefinedDate1,
+                                    UserDefinedDate2,
+                                    UserDefinedNumber1,
+                                    UserDefinedNumber2,
+                                    BegDOS,
+                                    EndDOS,
+                                    GroupTIN,
+                                    ClaimId,
+                                    MemberZip,
+                                    MemberSSN,
+                                    NPI,
+                                    MBI,
+                                    MemberAddress1,
+                                    MemberAddress2,
+                                    MemberAlias,
+                                    MemberCity,
+                                    MemberState,
+                                    MemberInsuranceID,
+                                    '$intervention' as INTERVENTION,
+                                    LOB,
+                                    '$batchId' as BATCHID,
+                                    OSELIGIBLE
+                                    from DATAVANTMBRPROV_FINAL_TABLE1 """).count()
+      }
+
+      val li = new LogInfo(s"$runId", batchId, s"$source", s"DatavantProvrt s3://${outBoundLocation + "/" + intervention.toLowerCase()}", row_count, processname2, processid, step2, stepId2, status1, ts.toString(), DateTime.now().toString())
+      LoadLogKey.log(spark, li)
+
+      log.info(s"*******Successfully completed DatavantProv retro outbound file*******")
+
+    } catch {
+      case NonFatal(ioe) =>
+        ioe match {
+          case ioe: DataFrameEmptyException =>
+            val errMsg = ioe.getLocalizedMessage
+            email.sendMail(emailFrom, emailTo, s"Error while Generating the $intervention and $lob outbound files!", s" $errMsg \n \n BatchId: $batchId \n AppId: $appId Failed")
+            val li = new LogInfo(s"$runId", batchId, intervention, s"DatavantProv Retro: ${outBoundLocation + "/" + intervention + "_" + lob}", 0, processname2, processid, step2, stepId2, status2, ts.toString(), DateTime.now().toString())
+            LoadLogKey.log(spark, li)
+            throw new RuntimeException(" Error while Generating the DatavantProv Retro outbound files!", ioe)
+          case _ =>
+            val errMsg = ioe.getLocalizedMessage
+            email.sendMail(emailFrom, emailToList, s"Error while Generating the $intervention and $lob outbound files!", s" $errMsg \n \n BatchId: $batchId \n AppId: $appId Failed")
+            val li = new LogInfo(s"$runId", batchId, intervention, s"DatavantProv Retro: ${outBoundLocation + "/" + intervention + "_" + lob}", 0, processname2, processid, step2, stepId2, status2, ts.toString(), DateTime.now().toString())
+            LoadLogKey.log(spark, li)
+            throw new RuntimeException(" Error while Generating the DatavantProv Retro outbound files!", ioe)
+        }
+    }
+  }
+
+  // RBICA-14070: Datavant Pre-Match Outbound File
+  // Target table: RAD_DATAVANT_CHASE_PREMATCH
+  def generateDatavantPreMatchOutboundFile(lineOfBusiness: String) {
+
+    val log = LoggerFactory.getLogger("datavantMbrProvFileETL")
+    log.info(s"Starting DatavantPreMatch ETL for line of business:$lineOfBusiness")
+
+    val datavantPreMatchTable: String = cfg.getString("intervention.master.hive.table.datavantprematch")
+    val intervention: String = cfg.getString("intervention.datavantprematch.code")
+    val outBoundLocation: String = cfg.getString("Outbound_Location")
+    val hiveDBName = cfg.getString("intervention.hive.database")
+    val chrtsMasterTable = cfg.getString("intervention.master.hive.table.mbrs")
+    val deployTable = cfg.getString("intervention.master.hive.table.deploy")
+    val lob: String = lineOfBusiness
+    val spark = this.getSession(configFolder, configFile)
+    val ts = DateTime.now()
+    val dt = new DateTime(ts.toString())
+    val processname2 = cfg.getString("processname2") + lineOfBusiness
+    val processid = 4500 //temp
+    val step2 = cfg.getString("step2") + lineOfBusiness
+    val stepId1 = cfg.getString("stepID1").toInt
+    val stepId2 = cfg.getString("stepID2").toInt
+    val status1 = cfg.getString("status1")
+    val status2 = cfg.getString("status2")
+    val emailFrom = cfg.getString("emailFrom")
+    val emailTo = cfg.getString("emailTo")
+    val emailToList = cfg.getString("emailToList")
+    val email = new Email()
+    var batchId = 0L
+    var deplyRecordCnt = 0L
+
+    try {
+
+      spark.sql(s""" use SCHEMA $hiveDBName """).count()
+
+      var res = spark.sql(
+        s"""SELECT batchid, status, reccnt from ${cfg.getString("riskadjustment.hive.table.loadlog")}
+          where processid = ${processid} and stepid = ${stepId1}
+          order by batchid desc limit 1""")
+
+      if (res.count > 0) {
+        batchId = res.first.get.getLong(0)
+        deplyRecordCnt = res.first().get.getLong(2)
+      }
+
+      if (res.count == 0 || res.first.get.getString(1) != status1 || deplyRecordCnt == 0) {
+        throw new Exception(
+          s"No load_log_key entry or failed status or 0 deploy record for processid = $processid and stepid = $stepId1")
+      }
+
+      runId = spark.sql("select md5(current_timestamp)").first().get.getString(0)
+      //To Map MRA to MCR
+      val joinLob = if (lob.equalsIgnoreCase("MRA")) "MCR" else lob
+      // Build Pre-Match DataFrame
+      val preMatchDplyDf = spark.sql(
+        s""" select
+              b.add_val4,
+              b.add_val6    as ONOFFSHORE,
+              b.add_val11   as FTPFLAG,
+              b.rundatetime,
+              b.add_val3,
+              a.CHART_PROV_ADRS1,
+              a.CHART_PROV_ADRS2,
+              a.CHART_PROV_CITY,
+              a.CHART_PROV_ST,
+              a.CHART_PROV_ZIP,
+              a.INPAT_CD,
+              a.chart_taxid,
+              a.CHART_NPI,
+              a.CHART_PROV_PHONE_NBR,
+              a.CHART_PROV_FAX,
+              a.MBR_ZIP,
+              a.HC_ID,
+              a.PAT_ACCT_NBR
+          from $deployTable b
+          inner join $chrtsMasterTable a
+              on trim(a.recordid)      = trim(b.recordid)
+              and trim(a.filedatetime) = trim(b.filedatetime)
+              and trim(chartid)        = trim(add_val1)
+              and trim(chartdatetime)  = trim(add_val2)
+              and trim(a.lob)          = trim(b.lob)
+              and trim(b.intervention) = '$intervention'
+              and trim(b.lob)          = '$joinLob'
+              and b.batch_id           = '$batchId'
+      """)
+
+      if (preMatchDplyDf.first(1).isEmpty) {
+        throw new Exception(
+          s"Empty dataframe for Pre-Match — no data to generate for $intervention and $lob")
+      }
+
+      preMatchDplyDf.dropDuplicates().createOrReplaceTempView("PREMATCH_DPLY_DATA")
+
+      // Transform Pre-Match columns per finalized mapping doc
+      // NOTE: ONOFFSHORE/FTPFLAG are still selected here, but no longer used to split output files.
+      val preMatchFileTempDf = spark.sql(
+        s""" select
+              trim(CHART_PROV_ADRS1)                          as "AddressLine1",
+              trim(CHART_PROV_ADRS2)                          as "AddressLine2",
+              trim(CHART_PROV_CITY)                           as "City",
+              trim(CHART_PROV_ST)                             as "State",
+              trim(CHART_PROV_ZIP)                            as "Zipcode",
+              case when (trim(INPAT_CD)) = 'Y' then 'Inpatient'
+              ELSE 'Outpatient' end                           as "FacilityType",
+              ''                                               as "FacilityNPI",
+              trim(chart_taxid)                               as "FacilityTIN",
+              trim(CHART_NPI)                                 as "PracticionerNPI",
+              trim(CHART_PROV_PHONE_NBR)                      as "ProviderPhone",
+              trim(CHART_PROV_FAX)                            as "ProviderFax",
+              trim(MBR_ZIP)                                   as "MemberZip",
+              trim(HC_ID)                                     as "MemberInsuranceId",
+              trim(PAT_ACCT_NBR)                              as "ClaimId",
+              ONOFFSHORE,
+              FTPFLAG
+          from PREMATCH_DPLY_DATA
+      """).cacheResult()
+
+      val row_count = preMatchFileTempDf.count()
+      preMatchFileTempDf.createOrReplaceTempView("PREMATCH_FINAL_TABLE")
+
+      // Check FTP flag. Pre-Match uses add_val11 directly (Y/N)
+      val ftpFlagDf = spark.sql(s"""SELECT distinct FTPFLAG FROM PREMATCH_FINAL_TABLE""")
+      val ftpToVendor = if (ftpFlagDf.count() > 0) ftpFlagDf.first().get.getString(0) else "N"
+      log.info(s"add_val11 FTP flag = $ftpToVendor")
+
+      // Generate a single Pre-Match outbound file (onshore/offshore no longer split, so combined per updated requirement)
+      def generatePreMatchOutboundFile(finalDataFrame: DataFrame): Unit = {
+
+        val Rvalue: String = spark.sql(
+            s"""Select Substr(add_val4,1,2) as Aval from PREMATCH_DPLY_DATA""")
+          .first().get.getString(0)
+
+        val maxRecordsPerFile = 500000L
+        val combinedDF = finalDataFrame
+          .drop("ONOFFSHORE", "FTPFLAG")
+          .withColumn("row_num", row_number().over(Window.orderBy(lit(1))))
+
+        val totalRecords = combinedDF.count()
+        val numFiles = Math.ceil(totalRecords.toDouble / maxRecordsPerFile).toInt
+
+        log.info(s"Creating $numFiles Pre-Match file(s) for $lob with $totalRecords records (combined, no onshore/offshore split)")
+
+        for (fileNum <- 1 to numFiles) {
+          val startRow = (fileNum - 1) * maxRecordsPerFile + 1
+          val endRow   = Math.min(fileNum * maxRecordsPerFile, totalRecords)
+
+          val preMatchFilename: String =
+            s"ELV_DTVNT_${Rvalue}_MRA_PREMATCH_${fileNum}_" +
+              dt.toString("yyyyMMdd") + dt.toString("HHmmss") + ".txt"
+
+          val fileOutBoundLocation: String =
+            outBoundLocation + "/datavantprematch-etl/" +
+              dt.toString("yyyyMMdd_HHmmss") + "/" + preMatchFilename
+
+          log.info(s"Writing Pre-Match file $fileNum of $numFiles: records $startRow to $endRow")
+
+          combinedDF
+            .filter(col("row_num") >= startRow && col("row_num") <= endRow)
+            .drop("row_num")
+            .write
+            .option("header", "true")
+            .option("field_delimiter", "|")
+            .option("empty_field_as_null", false)
+            .option("null_if", "")
+            .option("COMPRESSION", "NONE")
+            .option("SINGLE", "True")
+            .option("MAX_FILE_SIZE", 999999999)
+            .mode("Overwrite")
+            .csv(fileOutBoundLocation)
+
+          log.info(s"Successfully created Pre-Match file: $preMatchFilename")
+
+          if (ftpToVendor == "Y") {
+            log.info(s"add_val11=Y — SFTP transfer to vendor for file: $preMatchFilename")
+            // CFX/SFTP transfer logic goes here
+          } else {
+            log.info(s"add_val11=N — skipping SFTP for file: $preMatchFilename")
+          }
+        }
+      }
+
+      generatePreMatchOutboundFile(preMatchFileTempDf)
+
+      // Insert into RAD_DATAVANT_CHASE_PREMATCH
+      spark.sql(
+        s""" insert into $datavantPreMatchTable (
+              EDL_LOAD_DTM,
+              EDL_RUN_ID,
+              EDL_SCRTY_LVL_CD,
+              EDL_LOB_CD,
+              EDL_EXTRNL_LOAD_CD,
+              EDL_SOR_CD,
+              ADDRESSLINE1,
+              ADDRESSLINE2,
+              CITY,
+              STATE,
+              ZIPCODE,
+              FACILITYTYPE,
+              FACILITYNPI,
+              FACILITYTIN,
+              PRACTICIONERNPI,
+              PROVIDERPHONE,
+              PROVIDERFAX,
+              MEMBERZIP,
+              MEMBERINSURANCEID,
+              CLAIMID
+          )
+          select
+              current_timestamp()  as EDL_LOAD_DTM,
+              '$runId'             as EDL_RUN_ID,
+              'NA'                 as EDL_SCRTY_LVL_CD,
+              '$lob'               as EDL_LOB_CD,
+              'NA'                 as EDL_EXTRNL_LOAD_CD,
+              '1104'               as EDL_SOR_CD,
+              "AddressLine1",
+              "AddressLine2",
+              "City",
+              "State",
+              "Zipcode",
+              "FacilityType",
+              "FacilityNPI",
+              "FacilityTIN",
+              "PracticionerNPI",
+              "ProviderPhone",
+              "ProviderFax",
+              "MemberZip",
+              "MemberInsuranceId",
+              "ClaimId"
+          from PREMATCH_FINAL_TABLE
+      """).count()
+
+      val li = new LogInfo(s"$runId", batchId, intervention, s"DatavantPreMatch: ${outBoundLocation + "/" + intervention + "_" + lob}", row_count, processname2, processid, step2, stepId2, status1, ts.toString(), DateTime.now().toString())
+      LoadLogKey.log(spark, li)
+
+      log.info(s"*******Successfully completed DatavantPreMatch outbound file*******")
+
+    } catch {
+      case NonFatal(ioe) =>
+        val errMsg = ioe.getLocalizedMessage
+        email.sendMail(emailFrom, emailToList,
+          s"Error while Generating the Pre-Match file for $intervention and $lob!",
+          s"$errMsg \n\nBatchId: $batchId Failed")
+        val li = new LogInfo(s"$runId", batchId, intervention, s"DatavantPreMatch: ${outBoundLocation + "/" + intervention + "_" + lob}", 0, processname2, processid, step2, stepId2, status2, ts.toString(), DateTime.now().toString())
+        LoadLogKey.log(spark, li)
+        throw new RuntimeException(
+          "Error while Generating the DatavantPreMatch outbound files!", ioe)
+    }
+  }
+
+ def generateDatavantCPLOutboundFile(lineOfBusiness: String) {
+
+   val log = LoggerFactory.getLogger("datavantMbrProvFileETL")
+   log.info(s"Starting DatavantCPL ETL for line of business:$lineOfBusiness")
+
+   val datavantCplTable: String = cfg.getString("intervention.master.hive.table.datavantcpl")
+   val intervention: String = cfg.getString("intervention.datavantmbrprov.code")
+   val deployTempTable: String = cfg.getString("intervention.dtvntrt.mcare.deploy.temp.hive.table")
+   val outBoundLocation: String = cfg.getString("Outbound_Location")
+   val hiveDBName = cfg.getString("intervention.hive.database")
+   val chrtsMasterTable = cfg.getString("intervention.master.hive.table.mbrs")
+   val deployTable = cfg.getString("intervention.master.hive.table.deploy")
+   val lob: String = lineOfBusiness
+   val spark = this.getSession(configFolder, configFile)
+   val ts = DateTime.now()
+   val dt = new DateTime(ts.toString())
+   val processname2 = cfg.getString("processname2") + lineOfBusiness
+   val processid = cfg.getString(s"processID.$lineOfBusiness").toInt
+   val step2 = cfg.getString("step2") + lineOfBusiness
+   val stepId1 = cfg.getString("stepID1").toInt
+   val stepId2 = cfg.getString("stepID2").toInt
+   val status1 = cfg.getString("status1")
+   val status2 = cfg.getString("status2")
+   val emailFrom = cfg.getString("emailFrom")
+   val emailTo = cfg.getString("emailTo")
+   val emailToList = cfg.getString("emailToList")
+   val email = new Email()
+   var batchId = 0L
+   var deplyRecordCnt = 0L
+   var fFlag = ""
+
+   try {
+
+     spark.sql(s""" use SCHEMA $hiveDBName """).count()
+
+     var res = spark.sql(
+       s"""SELECT batchid, status, reccnt from ${cfg.getString("riskadjustment.hive.table.loadlog")}
+           where processid = ${processid} and stepid = ${stepId1}
+           order by batchid desc limit 1""")
+
+     if (res.count > 0) {
+       batchId = res.first.get.getLong(0)
+       deplyRecordCnt = res.first().get.getLong(2)
+     }
+
+     if (res.count == 0 || res.first.get.getString(1) != status1 || deplyRecordCnt == 0) {
+       throw new Exception(
+         s"No load_log_key entry or failed status or 0 deploy record for processid = $processid and stepid = $stepId1")
+     }
+
+     runId = spark.sql("select md5(current_timestamp)").first().get.getString(0)
+
+     // Build CPL DataFrame
+     val cplDplyDf = spark.sql(
+       s""" select
+               b.add_val4,
+               b.add_val6    as ONOFFSHORE,
+               b.add_col8,
+               b.add_val8,
+               b.rundatetime,
+               b.add_val3,
+               a.chart_rndrg_grpnm,
+               a.CHART_PROV_FRSTNM,
+               a.CHART_PROV_LASTNM,
+               a.CHART_PROV_ADRS1,
+               a.CHART_PROV_ADRS2,
+               a.CHART_PROV_CITY,
+               a.CHART_PROV_ST,
+               a.CHART_PROV_ZIP,
+               a.clm_line_srvc_strt_dt,
+               a.PAT_ACCT_NBR,
+               a.CHART_PROV_PHONE_NBR
+           from $deployTable b
+           inner join $chrtsMasterTable a
+               on trim(a.recordid)      = trim(b.recordid)
+               and trim(a.filedatetime) = trim(b.filedatetime)
+               and trim(chartid)        = trim(add_val1)
+               and trim(chartdatetime)  = trim(add_val2)
+               and trim(a.lob)          = trim(b.lob)
+               and trim(b.intervention) = '$intervention'
+               and trim(b.lob)          = '$lob'
+               and b.batch_id           = '$batchId'
+       """)
+
+     if (cplDplyDf.first(1).isEmpty) {
+       throw new Exception(
+         s"Empty dataframe for CPL — no data to generate for $intervention and $lob")
+     }
+
+     cplDplyDf.dropDuplicates().createOrReplaceTempView("CPL_DPLY_DATA")
+
+     // Check FTP flag
+     val ftpFlagDf = spark.sql(
+       s"""SELECT distinct ADD_VAL8
+           FROM CPL_DPLY_DATA
+           WHERE upper(trim(ADD_COL8)) = 'FTP_TO_VNDR'""")
+
+     val ftpToVendor = if (ftpFlagDf.count() > 0) {
+       ftpFlagDf.first().get.getString(0)
+     } else {
+       "N"
+     }
+
+     log.info(s"FTP_To_Vndr flag — ADD_COL8=FTP_To_Vndr, ADD_VAL8=$ftpToVendor")
+
+     // Transform CPL columns
+
+     val cplFileTempDf = spark.sql(
+       s""" select
+               case when trim(ONOFFSHORE) = 'ONSHORE'
+                    then concat(add_val4,'_1_',rundatetime)
+                    else concat(add_val4,'_2_',rundatetime)
+               end                                              as "ProjectID",
+               trim(add_val3)                                  as "ClientChartID",
+               substr(trim(chart_rndrg_grpnm),1,50)            as "RenderingProviderGroupName",
+               trim(CHART_PROV_FRSTNM)                         as "RenderingProviderFirstName",
+               case when trim(CHART_PROV_LASTNM) = ''
+                    then substr(trim(chart_rndrg_grpnm),1,50)
+                    else substr(trim(CHART_PROV_LASTNM),1,50)
+               end                                              as "RenderingProviderLastName",
+               trim(CHART_PROV_ADRS1)                          as "SpecificLocationofCareAddress1",
+               trim(CHART_PROV_ADRS2)                          as "SpecificLocationofCareAddress2",
+               trim(CHART_PROV_CITY)                           as "SpecificLocationOfCareCity",
+               trim(CHART_PROV_ST)                             as "SpecificLocationofCareState",
+               trim(CHART_PROV_ZIP)                            as "SpecificLocationOfCareZIP",
+               TO_VARCHAR(TO_DATE(clm_line_srvc_strt_dt,'DDMONYYYY'),'MM/DD/YYYY') as "SpecificDOS",
+               ''                                               as "ClaimNumber",
+               trim(PAT_ACCT_NBR)                              as "AccountNumber",
+               ''                                               as "LocationCode",
+               ''                                               as "SupplementalNPI",
+               ''                                               as "SupplementalNPISpecialtyCode",
+               ''                                               as "HMO_PPOFlag",
+               trim(CHART_PROV_PHONE_NBR)                      as "SpecificLocationOfCarePhone",
+               ONOFFSHORE
+           from CPL_DPLY_DATA
+       """).cacheResult()
+
+     val row_count = cplFileTempDf.count()
+     cplFileTempDf.createOrReplaceTempView("CPL_FINAL_TABLE")
+
+     // Generate CPL outbound file
+     def generateCPLOutboundFile(finalDataFrame: DataFrame, fileInd: String): Unit = {
+
+       val Rvalue: String = spark.sql(
+         s"""Select Substr(add_val4,1,2) as Aval from CPL_DPLY_DATA""")
+         .first().get.getString(0)
+
+       val maxRecordsPerFile = 500000L
+       val filteredDF = finalDataFrame
+         .filter(col("ONOFFSHORE") === fileInd)
+         .drop("ONOFFSHORE")
+         .withColumn("row_num", row_number().over(Window.orderBy(lit(1))))
+
+       val totalRecords = filteredDF.count()
+       val numFiles = Math.ceil(totalRecords.toDouble / maxRecordsPerFile).toInt
+
+       log.info(s"Creating $numFiles CPL file(s) for $lob with $totalRecords records")
+
+       for (fileNum <- 1 to numFiles) {
+         val startRow = (fileNum - 1) * maxRecordsPerFile + 1
+         val endRow   = Math.min(fileNum * maxRecordsPerFile, totalRecords)
+
+         val cplSuffix = s"_CPL_${fileNum}.txt"
+
+         val cplFilename: String =
+           s"ELV_DTVNT_${Rvalue}_MRA_${fileInd}_${fileNum}_" +
+           dt.toString("yyyyMMdd") + dt.toString("HHmmss") + cplSuffix
+
+         val fileOutBoundLocation: String =
+           outBoundLocation + "/datavantprov-retro-etl/" +
+           dt.toString("yyyyMMdd_HHmmss") + "/" + cplFilename
+
+         log.info(s"Writing CPL file $fileNum of $numFiles: records $startRow to $endRow")
+
+         filteredDF
+           .filter(col("row_num") >= startRow && col("row_num") <= endRow)
+           .drop("row_num")
+           .write
+           .option("header", "true")
+           .option("field_delimiter", "|")
+           .option("empty_field_as_null", false)
+           .option("null_if", "")
+           .option("COMPRESSION", "NONE")
+           .option("SINGLE", "True")
+           .option("MAX_FILE_SIZE", 999999999)
+           .mode("Overwrite")
+           .csv(fileOutBoundLocation)
+
+         log.info(s"Successfully created CPL file: $cplFilename")
+
+         //  FTP to vendor if flag is Y
+         if (ftpToVendor == "Y") {
+           log.info(s"ADD_VAL8=Y — SFTP transfer to vendor for file: $cplFilename")
+           // CFX/SFTP transfer logic goes here
+           // This will be handled by the existing CFX step
+         } else {
+           log.info(s"ADD_VAL8=N — skipping SFTP, SaaS only for file: $cplFilename")
+         }
+       }
+     }
+
+     // File generation for onshore/offshore split
+     val fileCnt = spark.sql(
+       s"""Select count(distinct ONOFFSHORE) from CPL_FINAL_TABLE
+           where length(ONOFFSHORE) > 0""").first().get.getLong(0).toInt
+
+     if (fileCnt > 1) {
+       fFlag = spark.sql(
+         s"""Select distinct ONOFFSHORE from CPL_FINAL_TABLE
+             where ONOFFSHORE='ONSHORE'""").first().get.getString(0)
+       generateCPLOutboundFile(cplFileTempDf, fFlag)
+
+       fFlag = spark.sql(
+         s"""Select distinct ONOFFSHORE from CPL_FINAL_TABLE
+             where ONOFFSHORE='OFFSHORE'""").first().get.getString(0)
+       generateCPLOutboundFile(cplFileTempDf, fFlag)
+     } else {
+       fFlag = spark.sql(
+         s"""Select distinct ONOFFSHORE from CPL_FINAL_TABLE""")
+         .first().get.getString(0)
+       generateCPLOutboundFile(cplFileTempDf, fFlag)
+     }
+
+     // Insert into RAD_DATAVANT_CHASE_CPL
+     spark.sql(
+       s""" insert into $datavantCplTable (
+               EDL_LOAD_DTM,
+               EDL_RUN_ID,
+               EDL_SCRTY_LVL_CD,
+               EDL_LOB_CD,
+               EDL_EXTRNL_LOAD_CD,
+               EDL_SOR_CD,
+               PROJECTID,
+               CLIENTCHARTID,
+               RENDERINGPROVIDERGROUPNAME,
+               RENDERINGPROVIDERFIRSTNAME,
+               RENDERINGPROVIDERLASTNAME,
+               SPECIFICLOCATIONOFCAREADDRESS1,
+               SPECIFICLOCATIONOFCAREADDRESS2,
+               SPECIFICLOCATIONOFCARECITY,
+               SPECIFICLOCATIONOFCARESTATE,
+               SPECIFICLOCATIONOFCAREZIP,
+               SPECIFICDOS,
+               CLAIMNUMBER,
+               ACCOUNTNUMBER,
+               LOCATIONCODE,
+               SUPPLEMENTALNPI,
+               SUPPLEMENTALNPISPECIALTYCODE,
+               HMO_PPOFLAG,
+               SPECIFICLOCATIONOFCAREPHONE
+           )
+           select
+               current_timestamp()  as EDL_LOAD_DTM,
+               '$runId'             as EDL_RUN_ID,
+               'NA'                 as EDL_SCRTY_LVL_CD,
+               '$lob'               as EDL_LOB_CD,
+               'NA'                 as EDL_EXTRNL_LOAD_CD,
+               '1104'               as EDL_SOR_CD,
+               "ProjectID",
+               "ClientChartID",
+               "RenderingProviderGroupName",
+               "RenderingProviderFirstName",
+               "RenderingProviderLastName",
+               "SpecificLocationofCareAddress1",
+               "SpecificLocationofCareAddress2",
+               "SpecificLocationOfCareCity",
+               "SpecificLocationofCareState",
+               "SpecificLocationOfCareZIP",
+               "SpecificDOS",
+               "ClaimNumber",
+               "AccountNumber",
+               "LocationCode",
+               "SupplementalNPI",
+               "SupplementalNPISpecialtyCode",
+               "HMO_PPOFlag",
+               "SpecificLocationOfCarePhone"
+           from CPL_FINAL_TABLE
+       """).count()
+
+     log.info(s"*******Successfully completed DatavantCPL outbound file*******")
+
+   } catch {
+     case NonFatal(ioe) =>
+       val errMsg = ioe.getLocalizedMessage
+       email.sendMail(emailFrom, emailToList,
+         s"Error while Generating the CPL file for $intervention and $lob!",
+         s"$errMsg \n\nBatchId: $batchId Failed")
+       throw new RuntimeException(
+         "Error while Generating the DatavantCPL outbound files!", ioe)
+   }
+ }
+ }
