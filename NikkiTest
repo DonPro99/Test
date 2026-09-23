@@ -1,1 +1,14 @@
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -A 12 "\[schema_virtix\]"
+[hadoop@ip-10-127-204-27 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -A 12 "\[schema_virtix\]"
+[schema_virtix]
+s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
+s3_archive_file_path=s3://crln-raa-prod-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/virtix/
+delimiter=|
+file_format=txt
+file_pattern=ChartData_ANT_Virtix_Chase_*.txt
+tablename=rad_virtix_chase_mcaid_load
+schema_name=
+columns_list=["FileName", "MBRID", "MBRFNAME", "MBRLNAME", "MBRDOB", "EnrollmentDate", "EnrollmentEndDate", "ESRDIndicator", "ProjectName", "ClientRequestId", "RecordTypeId", "OnshoreIndicator", "Gender", "ProviderLastName", "ProviderFirstName", "ProviderNPI", "MemberMiddle", "ProviderId", "UserDefinedText1", "UserDefinedText2", "UserDefinedText3", "UserDefinedText4"]
+step=MCAID VIRTIX CHASE FILES LOAD
+load_mode=append
+
+[snowflake]
