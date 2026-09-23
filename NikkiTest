@@ -1,2 +1,1 @@
-$ cd /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/RAA
--ksh: cd: /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/RAA: [No such file or directory]
+need to push a couple of merged Virtix files through MGFT to confirm they land correctly in uat/RAA before I call this done. Getting stuck at the SFTP password prompt for appchasesftp001@mgft.wellpoint.com — do you have that password, or know where it's stored?
