@@ -1,2 +1,147 @@
--rw-rw-r-- 1 srcradcoolbthts ahpck     292 Sep 23 15:51 ChartData_ANT_Virtix_Chase_IN_20260923.txt
--rw-rw-r-- 1 srcradcoolbthts ahpck 7954976 Sep 23 15:51 ChartData_ANT_Virtix_Chase_VA_20260923.txt
+$ ksh raa_mcaid_chasefiles_copy_to_s3.sh 
+SIT
+/hcaaapck/backup/IT/SIT/log
+Running Virtix Chase merge script: /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
+2026-09-23 16:19:55 : ====================================================
+2026-09-23 16:19:55 : Virtix Chase Merge Job Started
+2026-09-23 16:19:55 : Environment      : SIT
+2026-09-23 16:19:55 : Input Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-09-23 16:19:55 : Output Directory : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-09-23 16:19:55 : Archive Directory: /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260923
+2026-09-23 16:19:55 : ====================================================
+2026-09-23 16:19:55 : States Identified : IN
+VA
+WV
+2026-09-23 16:19:55 : ------------------------------------------------------
+2026-09-23 16:19:55 : Processing State : IN
+2026-09-23 16:19:55 : Existing output file found.
+2026-09-23 16:19:55 : Input Files
+2026-09-23 16:19:55 :    Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+2026-09-23 16:19:55 : Transforming _S file: Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+Already transformed, skipping: /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+2026-09-23 16:19:55 : Starting Merge Process
+2026-09-23 16:19:55 : Reading File : Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+2026-09-23 16:19:55 : Copying header and data.
+2026-09-23 16:19:55 : Renaming MemberId header field to MBRID to match Episource layout.
+2026-09-23 16:19:55 : Number of Files Processed : 1
+2026-09-23 16:19:55 : Input Records            : 0
+2026-09-23 16:19:55 : Output Records           : 0
+2026-09-23 16:19:55 : Record Count Validation Successful.
+2026-09-23 16:19:55 : Copying source files to archive.
+2026-09-23 16:19:55 : Archived : Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+2026-09-23 16:19:55 : Merged File Name : ChartData_ANT_Virtix_Chase_IN_20260923.txt
+2026-09-23 16:19:55 : Merged File Size : 512
+2026-09-23 16:19:55 : State IN processed successfully.
+2026-09-23 16:19:55 : ------------------------------------------------------
+2026-09-23 16:19:55 : ------------------------------------------------------
+2026-09-23 16:19:55 : Processing State : VA
+2026-09-23 16:19:55 : Existing output file found.
+2026-09-23 16:19:55 : Input Files
+2026-09-23 16:19:55 :    Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+2026-09-23 16:19:55 : Transforming _S file: Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+Already transformed, skipping: /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+2026-09-23 16:19:55 : Starting Merge Process
+2026-09-23 16:19:55 : Reading File : Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+2026-09-23 16:19:55 : Copying header and data.
+2026-09-23 16:19:55 : Renaming MemberId header field to MBRID to match Episource layout.
+2026-09-23 16:19:55 : Number of Files Processed : 1
+2026-09-23 16:19:55 : Input Records            : 39280
+2026-09-23 16:19:55 : Output Records           : 39280
+2026-09-23 16:19:55 : Record Count Validation Successful.
+2026-09-23 16:19:55 : Copying source files to archive.
+2026-09-23 16:19:55 : Archived : Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+2026-09-23 16:19:55 : Merged File Name : ChartData_ANT_Virtix_Chase_VA_20260923.txt
+2026-09-23 16:19:55 : Merged File Size : 7.0M
+2026-09-23 16:19:55 : State VA processed successfully.
+2026-09-23 16:19:55 : ------------------------------------------------------
+2026-09-23 16:19:55 : ------------------------------------------------------
+2026-09-23 16:19:55 : Processing State : WV
+2026-09-23 16:19:55 : No files found for state WV
+2026-09-23 16:19:55 : 
+2026-09-23 16:19:55 : ====================================================
+2026-09-23 16:19:55 : Virtix Chase Merge Job Completed Successfully.
+2026-09-23 16:19:55 : Environment        : SIT
+2026-09-23 16:19:55 : Processing Date    : 20260923
+2026-09-23 16:19:55 : Output Directory   : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-09-23 16:19:55 : Archive Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260923
+2026-09-23 16:19:55 : Output Files Created : 2
+2026-09-23 16:19:55 : ====================================================
+Virtix Chase merge completed successfully.
+ChartData_*.txt MCAID ChaseFiles is newer than the trigger process file - /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg.
+Starting the copying process for ChartData_*.txt CHASEFILE- /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_*.txt.
+Getting the file list
+ChartData_ANT_Virtix_Chase_IN_20260923.txt ChartData_CAID_Virtix_Chase_IN_20260922.txt ChartData_CAID_Virtix_Chase_VA_20260922.txt ChartData_ANT_Virtix_Chase_VA_20260923.txt
+STARTED: Copying for ChartData_ANT_Virtix_Chase_IN_20260923.txt CHASE FILE.
+INFO: SAS Environment - SIT
+Using overwrite config
+/hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
+Launching sftp-task-runner: Start Time: 2026-09-23 16:19:55: PID: 665565
+sftp.connection.host: mgft.wellpoint.com
+sftp.connection.host: 4028
+sftp.connection.user: appchasesftp001
+sftp.destination.dir: /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/RAA
+Source_file_name: /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_IN_20260923.txt
+Email File Name: ChartData_ANT_Virtix_Chase_IN_20260923
+Inside Upload method
+Welcome to the Gateway Interchange SSH server.   
+Password:
+Password:
+SUCCESS: Copying completed for ChartData_ANT_Virtix_Chase_IN_20260923.txt CHASE FILE.
+STARTED: Copying for ChartData_CAID_Virtix_Chase_IN_20260922.txt CHASE FILE.
+INFO: SAS Environment - SIT
+Using overwrite config
+/hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
+Launching sftp-task-runner: Start Time: 2026-09-23 16:20:15: PID: 665995
+sftp.connection.host: mgft.wellpoint.com
+sftp.connection.host: 4028
+sftp.connection.user: appchasesftp001
+sftp.destination.dir: /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/RAA
+Source_file_name: /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_CAID_Virtix_Chase_IN_20260922.txt
+Email File Name: ChartData_CAID_Virtix_Chase_IN_20260922
+Inside Upload method
+Welcome to the Gateway Interchange SSH server.   
+Password:
+SUCCESS: Copying completed for ChartData_CAID_Virtix_Chase_IN_20260922.txt CHASE FILE.
+STARTED: Copying for ChartData_CAID_Virtix_Chase_VA_20260922.txt CHASE FILE.
+INFO: SAS Environment - SIT
+Using overwrite config
+/hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
+Launching sftp-task-runner: Start Time: 2026-09-23 16:20:17: PID: 666457
+sftp.connection.host: mgft.wellpoint.com
+sftp.connection.host: 4028
+sftp.connection.user: appchasesftp001
+sftp.destination.dir: /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/RAA
+Source_file_name: /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_CAID_Virtix_Chase_VA_20260922.txt
+Email File Name: ChartData_CAID_Virtix_Chase_VA_20260922
+Inside Upload method
+Welcome to the Gateway Interchange SSH server.   
+Password:
+Password:
+Received disconnect from 10.155.129.207 port 4028:11: Too many bad authentication attempts!
+Disconnected from 10.155.129.207 port 4028
+Connection closed
+SUCCESS: Copying completed for ChartData_CAID_Virtix_Chase_VA_20260922.txt CHASE FILE.
+STARTED: Copying for ChartData_ANT_Virtix_Chase_VA_20260923.txt CHASE FILE.
+INFO: SAS Environment - SIT
+Using overwrite config
+/hcaaapck/backup/IT/SIT/conf/raa-mcaid-chasefiles-mgft.conf
+Launching sftp-task-runner: Start Time: 2026-09-23 16:20:18: PID: 666543
+sftp.connection.host: mgft.wellpoint.com
+sftp.connection.host: 4028
+sftp.connection.user: appchasesftp001
+sftp.destination.dir: /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/RAA
+Source_file_name: /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260923.txt
+Email File Name: ChartData_ANT_Virtix_Chase_VA_20260923
+Inside Upload method
+Welcome to the Gateway Interchange SSH server.   
+Password:
+Password:
+Received disconnect from 10.155.129.207 port 4028:11: Idle connection
+Disconnected from 10.155.129.207 port 4028
+Connection closed
+SUCCESS: Copying completed for ChartData_ANT_Virtix_Chase_VA_20260923.txt CHASE FILE.
+Copying successful for CHASEFILES: ChartData_ANT_Virtix_Chase_IN_20260923.txt
+ChartData_CAID_Virtix_Chase_IN_20260922.txt
+ChartData_CAID_Virtix_Chase_VA_20260922.txt
+ChartData_ANT_Virtix_Chase_VA_20260923.txt
+Updating the trigger file - /hcaaapck/backup/IT/SIT/trigger/Trigger_ChartData_ChaseFiles.trg
