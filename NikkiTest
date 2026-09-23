@@ -4,4 +4,4 @@ aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/inbound/raa/chartsprocess/mc
 
 s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
 
-s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
+cfx-validate-file-inbound-sf
