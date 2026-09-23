@@ -1,4 +1,23 @@
+2026-09-23 15:51:55 : ====================================================
+2026-09-23 15:51:55 : Virtix Chase Merge Job Completed Successfully.
+2026-09-23 15:51:55 : Environment        : SIT
+2026-09-23 15:51:55 : Processing Date    : 20260923
+2026-09-23 15:51:55 : Output Directory   : /raa2/backup/sitenvironment/rev_opt/chasefiles
+2026-09-23 15:51:55 : Archive Directory  : /raa2/backup/sitenvironment/rev_opt/chasefiles/archive/20260923
+2026-09-23 15:51:55 : Output Files Created : 2
+2026-09-23 15:51:55 : ====================================================
+$ cd  /raa2/backup/sitenvironment/rev_opt/chasefiles
+$ ls -lrt
+total 23335
+-rw-r--r-- 1 srcradcoolbthpr ahpck     434 Aug 26 13:23 Anthem_VirtixHealth_WVQ32026_Chase_C_08262026132348.txt
+-rw-r--r-- 1 srcradcoolbthts ahpck     434 Aug 26 17:24 Anthem_VirtixHealth_WVQ32026_Chase_C_08262026172447.txt
+-rw-rw-r-- 1 srcradcoolbthts ahpck     539 Aug 26 17:46 ChartData_CAID_Virtix_Chase_WV_20260826.txt
+-rw-r--r-- 1 srcradcoolbthts ahpck     434 Aug 27 11:38 Anthem_VirtixHealth_WVQ32026_Chase_C_08272026113805.txt
+-rw-r--r-- 1 srcradcoolbthpr ahpck     434 Aug 27 11:46 Anthem_VirtixHealth_WVQ32026_Chase_C_08272026114601.txt
+-rw-r--r-- 1 srcradcoolbthpr ahpck     434 Aug 27 12:08 Anthem_VirtixHealth_WVQ32026_Chase_C_08272026120847.txt
+-rw-r--r-- 1 srcradcoolbthts ahpck     434 Aug 27 12:10 Anthem_VirtixHealth_WVQ32026_Chase_C_08272026121057.txt
+-rw-rw-r-- 1 srcradcoolbthts ahpck     787 Aug 27 12:11 ChartData_CAID_Virtix_Chase_WV_20260827.txt
+-rw-rw-r-- 1 srcradcoolbthts ahpck     292 Sep 22 11:07 ChartData_CAID_Virtix_Chase_IN_20260922.txt
+-rw-rw-r-- 1 srcradcoolbthts ahpck 7954976 Sep 22 11:07 ChartData_CAID_Virtix_Chase_VA_20260922.txt
 -rw-rw-r-- 1 srcradcoolbthts ahpck     311 Sep 23 15:50 Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
 -rw-rw-r-- 1 srcradcoolbthts ahpck 7954995 Sep 23 15:50 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
-
-ksh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
