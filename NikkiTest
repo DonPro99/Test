@@ -17,7 +17,7 @@
 #   Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
 #
 # Output File:
-#   ChartData_ANT_Virtix_Chase_<STATE>_YYYYMMDD.txt
+#   ChartData_CAID_Virtix_Chase_<STATE>_YYYYMMDD.txt
 #
 # Processing Steps:
 #
@@ -25,11 +25,12 @@
 #   2. Set inbound/output/archive/log locations.
 #   3. Scan inbound directory.
 #   4. Identify all available states.
-#   5. Merge all files belonging to each state.
-#   6. Preserve only one header row.
-#   7. Validate record counts.
-#   8. Copy source files to archive.
-#   9. Log processing details.
+#   5. Transform any _S files (RBICA-14060: 54-col -> 22-col layout).
+#   6. Merge all files belonging to each state.
+#   7. Preserve only one header row.
+#   8. Validate record counts.
+#   9. Copy source files to archive.
+#  10. Log processing details.
 #
 # Usage:
 #
@@ -57,6 +58,8 @@ then
     INPUT_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles"
     OUTPUT_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles"
     LOG_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles/logs"
+    
+    TRANSFORM_SCRIPT="/hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py"
 
 elif [[ "$SERVICE_USER" == "srcradcoolbthts" ]]
 then
@@ -67,6 +70,8 @@ then
     INPUT_DIR="/raa2/backup/sitenvironment/rev_opt/chasefiles"
     OUTPUT_DIR="/raa2/backup/sitenvironment/rev_opt/chasefiles"
     LOG_DIR="/raa2/backup/sitenvironment/rev_opt/chasefiles/logs"
+
+    TRANSFORM_SCRIPT="/hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py"
 
 else
 
@@ -168,7 +173,7 @@ do
     LOG_MESG "------------------------------------------------------"
     LOG_MESG "Processing State : ${STATE}"
 
-    OUTFILE="${OUTPUT_DIR}/ChartData_ANT_Virtix_Chase_${STATE}_${PROCESS_DATE}.txt"
+    OUTFILE="${OUTPUT_DIR}/ChartData_CAID_Virtix_Chase_${STATE}_${PROCESS_DATE}.txt"
 
     if [ -f "${OUTFILE}" ]
     then
@@ -210,6 +215,34 @@ do
     do
 
         LOG_MESG "   $(basename ${FILE})"
+
+    done
+
+    ###########################################################################
+    # RBICA-14060: Transform any _S file for this state BEFORE merging, so it
+    # comes out already matching the 22-col _C/_M layout.
+    ###########################################################################
+
+    for FILE in ${FILE_LIST}
+    do
+
+        case "$(basename ${FILE})" in
+            *_Chase_S_*)
+
+                LOG_MESG "Transforming _S file: $(basename ${FILE})"
+
+                python3 "${TRANSFORM_SCRIPT}" "${FILE}"
+
+                if [ $? -ne 0 ]
+                then
+
+                    LOG_MESG "Failed transforming _S file: $(basename ${FILE})"
+
+                    exit 1
+
+                fi
+                ;;
+        esac
 
     done
 
@@ -353,7 +386,7 @@ done
 
 TOTAL_OUTPUT_FILES=$(find "${OUTPUT_DIR}" -maxdepth 1 \
 -type f \
--name "ChartData_ANT_Virtix_Chase_*_${PROCESS_DATE}.txt" | wc -l)
+-name "ChartData_CAID_Virtix_Chase_*_${PROCESS_DATE}.txt" | wc -l)
 
 LOG_MESG ""
 
