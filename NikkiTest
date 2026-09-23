@@ -17,7 +17,7 @@
 #   Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
 #
 # Output File:
-#   ChartData_CAID_Virtix_Chase_<STATE>_YYYYMMDD.txt
+#   ChartData_ANT_Virtix_Chase_<STATE>_YYYYMMDD.txt
 #
 # Processing Steps:
 #
@@ -58,7 +58,7 @@ then
     INPUT_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles"
     OUTPUT_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles"
     LOG_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles/logs"
-    
+
     TRANSFORM_SCRIPT="/hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py"
 
 elif [[ "$SERVICE_USER" == "srcradcoolbthts" ]]
@@ -173,7 +173,7 @@ do
     LOG_MESG "------------------------------------------------------"
     LOG_MESG "Processing State : ${STATE}"
 
-    OUTFILE="${OUTPUT_DIR}/ChartData_CAID_Virtix_Chase_${STATE}_${PROCESS_DATE}.txt"
+    OUTFILE="${OUTPUT_DIR}/ChartData_ANT_Virtix_Chase_${STATE}_${PROCESS_DATE}.txt"
 
     if [ -f "${OUTFILE}" ]
     then
@@ -220,7 +220,9 @@ do
 
     ###########################################################################
     # RBICA-14060: Transform any _S file for this state BEFORE merging, so it
-    # comes out already matching the 22-col _C/_M layout.
+    # comes out already matching the 22-col _C/_M layout. Everything below
+    # this block (merge loop, validation, archiving) is unchanged - by the
+    # time it runs, a transformed _S file is indistinguishable from _C/_M.
     ###########################################################################
 
     for FILE in ${FILE_LIST}
@@ -386,7 +388,7 @@ done
 
 TOTAL_OUTPUT_FILES=$(find "${OUTPUT_DIR}" -maxdepth 1 \
 -type f \
--name "ChartData_CAID_Virtix_Chase_*_${PROCESS_DATE}.txt" | wc -l)
+-name "ChartData_ANT_Virtix_Chase_*_${PROCESS_DATE}.txt" | wc -l)
 
 LOG_MESG ""
 
