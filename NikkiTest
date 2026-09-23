@@ -1,1 +1,6 @@
-need to push a couple of merged Virtix files through MGFT to confirm they land correctly in uat/RAA before I call this done. Getting stuck at the SFTP password prompt for appchasesftp001@mgft.wellpoint.com — do you have that password, or know where it's stored?
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep Virtix
+
+
+
+s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
+
