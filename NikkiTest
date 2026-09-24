@@ -1,1 +1,6 @@
 Hey Nazir, Tagore — update on RBICA-14060. Confirmed with MGFT that there's no automation set up for the lower env (UAT) — only PROD has it configured. So the _S transform + merge logic is fully tested and verified in SIT/UAT, but I can't actually push a file through MGFT→CFX→S3 to test end-to-end since that path doesn't exist yet in UAT. Wanted to flag before I call this done — do we need UAT automation set up to close this out, or is verifying the transform logic enough given PROD already works the same way?
+
+
+ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_*.txt
+
+head -3 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
