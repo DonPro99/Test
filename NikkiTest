@@ -3,4 +3,10 @@ Hey Nazir, Tagore — update on RBICA-14060. Confirmed with MGFT that there's no
 
 ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_*.txt
 
-head -3 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
+$ ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_*.txt
+-rw-rw-r-- 1 srcradcoolbthts ahpck 7954976 Sep 23 16:19 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260923.txt
+-rw-rw-r-- 1 srcradcoolbthts ahpck 7954976 Sep 24 10:12 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
+$ head -3 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
+FileName|MBRID|MBRFNAME|MBRLNAME|MBRDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+VA_26Q3_20250701_20260630_105397420_1508857574_1.pdf|105397420|LACHE|PARKER|11/09/1989||||ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397420P1508857574||Y|F|WILLIAMS|VERNEETA|1508857574||23809079|STD||VIRTIX|
+VA_26Q3_20250701_20260630_105397421_1003812082_1.pdf|105397421|ALICIA|HALL|08/12/1992||||ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397421P1003812082||Y|F|WINKE|BETH|1003812082||12882646|STD||VIRTIX|
