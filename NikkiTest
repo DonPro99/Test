@@ -9,3 +9,15 @@ Could you please confirm:
 Whether you received these files on your end at the path above, and if so, when.
 If not received — is the SFTP account/credential we're using still valid and correctly configured for this UAT path? Are there any known issues with this connection currently?
 If this connection method isn't working, what's the correct current way to push files through to this destination?
+
+===
+File name and format:
+ChartData_ANT_Virtix_Chase_VA_20260924.txt (pipe-delimited text file, .txt)
+
+Pickup source location:
+This is on your/SAS side — the local server path where the file sits before transfer:
+/raa2/backup/sitenvironment/rev_opt/chasefiles/ (SAS server, environment: SIT)
+
+Delivery destination location:
+This is the external SFTP server — the MGFT side:
+mgft.wellpoint.com — path /appchasesftp001/C_ELV_CFX/I_ELV_CFX_PLT001/uat/RAA (SFTP account: appchasesftp001)
