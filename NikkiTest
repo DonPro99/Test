@@ -1,1 +1,27 @@
-Hey Divya — for the Virtix Chase file work (RBICA-14060), I need to verify a file goes all the way through MGFT → CFX → S3 in UAT. When I tried it, MGFT told me there's no automation configured for lower/UAT environments — only PROD has that set up. So my question is: have you ever tested this kind of file delivery (MGFT to S3) in UAT before, given there's no automation there? If so, how did you do it — is there an alternate/manual way, or has this always only really been verified in PROD?
+sanitizeFileName:: datavantmbrprov-etl_uat.properties
+sanitizeFileName:: db.properties
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+Sep 24, 2026 6:22:41 PM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
+INFO: Initializing new connection
+Sep 24, 2026 6:22:41 PM net.snowflake.client.core.SFSession open
+INFO: Opening session with server: https://carelon-eda-preprod.privatelink.snowflakecomputing.com:443/, account: carelon-eda-preprod, user: SRCRAADU, password is not provided, role: SRCRAADU_PRIVS, database: U01_RAA, schema: , warehouse: U01_LOAD_02_WH_XL, validate default parameters: null, authenticator: null, ocsp mode: FAIL_OPEN, passcode in password: null, passcode is not provided, private key is provided, disable socks proxy: null, application: null, app id: Snowpark, app version: 1.15.0, login timeout: null, retry timeout: null, network timeout: null, query timeout: null, connection timeout: null, socket timeout: null, tracing: null, private key file: null, private key pwd is not provided, enable_diagnostics: not provided, diagnostics_allowlist_path: null, session parameters: client store temporary credential: null, gzip disabled: null, browser response timeout: null
+Sep 24, 2026 6:22:41 PM net.snowflake.client.core.SFBaseSession logHttpClientInitInfo
+INFO: Driver OCSP mode: FAIL_OPEN, gzip disabled: false and no proxy
+Sep 24, 2026 6:22:41 PM net.snowflake.client.core.SFSession open
+INFO: Connecting to GLOBAL Snowflake domain
+Sep 24, 2026 6:22:41 PM net.snowflake.client.core.FileUtil logFileUsage
+INFO: Cache file creation: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
+Sep 24, 2026 6:22:41 PM net.snowflake.client.core.FileUtil logFileUsage
+INFO: Read cache: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
+Sep 24, 2026 6:22:41 PM net.snowflake.client.core.FileUtil logFileUsage
+INFO: Write to cache: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
+Sep 24, 2026 6:22:42 PM net.snowflake.client.core.SFSession open
+INFO: Session 15658176930312586 opened in 911 ms.
+Sep 24, 2026 6:22:42 PM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
+INFO: Connection initialized successfully in 1,019 ms. Session id: 15658176930312586
+Sep 24, 2026 6:22:45 PM net.snowflake.client.jdbc.internal.apache.arrow.memory.BaseAllocator <clinit>
+INFO: Debug mode disabled. Enable with the VM option -Darrow.memory.debug.allocator=true.
+Sep 24, 2026 6:22:45 PM net.snowflake.client.jdbc.internal.apache.arrow.memory.DefaultAllocationManagerOption getDefaultAllocationManagerFactory
+INFO: allocation manager type not specified, using netty as the default type
+Sep 24, 2026 6:22:45 PM net.snowflake.client.jdbc.internal.apache.arrow.memory.CheckAllocator reportResult
+INFO: Using DefaultAllocationManager at memory/unsafe/DefaultAllocationManagerFactory.class
