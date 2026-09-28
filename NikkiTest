@@ -1,7 +1,7 @@
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20260924.txt s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-aws s3 ls s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260924
+mkdir -p /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260928
+mv /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260928/
+
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -A12 "schema_virtix" | grep -E "s3_file_path|s3_archive"
 
 
-aws s3 rm s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20260924.txt
-aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260924
-
+SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD WHERE EDL_LOAD_DTM = (SELECT MAX(EDL_LOAD_DTM) FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD);
