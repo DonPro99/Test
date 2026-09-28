@@ -1,5 +1,7 @@
-[hadoop@ip-10-197-212-20 ~]$ aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20260924.txt - | head -3
-FileName|MBRID|MBRFNAME|MBRLNAME|MBRDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
-VA_26Q3_20250701_20260630_105397420_1508857574_1.pdf|ZC7MMNVF9|9B5CY|7CZ2M3|10/01/1989||||ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397420P1508857574||Y|F|WILLIAMS|VERNEETA|1508857574||23809079|STD||VIRTIX|
-VA_26Q3_20250701_20260630_105397421_1003812082_1.pdf|X08XXKQST|YE7C26|IWC6|03/06/1992||||ANT_Medicaid_VA_Q32026|ANTVA2026Q3M105397421P1003812082||Y|F|WINKE|BETH|1003812082||12882646|STD||VIRTIX|
-download failed: s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20260924.txt to - [Errno 32] Broken pipe
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20260924.txt s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
+aws s3 ls s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260924
+
+
+aws s3 rm s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20260924.txt
+aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260924
+
