@@ -1,12 +1,3 @@
-cp /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties.bak /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
-
-grep -A6 "\[schema_virtix\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
-[schema_virtix]
-s3_file_path=s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-s3_archive_file_path=s3://crln-raa-uat-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/virtix/
-delimiter=|
-file_format=txt
-file_pattern=ChartData_ANT_Virtix_Chase_*.txt
-tablename=rad_virtix_chase_mcaid_load
+aws s3 ls s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260924
 
 sh /home/hadoop/scripts/mcaid_chase_all_lob_s3_to_snflk_load.sh schema_virtix 1234
