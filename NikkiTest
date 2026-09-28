@@ -1,5 +1,37 @@
 grep -n -E "INPUT_DIR|OUTPUT_DIR|ARCHIVE_DIR|TRIGGER" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
 
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:57:    INPUT_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:58:    OUTPUT_DIR="/raa2/backup/prodenvironment/rev_opt/chasefiles"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:67:    INPUT_DIR="/raa2/backup/sitenvironment/rev_opt/chasefiles"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:68:    OUTPUT_DIR="/raa2/backup/sitenvironment/rev_opt/chasefiles"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:80:ARCHIVE_DIR="${INPUT_DIR}/archive/${PROCESS_DATE}"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:97:if [ ! -d "${ARCHIVE_DIR}" ]
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:99:    mkdir -p "${ARCHIVE_DIR}"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:118:if [ ! -d "${INPUT_DIR}" ]
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:123:    LOG_MESG "${INPUT_DIR}"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:135:LOG_MESG "Input Directory  : ${INPUT_DIR}"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:137:LOG_MESG "Output Directory : ${OUTPUT_DIR}"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:139:LOG_MESG "Archive Directory: ${ARCHIVE_DIR}"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:146:STATE_LIST=$(find "${INPUT_DIR}" -maxdepth 1 -type f \
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:171:    OUTFILE="${OUTPUT_DIR}/ChartData_ANT_Virtix_Chase_${STATE}_${PROCESS_DATE}.txt"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:193:    FILE_LIST=$(find "${INPUT_DIR}" -maxdepth 1 -type f \
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:310:        cp -p "${FILE}" "${ARCHIVE_DIR}/"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:354:TOTAL_OUTPUT_FILES=$(find "${OUTPUT_DIR}" -maxdepth 1 \
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:368:LOG_MESG "Output Directory   : ${OUTPUT_DIR}"
+/hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh:370:LOG_MESG "Archive Directory  : ${ARCHIVE_DIR}"
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:51:export TRIGGER_FILE_LOCATION="/hcaaapck/backup/IT/${SAS_ENV}/trigger"
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:52:export TRIGGER_FILE_NAME="Trigger_ChartData_ChaseFiles.trg"
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:53:export TRIGGERFILELOC="${TRIGGER_FILE_LOCATION}/${TRIGGER_FILE_NAME}"
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:118:if [ ! -f "${TRIGGERFILELOC}" ]
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:120:   LOG_MESG "The trigger process file does not exist - ${TRIGGERFILELOC}"
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:130:export FILE_LIST=`find "${FILE_LOCATION}" -type f -name "${FILE_PATTERN}" -newer "${TRIGGERFILELOC}" -exec basename {} \;`
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:132:     LOG_MESG "${FILE_PATTERN} MCAID ChaseFiles is newer than the trigger process file - ${TRIGGERFILELOC}."
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:158:     LOG_MESG "${FILE_PATTERN} MCAID ChaseFiles is older than the trigger process file - ${TRIGGERFILELOC}."
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:165:if [[ ${FLAG} == "1" && -f "${TRIGGERFILELOC}" ]]
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:167:   LOG_MESG "Updating the trigger file - ${TRIGGERFILELOC}"
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:168:   touch ${TRIGGERFILELOC} 
+/hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh:173:   LOG_MESG "Failure encountered while updating the trigger file - ${TRIGGERFILELOC}"
+
 ls -la <PROD_INPUT_DIR>/
 ls -la <PROD_INPUT_DIR>/ChartData_*.txt 2>/dev/null
 ls -la <PROD_INPUT_DIR>/Anthem_VirtixHealth_*_Chase_*.txt 2>/dev/null
