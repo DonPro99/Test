@@ -9,6 +9,6 @@ file_format=txt
 file_pattern=ChartData_ANT_Virtix_Chase_*.txt
 tablename=rad_virtix_chase_mcaid_load
 schema_name=
-columns_list=["FileName", "MemberId", "MemberFirstName", "MemberLastName", "MemberDOB", "EnrollmentDate", "EnrollmentEndDate", "ESRDIndicator", "ProjectName", "ClientRequestId", "RecordTypeId", "OnshoreIndicator", "Gender", "ProviderLastName", "ProviderFirstName", "ProviderNPI", "MemberMiddle", "ProviderId", "UserDefinedText1", "UserDefinedText2", "UserDefinedText3", "UserDefinedText4"]
+columns_list=["FileName", "MBRID", "MBRFNAME", "MBRLNAME", "MBRDOB", "EnrollmentDate", "EnrollmentEndDate", "ESRDIndicator", "ProjectName", "ClientRequestId", "RecordTypeId", "OnshoreIndicator", "Gender", "ProviderLastName", "ProviderFirstName", "ProviderNPI", "MemberMiddle", "ProviderId", "UserDefinedText1", "UserDefinedText2", "UserDefinedText3", "UserDefinedText4"]
 step=MCAID VIRTIX CHASE FILES LOAD
 load_mode=append
