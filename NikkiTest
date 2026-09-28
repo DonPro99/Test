@@ -1,6 +1,56 @@
 
 sed -n '9,24p' /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
+
+#Determine the environment based on the user.
+export SERVICE_USER=`echo $USER`
+
+if [[ $SERVICE_USER == "srcradcoolbthts" ]]
+then
+    export ENVIRONMENT="ts"
+elif [[ $SERVICE_USER == "srcradcoolbthpr" ]]
+then
+    export ENVIRONMENT="pr"
+else
+    export ENVIRONMENT="dv"
+fi
+
+export ENV=$ENVIRONMENT
+
+===================
+
 ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | head -30
+total 849622
+drwxrwsr-x  4 ad67688         ahpck    16384 Sep 21 17:51 .
+drwxrwsr-x  4 srcradcoolbthpr ahpck     4096 Jul 24 11:44 ..
+-rw-rw-r--  1 ad67688         ahpck  5264323 Aug 27 15:35 Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
+-rw-r--r--  1 srcradcoolbthpr ahpck      436 Aug 31 10:09 Anthem_VirtixHealth_INQ22026_Chase_C_08312026100958.txt
+-rw-rw-r--  1 ad67688         ahpck  5480789 Aug 27 15:35 Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
+-rw-rw-r--  1 ad67688         ahpck      709 Sep 21 17:07 Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
+-rw-rw-r--  1 ad67688         ahpck  4778135 Aug 27 15:35 Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+-rw-r--r--  1 srcradcoolbthpr ahpck      437 Aug 17 14:04 Anthem_VirtixHealth_VAQ32026_Chase_CFXTEST_1.txt
+-rw-rw-r--  1 ad67688         ahpck  1561744 Aug 27 15:35 Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+-rw-rw-r--  1 ad67688         ahpck 15620738 Jul 15 11:14 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+drwxrwsr-x 13 srcradcoolbthpr ahpck     4096 Sep 24 10:36 archive
+-rwxrwSr--  1 ad67688         ahpck   194842 Jul 28  2025 ChartData_ANT_HN_Q12024_23FEB24.txt
+-rwxrwSr--  1 ad67688         ahpck  6562760 Jul 28  2025 ChartData_ANT_HN_Q12025_27JAN25.txt
+-rw-rw-r--  1 ad67688         ahpck 11115196 Jan  8  2026 ChartData_ANT_HN_Q12026_05JAN26.txt
+-rwxrwSr--  1 ad67688         ahpck  9006084 Jul 28  2025 ChartData_ANT_IA_Q22024_14MAY24.txt
+-rwxrwSr--  1 ad67688         ahpck  2023841 Jul 28  2025 ChartData_ANT_IA_Q22024_M360_14MAY24.txt
+-rwxrwSr--  1 ad67688         ahpck 15923936 Jul 28  2025 ChartData_ANT_IA_Q22025_05MAY25.txt
+-rwxrwSr--  1 ad67688         ahpck  6221487 Jul 28  2025 ChartData_ANT_IA_Q22025_M360_05MAY25.txt
+-rwxrwSr--  1 ad67688         ahpck 17100324 Jul 28  2025 ChartData_ANT_IA_Q32021_31AUG21.txt
+-rwxrwSr--  1 ad67688         ahpck  9256484 Jul 28  2025 ChartData_ANT_IA_Q32022_10OCT22.txt
+-rwxrwSr--  1 ad67688         ahpck  9256484 Jul 28  2025 ChartData_ANT_IA_Q32022_M360_10OCT22.txt
+-rwxrwSr--  1 ad67688         ahpck  7656572 Jul 28  2025 ChartData_ANT_IA_Q32023_12JUL23.txt
+-rwxrwSr--  1 ad67688         ahpck  1658932 Jul 28  2025 ChartData_ANT_IA_Q32023_M360_12JUL23.txt
+-rwxrwSr--  1 ad67688         ahpck 24626493 Jul 28  2025 ChartData_ANT_IN_Q22023_10APR23.txt
+-rwxrwSr--  1 ad67688         ahpck  5391323 Jul 28  2025 ChartData_ANT_IN_Q22023_M360_10APR23.txt
+-rwxrwSr--  1 ad67688         ahpck 16461185 Jul 28  2025 ChartData_ANT_IN_Q22024_10JUN24.txt
+-rwxrwSr--  1 ad67688         ahpck  6807107 Jul 28  2025 ChartData_ANT_IN_Q22024_M360_10JUN24.txt
+-rwxrwSr--  1 ad67688         ahpck 71501747 Jul 28  2025 ChartData_ANT_IN_Q22025_12JUN25.txt
+-rwxrwSr--  1 ad67688         ahpck 46183623 Jul 28  2025 ChartData_ANT_IN_Q22025_M360_12JUN25.txt
+
+============
 find /raa2/backup/prodenvironment/rev_opt/chasefiles -maxdepth 1 -type f -name "ChartData_*.txt" -newer /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
 
 
