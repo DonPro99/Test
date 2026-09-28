@@ -1,6 +1,15 @@
-ls -la /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
-find /raa2/backup/prodenvironment/rev_opt/chasefiles -maxdepth 1 -type f -name "ChartData_*.txt" -newer /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_*
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>Data_*.txt" -newer /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg                                                                                   <
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
+-rw-rw-r-- 1 srcradcoolbthts ahpck 7954976 Sep 24 10:12 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+-rw-r--r-- 1 srcradcoolbthpr ahpck 0 Sep 11 07:00 /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>Data_*.txt" -newer /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg                                                                                   <
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_*
+-rw-rw-r-- 1 srcradcoolbthpr ahpck 10744783 Aug 27 15:40 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_IN_20260827.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck      417 Aug 31 10:10 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_IN_20260831.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck      437 Aug 17 14:17 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260817.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck  6339550 Aug 27 15:40 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260827.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck  2705410 Aug 18 09:58 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_WV_20260818.txt
 
 
 cp /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt /raa2/backup/prodenvironment/rev_opt/chasefiles/
