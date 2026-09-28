@@ -1,2 +1,1 @@
-[hadoop@ip-10-197-212-20 ~]$ aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260924
-2026-09-28 17:42:05    7954976 ChartData_ANT_Virtix_Chase_VA_20260924.txt
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20260924.txt - | head -3
