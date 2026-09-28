@@ -1,52 +1,8 @@
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/bootstrap_key_uat.sh - | grep -n -i -E "properties|sed|env|prod|uat"
-[hadoop@ip-10-127-204-4 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/bootstrap_key_uat.sh - | grep -n -i -E "properties|sed|env|prod|uat"
-17:#copying .properties files from snowpark config to local config t
-18:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/ /home/hadoop/config/ --exclude "*"  --include "*uat.properties" --recursive
-21:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/external_uat.properties /home/hadoop/config/external.properties
-22:sudo chmod -R 777 /home/hadoop/config/external.properties
-24:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/db.properties /home/hadoop/config/
-25:sudo chmod -R 777 /home/hadoop/config/db.properties
-28:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/chartextraction/conf/cra_transact_config.json /home/hadoop/config/
-31:# RBICA-13935: rad_mcaid_chase_all_lob_s3_to_snflk_load.properties uses .properties extension and not .conf, so it is silently skipped by the "uat.conf" filter above. So, copy it explicitly.
-32:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
-33:sudo chmod 777 /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
-36:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/ /home/hadoop/jars/ --exclude "*" --include "*dependencies.jar" --recursive
-38:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/risk-adjustment-adl-etl-1.0-jar-with-dependencies.jar s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/
-39:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/common-ingestion-1.0.0-jar-with-dependencies.jar s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/
-41:# Recursively copying uat.properties files from all etl dir to local config
-42:sudo aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep 'uat.properties' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/{} /home/hadoop/config/
-45:# Recursively copying uat.conf files from all etl dir to local config
-46:sudo aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep 'uat.conf' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/{} /home/hadoop/config/
-49:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/Common-transact-load/config/Transact_config.json /home/hadoop/config/
-52:# RBICA-13935: rad_mcaid_chase_all_lob_s3_to_snflk_load.properties uses .properties extension and not .conf, so it is silently skipped by the "uat.conf" filter above. So, copy it explicitly.
-53:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/
-54:sudo chmod 777 /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
-57:sudo aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep 'config.conf' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/{} /home/hadoop/config/
-61:sudo aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep '\.sh' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/{} /home/hadoop/scripts/
-65:sudo aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep '\.py' | awk '{print $NF}' | xargs -I{} aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/{} /home/hadoop/scripts/
-69:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/chartextraction/conf/emailNotification.msg /home/hadoop/config/
-73:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/AnthemRaUtil/ /home/hadoop/AnthemRaUtil --recursive
-77:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/mtrx-prsp-etl/config/mtrx-prsp.json /home/hadoop/config/
-81:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/verisma-aca-etl/config/vrsmart-aca.json /home/hadoop/config/
-85:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/Centauri-aca-etl/config/Centauri-aca.json /home/hadoop/config/
-89:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/Centauri-aca-etl/config/Centauri-aca-prov.json /home/hadoop/config/
-111:sudo aws s3 cp s3://crln-652798729258-edl-uat-codez-nogbd-nophi-useast1/common/gluelibs/shared/ReduceReuseRecycle-1.5-py3-none-any.whl /home/hadoop/scripts/
-117:sudo aws s3 cp s3://crln-652798729258-edl-uat-toolsz-nogbd-nophi-useast1/libs/rrr_spark/reduce_reuse_recycle-0.1-SNAPSHOT.jar /home/hadoop/jars/
-121:sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/snowflake-jdbc-3.14.4.jar /home/hadoop/jars/
-122:sudo aws s3 cp s3://crln-163391535226-edl-prod-toolsz-nogbd-nophi-useast1/libs/jars/spark-snowflake_2.12-2.12.0-spark_3.4.jar /home/hadoop/jars/
-126:sudo aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/secondary_boot.sh /home/hadoop/scripts && sudo bash /home/hadoop/scripts/secondary_boot.sh & sleep 180 && exit 0
+cp /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties.bak
 
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -n -i -A8 "\[snowflake\]"
-[hadoop@ip-10-127-204-4 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -n -i -A8 "\[snowflake\]"
-97:[snowflake]
-98-env=uat
-99-region_name=us-east-1
-100-secret_path=/snowflake/raa
-101-usedatabase=U01_RAA
-102-raaDatabase=U01_RAA.RAA_RAWZ
-103-warehouse=U01_RAA_LOAD_WH_M
-104-sf_schema=RAA_RAWZ
-105-process=MCAID
+s3_file_path=s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
+s3_archive_file_path=s3://crln-raa-uat-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/virtix/
 
 
-sh /home/hadoop/scripts/mcaid_chase_all_lob_s3_to_snflk_load.sh schema_virtix 1234
+aws s3 ls s3://crln-raa-uat-archz-gbd-phi-useast1/
+
