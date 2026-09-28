@@ -1,7 +1,90 @@
 grep -n -E "INPUT_DIR|OUTPUT_DIR|ARCHIVE_DIR|TRIGGER" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
 
 sed -n '25,75p' /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
+if [[ "${ENVIRONMENT}" == "ts" ]]
+then
+  export SAS_ENV="SIT"
+  export SAS_ENV_LOWER="sit"
+elif [[ "${ENVIRONMENT}" == "dv" ]] 
+then
+  export SAS_ENV="DEV"
+  export SAS_ENV_LOWER="dev"
+else
+  export SAS_ENV="PROD"
+  export SAS_ENV_LOWER="prod"
+fi
+
+echo "$SAS_ENV"
+#Validate the line of business.
+#if [[ "${LINE_OF_BUSINESS}" != "ACA" ]] && [[ "${LINE_OF_BUSINESS}" != "MCAID" ]] && [[ "${LINE_OF_BUSINESS}" != "MCARE" ]] && [[ "${LINE_OF_BUSINESS}" != "MRA" ]] ;then
+#   echo "Please provide the valid line of business.Either ACA/MCAID/MCARE/MRA"
+#   exit 1
+#fi
+if [[ "${LINE_OF_BUSINESS}" != "ACA" ]] && [[ "${LINE_OF_BUSINESS}" != "MCAID" ]] && [[ "${LINE_OF_BUSINESS}" != "MCARE" ]] && [[ "${LINE_OF_BUSINESS}" != "MRA" ]] && [[ "${LINE_OF_BUSINESS}" != "MCD" ]] ;then
+   echo "Please provide the valid line of business. Either ACA/MCAID/MCARE/MRA/MCD"
+   exit 1
+fi
+
+export FILE_LOCATION="/raa2/backup/${SAS_ENV_LOWER}environment/rev_opt/chasefiles"
+export FILE_PATTERN="ChartData_*.txt"
+export TRIGGER_FILE_LOCATION="/hcaaapck/backup/IT/${SAS_ENV}/trigger"
+export TRIGGER_FILE_NAME="Trigger_ChartData_ChaseFiles.trg"
+export TRIGGERFILELOC="${TRIGGER_FILE_LOCATION}/${TRIGGER_FILE_NAME}"
+
+export SAS_HOME="/hcaaapck/backup/IT/${SAS_ENV}/scripts"
+export LOG_LOCATION="/hcaaapck/backup/IT/${SAS_ENV}/log"
+export SAS_CONFIG_FILE="/hcaaapck/backup/IT/${SAS_ENV}/conf/sas.properties"
+export ENV=${ENVIRONMENT}
+
+# --- BEGIN: Always-available vars for logging and FTP ---
+i="${LINE_OF_BUSINESS}"   # keep 'i' because later logs reference it
+LOB="${LINE_OF_BUSINESS}"
+
+LOB_LOWER=$(echo "${LOB}" | tr 'A-Z' 'a-z')
+
+# Used by MGFT scripts and logging later in the script
+work_file="/hcaaapck/backup/IT/${SAS_ENV}/work/rad_${FILETYPE_LOWER}_${LOB_LOWER}.txt"
+# --- END: Always-available vars for logging and FTP ---
+
+echo ${LOG_LOCATION}
+
+export LOG_PATH=${LOG_LOCATION} 
+export LOG_FILE="mcaid_chasefiles_copy_to_S3_`date +'%Y_%m_%d_%H_%M_%S'`.log"
+
+#Check if the log dir exists if not create.
+
+
+
 grep -n -E "SAS_ENV|FILE_LOCATION|FILE_PATTERN|\.conf|USER" /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
+11:export SERVICE_USER=`echo $USER`
+13:if [[ $SERVICE_USER == "srcradcoolbthts" ]]
+16:elif [[ $SERVICE_USER == "srcradcoolbthpr" ]]
+27:  export SAS_ENV="SIT"
+28:  export SAS_ENV_LOWER="sit"
+31:  export SAS_ENV="DEV"
+32:  export SAS_ENV_LOWER="dev"
+34:  export SAS_ENV="PROD"
+35:  export SAS_ENV_LOWER="prod"
+38:echo "$SAS_ENV"
+49:export FILE_LOCATION="/raa2/backup/${SAS_ENV_LOWER}environment/rev_opt/chasefiles"
+50:export FILE_PATTERN="ChartData_*.txt"
+51:export TRIGGER_FILE_LOCATION="/hcaaapck/backup/IT/${SAS_ENV}/trigger"
+53:export TRIGGERFILELOC="${TRIGGER_FILE_LOCATION}/${TRIGGER_FILE_NAME}"
+55:export SAS_HOME="/hcaaapck/backup/IT/${SAS_ENV}/scripts"
+56:export LOG_LOCATION="/hcaaapck/backup/IT/${SAS_ENV}/log"
+57:export SAS_CONFIG_FILE="/hcaaapck/backup/IT/${SAS_ENV}/conf/sas.properties"
+67:work_file="/hcaaapck/backup/IT/${SAS_ENV}/work/rad_${FILETYPE_LOWER}_${LOB_LOWER}.txt"
+97:MERGE_SCRIPT="/hcaaapck/backup/IT/${SAS_ENV}/scripts/merge_virtix_chase_files.sh"
+125:if [ ! `ls -1 ${FILE_LOCATION}/${FILE_PATTERN}  2>/dev/null | wc -l ` -gt 0 ]; then
+126:    LOG_MESG "${FILE_PATTERN} MCAID ChaseFiles does not exist - ${FILE_LOCATION}/${FILE_PATTERN}"
+130:export FILE_LIST=`find "${FILE_LOCATION}" -type f -name "${FILE_PATTERN}" -newer "${TRIGGERFILELOC}" -exec basename {} \;`
+132:     LOG_MESG "${FILE_PATTERN} MCAID ChaseFiles is newer than the trigger process file - ${TRIGGERFILELOC}."
+133:     LOG_MESG "Starting the copying process for ${FILE_PATTERN} CHASEFILE- ${FILE_LOCATION}/${FILE_PATTERN}."
+145:       bash /hcaaapck/backup/IT/${SAS_ENV}/scripts/common-sftp-sas-mgft-task.sh ${FILE_LOCATION}/${FILE} raa-mcaid-chasefiles-mgft.conf
+158:     LOG_MESG "${FILE_PATTERN} MCAID ChaseFiles is older than the trigger process file - ${TRIGGERFILELOC}."
+159:     LOG_MESG "Copying process not initiated for ${FILE_PATTERN} MCAID CHASEFILES- ${FILE_LOCATION}/${FILE_PATTERN}."
+
+
 
 
 ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | head -30
