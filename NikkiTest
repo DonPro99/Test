@@ -3,9 +3,10 @@ mv /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA
 
 aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -A12 "schema_virtix" | grep -E "s3_file_path|s3_archive"
 
-[hadoop@ip-10-127-204-4 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/conf/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties - | grep -A12 "schema_virtix" | grep -E "s3_file_path|s3_archive"
-s3_file_path=s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/
-s3_archive_file_path=s3://crln-raa-prod-archz-gbd-phi-useast1/raa/medicaid/na/rad_mcaid_all_chase_files/virtix/
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/common-ingestion/ --recursive | grep -i -E "chase|rad_mcaid"
+
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/<path-from-listing>/rad_mcaid_chase_all_lob_s3_to_snflk_load.py - | grep -n -i -E "env|replace|prod|uat|s3_file_path|argv"
+
 
 
 SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD WHERE EDL_LOAD_DTM = (SELECT MAX(EDL_LOAD_DTM) FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD);
