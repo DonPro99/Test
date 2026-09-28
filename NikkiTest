@@ -1,2 +1,9 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
--rw-rw-r-- 1 srcradcoolbthts ahpck 7954976 Sep 24 10:12 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
+ls -la /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+find /raa2/backup/prodenvironment/rev_opt/chasefiles -maxdepth 1 -type f -name "ChartData_*.txt" -newer /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_*
+
+
+cp /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt /raa2/backup/prodenvironment/rev_opt/chasefiles/
+
+cd /hcaaapck/backup/IT/PROD/scripts
+ksh raa_mcaid_chasefiles_copy_to_s3.sh
