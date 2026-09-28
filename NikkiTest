@@ -1,1 +1,2 @@
-ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
+-rw-rw-r-- 1 srcradcoolbthts ahpck 7954976 Sep 24 10:12 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260924.txt
