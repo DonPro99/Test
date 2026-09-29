@@ -1,4 +1,2 @@
-cp /raa1/backup/devenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524.txt \
-   /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
-
-ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH.*TEST"
+$ ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH.*TEST"
+-rw-r--r--  1 srcradcoolbthts ahpck      1408 Sep 29 18:08 ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
