@@ -1,10 +1,12 @@
-[hadoop@ip-10-127-204-4 ~]$ grep -n -i -E "mode|permissive|malformed|dropmalformed|option\(" /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py | grep -i -E "csv|read|mode"
-34:# usage         :/usr/bin/spark-submit --master yarn --deploy-mode client --driver-cores 2 --driver-memory 10G --executor-cores 6 --executor-memory 20G --conf spark.kryoserializer.buffer.max=128 --conf yarn.nodemanager.resource.memory-mb=36G --conf spark.driver.memoryOverhead=3072 --conf spark.executor.memoryOverhead=3072 --conf spark.dynamicAllocation.enabled=true --conf spark.shuffle.service.enabled=true --conf spark.sql.broadcastTimeout=4800 --conf spark.mail.conf=/home/hadoop/config/mail-prod.conf --conf spark.network.timeout=10000000 --conf spark.executor.heartbeatInterval=10000000 --conf spark.default.parallelism=1000 --packages net.snowflake:snowflake-jdbc:3.14.1,net.snowflake:spark-snowflake_2.12:2.12.0-spark_3.4 /home/hadoop/scripts/rad_mcaid_chase_all_lob_s3_to_snflk_load.py -c rad_mcaid_chase_all_lob_s3_to_snflk_load.properties /home/hadoop/config schema_epi/schema_cix run_id
-95:def load_data_to_snowflake(df: DataFrame, snowflake_options, table_name: str, schema_name: str, load_mode: str, today_date: str, process: str, batch_id: int):
-115:            .mode(load_mode) \
-125:            df = spark.read.option("header","true").option("delimiter", delimiter).csv(file_path)
-128:            df = spark.read.schema(schema_name).option("delimiter", delimiter).csv(file_path, header=True)
-345:    load_mode = config[schema]["load_mode"]
-421:            load_data_to_snowflake(combined_df, snowflake_options, target_table_name, schema_name, load_mode, today_date, process, batch_id)
-[hadoop@ip-10-127-204-4 ~]$ awk -F'|' '{print NF}' /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929_cleanup/ChartData_ANT_Virtix_Chase_VA_20260929.txt 2>/dev/null | sort | uniq -c
-[hadoop@ip-10-127-204-4 ~]$ 
+SELECT * FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
+WHERE EDL_LOAD_DTM = '2026-09-29 19:59:33.878' AND MEMBERID = '5AB4C5SV5';
+
+SHOW PRIMARY KEYS IN TABLE U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD;
+
+SELECT COUNT(*) FROM (
+  SELECT MBRID
+  FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
+  WHERE EDL_LOAD_DTM = '2026-09-29 19:59:33.878'
+  GROUP BY MBRID
+  HAVING COUNT(*) > 1
+);
