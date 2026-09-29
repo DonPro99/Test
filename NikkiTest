@@ -1,13 +1,1 @@
-The E2E UAT looks good for the MRA Datavant Prematch RBICA-14240. Please FTP the below file to the vendor with "TEST" included in the file name.
-
- 
-
-File name: ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
-
-File Path: /raa1/backup/devenvironment/sas_repository/outbound
-
- 
-
-Thanks
-
-Pranaya
+/hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG
