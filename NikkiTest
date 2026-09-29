@@ -1,4 +1,7 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
-ls: cannot access '/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt': No such file or directory
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls -la /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
--rw-r--r-- 1 srcradcoolbthpr ahpck 0 Sep 28 13:41 /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+
+cat /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt | wc -l
+
+cp -v /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt /raa2/backup/prodenvironment/rev_opt/chasefiles/
+
+ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
