@@ -1,13 +1,2 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls -la /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
--rw-r--r-- 1 srcradcoolbthpr ahpck 0 Sep 28 13:41 /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
--rw-rw-r-- 1 srcradcoolbthts ahpck 14294234 Sep 29 13:33 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>cat /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt | wc -l
-73092
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>cat /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt | wc -l
-73092
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>cp -v /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt /raa2/backup/prodenvironment/rev_opt/chasefiles/
-'/raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt' -> '/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt'
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
--rw-r--r-- 1 srcradcoolbthpr ahpck 14294234 Sep 29 14:07 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>
+cd /hcaaapck/backup/IT/PROD/scripts
+ksh raa_mcaid_chasefiles_copy_to_s3.sh
