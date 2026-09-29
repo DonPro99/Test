@@ -1,22 +1,7 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/ | grep VA
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>grep -n -B3 -A15 "Existing output file found" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-172-
-173-    if [ -f "${OUTFILE}" ]
-174-    then
-175:        LOG_MESG "Existing output file found."
-176-
-177-        rm -f "${OUTFILE}"
-178-
-179-        if [ $? -ne 0 ]
-180-        then
-181-            LOG_MESG "Unable to remove existing output file."
-182-
-183-            exit 1
-184-        fi
-185-    fi
-186-
-187-    HEADER_FLAG=1
-188-
-189-    INPUT_RECORDS=0
-190-
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>
+cp /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt /raa2/backup/prodenvironment/rev_opt/chasefiles/
+cp /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt /raa2/backup/prodenvironment/rev_opt/chasefiles/
+cp /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt /raa2/backup/prodenvironment/rev_opt/chasefiles/
+
+
+cd /hcaaapck/backup/IT/PROD/scripts
+ksh raa_mcaid_chasefiles_copy_to_s3.sh
