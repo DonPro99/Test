@@ -1,1 +1,2 @@
-aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260929
+[hadoop@ip-10-197-212-253 ~]$ aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260929
+2026-09-29 18:37:09   14294234 ChartData_ANT_Virtix_Chase_VA_20260929.txt
