@@ -1,7 +1,13 @@
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
-wc -l /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
-
-
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck 14294234 Sep 29 14:36 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>wc -l /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+73092 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/
+total 13977
+drwxrwsr-x  2 srcradcoolbthpr ahpck    4096 Sep 29 14:36 .
+drwxrwsr-x 15 srcradcoolbthpr ahpck    4096 Sep 29 13:48 ..
+-rw-rw-r--  1 srcradcoolbthpr ahpck 4778135 Sep 29 14:36 Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+-rw-rw-r--  1 srcradcoolbthpr ahpck 1561744 Sep 29 14:36 Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+-rw-rw-r--  1 srcradcoolbthpr ahpck 7954995 Sep 29 14:36 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
 
 aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260929
