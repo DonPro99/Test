@@ -1,2 +1,12 @@
-$ ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH.*TEST"
--rw-r--r--  1 srcradcoolbthts ahpck      1408 Sep 29 18:08 ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+Subject: RE: RBICA-14240 - Test file sent to vendor
+
+Hi,
+
+The test file has been placed in CFX_STG for delivery to the vendor as requested:
+
+File name: ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+
+Could you please confirm once CFX has picked it up and delivered it to the vendor? Let me know if there's anything else needed on my end.
+
+Thanks,
+Don
