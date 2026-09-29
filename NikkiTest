@@ -10,7 +10,4 @@ grep -A6 "\[schema_virtix\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_s
 
 sh /home/hadoop/scripts/mcaid_chase_all_lob_s3_to_snflk_load.sh schema_virtix 1234
 
-SELECT FileName, COUNT(*) 
-FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
-WHERE EDL_LOAD_DTM = (SELECT MAX(EDL_LOAD_DTM) FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD)
-GROUP BY FileName;
+SELECT MAX(EDL_LOAD_DTM) FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD;
