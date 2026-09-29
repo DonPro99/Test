@@ -1,6 +1,9 @@
-$ wc -l /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
-25484 /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
-$ wc -l /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
-8329 /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
-$ wc -l /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
-39281 /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+cd /hcaaapck/backup/IT/SIT/scripts
+ksh merge_virtix_chase_files.sh
+
+ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_*.txt
+wc -l /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+
+head -3 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+sed -n '25000,25005p' /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+tail -3 /raa2/backup/sitenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
