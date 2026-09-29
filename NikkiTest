@@ -1,4 +1,16 @@
-[hadoop@ip-10-127-204-155 ~]$ aws s3 cp s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20260929.txt - | tail -3
-VA_26Q3_20250701_20260630_885920511_1780685982_1.pdf|4OL7JYJWT|G9QW|SHRB0HM|08/01/2013||||ANT_Medicaid_VA_Q32026|ANTVA2026Q3M885920511P1780685982||Y|M|HARRINGTON|JOHN|1780685982||25737281|STD||VIRTIX|
-VA_26Q3_20250701_20260630_999000192_1497938849_1.pdf|TJI8IC3J6|XEHGNVE|T3Q8QI|03/05/1983||||ANT_Medicaid_VA_Q32026|ANTVA2026Q3M999000192P1497938849||Y|F|AYOOLA-YUSSUF|EBUNOLA|1497938849||12938206|STD||VIRTIX|
-VA_26Q3_20250701_20260630_999000217_1346711207_1.pdf|Z3AYSCJJC|HXGFL4|UDUR40|12/18/2002||||ANT_Medicaid_VA_Q32026|ANTVA2026Q3M999000217P1346711207||Y|F|WILLIAMS|LAUREN|1346711207||19042258|STD||VIRTIX|
+aws s3 rm s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ | grep 20260929
+
+
+mkdir -p /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929_cleanup
+mv /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929_cleanup/
+
+grep -A6 "\[schema_virtix\]" /home/hadoop/config/rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+
+
+sh /home/hadoop/scripts/mcaid_chase_all_lob_s3_to_snflk_load.sh schema_virtix 1234
+
+SELECT FileName, COUNT(*) 
+FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
+WHERE EDL_LOAD_DTM = (SELECT MAX(EDL_LOAD_DTM) FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD)
+GROUP BY FileName;
