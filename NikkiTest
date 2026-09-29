@@ -1,1 +1,26 @@
-2026-09-28 19:59:43.314
+Hi Tagore, Akhil,
+
+Closing the loop on RBICA-14060 (Virtix _S file transform). Ran two full end-to-end tests:
+
+Test 1 — _S only:
+
+Source (SAS, SIT): /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+Merged output: ChartData_ANT_Virtix_Chase_VA_20260924.txt
+Pushed through PROD MGFT/CFX, confirmed tokenized, copied to UAT S3, loaded into U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
+Result: 39,280/39,280 records, correct mapping, tokenized correctly
+EDL_LOAD_DTM: 2026-09-28 19:59:43.314
+
+Test 2 — _C + _M + _S combined (same state, same run):
+
+Sources (SAS, SIT): Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt, _M_07152026111457.txt, _S_07152026111448.txt
+Merged output: ChartData_ANT_Virtix_Chase_VA_20260929.txt
+Same path — PROD MGFT/CFX, tokenized, copied to UAT S3, loaded into Snowflake
+Result: 73,091/73,091 records, correct mapping across all three source types, tokenized correctly, zero data loss
+EDL_LOAD_DTM: 2026-09-29 19:59:33.878
+
+Both tests confirm the _S transform integrates cleanly with _C/_M, whether _S runs alone or alongside them in the same file.
+
+This ticket is good to close from a testing standpoint.
+
+Thanks,
+Don (Nikki)
