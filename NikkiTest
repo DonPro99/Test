@@ -1,35 +1,6 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
--rw-r--r-- 1 srcradcoolbthpr ahpck 14294234 Sep 29 14:07 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>cd /hcaaapck/backup/IT/PROD/scripts
-[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ksh raa_mcaid_chasefiles_copy_to_s3.sh
-PROD
-/hcaaapck/backup/IT/PROD/log
-Running Virtix Chase merge script: /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-2026-09-29 14:08:17 : ====================================================
-2026-09-29 14:08:17 : Virtix Chase Merge Job Started
-2026-09-29 14:08:17 : Environment      : PROD
-2026-09-29 14:08:17 : Input Directory  : /raa2/backup/prodenvironment/rev_opt/chasefiles
-2026-09-29 14:08:17 : Output Directory : /raa2/backup/prodenvironment/rev_opt/chasefiles
-2026-09-29 14:08:17 : Archive Directory: /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929
-2026-09-29 14:08:17 : ====================================================
-2026-09-29 14:08:17 : States Identified : IN
-VA
-2026-09-29 14:08:17 : ------------------------------------------------------
-2026-09-29 14:08:17 : Processing State : IN
-2026-09-29 14:08:17 : No files found for state IN
-2026-09-29 14:08:17 : ------------------------------------------------------
-2026-09-29 14:08:17 : Processing State : VA
-2026-09-29 14:08:17 : Existing output file found.
-2026-09-29 14:08:17 : No files found for state VA
-2026-09-29 14:08:17 : 
-2026-09-29 14:08:17 : ====================================================
-2026-09-29 14:08:17 : Virtix Chase Merge Job Completed Successfully.
-2026-09-29 14:08:17 : Environment        : PROD
-2026-09-29 14:08:17 : Processing Date    : 20260929
-2026-09-29 14:08:17 : Output Directory   : /raa2/backup/prodenvironment/rev_opt/chasefiles
-2026-09-29 14:08:17 : Archive Directory  : /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929
-2026-09-29 14:08:17 : Output Files Created : 0
-2026-09-29 14:08:17 : ====================================================
-Virtix Chase merge completed successfully.
-ChartData_*.txt MCAID ChaseFiles is older than the trigger process file - /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg.
-Copying process not initiated for ChartData_*.txt MCAID CHASEFILES- /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_*.txt.
+[ /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt -nt /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg ] && echo "NEWER" || echo "NOT NEWER"
+
+date
+
+stat /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+stat /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
