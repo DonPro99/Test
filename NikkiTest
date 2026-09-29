@@ -22,6 +22,12 @@ GROUP BY FileName;
 
 wc -l /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_*
 
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>wc -l /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_*
+   25484 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+    8329 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+   39281 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+   73094 total
+
 
 SELECT MBRID, COUNT(*) 
 FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
@@ -30,3 +36,24 @@ GROUP BY MBRID
 HAVING COUNT(*) > 1
 LIMIT 20;
 
+MEMBERID	COUNT(*)
+5AB4C5SV5	2
+KVRJU5DRN	2
+72WW4CEVT	2
+WQ8C24XJJ	2
+KDNVPEXP2	2
+ZCKL1OST7	2
+8FAPZN8JH	2
+RUA47ZPXG	2
+LWWD1N3LY	2
+5JFZPQAOA	2
+JSZDIQM7H	2
+WUQP089LS	2
+W1GG4P4NJ	2
+HFFE109D3	2
+B2XE6XX22	2
+4IKPX76X8	2
+4Y1DESG68	2
+ONIMPFXQX	2
+GM9HS3177	2
+IFEOJZF0U	2
