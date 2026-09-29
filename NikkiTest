@@ -1,1 +1,4 @@
-existing for pattern ELV_DTVNT_.*_MRA_PREMATCH_.*.txt
+cp /raa1/backup/devenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524.txt \
+   /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+
+ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH.*TEST"
