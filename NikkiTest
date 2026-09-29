@@ -1,6 +1,16 @@
-[ /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt -nt /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg ] && echo "NEWER" || echo "NOT NEWER"
-
-date
-
-stat /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
-stat /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>ROD/trigger/Trigger_ChartData_ChaseFiles.trg ] && echo "NEWER" || echo "NOT NEWER"                                                                                 <
+NOT NEWER
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>date
+Tue Sep 29 14:31:58 EDT 2026
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>stat /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt
+stat: cannot statx '/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260929.txt': No such file or directory
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>stat /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+  File: /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+  Size: 0               Blocks: 0          IO Block: 1048576 regular empty file
+Device: 56h/86d Inode: 564676      Links: 1
+Access: (0644/-rw-r--r--)  Uid: (  901/srcradcoolbthpr)   Gid: (  990/   ahpck)
+Access: 2026-09-28 13:41:39.695233394 -0400
+Modify: 2026-09-28 13:41:39.695233394 -0400
+Change: 2026-09-28 13:41:39.695233394 -0400
+ Birth: -
+[SAS@dc04plpsas104-srcradcoolbthpr]/hcaaapck/backup/IT/PROD/scripts>
