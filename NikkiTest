@@ -1,3 +1,15 @@
 Non-RADV: exported as pipe-delimited to /hcaaapck/backup/IT/SIT/work/deply_dtvntmbrrt_aca.txt (confirmed from the log line "Exported deploy sas file as pipe delimited to location: /hcaaapck/backup/IT/SIT/work")
 RADV: the converted output landed at /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20260918.txt (this is the exact file you later re-ran raa_inbound_pgp_sftp_notify.sh against for the retest)
 
+
+
+ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_*
+
+cp /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt /raa2/backup/sitenvironment/rev_opt/chasefiles/
+cp /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt /raa2/backup/sitenvironment/rev_opt/chasefiles/
+
+
+touch /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+touch /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+touch /raa2/backup/sitenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+
