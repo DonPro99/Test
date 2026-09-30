@@ -1,9 +1,1 @@
-$ sed -n '28,35p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-import os
-import sys
-from typing import Tuple
-import shutil
-from pathlib import Path
-
-# Confirmed: Virtix chase files (all types) are pipe-delimited, matching the
-# "delimiter" value in rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+grep -n "^def transform_one\|^def is_already_transformed" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
