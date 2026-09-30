@@ -18,6 +18,11 @@ aws s3 ls s3://<the corrected CRA/Commercial destination path>/ --recursive | gr
 
 
 ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep -E "VA_20260929|VAQ32026"
+$ ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ | grep -E "VA_20260929|VAQ32026"
+-rw-rw-r--  1 ad67688         ahpck  4778135 Sep 29 14:36 Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+-rw-r--r--  1 srcradcoolbthpr ahpck      437 Aug 17 14:04 Anthem_VirtixHealth_VAQ32026_Chase_CFXTEST_1.txt
+-rw-rw-r--  1 ad67688         ahpck  1561744 Sep 29 14:36 Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+-rw-rw-r--  1 ad67688         ahpck  7954995 Sep 29 14:36 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
 
 ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/
 
