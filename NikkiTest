@@ -1,6 +1,16 @@
 # non-RADV
 ./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT ACA
 
+$ ./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT ACA
+Source the Deploy configuration file - /hcaaapck/backup/IT/SIT/conf/deploy.properties
+Using deploy location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
+Using output location: /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT
+Intervention provided is DTVNTMBRRT;Line of Business is ACA
+Deploy File Name pattern: deply_dtvntmbrrt_aca
+Deploy file for intervention DTVNTMBRRT and line of business ACA does not exist at deploy location /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN
+No SAS Deploy dataset with intervention DTVNTMBRRT and line of business ACA available for copy to HDFS.. 
+
+
 # RADV
 ./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV
 
