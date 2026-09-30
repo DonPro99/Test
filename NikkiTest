@@ -43,5 +43,8 @@ find /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG -iname "*VAQ32026*"
 But for UAT validation the legacy file should be available. Is there any possibility to get the original one for the below file?
 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
 
-head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
-head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+$ head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+$ head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+$ 
