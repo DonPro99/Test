@@ -1,5 +1,9 @@
-python3 -m py_compile /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py && echo "SYNTAX OK"
+cat > /tmp/test_S_file.txt << 'EOF'
+ProjectId|ProjectName|ClientRequestid|MemberLastName|MemberFirstName|MemberMI|MemberId|MemberDOB|ProviderGroupName|ProviderGroupTIN|ProviderNPI|ProviderId|ProviderLastName|ProviderFirstName|ProviderAddress1|ProviderAddress2|ProviderCity|ProviderState|ProviderZip|ProviderPhone|ProviderFax|ProviderContactName|CentralContactName|CentralContactPhone|CentralContactFax|MemberZip|ClaimNumber|RecordRank|SSN|MemberAddress1|MemberAddress2|MemberCity|MemberState|HomePhone|MobilePhone|InsuranceID|ClaimID|Gender|BeginDOS|EndDOS|ReturnFileName|BusinessUnit|LOB|RecordType|ContractNumber|CodingVendor|AltCodingVendor|UserDefinedText1|UserDefinedText2|UserDefinedText3|OnshoreIndicator|ClientCode|HealthPlanProduct|MBI
+TEST|ANT_Test_VA|TESTREQ001|SMITH|JOHN|A|999999999|01/01/1980|TESTGROUP|123456789|1234567890|1|DOE|JANE|123 Main St||Anytown|VA|12345|5551234567|5551234568|Contact1|Central1|5559876543|5559876544|12345|CLM001|1|123456789|456 Elm St||Anytown|VA|5551112222|5553334444|INS001|CLAIM001|M|01/01/2026|12/31/2026|TestFile.txt|BU1|MCAID|RT1|CN1|CV1|ACV1|STD|UT2|VIRTIX|Y|CC1|HPP1|MBI001
+EOF
 
-python3 /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py /raa2/backup/sitenvironment/rev_opt/chasefiles/<some_untouched_S_file>.txt
-ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/pre_transform_backup/
-head -1 /raa2/backup/sitenvironment/rev_opt/chasefiles/pre_transform_backup/<same_file>.txt
+python3 /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py /tmp/test_S_file.txt
+ls -la /tmp/pre_transform_backup/
+head -1 /tmp/pre_transform_backup/test_S_file.txt
+head -1 /tmp/test_S_file.txt
