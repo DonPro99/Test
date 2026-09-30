@@ -34,4 +34,5 @@ drwxr-sr-x  2 srcradcoolbthpr ahpck     4096 Sep 29 15:11 .
 drwxrwsr-x 16 srcradcoolbthpr ahpck     4096 Sep 29 15:11 ..
 -rw-rw-r--  1 srcradcoolbthpr ahpck 14294234 Sep 29 14:36 ChartData_ANT_Virtix_Chase_VA_20260929.txt
 
-ls -la /raa2/backup/uatenvironment/rev_opt/chasefiles/ 2>/dev/null | grep VAQ32026
+find /hcaaapck/backup -iname "*VAQ32026*" 2>/dev/null
+find /hcaaapck -iname "*Chase_S_07152026111448*" 2>/dev/null
