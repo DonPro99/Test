@@ -1,4 +1,24 @@
-sed -i '160,170d' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+$ grep -n "^def backup_original\|^def transform_one\|^def is_already_transformed" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+144:def is_already_transformed(header: list) -> bool:
+150:def backup_original(file_path: str) -> None:
+161:def transform_one(source_path: str) -> int:
+$ sed -n '144,162p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+def is_already_transformed(header: list) -> bool:
+    """True if this file's header already matches the TARGET layout rather
+    than the raw _S layout..."""
+    return "FileName" in header and "ReturnFileName" not in header
 
-grep -n "^def backup_original\|^def transform_one\|^def is_already_transformed" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-sed -n '144,162p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+
+def backup_original(file_path: str) -> None:
+    """Copy the untouched _S file to a backup subfolder before transforming,
+    for audit/UAT-validation purposes (the original is otherwise lost once
+    the in-place transform runs)."""
+    source = Path(file_path)
+    backup_dir = source.parent / "pre_transform_backup"
+    backup_dir.mkdir(exist_ok=True)
+    backup_path = backup_dir / source.name
+    shutil.copy2(file_path, backup_path)
+    print(f"Backed up original to {backup_path}")
+
+def transform_one(source_path: str) -> int:
+    """Reshape a single raw _S file in place.
