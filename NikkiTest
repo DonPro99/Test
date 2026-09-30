@@ -43,6 +43,7 @@ find /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG -iname "*VAQ32026*"
 But for UAT validation the legacy file should be available. Is there any possibility to get the original one for the below file?
 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
 
-/raa2/backup/prodenvironment/rev_opt/chasefiles
-Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
-ProjectId|ProjectName|ClientRequestid|MemberLastName|MemberFirstName|MemberMI|MemberId|MemberDOB|ProviderGroupName|ProviderGroupTIN|ProviderNPI|ProviderId|ProviderLastName|ProviderFirstName|ProviderAddress1|ProviderAddress2|ProviderCity|ProviderState|ProviderZip|ProviderPhone|ProviderFax|ProviderContactName|CentralContactName|CentralContactPhone|CentralContactFax|MemberZip|ClaimNumber|RecordRank|SSN|MemberAddress1|MemberAddress2|MemberCity|MemberState|HomePhone|MobilePhone|InsuranceID|ClaimID|Gender|BeginDOS|EndDOS|ReturnFileName|BusinessUnit|LOB|RecordType|ContractNumber|CodingVendor|AltCodingVendor|UserDefinedText1|UserDefinedText2|UserDefinedText3|OnshoreIndicator|ClientCode|HealthPlanProduct|MBI
+mkdir -p /raa2/backup/prodenvironment/rev_opt/chasefiles/pre_transform_backup
+cp -p /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt /raa2/backup/prodenvironment/rev_opt/chasefiles/pre_transform_backup/
+
+wc -l /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
