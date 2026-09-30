@@ -1,11 +1,3 @@
-$ sed -i '30a import shutil\nfrom pathlib import Path' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-$ grep -n "^def transform_one" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-152:def transform_one(source_path: str) -> int:
-$ sed -n '28,35p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-import os
-import sys
-from typing import Tuple
-import shutil
-from pathlib import Path
-import shutil
-from pathlib import Path
+sed -i '33,34d' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+
+sed -n '28,35p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
