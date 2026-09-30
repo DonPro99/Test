@@ -1,12 +1,9 @@
-Subject: RE: RBICA-14240 - Test file sent to vendor
+# non-RADV
+./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT ACA
 
-Hi,
+# RADV
+./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV
 
-The test file has been placed in CFX_STG for delivery to the vendor as requested:
+aws s3 ls s3://<the corrected CRA/Commercial destination path>/ --recursive | grep -i dtvntmbrrt
 
-File name: ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
 
-Could you please confirm once CFX has picked it up and delivered it to the vendor? Let me know if there's anything else needed on my end.
-
-Thanks,
-Don
