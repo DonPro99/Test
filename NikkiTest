@@ -34,5 +34,5 @@ drwxr-sr-x  2 srcradcoolbthpr ahpck     4096 Sep 29 15:11 .
 drwxrwsr-x 16 srcradcoolbthpr ahpck     4096 Sep 29 15:11 ..
 -rw-rw-r--  1 srcradcoolbthpr ahpck 14294234 Sep 29 14:36 ChartData_ANT_Virtix_Chase_VA_20260929.txt
 
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/
-head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+$ head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
