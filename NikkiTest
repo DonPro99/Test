@@ -1,3 +1,1 @@
-$ grep -n "^def transform_one\|^def is_already_transformed" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-144:def is_already_transformed(header: list) -> bool:
-150:def transform_one(source_path: str) -> int:
+sed -n '144,151p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
