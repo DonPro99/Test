@@ -1,9 +1,6 @@
-$ sed -n '144,151p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-def is_already_transformed(header: list) -> bool:
-    """True if this file's header already matches the TARGET layout rather
-    than the raw _S layout..."""
-    return "FileName" in header and "ReturnFileName" not in header
+sed -n '149p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
 
+sed -i '149a def backup_original(file_path: str) -> None:\n    """Copy the untouched _S file to a backup subfolder before transforming,\n    for audit/UAT-validation purposes (the original is otherwise lost once\n    the in-place transform runs)."""\n    source = Path(file_path)\n    backup_dir = source.parent / "pre_transform_backup"\n    backup_dir.mkdir(exist_ok=True)\n    backup_path = backup_dir / source.name\n    shutil.copy2(file_path, backup_path)\n    print(f"Backed up original to {backup_path}")\n' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
 
-def transform_one(source_path: str) -> int:
-    """Reshape a single raw _S file in place.
+grep -n "^def backup_original\|^def transform_one\|^def is_already_transformed" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+sed -n '149,165p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
