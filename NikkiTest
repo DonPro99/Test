@@ -1,34 +1,3 @@
-$ sed -n '148,180p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-def transform_one(source_path: str) -> int:
-    """Reshape a single raw _S file in place.
-    Returns 0 on success, 1 on failure (mirrors shell exit-code conventions
-    so merge_virtix_chase_files.sh can check $? directly).
-    """
-    if not os.path.isfile(source_path):
-        print(f"ERROR: file not found: {source_path}", file=sys.stderr)
-        return 1
+sed -i '30a import shutil\nfrom pathlib import Path' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
 
-    # Idempotency check
-    header = _read_header(source_path)
-    if is_already_transformed(header):
-        print(f"Already transformed, skipping: {source_path}")
-        return 0
-
-
-    # Overwrite in place so merge_virtix_chase_files.sh's existing glob picks
-    # it up unchanged, with the same filename (state/timestamp already
-    # embedded in it).
-    # <<< confirm whether in-place overwrite is acceptable, or whether you'd
-    #     rather write to a temp file then move, to avoid partial writes if
-    #     this step is interrupted mid-run
-    tmp_path = source_path + ".transformed"
-    try:
-        in_count, out_count = transform_file(source_path, tmp_path)
-    except ValueError as e:
-        print(f"ERROR: {e}", file=sys.stderr)
-        return 1
-
-    if in_count != out_count:
-        print(
-            f"ERROR: record count mismatch for {source_path}: "
-            f"input={in_count} output={out_count}",
+grep -n "^def transform_one" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
