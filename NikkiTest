@@ -1,1 +1,9 @@
-sed -n '144,151p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+$ sed -n '144,151p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+def is_already_transformed(header: list) -> bool:
+    """True if this file's header already matches the TARGET layout rather
+    than the raw _S layout..."""
+    return "FileName" in header and "ReturnFileName" not in header
+
+
+def transform_one(source_path: str) -> int:
+    """Reshape a single raw _S file in place.
