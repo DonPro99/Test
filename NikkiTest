@@ -43,4 +43,4 @@ find /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG -iname "*VAQ32026*"
 But for UAT validation the legacy file should be available. Is there any possibility to get the original one for the below file?
 Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
 
-For this exact file, no — my transform script overwrites the _S file in place rather than keeping a separate copy, so once I ran it during testing, the original 54-column version stopped existing anywhere in this pipeline (I checked SIT, PROD's main folder, and PROD's archive — all already show the transformed 22-column version)
+In the meantime, I can pull a different, untouched _S file (not this exact one, but the same file type/structure) so you can see the true 54-column layout and validate the mapping logic against it — would that work for your validation, or do you specifically need this file's original?
