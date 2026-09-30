@@ -1,6 +1,23 @@
-sed -n '149p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+$ grep -n "^def backup_original\|^def transform_one\|^def is_already_transformed" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+144:def is_already_transformed(header: list) -> bool:
+150:def backup_original(file_path: str) -> None:
+161:def backup_original(file_path: str) -> None:
+172:def transform_one(source_path: str) -> int:
+$ sed -n '149,165p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
 
-sed -i '149a def backup_original(file_path: str) -> None:\n    """Copy the untouched _S file to a backup subfolder before transforming,\n    for audit/UAT-validation purposes (the original is otherwise lost once\n    the in-place transform runs)."""\n    source = Path(file_path)\n    backup_dir = source.parent / "pre_transform_backup"\n    backup_dir.mkdir(exist_ok=True)\n    backup_path = backup_dir / source.name\n    shutil.copy2(file_path, backup_path)\n    print(f"Backed up original to {backup_path}")\n' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+def backup_original(file_path: str) -> None:
+    """Copy the untouched _S file to a backup subfolder before transforming,
+    for audit/UAT-validation purposes (the original is otherwise lost once
+    the in-place transform runs)."""
+    source = Path(file_path)
+    backup_dir = source.parent / "pre_transform_backup"
+    backup_dir.mkdir(exist_ok=True)
+    backup_path = backup_dir / source.name
+    shutil.copy2(file_path, backup_path)
+    print(f"Backed up original to {backup_path}")
 
-grep -n "^def backup_original\|^def transform_one\|^def is_already_transformed" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-sed -n '149,165p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+def backup_original(file_path: str) -> None:
+    """Copy the untouched _S file to a backup subfolder before transforming,
+    for audit/UAT-validation purposes (the original is otherwise lost once
+    the in-place transform runs)."""
+    source = Path(file_path)
