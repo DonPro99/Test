@@ -1,3 +1,2 @@
-sed -i '30a import shutil\nfrom pathlib import Path' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-
-grep -n "^def transform_one" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+$ grep -n "^def transform_one" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+152:def transform_one(source_path: str) -> int:
