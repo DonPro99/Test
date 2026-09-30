@@ -1,14 +1,4 @@
-$ sed -n '160,172p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+sed -i '160,170d' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
 
-def backup_original(file_path: str) -> None:
-    """Copy the untouched _S file to a backup subfolder before transforming,
-    for audit/UAT-validation purposes (the original is otherwise lost once
-    the in-place transform runs)."""
-    source = Path(file_path)
-    backup_dir = source.parent / "pre_transform_backup"
-    backup_dir.mkdir(exist_ok=True)
-    backup_path = backup_dir / source.name
-    shutil.copy2(file_path, backup_path)
-    print(f"Backed up original to {backup_path}")
-
-def transform_one(source_path: str) -> int:
+grep -n "^def backup_original\|^def transform_one\|^def is_already_transformed" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+sed -n '144,162p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
