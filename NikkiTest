@@ -34,9 +34,9 @@ drwxr-sr-x  2 srcradcoolbthpr ahpck     4096 Sep 29 15:11 .
 drwxrwsr-x 16 srcradcoolbthpr ahpck     4096 Sep 29 15:11 ..
 -rw-rw-r--  1 srcradcoolbthpr ahpck 14294234 Sep 29 14:36 ChartData_ANT_Virtix_Chase_VA_20260929.txt
 
-find /hcaaapck/backup/ProdEnvironment -iname "*VAQ32026*" 2>/dev/null
-find /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG -iname "*Chase_S*" 2>/dev/null
+find /hcaaapck/backup/ProdEnvironment -type d -iname "*archive*" 2>/dev/null
 
+find /hcaaapck/backup -newermt "2026-07-14" ! -newermt "2026-07-17" -iname "*Virtix*" 2>/dev/null
 find /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG -iname "*Virtix*" 2>/dev/null
 find /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG -iname "*VAQ32026*" 2>/dev/null
 
