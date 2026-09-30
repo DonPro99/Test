@@ -1,21 +1,5 @@
-$ sed -n '161,180p' /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-def transform_one(source_path: str) -> int:
-    """Reshape a single raw _S file in place.
-    Returns 0 on success, 1 on failure (mirrors shell exit-code conventions
-    so merge_virtix_chase_files.sh can check $? directly).
-    """
-    if not os.path.isfile(source_path):
-        print(f"ERROR: file not found: {source_path}", file=sys.stderr)
-        return 1
+python3 -m py_compile /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py && echo "SYNTAX OK"
 
-    # Idempotency check
-    header = _read_header(source_path)
-    if is_already_transformed(header):
-        print(f"Already transformed, skipping: {source_path}")
-        return 0
-
-    backup_original(source_path)
-
-
-    # Overwrite in place so merge_virtix_chase_files.sh's existing glob picks
-    # it up unchanged, with the same filename (state/timestamp already
+python3 /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py /raa2/backup/sitenvironment/rev_opt/chasefiles/<some_untouched_S_file>.txt
+ls -la /raa2/backup/sitenvironment/rev_opt/chasefiles/pre_transform_backup/
+head -1 /raa2/backup/sitenvironment/rev_opt/chasefiles/pre_transform_backup/<same_file>.txt
