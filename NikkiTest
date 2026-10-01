@@ -1,1 +1,8 @@
-"Re-ran the encryption and SFTP — succeeded cleanly again, same as before, using key ID 4E25745981D458FB. Same filename (DEPLOY_DTVNTMBRRT_RADV_ACA_20261001.txt.pgp) has now been re-uploaded, overwriting the previous one. Can you try reprocessing again? If it fails the same way, can you share the specific decryption error — want to rule out whether this is a key mismatch on your end versus something with the file itself, since this is the first file ever sent for this intervention."
+
+
+  "Error": "GpgException",
+
+  "Cause": "{\"errorMessage\": \"No secret key available\", \"errorType\": \"GpgException\"
+ 
+This is the only error message
+ 
