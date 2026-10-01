@@ -1,3 +1,1 @@
-Hi team, following up on RITM26704813/SCTASK31464285 - I confirmed the hostname/connectivity is correct. Looking into why the RADV file isn't showing up in S3, I found the issue: the pattern on file is based on the raw deploy dataset name (DEPLY_DTVNTMBRRT_RV_ACA*.txt), but the actual file that lands on the SFTP server for RADV is named differently - it's DEPLOY_DTVNTMBRRT_RADV_ACA_<timestamp>.txt.pgp (uppercase DEPLOY, RADV instead of RV, and a .pgp extension since it's PGP-encrypted).
-
-Could you update the watched pattern for RADV to DEPLOY_DTVNTMBRRT_RADV_ACA*.txt.pgp so it matches what's actually being uploaded? The non-RADV pattern (DEPLY_DTVNTMBRRT_ACA*.txt) should be fine as-is. Let me know if you need anything else from my side.
+DEPLOY_DTVNTMBRRT_RADV_ACA_20261001.txt
