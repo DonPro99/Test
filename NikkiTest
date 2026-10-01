@@ -1,1 +1,1 @@
-"Thanks — just to confirm, has the specific file (DEPLOY_DTVNTMBRRT_RADV_ACA_20261001.txt.pgp) already been reprocessed and delivered to S3, or is that still in progress? I'm not seeing the destination folder exist yet in .../commercial/na/... — is there a typical delay before it shows up, or should I expect to see it immediately once processing completes?"
+Yeah, I see it failed at the decryption step. Looks like the file was not pgp-encrypted properly. Can you please re-apply the PGP encryption properly and resend the file name again.
