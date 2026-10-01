@@ -1,1 +1,17 @@
-aws s3 ls s3://<the corrected CRA/Commercial destination path>/ --recursive | grep -i dtvntmbrrt
+s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/deply_dtvntmbrrt_aca_stg/yyyyMMdd_HHmmss/incr/
+s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/deply_dtvntmbrrt_rv_aca_stg/yyyyMMdd_HHmmss/incr/
+
+the abv were the desst paths according to my request for the file pattern DEPLY_DTVNTMBRRT_ACA*.txt and DEPLY_DTVNTMBRRT_RV_ACA*.txt resp
+!!
+
+but i dont the file in this path at my UAT s3 !!
+
+this was the reply from my cfx team|he captioned CFX "Modify" Task with RITM ID: RITM26704813/SCTASK31464285 --- UAT has been completed.
+
+CFX HostDetails:
+Host : sftp.cfx.internal.elevancehealth.gld-dig-infoexc.awsdns.internal.das
+Username: sftp-raaetl-in-user
+Port: 22
+Upload folder : uat/raaetl_developers/
+
+Kindly proceed with testing the connectivity and file transfer flow. Do let us know in case you have any additional questions.
