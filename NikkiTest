@@ -1,1 +1,2 @@
-ls -ld /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026
+$ ls -ld /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026
+drwxr-sr-x 5 srcradcoolbthpr ahpck 4096 Sep  1 11:11 /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026
