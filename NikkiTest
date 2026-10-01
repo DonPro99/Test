@@ -1,2 +1,20 @@
-nslookup sftp.internal.preprod.elevancehealth.com.gld-dig-infoexc.awsdns.internal.das
-nslookup sftp.cfx.internal.elevancehealth.gld-dig-infoexc.awsdns.internal.das
+$ nslookup sftp.internal.preprod.elevancehealth.com.gld-dig-infoexc.awsdns.internal.das
+Server:         30.128.241.253
+Address:        30.128.241.253#53
+
+Non-authoritative answer:
+sftp.internal.preprod.elevancehealth.com.gld-dig-infoexc.awsdns.internal.das    canonical name = vpce-0556ab19c7c162194-d2cj29p9.vpce-svc-009c79b723cc15d7f.us-east-1.vpce.amazonaws.com.
+Name:   vpce-0556ab19c7c162194-d2cj29p9.vpce-svc-009c79b723cc15d7f.us-east-1.vpce.amazonaws.com
+Address: 10.127.30.110
+Name:   vpce-0556ab19c7c162194-d2cj29p9.vpce-svc-009c79b723cc15d7f.us-east-1.vpce.amazonaws.com
+Address: 10.127.29.168
+Name:   vpce-0556ab19c7c162194-d2cj29p9.vpce-svc-009c79b723cc15d7f.us-east-1.vpce.amazonaws.com
+Address: 10.127.28.42
+
+$ nslookup sftp.cfx.internal.elevancehealth.gld-dig-infoexc.awsdns.internal.das
+Server:         30.128.241.253
+Address:        30.128.241.253#53
+
+** server can't find sftp.cfx.internal.elevancehealth.gld-dig-infoexc.awsdns.internal.das: NXDOMAIN
+
+$ 
