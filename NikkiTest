@@ -1,7 +1,1 @@
-chmod 777 /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026
-chmod 777 /hcaaapck/backup/SitEnvironment/PGP_Encrypt/archive/2026
-chmod 777 /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026
-
 ls -ld /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026
-
-./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV
