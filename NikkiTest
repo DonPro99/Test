@@ -1,69 +1,10 @@
-$ ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/archive/20260922/
-total 769
-drwxrwsr-x  2 srcradcoolbthts ahpck   4096 Sep 22 17:30 .
-drwxrwsr-x 39         6040194 ahpck   4096 Sep 22 17:30 ..
--rw-rw-r--  1 srcradcoolbthts ahpck 786432 Sep 22 17:30 deply_dtvntmbrrt_aca_20260918.sas7bdat
-$ ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT/
-total 1997056
-drwxrws---  2         6040194 ahpck      4096 Sep 22 17:38 .
-drwxrws--- 24         6040194 ahpck      4096 May 28 15:05 ..
--rw-r--r--  1 srcradcoolbthts ahpck  11927552 Aug  7 09:30 deply_ahgprsp_aca_20260805.sas7bdat
--rw-rw-r--  1 ad89335         ahpck  25559040 Aug 17 09:49 deply_ahgprsp_aca_20260817.sas7bdat
--rw-r--r--  1 srcradcoolbthts ahpck  25559040 Sep  2 09:55 deply_ahgprsp_aca_20260824.sas7bdat
--rw-rw-r--  1 ad89335         ahpck  37289984 Sep 15 09:08 deply_ahgprsp_aca_20260915.sas7bdat
--rw-rw-r--  1 ad89335         ahpck  37748736 Sep 16 13:20 deply_ahgprsp_aca_20260916.sas7bdat
--rw-r-----  1         5921656 ahpck   2686976 Oct 17  2019 deply_allsrcrt_aca_20190521.sas7bdat
--rwxr-x---  1 srcradcoolbthts ahpck    458752 Jan 14  2020 deply_allsrcrt_aca_20190621.sas7bdat
--rw-r-----  1 srcradcoolbthts ahpck   5701632 Jan 29  2020 deply_allsrcrt_aca_20191022.sas7bdat
--rw-r--r--  1 srcradcoolbthts ahpck   5832704 Jan 22  2026 deply_centprvrt_aca_20251016.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Mar 24  2026 deply_centprvrt_aca_20260324.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Mar 16  2026 deply_centprvrt_aca_20260818.sas7bdat
--rw-r--r--  1 srcradcoolbthts ahpck  17563648 Feb 13  2026 deply_centrt_aca_20251023.sas7bdat
--rw-rwSr--  1 ad89335         ahpck   5046272 Apr 21  2025 deply_cioxrt_aca_20250421.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Mar 18  2026 deply_cioxrt_aca_20260318.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Mar 24  2026 deply_cioxrt_aca_20260324.sas7bdat
--rw-rw-r--  1 ad89335         ahpck  26148864 Sep  1 14:49 deply_cioxrt_aca_20260630.sas7bdat
--rw-rw-r--  1 ad89335         ahpck  14483456 Sep  1 14:51 deply_cioxrt_aca_20260715.sas7bdat
--rw-r--r--  1 srcradcoolbthpr ahpck    393216 Jul  8 12:05 deply_cioxrt_rv_aca_20260317.sas7bdat
--rw-rw-r--  1 ad89335         ahpck    196608 Sep  1 09:21 deply_cioxrt_rv_aca_20260828.sas7bdat
--rw-r--r--  1 srcradcoolbthpr ahpck   1441792 Sep 11  2025 deply_cozeva_20250828.sas7bdat
--rw-r--r--  1 srcradcoolbthpr ahpck   1441792 Sep 11  2025 deply_cozeva_20250909.sas7bdat
--rw-rwS---  1 ad89335         ahpck    196608 Nov  8  2024 deply_crapcvdr_aca_20241108.sas7bdat
--rw-rwS---  1 ad89335         ahpck    196608 Nov  8  2024 deply_crasydr_aca_20241108.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Mar 16  2026 deply_ctvirt_aca_20260318.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Mar 24  2026 deply_ctvirt_aca_20260324.sas7bdat
--rw-rwSr--  1 al50054         ahpck    786432 Sep 18 10:52 deply_dtvntmbrrt_aca_20260918.sas7bdat
--rw-rwSr--  1 al50054         ahpck    917504 Sep 18 10:36 deply_dtvntmbrrt_rv_aca_20260918.sas7bdat
--rw-rwS---  1 ad89335         ahpck    196608 Nov 20  2024 deply_emlcmpn_aca_20241108.sas7bdat
--rw-rwSr--  1 ad89335         ahpck 152502272 Dec 26  2025 deply_invprsp_aca_20251225.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 May 28 10:38 deply_invprsp_aca_20260512.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Jun  1 13:55 deply_invprsp_aca_20260601.sas7bdat
--rw-r-----  1         6341706 ahpck 936116224 Dec 18  2019 deply_invrtsp_aca_20191218.sas7bdat
--rw-r--r--  1 srcradcoolbthts ahpck    262144 Mar  3  2025 deply_mrocprt_aca_20250226.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    262144 Mar 16  2026 deply_mrocprt_aca_20260318.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    262144 Mar 24  2026 deply_mrocprt_aca_20260324.sas7bdat
--rw-rwSr--  1 ad89335         ahpck  10223616 Nov  3  2025 deply_mtrxprsp_aca_20250730.sas7bdat
--rw-rwSr--  1 ad89335         ahpck  24903680 Nov  3  2025 deply_mtrxprsp_aca_20250819.sas7bdat
--rw-rwSr--  1 ad89335         ahpck  11075584 Nov  3  2025 deply_mtrxprsp_aca_20250916.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Oct 28  2025 deply_mtrxprsp_aca_20251028.sas7bdat
--rw-rw-r--  1 ad89335         ahpck   3866624 Sep 14 08:15 deply_mtrxprsp_aca_20260914.sas7bdat
--rw-r-----  1         6341706 ahpck 633995264 Jan 17  2020 deply_optumprsp_aca_20200117.sas7bdat
--rw-r--r--  1 srcradcoolbthts ahpck    131072 Feb 25  2026 deply_pcms_aca_20260210.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Mar 16  2026 deply_shrcrrt_aca_20260318.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Mar 24  2026 deply_shrcrrt_aca_20260324.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Oct  8  2025 deply_vrsmart_aca_20250924.sas7bdat
--rw-r--r--  1 srcradcoolbthts ahpck    196608 Jun 20  2025 deply_vrtxrt_aca_20250326.sas7bdat
--rw-r--r--  1 srcradcoolbthts ahpck  20971520 Jul 10  2025 deply_vrtxrt_aca_20250703.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Mar 24  2026 deply_vrtxrt_aca_20260319.sas7bdat
--rw-rwSr--  1 ad89335         ahpck    196608 Mar 26  2025 deply_vrtxrt_ooa_aca_20250326.sas7bdat
--rw-r--r--  1 srcradcoolbthts ahpck  12058624 Jul 10  2025 deply_vrtxrt_ooa_aca_20250703.sas7bdat
--rw-rwSr--  1 ad89335         ahpck   6684672 Mar 16  2026 deply_vrtxrt_ooa_aca_20260316.sas7bdat
--rw-rwSr--  1 ad89335         ahpck   6946816 Mar 24  2026 deply_vrtxrt_ooa_aca_20260324.sas7bdat
-$ find /hcaaapck/backup/DevEnvironment/SAS_Repository/ -iname "*dtvntmbrrt*" 2>/dev/null
-/hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/archive/20260922/deply_dtvntmbrrt_aca_20260918.sas7bdat
-/hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT/deply_dtvntmbrrt_rv_aca_20260918.sas7bdat
-/hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT/deply_dtvntmbrrt_aca_20260918.sas7bdat
+cp /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT/deply_dtvntmbrrt_aca_20260918.sas7bdat \
+   /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/deply_dtvntmbrrt_aca_20261001.sas7bdat
 
-cp /path/to/found/deply_dtvntmbrrt_aca_20260918.sas7bdat /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/deply_dtvntmbrrt_aca_20261001.sas7bdat
+cp /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT/deply_dtvntmbrrt_rv_aca_20260918.sas7bdat \
+   /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/deply_dtvntmbrrt_rv_aca_20261001.sas7bdat
 
-cp /path/to/found/deply_dtvntmbrrt_rv_aca_20260918.sas7bdat /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/deply_dtvntmbrrt_rv_aca_20261001.sas7bdat
+ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/ | grep dtvntmbrrt
+
+./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT ACA
+./start_sas_deploy_copy_hdfs_MN.sh DTVNTMBRRT RADV
