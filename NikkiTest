@@ -1,21 +1,5 @@
-Hi Pranaya,
-
-Thanks for this — the 96,653 figure isn't a mismatch in this test, it's the table showing records from multiple test cycles combined:
-
-39,280 — your VA _S test (Test 1), confirmed exact match
-57,372 — IN market records, left over from earlier RBICA-14159 testing (unrelated to this ticket)
-1 — the known test record flagged previously
-
-39,280 + 57,372 + 1 = 96,653.
-
-So Test 1 itself is clean with no discrepancy — the match is 39,280/39,280 as you noted. I'll clean out the IN leftovers and the test record from the table so it doesn't cause confusion in future checks.
-
-For the retention and mapping items — understood, I've already added a fix to retain the original _S file going forward (tested in SIT, deploying to PROD shortly), and the mapping confirmations all match what's documented. Thanks for the thorough check.
-
-Thanks,
-Don (Nikki)
-
 SELECT * FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
-WHERE FileName NOT LIKE '%.pdf%' 
-   OR MemberId IN ('TEST', '999999999', '000000000')
-LIMIT 20;
+WHERE FileName = 'testFile';
+
+DELETE FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
+WHERE FileName = 'testFile';
