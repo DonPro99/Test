@@ -1,8 +1,1 @@
-
-
-  "Error": "GpgException",
-
-  "Cause": "{\"errorMessage\": \"No secret key available\", \"errorType\": \"GpgException\"
- 
-This is the only error message
- 
+Got it — the error confirms it's a key issue: 'No secret key available.' My script is encrypting with public key ID 4E25745981D458FB. Can you confirm which PGP key ID you have registered/configured for decryption on this RITM, and whether it matches? If not, I'll need to either get this key ID added on your end, or get pointed to whichever public key I should be encrypting with instead that you already have the private key for."
