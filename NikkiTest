@@ -1,1 +1,1 @@
-Yeah, I see it failed at the decryption step. Looks like the file was not pgp-encrypted properly. Can you please re-apply the PGP encryption properly and resend the file name again.
+./raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261001.txt
