@@ -14,3 +14,8 @@ For the retention and mapping items — understood, I've already added a fix to 
 
 Thanks,
 Don (Nikki)
+
+SELECT * FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
+WHERE FileName NOT LIKE '%.pdf%' 
+   OR MemberId IN ('TEST', '999999999', '000000000')
+LIMIT 20;
