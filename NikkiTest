@@ -1,8 +1,1 @@
-these 4 columns are in the 22 column S file layout. 
- 
-EnrollmentDate
-EnrollmentEndDate
-ESRDIndicator
-UserDefinedText4
- 
-Could you please confirm the matched columns for the above 4 in the acutual 54 column file
+Those 4 columns don't have a matching source column in the 54-column _S file — there's no equivalent field for any of them in the original layout. This was confirmed with the vendor (James) during the mapping design: _S files don't carry Enrollment Date, Enrollment End Date, ESRD Indicator, or UserDefinedText4 data at all, so those columns are intentionally left blank in the transformed output. (One more column, RecordTypeId, is also in this same no-source-equivalent category, in case you come across that one too.)
