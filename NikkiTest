@@ -1,12 +1,9 @@
-$ python3 /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py /tmp/test_S_file.txt
-Backed up original to /tmp/pre_transform_backup/test_S_file.txt
-Transformed /tmp/test_S_file.txt: 1 records, 54-col -> 22-col.
-$ ls -la /tmp/pre_transform_backup/
-total 136
-drwxr-xr-x     2 srcradcoolbthts ahpck    29 Sep 30 17:44 .
-drwxrwxrwt. 1537 root            root  94208 Sep 30 17:44 ..
--rw-r--r--     1 srcradcoolbthts ahpck  1088 Sep 30 17:43 test_S_file.txt
-$ head -1 /tmp/pre_transform_backup/test_S_file.txt
-ProjectId|ProjectName|ClientRequestid|MemberLastName|MemberFirstName|MemberMI|MemberId|MemberDOB|ProviderGroupName|ProviderGroupTIN|ProviderNPI|ProviderId|ProviderLastName|ProviderFirstName|ProviderAddress1|ProviderAddress2|ProviderCity|ProviderState|ProviderZip|ProviderPhone|ProviderFax|ProviderContactName|CentralContactName|CentralContactPhone|CentralContactFax|MemberZip|ClaimNumber|RecordRank|SSN|MemberAddress1|MemberAddress2|MemberCity|MemberState|HomePhone|MobilePhone|InsuranceID|ClaimID|Gender|BeginDOS|EndDOS|ReturnFileName|BusinessUnit|LOB|RecordType|ContractNumber|CodingVendor|AltCodingVendor|UserDefinedText1|UserDefinedText2|UserDefinedText3|OnshoreIndicator|ClientCode|HealthPlanProduct|MBI
-$ head -1 /tmp/test_S_file.txt
-FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/archive/20260922/
+
+ls -la /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_OUT/
+
+find /hcaaapck/backup/DevEnvironment/SAS_Repository/ -iname "*dtvntmbrrt*" 2>/dev/null
+
+cp /path/to/found/deply_dtvntmbrrt_aca_20260918.sas7bdat /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/deply_dtvntmbrrt_aca_20261001.sas7bdat
+
+cp /path/to/found/deply_dtvntmbrrt_rv_aca_20260918.sas7bdat /hcaaapck/backup/DevEnvironment/SAS_Repository/DEPLOY_IN/deply_dtvntmbrrt_rv_aca_20261001.sas7bdat
