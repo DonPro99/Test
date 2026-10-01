@@ -1,1 +1,119 @@
-Got it — the error confirms it's a key issue: 'No secret key available.' My script is encrypting with public key ID 4E25745981D458FB. Can you confirm which PGP key ID you have registered/configured for decryption on this RITM, and whether it matches? If not, I'll need to either get this key ID added on your end, or get pointed to whichever public key I should be encrypting with instead that you already have the private key for."
+Hi Nikitha,
+
+ 
+
+PFB Observations for the story RBICA-14060
+
+ 
+
+TEST 1:
+
+Upon comparing the SF data against the S-legacy file/merged output, 39,280 records from the S file are present in the SF table. The additional 57,372 records in SF are related to IN market
+
+Whereas S file used for this test contains VA market data. Below is the discrepancy between the Legacy file and the SF data.
+
+
+
+Virtix_S Legacy Data
+
+Merged Output
+
+SF
+
+39280
+
+39280
+
+96653
+
+ 
+
+Also, there is a test record created for testing purposes and should not be present in the SF target, as it is not part of the source/merged file.
+
+ 
+
+PFB snipshot for reference:
+
+
+
+ 
+
+TEST 2:
+
+The E2E UAT looks good for the combination data of C,M and S files. The data and tokenization are populated as expected in the SF table.
+
+
+
+Virtix_C Legacy Data
+
+Virtix_M Legacy Data
+
+Virtix_S Legacy Data
+
+Merged file
+
+SF Total
+
+25,483
+
+8328
+
+39,280
+
+73,091
+
+73,091
+
+ 
+
+Please Note:
+
+ 
+
+Legacy S File Source Retention: Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt:
+As discussed, the original legacy file (Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt) containing 54-column source layout is not currently available in the prod location: raa2\backup\prodenvironment\rev_opt\chasefiles
+
+ 
+
+Since this is the original source file provided by RAA and is subsequently transformed to the required 22-column as per C and M layout, the original 54-column legacy file should be retained separately and should not be overwritten during the transformation process. Please ensure that the original legacy S file is retained going forward, separately from the transformed/merged file.
+
+ 
+
+S File mapping observation:
+I reviewed another sample original S file that was shared (/raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt) having 54-column header layout. And when comparing the 54-column S file against the 22-column transformed layout, the following fields in the transformed output do not have a corresponding source field identified in the original S file. Based on the confirmation with Jim, the following field-level mapping/handling was confirmed.
+
+
+
+Virtix S file
+
+Jim comformation
+
+FileName
+
+to be populated from 'ReturnFileName' from 54 col original file
+
+EnrollmentDate
+
+Business does not provide this data, can be populated as blank.
+
+EnrollmentEndDate
+
+Business does not provide this data, can be populated as blank.
+
+ESRDIndicator
+
+Can be populated as blank
+
+RecordTypeId
+
+Can be populated as blank
+
+UserDefinedText4
+
+not required, can be populated as blank
+
+ 
+
+Thanks
+
+Pranaya
