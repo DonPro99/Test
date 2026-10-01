@@ -1,1 +1,23 @@
-Those 4 columns don't have a matching source column in the 54-column _S file — there's no equivalent field for any of them in the original layout. This was confirmed with the vendor (James) during the mapping design: _S files don't carry Enrollment Date, Enrollment End Date, ESRD Indicator, or UserDefinedText4 data at all, so those columns are intentionally left blank in the transformed output. (One more column, RecordTypeId, is also in this same no-source-equivalent category, in case you come across that one too.)
+Target (22-col layout)	Source (_S) 54-col	Notes / Confirmed by James	
+FileName		Possibly ReturnFileName, needs confirmation	Need this as this is the imagename
+MemberId	MemberId		This should be a direct match as the subscriber_id, e.g., 00000011881
+MemberFirstName	MemberFirstName	Direct match	
+MemberLastName	MemberLastName	Direct match	
+MemberDOB	MemberDOB	Direct match	
+EnrollmentDate	not populated 	Empty placeholder field, business never sends this data	
+EnrollmentEndDate	not populated 	Empty placeholder field, business never sends this data	
+ESRDIndicator		Not present in _S layout	
+ProjectName	ProjectName	Direct match	
+ClientRequestId	ClientRequestid	Confirmed : "the chase ID"	
+RecordTypeId		Not present in _S layout	
+OnshoreIndicator	OnshoreIndicator (col 53)		
+Gender	Gender (col 40)	 direct match	
+ProviderLastName	ProviderLastName	Direct match	
+ProviderFirstName	ProviderFirstName	Direct match	
+ProviderNPI	ProviderNPI		
+MemberMiddle	MemberMI		
+ProviderId	ProviderId	Direct match	
+UserDefinedText1	UserDefinedText1	Direct match	
+UserDefinedText2	UserDefinedText2	Direct match 	
+UserDefinedText3	UserDefinedText3	Direct match	
+UserDefinedText4	(no direct match  _S only has UserDefinedText1-3)	Needs confirmation , may just be blank for _S-derived rows ???	no need for this Column
