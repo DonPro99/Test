@@ -26,6 +26,22 @@ WHERE <load_date_column> = '2026-09-29'
 GROUP BY 1;
 
 
+quick update on the S vs C/M question.
+
+UserDefinedText1 is the field that separates them — it's 'STD' for S-origin rows and NULL for C/M. Ran this for the 9/29 load:
+
+sql
+SELECT 
+  CASE WHEN UserDefinedText1 = 'STD' THEN 'S file' ELSE 'C/M file' END AS source_type,
+  COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
+WHERE <load_date_column> = '2026-09-29'
+GROUP BY 1;
+
+Got S = 39,280, C/M = 33,811, total 73,091 — matches the expected combined count, so nothing's missing.
+
+Also pulled a few sample rows from each bucket and MemberId is coming through tokenized correctly in both, not the raw IDs. Attaching that too — let me know if you want to dig into anything further.
+
 SELECT MemberId, MemberFirstName, MemberLastName, UserDefinedText1
 FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
 WHERE <load_date_column> = '2026-09-29'
