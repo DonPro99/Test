@@ -65,4 +65,18 @@ S file	39280
 M file	8328
 C file	25483
 
+found it, no source change needed. ProjectName already carries a distinguishing suffix per file type: _CIOX for C and _M360 for M. Combined with UserDefinedText1 = 'STD' for S, I get a full three-way split that balances exactly against the totals:
+
+SELECT 
+  CASE 
+    WHEN UserDefinedText1 = 'STD' THEN 'S file'
+    WHEN ProjectName LIKE '%_CIOX' THEN 'C file'
+    WHEN ProjectName LIKE '%_M360' THEN 'M file'
+    ELSE 'Unknown'
+  END AS source_type,
+  COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
+WHERE EDL_LOAD_DTM = '2026-09-29 19:59:33.878'
+GROUP BY 1;
+
 
