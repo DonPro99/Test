@@ -88,17 +88,79 @@ ORDER BY 1;
 
 
 
-Made the change — added a backfill step in merge_virtix_chase_files.sh right after the _S transform block. It derives UserDefinedText1 for C/M files from the ProjectName suffix (_CIOX → CIOX, _M360 → M360), only when the field is currently blank.
-
-Tested against real C and M files: record counts matched exactly before/after (25,484 and 8,329 respectively, no rows lost), and UserDefinedText1 populated correctly in both. Ready for today's deploy whenever you are.
-
-
-
-
-Change is in and validated at the file level (record counts match, UserDefinedText1 populates correctly for both C and M). Since this is additive and doesn't touch existing logic/columns, do you want a full UAT reload through Snowflake before PROD, or is the file-level validation enough to move ahead today
-
-
-
-
-
-      
+Warning: Ignoring non-Spark config property: yarn.nodemanager.resource.memory-mb
+Ivy Default Cache set to: /home/hadoop/.ivy2/cache
+The jars for the packages stored in: /home/hadoop/.ivy2/jars
+net.snowflake#snowflake-jdbc added as a dependency
+net.snowflake#spark-snowflake_2.12 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-d938d3b3-0a18-4a1c-bece-f5993134da7a;1.0
+	confs: [default]
+	found net.snowflake#snowflake-jdbc;3.20.1 in central
+	found net.snowflake#spark-snowflake_2.12;2.12.0-spark_3.4 in central
+	found net.snowflake#snowflake-ingest-sdk;0.10.8 in central
+downloading https://repo1.maven.org/maven2/net/snowflake/snowflake-jdbc/3.20.1/snowflake-jdbc-3.20.1.jar ...
+	[SUCCESSFUL ] net.snowflake#snowflake-jdbc;3.20.1!snowflake-jdbc.jar (915ms)
+downloading https://repo1.maven.org/maven2/net/snowflake/spark-snowflake_2.12/2.12.0-spark_3.4/spark-snowflake_2.12-2.12.0-spark_3.4.jar ...
+	[SUCCESSFUL ] net.snowflake#spark-snowflake_2.12;2.12.0-spark_3.4!spark-snowflake_2.12.jar (50ms)
+downloading https://repo1.maven.org/maven2/net/snowflake/snowflake-ingest-sdk/0.10.8/snowflake-ingest-sdk-0.10.8.jar ...
+	[SUCCESSFUL ] net.snowflake#snowflake-ingest-sdk;0.10.8!snowflake-ingest-sdk.jar (92ms)
+:: resolution report :: resolve 788ms :: artifacts dl 1061ms
+	:: modules in use:
+	net.snowflake#snowflake-ingest-sdk;0.10.8 from central in [default]
+	net.snowflake#snowflake-jdbc;3.20.1 from central in [default]
+	net.snowflake#spark-snowflake_2.12;2.12.0-spark_3.4 from central in [default]
+	:: evicted modules:
+	net.snowflake#snowflake-jdbc;3.13.30 by [net.snowflake#snowflake-jdbc;3.20.1] in [default]
+	---------------------------------------------------------------------
+	|                  |            modules            ||   artifacts   |
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+	---------------------------------------------------------------------
+	|      default     |   4   |   3   |   3   |   1   ||   3   |   3   |
+	---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-d938d3b3-0a18-4a1c-bece-f5993134da7a
+	confs: [default]
+	3 artifacts copied, 0 already retrieved (85305kB/42ms)
+26/10/01 17:39:37 INFO Snowpark$: Recevied rrr SnowparkSession parameters are env:uat, region name:us-east-1, aplctn_cd:RAA, prefix : ,  warehouse_size_suffix:_XL, conn_parms : Map(), query_tag:RAA_RRR_CALL
+26/10/01 17:39:37 INFO Commons$: Secret used is uat/snowflake/raa, Region used is us-east-1
+26/10/01 17:39:37 WARN VersionInfoUtils: The AWS SDK for Java 1.x entered maintenance mode starting July 31, 2024 and will reach end of support on December 31, 2025. For more information, see https://aws.amazon.com/blogs/developer/the-aws-sdk-for-java-1-x-is-in-maintenance-mode-effective-july-31-2024/
+You can print where on the file system the AWS SDK for Java 1.x core runtime is located by setting the AWS_JAVA_V1_PRINT_LOCATION environment variable or aws.java.v1.printLocation system property to 'true'.
+This message can be disabled by setting the AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT environment variable or aws.java.v1.disableDeprecationAnnouncement system property to 'true'.
+The AWS SDK for Java 1.x is being used here:
+at java.base/java.lang.Thread.getStackTrace(Thread.java:1619)
+at com.amazonaws.util.VersionInfoUtils.printDeprecationAnnouncement(VersionInfoUtils.java:81)
+at com.amazonaws.util.VersionInfoUtils.<clinit>(VersionInfoUtils.java:59)
+at com.amazonaws.ClientConfiguration.<clinit>(ClientConfiguration.java:95)
+at com.amazonaws.ClientConfigurationFactory.getDefaultConfig(ClientConfigurationFactory.java:46)
+at com.amazonaws.ClientConfigurationFactory.getConfig(ClientConfigurationFactory.java:36)
+at com.amazonaws.client.builder.AwsClientBuilder.resolveClientConfiguration(AwsClientBuilder.java:169)
+at com.amazonaws.client.builder.AwsClientBuilder.access$000(AwsClientBuilder.java:54)
+at com.amazonaws.client.builder.AwsClientBuilder$SyncBuilderParams.<init>(AwsClientBuilder.java:505)
+at com.amazonaws.client.builder.AwsClientBuilder.getSyncClientParams(AwsClientBuilder.java:441)
+at com.amazonaws.client.builder.AwsSyncClientBuilder.build(AwsSyncClientBuilder.java:46)
+at com.org.rrr.aedl.commons.Commons$.getSecrets(Commons.scala:31)
+at com.org.rrr.aedl.dbutils.Snowpark$.snowparkSession(Snowpark.scala:20)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+at com.anthem.utils.SessionCreator$.createRRRSession(SessionCreator.scala:198)
+at com.anthem.utils.SessionCreator$.getSession(SessionCreator.scala:85)
+at com.anthem.enterprise.risk.adjustment.exec.DataLoadDriver$.main(DataLoadDriver.scala:70)
+at com.anthem.enterprise.risk.adjustment.exec.DataLoadDriver.main(DataLoadDriver.scala)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+at org.apache.spark.deploy.JavaMainApplication.start(SparkApplication.scala:52)
+at org.apache.spark.deploy.SparkSubmit.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:1150)
+at org.apache.spark.deploy.SparkSubmit.doRunMain$1(SparkSubmit.scala:200)
+at org.apache.spark.deploy.SparkSubmit.submit(SparkSubmit.scala:223)
+at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:92)
+at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1246)
+at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1255)
+at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+26/10/01 17:39:37 WARN CredentialsLegacyConfigLocationProvider: Found the legacy config profiles file at [/home/hadoop/.aws/config]. Please move it to the latest default location [~/.aws/credentials].
+26/10/01 17:39:38 INFO Snowpark$: username : SRCRAADU, warehouse : U01_LOAD_02_WH_XL, schema: , dbname : U01_RAA, role : SRCRAADU_PRIVS, sfurl : carelon-eda-preprod.privatelink.snowflakecomputing.com
+26/10/01 17:39:38 INFO Snowpark$: querytag : RAA_RRR_CALL
+26/10/01 17:39:38 INFO Session: Closing stderr and redirecting to stdout
+Command exiting with ret '0'
