@@ -52,6 +52,19 @@ LIMIT 10;
 ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/*/Anthem_VirtixHealth_*_Chase_C_*.txt | tail -5
 ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/*/Anthem_VirtixHealth_*_Chase_M_*.txt | tail -5
 
+$ ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/*/Anthem_VirtixHealth_*_Chase_C_*.txt | tail -5
+-rw-rw-r-- 1 srcradcoolbthpr ahpck 2543226 Aug 18 09:34 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260818/Anthem_VirtixHealth_WVQ22026_Chase_C_04132026113903.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck 5264323 Aug 27 15:35 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260827/Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck 4778135 Aug 27 15:35 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260827/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+-rw-r--r-- 1 srcradcoolbthpr ahpck     436 Aug 31 10:09 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260831/Anthem_VirtixHealth_INQ22026_Chase_C_08312026100958.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck 4778135 Sep 29 14:36 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+$ ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/*/Anthem_VirtixHealth_*_Chase_M_*.txt | tail -5
+-rw-rw-r-- 1 srcradcoolbthpr ahpck  162494 Aug 17 14:13 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260817/Anthem_VirtixHealth_WVQ22026_Chase_M_04132026114026.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck  162494 Aug 18 09:34 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260818/Anthem_VirtixHealth_WVQ22026_Chase_M_04132026114026.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck 5480789 Aug 27 15:35 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260827/Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck 1561744 Aug 27 15:35 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260827/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+-rw-rw-r-- 1 srcradcoolbthpr ahpck 1561744 Sep 29 14:36 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+
 head -4 /path/to/one/Anthem_VirtixHealth_<STATE>Q<YEAR>_Chase_C_<TIMESTAMP>.txt
 echo "---"
 head -4 /path/to/one/Anthem_VirtixHealth_<STATE>Q<YEAR>_Chase_M_<TIMESTAMP>.txt
