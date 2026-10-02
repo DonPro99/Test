@@ -1,23 +1,12 @@
-Hi Pranaya,
+cd ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files
 
-Thanks for this — a few things to clarify, and a request to submit.
+git status
+git fetch origin
+git checkout master
+git pull origin master
 
-On the 96,653 figure (Test 1): this isn't a discrepancy in the test itself — it's the table showing records from multiple test cycles combined:
+git checkout -b feature/AM-71511-RRR-Testing
+git push -u origin feature/AM-71511-RRR-Testing
 
-39,280 — your VA _S test (Test 1), confirmed exact match
-57,372 — IN market records, left over from earlier RBICA-14159 testing (unrelated to this ticket)
-3 — a fabricated TestFile test record, loaded across three different batches (10, 11, 12) during earlier connectivity testing
-
-39,280 + 57,372 + 3 = 96,655 — close to your figure; let me know if there's a small variance I should double check.
-
-So Test 1 itself is clean with no discrepancy on the actual VA data — the match is 39,280/39,280 as noted.
-
-Requesting removal of test data from UAT: I'd like to submit a request to delete:
-
-The 3 TestFile records (confirmed fabricated test data, not from any real source/merged file)
-The 57,372 leftover IN records from earlier RBICA-14159 testing — let me know if you'd like these removed too, or if they should stay for reference
-
-Retention and mapping items: understood on retaining the original _S file going forward — I've already added a fix for this (tested in SIT, deploying to PROD shortly). I'll also follow up with James to close out the two open mapping confirmations (RecordType/RecordTypeId, and FileName/ReturnFileName) and get back to you.
-
-Thanks,
-Don (Nikki)
+git log --oneline -1 master
+git log --oneline -1
