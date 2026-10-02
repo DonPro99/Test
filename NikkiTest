@@ -18,3 +18,10 @@ GROUP BY 1;
 
 wc -l /raa2/backup/.../archive/*/Anthem_VirtixHealth_*_Chase_S_*.txt
 
+SELECT 
+  CASE WHEN UserDefinedText1 = 'STD' THEN 'S file' ELSE 'C/M file' END AS source_type,
+  COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
+WHERE <load_date_column> = '2026-09-29'
+GROUP BY 1;
+
