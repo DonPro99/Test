@@ -95,7 +95,7 @@ Tested against real C and M files: record counts matched exactly before/after (2
 
 
 
-
+Change is in and validated at the file level (record counts match, UserDefinedText1 populates correctly for both C and M). Since this is additive and doesn't touch existing logic/columns, do you want a full UAT reload through Snowflake before PROD, or is the file-level validation enough to move ahead today
 
 
 
