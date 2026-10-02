@@ -88,22 +88,17 @@ ORDER BY 1;
 
 
 
-# Copy a known sample file somewhere safe, don't touch the original
-cp /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt /tmp/test_C_file.txt
+echo "--- C file sample (ProjectName | UserDefinedText1) ---"
+awk -F'|' 'NR>1 && NR<=4 {print $9" | "$19}' /tmp/test_C_file_backfilled.txt
 
-$ wc -l /tmp/test_C_file.txt /tmp/test_C_file_backfilled.txt
-  25484 /tmp/test_C_file.txt
-  25484 /tmp/test_C_file_backfilled.txt
-  50968 total
+echo "--- M file sample (ProjectName | UserDefinedText1) ---"
+awk -F'|' 'NR>1 && NR<=4 {print $9" | "$19}' /tmp/test_M_file_backfilled.txt
 
-$ head -3 /tmp/test_M_file_backfilled.txt
-FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
-VA_26Q3_20250701_20260630_105397427_1265785786_1.pdf|105397427|CARMELLE|JAMES|06/07/1980||||ANT_Virtix_VA_Q32026_M360|ANTVA2026Q3M105397427P1265785786||Y|F|JACKSON|GINA|1265785786|||M360|||
-VA_26Q3_20250701_20260630_105397515_1730313735_1.pdf|105397515|HEAVEN|MITCHELL|05/15/1999||||ANT_Virtix_VA_Q32026_M360|ANTVA2026Q3M105397515P1730313735||Y|F|SALMON|LAUREN|1730313735|||M360|||
-$ wc -l /tmp/test_M_file.txt /tmp/test_M_file_backfilled.txt
-   8329 /tmp/test_M_file.txt
-   8329 /tmp/test_M_file_backfilled.txt
-  16658 total
+echo "--- Record counts ---"
+echo "C file: $(wc -l < /tmp/test_C_file.txt) in -> $(wc -l < /tmp/test_C_file_backfilled.txt) out"
+echo "M file: $(wc -l < /tmp/test_M_file.txt) in -> $(wc -l < /tmp/test_M_file_backfilled.txt) out"
+
+
 
 
 
