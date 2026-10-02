@@ -93,5 +93,4 @@ The CFX contact who'd know the fix is out today for a holiday, so I'm blocked un
 Incident: PGP key mismatch blocking CRA RADV inbound file decryption (RITM26704813/SCTASK31464285)
 yes — Test 1 was the S-only run (standalone feasibility check on the 54→22 transform), Test 2 was the combined S+C+M run matching the actual requirement.
 
-On populating UserDefinedText1 for C and M — we can actually do that in the merge script itself rather than needing a vendor change, since ProjectName already carries a distinguishing suffix for C (_CIOX) and M (_M360). I can add a step to backfill UserDefinedText1 from that during merge so all three are consistent. Want me to go ahead with that?
-
+got it, we will hv files loaded as and when they are on source loc sas, it will work rt?
