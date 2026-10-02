@@ -48,21 +48,14 @@ WHERE <load_date_column> = '2026-09-29'
 LIMIT 10;
 
 
-# Find recent C and M files (adjust path for prod/SIT as needed)
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/*/Anthem_VirtixHealth_*_Chase_C_*.txt | tail -5
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/*/Anthem_VirtixHealth_*_Chase_M_*.txt | tail -5
-
-$ head -4 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
-FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
-VA_26Q3_20250701_20260630_105397441_1699303610_1.pdf|105397441|JULIE|PERRY|12/07/1972||||ANT_Virtix_VA_Q32026_CIOX|ANTVA2026Q3M105397441P1699303610||Y|F|SHAMIM|MUHAMMAD|1699303610||||||
-VA_26Q3_20250701_20260630_105397448_1083296453_1.pdf|105397448|ASHLEY|KOLB|10/05/1987||||ANT_Virtix_VA_Q32026_CIOX|ANTVA2026Q3M105397448P1083296453||Y|F|THOMSON|AVERY|1083296453||||||
-VA_26Q3_20250701_20260630_105397452_1265417240_1.pdf|105397452|BRANDY|GREEN|01/27/1984||||ANT_Virtix_VA_Q32026_CIOX|ANTVA2026Q3M105397452P1265417240||Y|F|SMITH|CHARI|1265417240||||||
-$ echo "===================="
-====================
-$ head -4 /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
-FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
-VA_26Q3_20250701_20260630_105397427_1265785786_1.pdf|105397427|CARMELLE|JAMES|06/07/1980||||ANT_Virtix_VA_Q32026_M360|ANTVA2026Q3M105397427P1265785786||Y|F|JACKSON|GINA|1265785786||||||
-VA_26Q3_20250701_20260630_105397515_1730313735_1.pdf|105397515|HEAVEN|MITCHELL|05/15/1999||||ANT_Virtix_VA_Q32026_M360|ANTVA2026Q3M105397515P1730313735||Y|F|SALMON|LAUREN|1730313735||||||
-VA_26Q3_20250701_20260630_105397597_1194133363_1.pdf|105397597|SIMONETTA|DARK|07/16/1992||||ANT_Virtix_VA_Q32026_M360|ANTVA2026Q3M105397597P1194133363||Y|F|STALEY|MADELINE|1194133363||||||
-
-awk -F'|' 'NR==1{for(i=1;i<=NF;i++) print i": "$i; exit}' /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+SELECT 
+  CASE 
+    WHEN UserDefinedText1 = 'STD' THEN 'S file'
+    WHEN ProjectName LIKE '%_CIOX' THEN 'C file'
+    WHEN ProjectName LIKE '%_M360' THEN 'M file'
+    ELSE 'Unknown'
+  END AS source_type,
+  COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
+WHERE <load_date_column> = '2026-09-29'
+GROUP BY 1;
