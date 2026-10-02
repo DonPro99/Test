@@ -91,4 +91,7 @@ snowflake-jdbc-3.20.1.jar
 The CFX contact who was helping me with RITM26704813 is out today (holiday in India). I hit a PGP key mismatch error — CFX says 'No secret key available' for key ID 4E25745981D458FB, which is what my script used to encrypt the RADV file. Do you know if this is the correct/standard key other RADV interventions use, or if there's someone else on the CFX side I could loop in while he's out?
 The CFX contact who'd know the fix is out today for a holiday, so I'm blocked until Monday. I'll get it resolved and close both out once RADV's confirmed working — didn't want to close RADV prematurely with an unverified deliver
 Incident: PGP key mismatch blocking CRA RADV inbound file decryption (RITM26704813/SCTASK31464285)
-tagore replied...you are asking if you ran testing for C, M and S separately ? in addition, we need to have userdefinedtext1 populated for C and M too that way it is consistent
+yes — Test 1 was the S-only run (standalone feasibility check on the 54→22 transform), Test 2 was the combined S+C+M run matching the actual requirement.
+
+On populating UserDefinedText1 for C and M — we can actually do that in the merge script itself rather than needing a vendor change, since ProjectName already carries a distinguishing suffix for C (_CIOX) and M (_M360). I can add a step to backfill UserDefinedText1 from that during merge so all three are consistent. Want me to go ahead with that?
+
