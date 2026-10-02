@@ -81,9 +81,8 @@ GROUP BY 1;
 
 Subject: RE: RBICA-14240 - Test file sent to vendor
 
-Hi,
-
-Just following up on the test file sent earlier this week — haven't heard back yet. Any update on whether the vendor received it?
-
-Thanks,
-Don
+Make the dummy changes to the ETL files assigned to you, same as Rajesh said.
+Test a sample, not all of them. Pick a couple of the files you changed and actually run them.
+Confirm the run behaves the same as before. The job should still complete and do what it did previously.
+The main goal is the Snowflake connection on the new driver. When the job runs, it should pull the Snowflake JDBC 3.20.1 jar from the repo and use it to open a Snowflake session.
+Check the log. Look for the jar name Akhil is sending you. If it shows up and the session is established, that's your proof the new jar is being used.
