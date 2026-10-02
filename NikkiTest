@@ -1,12 +1,10 @@
-cd ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files
-
-git status
-git fetch origin
-git checkout master
-git pull origin master
-
-git checkout -b feature/AM-71511-RRR-Testing
-git push -u origin feature/AM-71511-RRR-Testing
-
-git log --oneline -1 master
-git log --oneline -1
+SELECT 
+  CASE 
+    WHEN ProjectName LIKE '%_STD' OR ProjectName LIKE '%STD%' THEN 'S'
+    WHEN ProjectName LIKE '%CIOX%' THEN 'C or M'
+    ELSE 'Unknown'
+  END AS source_type,
+  COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
+WHERE BATCH_ID = 12
+GROUP BY 1;
