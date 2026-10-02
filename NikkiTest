@@ -2,3 +2,19 @@ SELECT UserDefinedText1, COUNT(*)
 FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
 GROUP BY 1 
 ORDER BY 2 DESC;
+
+
+SELECT MemberId, ClientRequestId, ProviderId, COUNT(*) AS cnt
+FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
+WHERE UserDefinedText1 = 'STD'
+GROUP BY MemberId, ClientRequestId, ProviderId
+HAVING COUNT(*) > 1
+ORDER BY cnt DESC;
+
+SELECT <load_date_or_batch_column>, COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
+WHERE UserDefinedText1 = 'STD'
+GROUP BY 1;
+
+wc -l /raa2/backup/.../archive/*/Anthem_VirtixHealth_*_Chase_S_*.txt
+
