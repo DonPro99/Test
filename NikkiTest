@@ -79,4 +79,11 @@ FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
 WHERE EDL_LOAD_DTM = '2026-09-29 19:59:33.878'
 GROUP BY 1;
 
-For the S file, ProjectName is ANT_Medicaid_VA_Q32026 — it doesn't carry a _STD suffix like the ProjectId does. That's actually the root of the original confusion: the STD suffix lives in ProjectId (ANT_Virtix_VA_Q32026_STD), not ProjectName, which is why filtering ProjectName for STD never worked and you had to use UserDefinedText1 = 'STD' instead. ProjectName for the S file follows the ANT_Medicaid_<STATE>_Q<N><YEAR> pattern, with no file-type marker in it at all.
+Subject: RE: RBICA-14240 - Test file sent to vendor
+
+Hi,
+
+Just following up on the test file sent earlier this week — haven't heard back yet. Any update on whether the vendor received it?
+
+Thanks,
+Don
