@@ -1,9 +1,4 @@
-SELECT 
-  CASE 
-    WHEN UserDefinedText1 = 'STD' THEN 'S file'
-    WHEN UserDefinedText1 = 'CIOX' THEN 'C or M file'
-    ELSE 'Unknown'
-  END AS source_type,
-  COUNT(*)
+SELECT UserDefinedText1, COUNT(*) 
 FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
-GROUP BY 1;
+GROUP BY 1 
+ORDER BY 2 DESC;
