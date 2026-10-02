@@ -86,13 +86,4 @@ SELECT DISTINCT EDL_LOAD_DTM,
 FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
 ORDER BY 1;
 
-Hi Tagore,
-
-Quick follow-up on two things:
-
-S/C/M split: Found a clean way to tell them apart in the table — UserDefinedText1 = 'STD' for S, and ProjectName suffix (_CIOX for C, _M360 for M) for the rest. Checked against the 9/29 VA load: S=39,280, C=25,483, M=8,328, total 73,091 — all accounted for.
-
-UAT question from Pranaya: She's good with Test 2 (combined S+C+M). I'd run Test 1 (S-only) earlier just to confirm the 54→22 column transform was mapping correctly before merging it in with C/M — it wasn't tied to a specific business requirement, just my own check that the S-file logic worked on its own before combining. She's asking if that one still needs to be part of UAT, or if Test 2 alone is enough to move to approval. Let me know your take — if Test 1 does need to stay in, I'll re-run it clean since the original load overlapped with some IN data.
-
-Thanks,
-Nikhitha
+The CFX contact who was helping me with RITM26704813 is out today (holiday in India). I hit a PGP key mismatch error — CFX says 'No secret key available' for key ID 4E25745981D458FB, which is what my script used to encrypt the RADV file. Do you know if this is the correct/standard key other RADV interventions use, or if there's someone else on the CFX side I could loop in while he's out?
