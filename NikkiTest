@@ -86,7 +86,7 @@ SELECT DISTINCT EDL_LOAD_DTM,
 FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
 ORDER BY 1;
 
-
+{	"clusternm": "RAA",	"jobargs": [{		"jobname": "RAA-CARILLON-ETL",		"job": ["java", "-cp", "/home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar", "com.anthem.hca.intervention.carillon.CarillonEtlDriver", "ACA", "/home/hadoop/config/carillon_application_${env}.properties", "/home/hadoop/config/", "db.properties", "${edl_run_id}"]	}],	"createcluster": "YES",	"application": "RAA",	"configfile": "s3://crln-raa-${env}-codez-nogbd-phi-useast2/files/snowpark/config/STANDARD_M.json",	"maxconcurrency": 1,	"clusterid": "na",	"bootstrapbucket": "crln-raa-${env}-codez-nogbd-phi-useast2",	"bootstrapkey": "files/snowpark/config/bootstrap_key_${env}.sh",	"emrenv": "${env}",	"logpath": "s3://crln-raa-${env}-codez-nogbd-phi-useast2/logs/",	"terminationwaittime": 10,	"terminateoption": "NO"}
 snowflake-jdbc-3.20.1.jar
 The CFX contact who was helping me with RITM26704813 is out today (holiday in India). I hit a PGP key mismatch error — CFX says 'No secret key available' for key ID 4E25745981D458FB, which is what my script used to encrypt the RADV file. Do you know if this is the correct/standard key other RADV interventions use, or if there's someone else on the CFX side I could loop in while he's out?
 The CFX contact who'd know the fix is out today for a holiday, so I'm blocked until Monday. I'll get it resolved and close both out once RADV's confirmed working — didn't want to close RADV prematurely with an unverified deliver
