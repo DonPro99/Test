@@ -1,10 +1,9 @@
 SELECT 
   CASE 
-    WHEN ProjectName LIKE '%_STD' OR ProjectName LIKE '%STD%' THEN 'S'
-    WHEN ProjectName LIKE '%CIOX%' THEN 'C or M'
+    WHEN UserDefinedText1 = 'STD' THEN 'S file'
+    WHEN UserDefinedText1 = 'CIOX' THEN 'C or M file'
     ELSE 'Unknown'
   END AS source_type,
   COUNT(*)
 FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
-WHERE BATCH_ID = 12
 GROUP BY 1;
