@@ -91,12 +91,23 @@ ORDER BY 1;
 # Copy a known sample file somewhere safe, don't touch the original
 cp /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt /tmp/test_C_file.txt
 
-$ head -3 /tmp/test_C_file_backfilled.txt
-FileName|MemberId|MemberFirstName|MemberLastName|MemberDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
-VA_26Q3_20250701_20260630_105397441_1699303610_1.pdf|105397441|JULIE|PERRY|12/07/1972||||ANT_Virtix_VA_Q32026_CIOX|ANTVA2026Q3M105397441P1699303610||Y|F|SHAMIM|MUHAMMAD|1699303610|||CIOX|||
-VA_26Q3_20250701_20260630_105397448_1083296453_1.pdf|105397448|ASHLEY|KOLB|10/05/1987||||ANT_Virtix_VA_Q32026_CIOX|ANTVA2026Q3M105397448P1083296453||Y|F|THOMSON|AVERY|1083296453|||CIOX|||
+wc -l /tmp/test_C_file.txt /tmp/test_C_file_backfilled.txt
 
+cp /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20260929/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt /tmp/test_M_file.txt
 
+awk -F'|' -v OFS='|' '
+    NR==1 { print; next }
+    {
+        if ($19 == "") {
+            if ($9 ~ /_CIOX$/) { $19 = "CIOX" }
+            else if ($9 ~ /_M360$/) { $19 = "M360" }
+        }
+        print
+    }
+' /tmp/test_M_file.txt > /tmp/test_M_file_backfilled.txt
+
+head -3 /tmp/test_M_file_backfilled.txt
+wc -l /tmp/test_M_file.txt /tmp/test_M_file_backfilled.txt
 
 
 
