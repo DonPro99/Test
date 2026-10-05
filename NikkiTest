@@ -1,6 +1,4 @@
-grep -rn "PGP_KEY_ID" /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
-
-PGP_KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub:/ && $5 != "" {print $5; exit}' | tr -d '\r\n ')
+Hey Akhil, found something on the CFX key issue - /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh, line 62. It just grabs whichever pub key is listed first in the keyring, not something tied to the vendor. That's why it's been using the Prod key's primary ID instead of the subkey CFX actually wants (925B09E785B78FF4). Since this script's shared across RADV interventions, figured you'd want to take a look. Let me know what you think.
 
 -----------------------------------------------
 pub   rsa4096 2024-12-18 [SC]
