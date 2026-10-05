@@ -1,95 +1,11 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>diff /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
-28,32c28,33
-< #   5. Merge all files belonging to each state.
-< #   6. Preserve only one header row.
-< #   7. Validate record counts.
-< #   8. Copy source files to archive.
-< #   9. Log processing details.
----
-> #   5. Transform any _S files (RBICA-14060: 54-col -> 22-col layout).
-> #   6. Merge all files belonging to each state.
-> #   7. Preserve only one header row.
-> #   8. Validate record counts.
-> #   9. Copy source files to archive.
-> #  10. Log processing details.
-59a61,62
->     
->     TRANSFORM_SCRIPT="/hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py"
-70a74,75
->     TRANSFORM_SCRIPT="/hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py"
-> 
-214a220,291
-> 
->     ###########################################################################
->     # RBICA-14060: Transform any _S file for this state BEFORE merging, so it
->     # comes out already matching the 22-col _C/_M layout.
->     ###########################################################################
-> 
->     for FILE in ${FILE_LIST}
->     do
-> 
->         case "$(basename ${FILE})" in
->             *_Chase_S_*)
-> 
->                 LOG_MESG "Transforming _S file: $(basename ${FILE})"
-> 
->                 python3 "${TRANSFORM_SCRIPT}" "${FILE}"
-> 
->                 if [ $? -ne 0 ]
->                 then
-> 
->                     LOG_MESG "Failed transforming _S file: $(basename ${FILE})"
-> 
->                     exit 1
-> 
->                 fi
->                 ;;
->         esac
-> 
->     done
-> 
->  ###########################################################################
->  # Backfill UserDefinedText1 for _C/_M files from the ProjectName suffix,
->  # so all three file types carry a consistent type marker
->  ###########################################################################
-> 
->     for FILE in ${FILE_LIST}
->     do
-> 
->         case "$(basename ${FILE})" in
->             *_Chase_C_*|*_Chase_M_*)
-> 
->                 LOG_MESG "Backfilling UserDefinedText1: $(basename ${FILE})"
-> 
->                 TMP_FILE="${FILE}.udt1tmp"
-> 
->                 awk -F'|' -v OFS='|' '
->                     NR==1 { print; next }
->                     {
->                         if ($19 == "") {
->                             if ($9 ~ /_CIOX$/) { $19 = "CIOX" }
->                             else if ($9 ~ /_M360$/) { $19 = "M360" }
->                         }
->                         print
->                     }
->                 ' "${FILE}" > "${TMP_FILE}"
-> 
->                 if [ $? -ne 0 ]
->                 then
-> 
->                     LOG_MESG "Failed backfilling UserDefinedText1: $(basename ${FILE})"
-> 
->                     rm -f "${TMP_FILE}"
-> 
->                     exit 1
-> 
->                 fi
-> 
->                 mv "${TMP_FILE}" "${FILE}"
->                 ;;
->         esac
-> 
->     done
+cp -p /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh.bak_20261005
+cp -p /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py /hcaaapck/backup/IT/PROD/scripts/
+cp -p /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/
+chmod 755 /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+
+ksh -n /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh && echo "syntax OK"
+python3 -c "import ast; ast.parse(open('/hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py').read()); print('py OK')"
+ls -la /hcaaapck/backup/IT/PROD/scripts/ | grep -i virtix
 
 ===========
 
