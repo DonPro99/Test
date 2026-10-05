@@ -1,18 +1,7 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_*_Chase_*.txt
--rw-rw-r-- 1 ad67688         ahpck 5264323 Aug 27 15:35 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_C_06092026092900.txt
--rw-r--r-- 1 srcradcoolbthpr ahpck     436 Aug 31 10:09 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_C_08312026100958.txt
--rw-rw-r-- 1 ad67688         ahpck 5480789 Aug 27 15:35 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_M_06092026092903.txt
--rw-rw-r-- 1 ad67688         ahpck     709 Sep 21 17:07 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_INQ22026_Chase_S_06092026092859.txt
--rw-rw-r-- 1 ad67688         ahpck 4778135 Sep 29 14:36 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
--rw-r--r-- 1 srcradcoolbthpr ahpck     437 Aug 17 14:04 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_CFXTEST_1.txt
--rw-rw-r-- 1 ad67688         ahpck 1561744 Sep 29 14:36 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
--rw-rw-r-- 1 ad67688         ahpck 7954995 Sep 29 14:36 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_*.txt
--rw-rw-r-- 1 srcradcoolbthpr ahpck 10744783 Aug 27 15:40 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_IN_20260827.txt
--rw-rw-r-- 1 srcradcoolbthpr ahpck      417 Aug 31 10:10 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_IN_20260831.txt
--rw-rw-r-- 1 srcradcoolbthpr ahpck      437 Aug 17 14:17 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260817.txt
--rw-rw-r-- 1 srcradcoolbthpr ahpck  6339550 Aug 27 15:40 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20260827.txt
--rw-rw-r-- 1 srcradcoolbthpr ahpck  2705410 Aug 18 09:58 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_WV_20260818.txt
+ksh /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+
+LOG=$(ls -t /raa2/backup/prodenvironment/rev_opt/chasefiles/logs/merge_virtix_chase_*.log | head -1)
+grep -E "Transforming|Backfilling|Input Records|Output Records|Validation|ERROR|Failed" "$LOG"
 ========
 
 
