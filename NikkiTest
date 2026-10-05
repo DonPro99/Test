@@ -1,6 +1,7 @@
-find /hcaaapck/backup/IT/PROD -name "raa-mcaid-chasefiles-mgft.conf"
-ls -t /hcaaapck/backup/IT/PROD/log/mcaid_chasefiles_copy_to_S3_*.log | head -1
-
+[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>find /hcaaapck/backup/IT/PROD -name "raa-mcaid-chasefiles-mgft.conf"
+/hcaaapck/backup/IT/PROD/conf/raa-mcaid-chasefiles-mgft.conf
+[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>ls -t /hcaaapck/backup/IT/PROD/log/mcaid_chasefiles_copy_to_S3_*.log | head -1
+/hcaaapck/backup/IT/PROD/log/mcaid_chasefiles_copy_to_S3_2026_10_05_08_00_00.log
 ========
 
 
