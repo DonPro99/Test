@@ -7,6 +7,13 @@ download failed: s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsp
 73092
 
 
+Hi Tagore, the VA Q3 2026 file (S+C+M) is in PROD S3 inbound: 73,092 rows, MBRID tokenized. UserDefinedText1 is populated for all three types: STD 39,280, CIOX 25,483, M360 8,328. Sample rows are below.
+
+[paste awk output]
+
+It will load automatically at 8 AM tomorrow. If you'd rather have it loaded now, let me know and I can trigger it manually. I'll send the Snowflake counts after the load.
+
+
 aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | awk -F'|' 'NR>1 { c[$19]++; if (!($19 in s)) s[$19]=$1 "|" $9 "|" $19 } END { for (k in c) print k, c[k], "-> sample:", s[k] }'
 
 ========
