@@ -1,6 +1,7 @@
-$ grep -n "recipient\|-r \|--recipient\|4E25745981D458FB" /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
-87:    echo "gpg --batch --yes --encrypt --recipient \"$PGP_KEY_ID\" --output \"$encrypted_file\" \"$file\"" >> "$LOG_FILE"
-89:    gpg --batch --yes --encrypt --recipient "$PGP_KEY_ID" --output "$encrypted_file" "$file" 2>>"$LOG_FILE"
+grep -rn "PGP_KEY_ID" /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
+
+
+
 -----------------------------------------------
 pub   rsa4096 2024-12-18 [SC]
       789B8CECD72B3AAE6295E21F4E25745981D458FB
