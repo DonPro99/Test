@@ -6,6 +6,9 @@ download failed: s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsp
 [hadoop@ip-10-197-212-53 ~]$ aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | wc -l
 73092
 
+
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | awk -F'|' 'NR>1 { c[$19]++; if (!($19 in s)) s[$19]=$1 "|" $9 "|" $19 } END { for (k in c) print k, c[k], "-> sample:", s[k] }'
+
 ========
 
 
