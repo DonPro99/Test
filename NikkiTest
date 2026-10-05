@@ -1,20 +1,17 @@
-RBICA-14240 (Datavant Pre-Match combined file): UAT done and results sent. Waiting on vendor approval before moving to prod.
-RBICA-14160 (Virtix chase file): Changes reviewed with the team lead and approved. Loading to prod today.
-RBICA-14227 / 14222 (Datavant CRA RADV and non-RADV): Non-RADV testing is complete. RADV is blocked on the secret key issue. The CFX contact replied this morning and is looking into it today.
+ls -la /hcaaapck/backup/IT/PROD/scripts/ | grep -i -E "virtix|merge"
+find /hcaaapck/backup/IT -name "virtix_chase_transform.py" 2>/dev/null
+grep -c "RBICA-14060" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
 
-grep -n "Backfill UserDefinedText1" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-grep -n "TRANSFORM_SCRIPT=" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-ls -la /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
-grep -n "pre_transform_backup" /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
+# compare first, so you know exactly what you're overwriting
+diff /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
 
+# back up the current PROD script
+cp -p /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh.bak_$(date +%Y%m%d)
 
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -n "Backfill UserDefinedText1" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -n "TRANSFORM_SCRIPT=" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
-ls: cannot access '/hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py': No such file or directory
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -n "pre_transform_backup" /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
-grep: /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py: No such file or directory
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>
+# deploy both
+cp -p /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py /hcaaapck/backup/IT/PROD/scripts/
+cp -p /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/
+chmod 755 /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
 
 
 ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_*_Chase_*.txt
