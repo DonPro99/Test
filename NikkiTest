@@ -8,9 +8,25 @@ download failed: s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsp
 
 grep -rn "4E25745981D458FB" /hcaaapck/backup/IT/SIT/scripts/ /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
 
-grep -rn "raa_charts\|CloudFileExchangeDispatch" /hcaaapck/backup/IT/SIT/scripts/ /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
-grep -rln "PGP\|pgp" /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
-gpg --list-keys
+$ grep -rn "4E25745981D458FB" /hcaaapck/backup/IT/SIT/scripts/ /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
+$ grep -rn "raa_charts\|CloudFileExchangeDispatch" /hcaaapck/backup/IT/SIT/scripts/ /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
+$ grep -rln "PGP\|pgp" /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
+$ gpg --list-keys
+/export/home/srcradcoolbthts/.gnupg/pubring.kbx
+-----------------------------------------------
+pub   rsa4096 2024-12-18 [SC]
+      789B8CECD72B3AAE6295E21F4E25745981D458FB
+uid           [ultimate] srcradcoolbthpr (Prod key) <dl-RAAETLDevelopers@anthem.com>
+sub   rsa4096 2024-12-18 [E]
+
+pub   rsa4096 2024-12-18 [SC]
+      D2F93FC3AD99094DEF47D4896A142B247AD2C9FE
+uid           [ultimate] srcradcoolbthts (srcradcoolbthts test key) <dl-RAAETLDevelopers@anthem.com>
+sub   rsa4096 2024-12-18 [E]
+
+pub   rsa4096 2024-12-03 [SCE]
+      F0B610B9A698B2DD93A63C043CA603C9287F1146
+uid           [ unknown] raa_charts (These keys are for raa_charts client) <CloudFileExchangeDispatch@elevancehealth.com>
 
 aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | awk -F'|' 'NR>1 { c[$19]++; if (!($19 in s)) s[$19]=$1 "|" $9 "|" $19 } END { for (k in c) print k, c[k], "-> sample:", s[k] }'
 
