@@ -8,6 +8,10 @@ download failed: s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsp
 
 grep -rn "4E25745981D458FB" /hcaaapck/backup/IT/SIT/scripts/ /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
 
+grep -rn "raa_charts\|CloudFileExchangeDispatch" /hcaaapck/backup/IT/SIT/scripts/ /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
+grep -rln "PGP\|pgp" /hcaaapck/backup/IT/SIT/conf/ 2>/dev/null
+gpg --list-keys
+
 aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | awk -F'|' 'NR>1 { c[$19]++; if (!($19 in s)) s[$19]=$1 "|" $9 "|" $19 } END { for (k in c) print k, c[k], "-> sample:", s[k] }'
 
 ========
