@@ -1,13 +1,37 @@
-sed -n '1,24p' /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
-crontab -l | grep -i chasefiles
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>sed -n '1,24p' /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
+#!/usr/bin/ksh
+#Created by : Sai Srinivasa Reddy Vustela
+#Modified by: Nikhitha (added Virtix Chase merge step) - RBICA-13935
+#This script will push the MCAID chase files to S3 via MGFT/CFX.
 
 
-# before: confirm still only the VA file is newer than the trigger
-find /raa2/backup/prodenvironment/rev_opt/chasefiles -type f -name "ChartData_*.txt" -newer /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+#args.
+export LINE_OF_BUSINESS="MCAID"
 
-# after: check the log and that the trigger file got updated
-ls -t /hcaaapck/backup/IT/PROD/log/mcaid_chasefiles_copy_to_S3_*.log | head -1
-ls -la /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+#Determine the environment based on the user.
+export SERVICE_USER=`echo $USER`
+
+if [[ $SERVICE_USER == "srcradcoolbthts" ]]
+then
+    export ENVIRONMENT="ts"
+elif [[ $SERVICE_USER == "srcradcoolbthpr" ]]
+then
+    export ENVIRONMENT="pr"
+else
+    export ENVIRONMENT="dv"
+fi
+
+export ENV=$ENVIRONMENT
+
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>crontab -l | grep -i chasefiles
+You (srcradcoolbthpr) are not allowed to use this program (crontab)
+See crontab(1) for more information
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>find /raa2/backup/prodenvironment/rev_opt/chasefiles -type f -name "ChartData_*.txt" -newer /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20261005.txt
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -t /hcaaapck/backup/IT/PROD/log/mcaid_chasefiles_copy_to_S3_*.log | head -1
+/hcaaapck/backup/IT/PROD/log/mcaid_chasefiles_copy_to_S3_2026_10_05_08_00_00.log
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+-rw-r--r-- 1 srcradcoolbthpr ahpck 0 Sep 29 14:36 /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
 ========
 
 
