@@ -1,6 +1,8 @@
-gpg --import /path/to/provided/key.asc
-
-gpg --list-keys 925B09E785B78FF4
+$ gpg --list-keys 925B09E785B78FF4
+pub   rsa4096 2024-12-18 [SC]
+      789B8CECD72B3AAE6295E21F4E25745981D458FB
+uid           [ultimate] srcradcoolbthpr (Prod key) <dl-RAAETLDevelopers@anthem.com>
+sub   rsa4096 2024-12-18 [E]
 
 -----------------------------------------------
 pub   rsa4096 2024-12-18 [SC]
