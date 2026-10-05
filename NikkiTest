@@ -1,138 +1,17 @@
-SELECT UserDefinedText1, COUNT(*) 
-FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD 
-GROUP BY 1 
-ORDER BY 2 DESC;
+grep -n "Backfill UserDefinedText1" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+grep -n "TRANSFORM_SCRIPT=" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+ls -la /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
+grep -n "pre_transform_backup" /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
 
 
-SELECT MemberId, ClientRequestId, ProviderId, COUNT(*) AS cnt
-FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-WHERE UserDefinedText1 = 'STD'
-GROUP BY MemberId, ClientRequestId, ProviderId
-HAVING COUNT(*) > 1
-ORDER BY cnt DESC;
+ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_*_Chase_*.txt
+ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_*.txt
 
-SELECT <load_date_or_batch_column>, COUNT(*)
-FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-WHERE UserDefinedText1 = 'STD'
-GROUP BY 1;
+ksh -n /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh && echo "syntax OK"
 
-wc -l /raa2/backup/.../archive/*/Anthem_VirtixHealth_*_Chase_S_*.txt
+LOG=$(ls -t /raa2/backup/prodenvironment/rev_opt/chasefiles/logs/merge_virtix_chase_*.log | head -1)
+grep -E "Backfilling|Transforming|Input Records|Output Records|Validation|ERROR|Failed" "$LOG"
 
-SELECT 
-  CASE WHEN UserDefinedText1 = 'STD' THEN 'S file' ELSE 'C/M file' END AS source_type,
-  COUNT(*)
-FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-WHERE <load_date_column> = '2026-09-29'
-GROUP BY 1;
-
-
-quick update on the S vs C/M question.
-
-UserDefinedText1 is the field that separates them — it's 'STD' for S-origin rows and NULL for C/M. Ran this for the 9/29 load:
-
-sql
-SELECT 
-  CASE WHEN UserDefinedText1 = 'STD' THEN 'S file' ELSE 'C/M file' END AS source_type,
-  COUNT(*)
-FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-WHERE <load_date_column> = '2026-09-29'
-GROUP BY 1;
-
-Got S = 39,280, C/M = 33,811, total 73,091 — matches the expected combined count, so nothing's missing.
-
-Also pulled a few sample rows from each bucket and MemberId is coming through tokenized correctly in both, not the raw IDs. Attaching that too — let me know if you want to dig into anything further.
-
-SELECT MemberId, MemberFirstName, MemberLastName, UserDefinedText1
-FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-WHERE <load_date_column> = '2026-09-29'
-LIMIT 10;
-
-
-SELECT 
-  CASE 
-    WHEN UserDefinedText1 = 'STD' THEN 'S file'
-    WHEN ProjectName LIKE '%_CIOX' THEN 'C file'
-    WHEN ProjectName LIKE '%_M360' THEN 'M file'
-    ELSE 'Unknown'
-  END AS source_type,
-  COUNT(*)
-FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-WHERE <load_date_column> = '2026-09-29'
-GROUP BY 1;
-
-EDL_LOAD_DTM= '2026-09-29 19:59:33.878'
-S file	39280
-M file	8328
-C file	25483
-
-found it, no source change needed. ProjectName already carries a distinguishing suffix per file type: _CIOX for C and _M360 for M. Combined with UserDefinedText1 = 'STD' for S, I get a full three-way split that balances exactly against the totals:
-
-SELECT 
-  CASE 
-    WHEN UserDefinedText1 = 'STD' THEN 'S file'
-    WHEN ProjectName LIKE '%_CIOX' THEN 'C file'
-    WHEN ProjectName LIKE '%_M360' THEN 'M file'
-    ELSE 'Unknown'
-  END AS source_type,
-  COUNT(*)
-FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-WHERE EDL_LOAD_DTM = '2026-09-29 19:59:33.878'
-GROUP BY 1;
-
-SELECT DISTINCT EDL_LOAD_DTM, 
-  CASE WHEN ProjectName LIKE 'ANT_Medicaid_IN%' OR ProjectName LIKE 'ANT_Virtix_IN%' THEN 'IN' 
-       WHEN ProjectName LIKE 'ANT_Medicaid_VA%' OR ProjectName LIKE 'ANT_Virtix_VA%' THEN 'VA' 
-       ELSE 'Other' END AS state
-FROM U01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-ORDER BY 1;
-
-
-
-CarillonEtlDriver.scala
-{
- "job_id": "800009180",
- "etl_stp_nbr_lst": "1.0",
- "retry": "no"
-}
- 
-CioxRetroDriver
- 
-{
- "job_id": "800009196",
- "etl_stp_nbr_lst": "1.0",
- "retry": "no"
-}
- 
-CobcPrspETLDriver.scala
- 
-{
- "job_id": "800009182",
- "etl_stp_nbr_lst": "1.0",
- "retry": "no"
-}
- 
-
-
-  PCVEmailCampaignDriver  
- 
-{
- "job_id": "800009183",
- "etl_stp_nbr_lst": "1.0",
- "retry": "no"
-}
- 
-MRDMMemberDriver
- 
-{
- "job_id": "800009188",
- "etl_stp_nbr_lst": "1.0",
- "retry": "no"
-}
- 
-VirtixETLDriver
- 
-{
- "job_id": "780009061",
- "etl_stp_nbr_lst": "1.0",
- "retry": "no"
-}
+OUT=/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_<STATE>_$(date +%Y%m%d).txt
+awk -F'|' 'NR>1 {c[$19]++} END {for (k in c) print k, c[k]}' "$OUT"
+wc -l "$OUT"
