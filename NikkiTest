@@ -1,3 +1,7 @@
+RBICA-14240 (Datavant Pre-Match combined file): UAT done and results sent. Waiting on vendor approval before moving to prod.
+RBICA-14160 (Virtix chase file): Changes reviewed with the team lead and approved. Loading to prod today.
+RBICA-14227 / 14222 (Datavant CRA RADV and non-RADV): Non-RADV testing is complete. RADV is blocked on the secret key issue. The CFX contact replied this morning and is looking into it today.
+
 grep -n "Backfill UserDefinedText1" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
 grep -n "TRANSFORM_SCRIPT=" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
 ls -la /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
