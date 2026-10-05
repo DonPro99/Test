@@ -1,65 +1,7 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt | awk -F'|' '{print NF}'
-22
-[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>ksh /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-2026-10-05 12:15:18 : ====================================================
-2026-10-05 12:15:18 : Virtix Chase Merge Job Started
-2026-10-05 12:15:18 : Environment      : PROD
-2026-10-05 12:15:18 : Input Directory  : /raa2/backup/prodenvironment/rev_opt/chasefiles
-2026-10-05 12:15:18 : Output Directory : /raa2/backup/prodenvironment/rev_opt/chasefiles
-2026-10-05 12:15:18 : Archive Directory: /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20261005
-2026-10-05 12:15:18 : ====================================================
-2026-10-05 12:15:18 : States Identified : IN
-VA
-2026-10-05 12:15:18 : ------------------------------------------------------
-2026-10-05 12:15:18 : Processing State : IN
-2026-10-05 12:15:18 : No files found for state IN
-2026-10-05 12:15:18 : ------------------------------------------------------
-2026-10-05 12:15:18 : Processing State : VA
-2026-10-05 12:15:18 : Input Files
-2026-10-05 12:15:18 :    Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
-2026-10-05 12:15:18 :    Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
-2026-10-05 12:15:18 :    Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
-2026-10-05 12:15:18 : Transforming _S file: Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
-Already transformed, skipping: /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
-2026-10-05 12:15:18 : Backfilling UserDefinedText1: Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
-2026-10-05 12:15:18 : Backfilling UserDefinedText1: Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
-2026-10-05 12:15:18 : Starting Merge Process
-2026-10-05 12:15:18 : Reading File : Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
-2026-10-05 12:15:18 : Copying header and data.
-2026-10-05 12:15:18 : Renaming MemberId header field to MBRID to match Episource layout.
-2026-10-05 12:15:18 : Reading File : Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
-2026-10-05 12:15:18 : Appending data without header.
-2026-10-05 12:15:18 : Reading File : Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
-2026-10-05 12:15:18 : Appending data without header.
-2026-10-05 12:15:18 : Number of Files Processed : 3
-2026-10-05 12:15:18 : Input Records            : 73091
-2026-10-05 12:15:18 : Output Records           : 73091
-2026-10-05 12:15:18 : Record Count Validation Successful.
-2026-10-05 12:15:18 : Copying source files to archive.
-2026-10-05 12:15:18 : Archived : Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
-2026-10-05 12:15:18 : Archived : Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
-2026-10-05 12:15:18 : Archived : Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
-2026-10-05 12:15:18 : Merged File Name : ChartData_ANT_Virtix_Chase_VA_20261005.txt
-2026-10-05 12:15:18 : Merged File Size : 6.0M
-2026-10-05 12:15:18 : State VA processed successfully.
-2026-10-05 12:15:18 : ------------------------------------------------------
-2026-10-05 12:15:18 : 
-2026-10-05 12:15:18 : ====================================================
-2026-10-05 12:15:18 : Virtix Chase Merge Job Completed Successfully.
-2026-10-05 12:15:18 : Environment        : PROD
-2026-10-05 12:15:18 : Processing Date    : 20261005
-2026-10-05 12:15:18 : Output Directory   : /raa2/backup/prodenvironment/rev_opt/chasefiles
-2026-10-05 12:15:18 : Archive Directory  : /raa2/backup/prodenvironment/rev_opt/chasefiles/archive/20261005
-2026-10-05 12:15:18 : Output Files Created : 1
-2026-10-05 12:15:18 : ====================================================
-[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>LOG=$(ls -t /raa2/backup/prodenvironment/rev_opt/chasefiles/logs/merge_virtix_chase_*.log | head -1)
-[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>grep -E "Transforming|Backfilling|Input Records|Output Records|Validation|ERROR|Failed" "$LOG"
-2026-10-05 12:15:18 : Transforming _S file: Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
-2026-10-05 12:15:18 : Backfilling UserDefinedText1: Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
-2026-10-05 12:15:18 : Backfilling UserDefinedText1: Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
-2026-10-05 12:15:18 : Input Records            : 73091
-2026-10-05 12:15:18 : Output Records           : 73091
-2026-10-05 12:15:18 : Record Count Validation Successful.
+OUT=/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20261005.txt
+awk -F'|' 'NR>1 {c[$19]++} END {for (k in c) print k, c[k]}' "$OUT"
+head -1 "$OUT" | awk -F'|' '{print NF}'
+wc -l "$OUT"
 ========
 
 
