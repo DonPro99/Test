@@ -1,5 +1,10 @@
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | head -3
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | wc -l
+[hadoop@ip-10-197-212-53 ~]$ aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | head -3
+FileName|MBRID|MBRFNAME|MBRLNAME|MBRDOB|EnrollmentDate|EnrollmentEndDate|ESRDIndicator|ProjectName|ClientRequestId|RecordTypeId|OnshoreIndicator|Gender|ProviderLastName|ProviderFirstName|ProviderNPI|MemberMiddle|ProviderId|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4
+VA_26Q3_20250701_20260630_105397441_1699303610_1.pdf|45B9QE462|6XO2B|SG842|06/13/1972||||ANT_Virtix_VA_Q32026_CIOX|ANTVA2026Q3M105397441P1699303610||Y|F|SHAMIM|MUHAMMAD|1699303610|||CIOX|||
+VA_26Q3_20250701_20260630_105397448_1083296453_1.pdf|O2HT9N4V8|COLU1B|TT6H|12/05/1987||||ANT_Virtix_VA_Q32026_CIOX|ANTVA2026Q3M105397448P1083296453||Y|F|THOMSON|AVERY|1083296453|||CIOX|||
+download failed: s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt to - [Errno 32] Broken pipe
+[hadoop@ip-10-197-212-53 ~]$ aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | wc -l
+73092
 
 ========
 
