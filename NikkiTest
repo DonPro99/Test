@@ -1,4 +1,9 @@
-grep -n "s3_file_path\|s3_archive_file_path" rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
+cd ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files
+git checkout master && git pull
+grep -rn "s3_file_path\|s3_archive_file_path" --include=*.properties . | grep -i "mcaid_chase"
+
+
+
 
 ========
 
