@@ -1,7 +1,4 @@
-SELECT UserDefinedText1, COUNT(*)
-FROM P01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-WHERE ProjectName LIKE '%VA%Q32026%'
-GROUP BY 1;
+grep -n "s3_file_path\|s3_archive_file_path" rad_mcaid_chase_all_lob_s3_to_snflk_load.properties
 
 ========
 
