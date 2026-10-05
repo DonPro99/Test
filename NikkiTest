@@ -1,3 +1,14 @@
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /hcaaapck/backup/IT/PROD/scripts/ | grep -i -E "virtix|merge"
+-rw-r--r--  1 srcradcoolbthpr ahpck        9216 Aug 27 15:28 merge_virtix_chase_files.sh
+-rw-r--r--  1 srcradcoolbthpr ahpck        8990 Aug 26 12:48 merge_virtix_chase_files.sh.bak
+-rw-r--r--  1 srcradcoolbthpr ahpck        9135 Aug 27 15:21 merge_virtix_chase_files.sh.bak3
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>find /hcaaapck/backup/IT -name "virtix_chase_transform.py" 2>/dev/null
+/hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -c "RBICA-14060" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+0
+========
+
+
 ls -la /hcaaapck/backup/IT/PROD/scripts/ | grep -i -E "virtix|merge"
 find /hcaaapck/backup/IT -name "virtix_chase_transform.py" 2>/dev/null
 grep -c "RBICA-14060" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
