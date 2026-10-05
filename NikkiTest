@@ -1,23 +1,13 @@
-SELECT EDL_LOAD_DTM, COUNT(*)
-FROM P01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-GROUP BY 1
-ORDER BY 1;
-2026-08-18 14:44:16.966	14011
-2026-09-21 12:31:41.279	57373
+sed -n '1,24p' /hcaaapck/backup/IT/PROD/scripts/raa_mcaid_chasefiles_copy_to_s3.sh
+crontab -l | grep -i chasefiles
 
-SELECT DISTINCT ProjectName
-FROM P01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-ORDER BY 1;
-ANT_Virtix_IN_Q22026_CIOX
-ANT_Virtix_IN_Q22026_M360
-ANT_Virtix_WV_Q22026_CIOX
-ANT_Virtix_WV_Q22026_M360
-TestProject
 
-SELECT UserDefinedText1, COUNT(*)
-FROM P01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-WHERE ProjectName LIKE '%VA%Q32026%'
-GROUP BY 1;
+# before: confirm still only the VA file is newer than the trigger
+find /raa2/backup/prodenvironment/rev_opt/chasefiles -type f -name "ChartData_*.txt" -newer /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
+
+# after: check the log and that the trigger file got updated
+ls -t /hcaaapck/backup/IT/PROD/log/mcaid_chasefiles_copy_to_S3_*.log | head -1
+ls -la /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
 ========
 
 
