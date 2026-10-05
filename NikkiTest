@@ -4,6 +4,15 @@ ls -la /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
 grep -n "pre_transform_backup" /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
 
 
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -n "Backfill UserDefinedText1" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -n "TRANSFORM_SCRIPT=" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
+ls: cannot access '/hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py': No such file or directory
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -n "pre_transform_backup" /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py
+grep: /hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py: No such file or directory
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>
+
+
 ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_*_Chase_*.txt
 ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_*.txt
 
