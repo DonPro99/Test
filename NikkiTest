@@ -1,13 +1,4 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>OUT=/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20261005.txt
-[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>awk -F'|' 'NR>1 {c[$19]++} END {for (k in c) print k, c[k]}' "$OUT"
-head -1 "$OUT" | awk -F'|' '{print NF}'
-wc -l "$OUT"STD 39280
-M360 8328
-CIOX 25483
-[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>head -1 "$OUT" | awk -F'|' '{print NF}'
-22
-[SAS@dc04plpsas104-srcradcoolbthpr]/raa2/backup/prodenvironment/rev_opt/chasefiles>wc -l "$OUT"
-73092 /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_VA_20261005.txt
+find /raa2/backup/prodenvironment/rev_opt/chasefiles -type f -name "ChartData_*.txt" -newer /hcaaapck/backup/IT/PROD/trigger/Trigger_ChartData_ChaseFiles.trg
 ========
 
 
