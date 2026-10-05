@@ -1,7 +1,11 @@
-ksh /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
+# is the S file already 22 columns (transformed) or still raw 54?
+head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt | awk -F'|' '{print NF}'
 
-LOG=$(ls -t /raa2/backup/prodenvironment/rev_opt/chasefiles/logs/merge_virtix_chase_*.log | head -1)
-grep -E "Transforming|Backfilling|Input Records|Output Records|Validation|ERROR|Failed" "$LOG"
+# make only the three VA files count as "today"
+cd /raa2/backup/prodenvironment/rev_opt/chasefiles
+touch Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt \
+      Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt \
+      Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
 ========
 
 
