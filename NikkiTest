@@ -1,5 +1,5 @@
-[hadoop@ip-10-197-212-53 ~]$ aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ --human-readable | grep Virtix_Chase_VA
-2026-10-05 17:58:09   13.8 MiB ChartData_ANT_Virtix_Chase_VA_20261005.txt
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | head -3
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | wc -l
 
 ========
 
