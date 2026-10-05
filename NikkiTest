@@ -1,11 +1,6 @@
-# is the S file already 22 columns (transformed) or still raw 54?
-head -1 /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt | awk -F'|' '{print NF}'
-
-# make only the three VA files count as "today"
-cd /raa2/backup/prodenvironment/rev_opt/chasefiles
-touch Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt \
-      Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt \
-      Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
+-rw-rw-r--  1 ad67688         ahpck  7954995 Oct  5 11:49  Anthem_VirtixHealth_VAQ32026_Chase_S_07152026111448.txt
+-rw-rw-r--  1 ad67688         ahpck  4778135 Oct  5 11:49  Anthem_VirtixHealth_VAQ32026_Chase_C_07152026111454.txt
+-rw-rw-r--  1 ad67688         ahpck  1561744 Oct  5 11:49  Anthem_VirtixHealth_VAQ32026_Chase_M_07152026111457.txt
 ========
 
 
