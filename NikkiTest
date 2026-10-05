@@ -1,11 +1,4 @@
-20:#   ChartData_ANT_Virtix_Chase_<STATE>_YYYYMMDD.txt
-62:    TRANSFORM_SCRIPT="/hcaaapck/backup/IT/PROD/scripts/virtix_chase_transform.py"
-74:    TRANSFORM_SCRIPT="/hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py"
-176:    OUTFILE="${OUTPUT_DIR}/ChartData_ANT_Virtix_Chase_${STATE}_${PROCESS_DATE}.txt"
-250: # Backfill UserDefinedText1 for _C/_M files from the ProjectName suffix,
-433:-name "ChartData_ANT_Virtix_Chase_*_${PROCESS_DATE}.txt" | wc -l)
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>grep -n "pre_transform_backup" /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py
-155:    backup_dir = source.parent / "pre_transform_backup"
+diff /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
 
 diff /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh
 
