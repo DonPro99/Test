@@ -1,10 +1,5 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -la /hcaaapck/backup/IT/PROD/scripts/ | grep -i virtix
--rwxr-xr-x  1 srcradcoolbthpr ahpck       11446 Oct  2 15:28 merge_virtix_chase_files.sh
--rw-r--r--  1 srcradcoolbthpr ahpck        8990 Aug 26 12:48 merge_virtix_chase_files.sh.bak
--rw-r--r--  1 srcradcoolbthpr ahpck        9216 Aug 27 15:28 merge_virtix_chase_files.sh.bak_20261005
--rw-r--r--  1 srcradcoolbthpr ahpck        9135 Aug 27 15:21 merge_virtix_chase_files.sh.bak3
--rw-r--r--  1 srcradcoolbthpr ahpck        7514 Sep 30 17:37 virtix_chase_transform.py
-
+ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_*_Chase_*.txt
+ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_*.txt
 ===========
 
 cp -p /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh.bak_20261005
