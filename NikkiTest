@@ -1,9 +1,4 @@
-Hi, quick question on a test file I dropped in CFX_STG on Sep 29 around 6:08 PM ET:
-
-ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
-
-It matches the existing pattern ELV_DTVNT_.*_MRA_PREMATCH_.*.txt, but it's still showing in the folder. Can you check if CFX picked it up and sent it to the vendor? If it did, could you share the transfer time and the vendor path it went to? If not, can you tell me what's blocking it? Thanks!
-
+"Quick check: for the Pre-Match test file I was asked to FTP to the vendor, I copied it into the Dev CFX_STG folder with _TEST added to the name. Is that the right way to get it to the vendor, or does vendor delivery go through a separate step, like the Lambda with the vendor flag? It's still sitting in the folder a week later.
  I_ELV_CFX013/prod/mra/ciox/).
 -----------------------------------------------
 pub   rsa4096 2024-12-18 [SC]
