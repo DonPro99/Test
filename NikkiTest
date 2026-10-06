@@ -1,5 +1,7 @@
-Hey Akhil, found something on the CFX key issue - /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh, line 62. It just grabs whichever pub key is listed first in the keyring, not something tied to the vendor. That's why it's been using the Prod key's primary ID instead of the subkey CFX actually wants (925B09E785B78FF4). Since this script's shared across RADV interventions, figured you'd want to take a look. Let me know what you think.
-
+   SELECT UserDefinedText1, COUNT(*)
+   FROM P01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
+   WHERE ProjectName LIKE '%VA%Q32026%'
+   GROUP BY 1;
 -----------------------------------------------
 pub   rsa4096 2024-12-18 [SC]
       789B8CECD72B3AAE6295E21F4E25745981D458FB
