@@ -1,8 +1,7 @@
-[hadoop@ip-10-197-212-196 ~]$ aws s3 ls s3://cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX013/prod/mra/ciox/ | grep PREMATCH
-2026-10-06 16:54:30       1408 ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+Hi, thanks for getting back. I placed a test file in the CFX vendor path today around 12:54 PM ET:
 
+cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX013/prod/mra/ciox/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
 
-ls -lat /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH"
-ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH.*TEST"
+Can you check whether CFX picked it up and sent it to the vendor? If it did, could you share the transfer time and the vendor-side SFTP folder it landed in? If not, please let me know what's blocking it. Thanks!
 
 Hi Divya, the _TEST file is now in the CFX vendor path (cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX013/prod/mra/ciox/). Pranaya is asking for the SFTP details for it, meaning the vendor-side SFTP folder it lands in. Do you know where those are documented, other than the CFX ticket or the CFX contact? Thanks!
