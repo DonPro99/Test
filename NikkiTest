@@ -2,14 +2,7 @@ Rename the file in S3. S3 has no real rename, so copy the object to a new key wi
 Run the Lambda she named. Check the exact name in the console. By her wording it may be CRLN-RAA-uat-Lmda-CopyFile or a similar copy-file function, and that could be a different one from CRLN-RAAUAD-Lambda-copy-file, which you used for CFX_STG.
 Set the test event for the vendor route. She didn't say which input sends the file to the vendor, and I don't want to guess a payload. Open the test event the Lambda already has and look for the field that picks the destination, possibly file_location_flg from your CPL notes. If it isn't obvious, ask her which value to use. Also point the event's file name or key at the _TEST copy.
 -----------------------------------------------
-Hi, quick question on the outbound CFX ticket I submitted for the Datavant Pre-Match file. The vendor SFTP path was set up for prod:
-
-cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX013/prod/mra/ciox/
-
-Can you check if the same vendor path is also set up for UAT (source bucket crln-652798729258-ssm-uat-filetransfer, outbound/raa/datavantprematch-etl/)? If it's not, can you set it up, or tell me if I need to update the ticket? I need to send a _TEST file to the vendor from UAT. Thanks!
-
-There's no UAT vendor SFTP route for the Pre-Match test file, only the prod vendor path. What's the approved way to get the _TEST file to the vendor? Can I stage it in the prod bucket and run the prod Lambda, or should CFX send it from the UAT bucket?
-
+you can move the file to prod ssm nogbd bucket and then rename it _test and them using lamda copy function send it to vendor
 aws s3 cp \
   s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524.txt \
   s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
