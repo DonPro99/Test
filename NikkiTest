@@ -1,5 +1,8 @@
-$ ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH.*TEST"
--rw-r--r--  1 srcradcoolbthts ahpck      1408 Sep 29 18:08 ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+Hi, quick question on a test file I dropped in CFX_STG on Sep 29 around 6:08 PM ET:
+
+ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+
+It matches the existing pattern ELV_DTVNT_.*_MRA_PREMATCH_.*.txt, but it's still showing in the folder. Can you check if CFX picked it up and sent it to the vendor? If it did, could you share the transfer time and the vendor path it went to? If not, can you tell me what's blocking it? Thanks!
 
  I_ELV_CFX013/prod/mra/ciox/).
 -----------------------------------------------
