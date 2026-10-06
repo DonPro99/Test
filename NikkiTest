@@ -1,4 +1,6 @@
-  s I_ELV_CFX013/prod/mra/ciox/).
+ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH.*TEST"
+
+ I_ELV_CFX013/prod/mra/ciox/).
 -----------------------------------------------
 pub   rsa4096 2024-12-18 [SC]
       789B8CECD72B3AAE6295E21F4E25745981D458FB
