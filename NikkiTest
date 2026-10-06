@@ -1,3 +1,14 @@
-Thanks for confirming! Could you also tell me the SFTP folder it landed in on the vendor side, and the time it was transferred? Pranaya is asking for those details. If you don't have them, no worries, just let me know.
+Subject: Datavant Pre-Match test file - SFTP delivery confirmation
 
-Hi Divya, the _TEST file is now in the CFX vendor path (cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX013/prod/mra/ciox/). Pranaya is asking for the SFTP details for it, meaning the vendor-side SFTP folder it lands in. Do you know where those are documented, other than the CFX ticket or the CFX contact? Thanks!
+Hi MGFT team,
+
+The CFX team confirmed they delivered this test file on their end. Could you please check the SFTP transfer to the vendor?
+
+File: ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+Source: cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX013/prod/mra/ciox/
+Placed there: Oct 6, around 12:54 PM ET
+
+Can you confirm it was sent to the vendor, and share the transfer time and the SFTP folder it landed in? Let me know if you need anything else from me.
+
+Thanks,
+Don
