@@ -2,49 +2,8 @@ Rename the file in S3. S3 has no real rename, so copy the object to a new key wi
 Run the Lambda she named. Check the exact name in the console. By her wording it may be CRLN-RAA-uat-Lmda-CopyFile or a similar copy-file function, and that could be a different one from CRLN-RAAUAD-Lambda-copy-file, which you used for CFX_STG.
 Set the test event for the vendor route. She didn't say which input sends the file to the vendor, and I don't want to guess a payload. Open the test event the Lambda already has and look for the field that picks the destination, possibly file_location_flg from your CPL notes. If it isn't obvious, ask her which value to use. Also point the event's file name or key at the _TEST copy.
 -----------------------------------------------
-pub   rsa4096 2024-12-18 [SC]
-      789B8CECD72B3AAE6295E21F4E25745981D458FB
-uid           [ultimate] srcradcoolbthpr (Prod key) <dl-RAAETLDevelopers@anthem.com>
-sub   rsa4096 2024-12-18 [E]
-
-pub   rsa4096 2024-12-18 [SC]
-      D2F93FC3AD99094DEF47D4896A142B247AD2C9FE
-uid           [ultimate] srcradcoolbthts (srcradcoolbthts test key) <dl-RAAETLDevelopers@anthem.com>
-sub   rsa4096 2024-12-18 [E]
-
-pub   rsa4096 2024-12-03 [SCE]
-      F0B610B9A698B2DD93A63C043CA603C9287F1146
-uid           [ unknown] raa_charts (These keys are for raa_charts client) <CloudFileExchangeDispatch@elevancehealth.com>
-
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/inbound/raa/chartsprocess/mcaid/ChartData_ANT_Virtix_Chase_VA_20261005.txt - | awk -F'|' 'NR>1 { c[$19]++; if (!($19 in s)) s[$19]=$1 "|" $9 "|" $19 } END { for (k in c) print k, c[k], "-> sample:", s[k] }'
-
-========
 
 
-ls -la /hcaaapck/backup/IT/PROD/scripts/ | grep -i -E "virtix|merge"
-find /hcaaapck/backup/IT -name "virtix_chase_transform.py" 2>/dev/null
-grep -c "RBICA-14060" /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-
-# compare first, so you know exactly what you're overwriting
-diff /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-
-# back up the current PROD script
-cp -p /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh.bak_$(date +%Y%m%d)
-
-# deploy both
-cp -p /hcaaapck/backup/IT/SIT/scripts/virtix_chase_transform.py /hcaaapck/backup/IT/PROD/scripts/
-cp -p /hcaaapck/backup/IT/SIT/scripts/merge_virtix_chase_files.sh /hcaaapck/backup/IT/PROD/scripts/
-chmod 755 /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh
-
-
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/Anthem_VirtixHealth_*_Chase_*.txt
-ls -la /raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_*.txt
-
-ksh -n /hcaaapck/backup/IT/PROD/scripts/merge_virtix_chase_files.sh && echo "syntax OK"
-
-LOG=$(ls -t /raa2/backup/prodenvironment/rev_opt/chasefiles/logs/merge_virtix_chase_*.log | head -1)
-grep -E "Backfilling|Transforming|Input Records|Output Records|Validation|ERROR|Failed" "$LOG"
-
-OUT=/raa2/backup/prodenvironment/rev_opt/chasefiles/ChartData_ANT_Virtix_Chase_<STATE>_$(date +%Y%m%d).txt
-awk -F'|' 'NR>1 {c[$19]++} END {for (k in c) print k, c[k]}' "$OUT"
-wc -l "$OUT"
+Search by file name instead of browsing folders. Run aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/ --recursive | grep -i PREMATCH from the EMR node, or use the console's "find objects by prefix" at that level. The Sep 25 file should show up under a folder like 20260925_212524/. A grep 20260925 also works.
+Read the Lambda's source key. When you tested the Lambda on Sep 24 it reported copying ELV_DTVNT_R1_MRA_PREMATCH_1_20260924182357.txt. The Lambda's test event, or its CloudWatch log for that run, shows the exact bucket and key it read from. That is the real location.
+Check the job's own log (Glue/EMR) for the line "Writing Pre-Match file 1 of 1". The output path is in Outbound_Location in datavantmbrprov-etl_uat.properties.
