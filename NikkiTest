@@ -3,7 +3,6 @@ Run the Lambda she named. Check the exact name in the console. By her wording it
 Set the test event for the vendor route. She didn't say which input sends the file to the vendor, and I don't want to guess a payload. Open the test event the Lambda already has and look for the field that picks the destination, possibly file_location_flg from your CPL notes. If it isn't obvious, ask her which value to use. Also point the event's file name or key at the _TEST copy.
 -----------------------------------------------
 
-
-Search by file name instead of browsing folders. Run aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/ --recursive | grep -i PREMATCH from the EMR node, or use the console's "find objects by prefix" at that level. The Sep 25 file should show up under a folder like 20260925_212524/. A grep 20260925 also works.
-Read the Lambda's source key. When you tested the Lambda on Sep 24 it reported copying ELV_DTVNT_R1_MRA_PREMATCH_1_20260924182357.txt. The Lambda's test event, or its CloudWatch log for that run, shows the exact bucket and key it read from. That is the real location.
-Check the job's own log (Glue/EMR) for the line "Writing Pre-Match file 1 of 1". The output path is in Outbound_Location in datavantmbrprov-etl_uat.properties.
+aws s3 cp \
+  s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524.txt \
+  s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
