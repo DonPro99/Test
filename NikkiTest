@@ -1,9 +1,4 @@
-   Hi Pranaya, here are the details for the Pre-Match test file:
-
-File: ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
-Dropped into CFX_STG on Sep 29 around 6:08 PM ET
-
-CFX picks it up through the existing outbound pattern and sends it to the vendor over SFTP, so I didn't run the SFTP myself. I'm checking with the CFX contact for the delivery confirmation and exact vendor path. Will share as soon as I have it. Let me know if you need anything else.
+  s I_ELV_CFX013/prod/mra/ciox/).
 -----------------------------------------------
 pub   rsa4096 2024-12-18 [SC]
       789B8CECD72B3AAE6295E21F4E25745981D458FB
