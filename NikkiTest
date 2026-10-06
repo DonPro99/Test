@@ -1,14 +1,1 @@
-Subject: Datavant Pre-Match test file - SFTP delivery confirmation
-
-Hi MGFT team,
-
-The CFX team confirmed they delivered this test file on their end. Could you please check the SFTP transfer to the vendor?
-
-File: ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
-Source: cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX013/prod/mra/ciox/
-Placed there: Oct 6, around 12:54 PM ET
-
-Can you confirm it was sent to the vendor, and share the transfer time and the SFTP folder it landed in? Let me know if you need anything else from me.
-
-Thanks,
-Don
+Hi Pranaya, the CFX team confirmed the Pre-Match test file (ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt) was delivered from their end. We don't usually have the vendor-side SFTP details, so I've submitted a ticket to the MGFT team and pinged them for the vendor SFTP folder and transfer time. I don't have a timeline from them yet, and I'll share as soon as I hear back. Attaching a screenshot of what the CFX team sent me.
