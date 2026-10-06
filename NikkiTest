@@ -1,15 +1,1 @@
-File_Delivery_Status:  success.
-Action: File Reception and Validation
-Protocol: S3_FileTransfer.
-File_Path: I_ELV_CFX013/prod/mra/ciox/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
-File_Name: ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
-Timestamp: 2026-10-06 12:56:16.328417-04:00 America/New_York
-
-File_Delivery Status: success.
-Action: SFTP File Upload
-Protocol: SFTP.
-File_Path: I_ELV_CFX013/prod/mra/ciox/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
-File_Name: ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
-Timestamp: 2026-10-06 12:56:19.175507-04:00 America/New_York
-
-Hi team, does anyone have the location of the Excel sheet that IT maintains with the vendor SFTP details? I need the SFTP folder for the Datavant vendor (CFX I_ELV_CFX013). If you have the link or path, please share it. Thanks!
+Username : ciox_mra_prd
