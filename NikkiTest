@@ -1,21 +1,9 @@
-   SELECT UserDefinedText1, COUNT(*)
-   FROM P01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-   WHERE ProjectName LIKE '%VA%Q32026%'
-   GROUP BY 1;
+   Hi Pranaya, here are the details for the Pre-Match test file:
 
-USERDEFINEDTEXT1	COUNT(*)
-STD	39280
-CIOX	25483
-M360	8328
+File: ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+Dropped into CFX_STG on Sep 29 around 6:08 PM ET
 
-SELECT EDL_LOAD_DTM, UserDefinedText1, COUNT(*) AS CNT
-FROM P01_RAA.RAA_RAWZ.RAD_VIRTIX_CHASE_MCAID_LOAD
-WHERE ProjectName LIKE '%VA%Q32026%'
-GROUP BY EDL_LOAD_DTM, UserDefinedText1
-ORDER BY EDL_LOAD_DTM, UserDefinedText1;
-
-Hi Tagore, the VA Q3 2026 file loaded in PROD this morning. Counts by UserDefinedText1: STD 39,280, CIOX 25,483, M360 8,328 (73,091 total, matches the source file). So S/C/M can now be told apart on this column going forward. One thing to note: the older IN/WV C/M rows in PROD still have NULL UserDefinedText1, since they were loaded before this change. Let me know if you'd like those handled.
-"Loaded 10/6 at 8:26 AM ET, single load, counts match the source file."
+CFX picks it up through the existing outbound pattern and sends it to the vendor over SFTP, so I didn't run the SFTP myself. I'm checking with the CFX contact for the delivery confirmation and exact vendor path. Will share as soon as I have it. Let me know if you need anything else.
 -----------------------------------------------
 pub   rsa4096 2024-12-18 [SC]
       789B8CECD72B3AAE6295E21F4E25745981D458FB
