@@ -1,19 +1,11 @@
-{
-  "etl_stp_parms": {
-    "src_s3_bucket": "crln-163391535226-ssm-prod-nogbd-filetransfer",
-    "src_s3_path": "outbound/raa/datavantprematch-etl/20260925_212524/",
-    "dest_s3_bucket": "cfx-antm-prod-mgft-raafiles-outbound",
-    "dest_s3_path": "I_ELV_CFX013/prod/mra/ciox/"
-  }
-}
-
-
-CRLN-RAA-prod-Lmda-CopyFile
-{
-  "errorMessage": "'Contents'",
-  "errorType": "KeyError",
-  "requestId": "41925846-00ea-4c8b-8274-0a759b2fcff3",
-  "stackTrace": [
-    "  File \"/var/task/CopyFile.py\", line 30, in lambda_handler\n    for file in s3.list_objects(Bucket=src_s3_bucket, Prefix=final_prefix + cfx)['Contents']:\n"
-  ]
-}
+START RequestId: 3bf6c163-6d0d-4999-8149-bac3d0033728 Version: $LATEST
+outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+latest_date_str 20260925_212524
+<<< file count in path outbound/raa/datavantprematch-etl/20260925_212524/cfx/ is: 0>>>
+None
+<<< files fetching directory: outbound/raa/datavantprematch-etl/20260925_212524/ >>>>
+CFX copy file I_ELV_CFX013/prod/mra/ciox/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt - started
+CFX copy file I_ELV_CFX013/prod/mra/ciox/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt - completed
+***** Files Copy Has Completed Successfully *****
+END RequestId: 3bf6c163-6d0d-4999-8149-bac3d0033728
+REPORT RequestId: 3bf6c163-6d0d-4999-8149-bac3d0033728	Duration: 384.75 ms	Billed Duration: 385 ms	Memory Size: 9912 MB	Max Memory Used: 113 MB	
