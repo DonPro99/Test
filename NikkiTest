@@ -7,6 +7,7 @@ aws s3 cp \
   s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524.txt \
   s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
 
+cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX013/prod/mra/ciox/
 
 {
   "etl_stp_parms": {
