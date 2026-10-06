@@ -1,4 +1,5 @@
-ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH.*TEST"
+$ ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH.*TEST"
+-rw-r--r--  1 srcradcoolbthts ahpck      1408 Sep 29 18:08 ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
 
  I_ELV_CFX013/prod/mra/ciox/).
 -----------------------------------------------
