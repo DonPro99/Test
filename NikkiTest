@@ -6,3 +6,13 @@ Set the test event for the vendor route. She didn't say which input sends the fi
 aws s3 cp \
   s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524.txt \
   s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+
+
+{
+  "etl_stp_parms": {
+    "src_s3_bucket": "crln-652798729258-ssm-uat-filetransfer",
+    "src_s3_path": "outbound/raa/datavantprematch-etl/",
+    "dest_s3_bucket": "cfx-antm-preprod-raaetl-outbound",
+    "dest_s3_path": "devenvironment_CFX_STG/"
+  }
+}
