@@ -1,10 +1,6 @@
-Thanks Divya, that helps. To send the Pre-Match test file to the vendor, can you tell me:
-
-1. What value or test event do I give CRLN-RAAUAD-Lambda-copy-file so it sends the file to the vendor destination instead of CFX_STG?
-2. What's the exact vendor destination path for this file?
-3. How do I get _TEST into the file name? The file in S3 doesn't have it. Can the Lambda rename it, or do I rename it in S3 first?
-
-Thanks!
+Rename the file in S3. S3 has no real rename, so copy the object to a new key with _TEST added, either in the console or with aws s3 cp. Keep the original, so use copy rather than move. The file is in crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/<timestamp>/. The new name should be ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt.
+Run the Lambda she named. Check the exact name in the console. By her wording it may be CRLN-RAA-uat-Lmda-CopyFile or a similar copy-file function, and that could be a different one from CRLN-RAAUAD-Lambda-copy-file, which you used for CFX_STG.
+Set the test event for the vendor route. She didn't say which input sends the file to the vendor, and I don't want to guess a payload. Open the test event the Lambda already has and look for the field that picks the destination, possibly file_location_flg from your CPL notes. If it isn't obvious, ask her which value to use. Also point the event's file name or key at the _TEST copy.
 -----------------------------------------------
 pub   rsa4096 2024-12-18 [SC]
       789B8CECD72B3AAE6295E21F4E25745981D458FB
