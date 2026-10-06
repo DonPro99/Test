@@ -1,1 +1,2 @@
-Username : ciox_mra_prd
+aws s3 ls s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/
+aws s3 rm s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ --recursive
