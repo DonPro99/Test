@@ -1,2 +1,6 @@
 [hadoop@ip-10-197-212-196 ~]$ aws s3 ls s3://cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX013/prod/mra/ciox/ | grep PREMATCH
 2026-10-06 16:54:30       1408 ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+
+
+ls -lat /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH"
+ls -lat /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i "PREMATCH.*TEST"
