@@ -1,29 +1,16 @@
-Rename the file in S3. S3 has no real rename, so copy the object to a new key with _TEST added, either in the console or with aws s3 cp. Keep the original, so use copy rather than move. The file is in crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/<timestamp>/. The new name should be ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt.
-Run the Lambda she named. Check the exact name in the console. By her wording it may be CRLN-RAA-uat-Lmda-CopyFile or a similar copy-file function, and that could be a different one from CRLN-RAAUAD-Lambda-copy-file, which you used for CFX_STG.
-Set the test event for the vendor route. She didn't say which input sends the file to the vendor, and I don't want to guess a payload. Open the test event the Lambda already has and look for the field that picks the destination, possibly file_location_flg from your CPL notes. If it isn't obvious, ask her which value to use. Also point the event's file name or key at the _TEST copy.
------------------------------------------------
-you can move the file to prod ssm nogbd bucket and then rename it _test and them using lamda copy function send it to vendor
+# 1. Confirm the _TEST file is where you expect (UAT bucket)
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/
+
+# 2. Dry run first. Nothing is copied, it only shows what would happen
 aws s3 cp \
-  s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524.txt \
-  s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
+  s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt \
+  s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/datavantprematch-etl/test/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt \
+  --dryrun
 
-cfx-antm-prod-mgft-raafiles-outbound/I_ELV_CFX013/prod/mra/ciox/
+# 3. Real copy: same command without --dryrun
+aws s3 cp \
+  s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt \
+  s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/datavantprematch-etl/test/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
 
-{
-  "etl_stp_parms": {
-    "src_s3_bucket": "crln-652798729258-ssm-uat-filetransfer",
-    "src_s3_path": "outbound/raa/datavantprematch-etl/",
-    "dest_s3_bucket": "cfx-antm-preprod-raaetl-outbound",
-    "dest_s3_path": "devenvironment_CFX_STG/"
-  }
-}
-
-
-{
-  "etl_stp_parms": {
-    "src_s3_bucket": "crln-652798729258-ssm-uat-filetransfer",
-    "src_s3_path": "outbound/raa/datavantprematch-etl/",
-    "dest_s3_bucket": "cfx-antm-prod-mgft-raafiles-outbound",
-    "dest_s3_path": "I_ELV_CFX013/prod/mra/ciox/"
-  }
-}
+# 4. Confirm it landed, and that it's the only file in that folder
+aws s3 ls s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/datavantprematch-etl/test/
