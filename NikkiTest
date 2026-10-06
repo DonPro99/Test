@@ -1,20 +1,8 @@
-aws s3 rm s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524.txt
-aws s3 ls s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/
-
-
-# 1. Confirm the _TEST file is where you expect (UAT bucket)
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/
-
-# 2. Dry run first. Nothing is copied, it only shows what would happen
-aws s3 cp \
-  s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt \
-  s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/datavantprematch-etl/test/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt \
-  --dryrun
-
-# 3. Real copy: same command without --dryrun
-aws s3 cp \
-  s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt \
-  s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/datavantprematch-etl/test/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
-
-# 4. Confirm it landed, and that it's the only file in that folder
-aws s3 ls s3://crln-163391535226-ssm-prod-nogbd-filetransfer/outbound/raa/datavantprematch-etl/test/
+{
+  "etl_stp_parms": {
+    "src_s3_bucket": "crln-163391535226-ssm-prod-nogbd-filetransfer",
+    "src_s3_path": "outbound/raa/datavantprematch-etl/20260925_212524/",
+    "dest_s3_bucket": "cfx-antm-prod-mgft-raafiles-outbound",
+    "dest_s3_path": "I_ELV_CFX013/prod/mra/ciox/"
+  }
+}
