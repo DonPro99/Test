@@ -3,6 +3,8 @@ Run the Lambda she named. Check the exact name in the console. By her wording it
 Set the test event for the vendor route. She didn't say which input sends the file to the vendor, and I don't want to guess a payload. Open the test event the Lambda already has and look for the field that picks the destination, possibly file_location_flg from your CPL notes. If it isn't obvious, ask her which value to use. Also point the event's file name or key at the _TEST copy.
 -----------------------------------------------
 
+There's no UAT vendor SFTP route for the Pre-Match test file, only the prod vendor path. What's the approved way to get the _TEST file to the vendor? Can I stage it in the prod bucket and run the prod Lambda, or should CFX send it from the UAT bucket?
+
 aws s3 cp \
   s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524.txt \
   s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprematch-etl/20260925_212524/ELV_DTVNT_R1_MRA_PREMATCH_1_20260925212524_TEST.txt
