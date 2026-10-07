@@ -3,7 +3,9 @@ Quick update on the PGP key issue in raa_inbound_pgp_sftp_notify.sh - found some
 
 
 $ wc -l /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
-212 /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
+grep -c "^import_pgp_key" /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
+grep -n "DTVNTMBRRT" /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
+grep -c "^send_email_summary$" /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
 
 
 ===============
