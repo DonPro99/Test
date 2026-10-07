@@ -6,3 +6,6 @@ Also, I had sent an email earlier to the group but I'm not seeing it anywhere - 
 
 aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/deply_dtvntmbrrt_rv_aca_stg/ --recursive | grep -i 20261007
 Here is the destination, s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntmbrrt_mra_stg/${timestamp(%Y%m%d_%H%M%S)}/incr/
+
+
+"Thanks for checking — but this path is for Medicare/MRA (deply_dtvntmbrrt_mra_stg), which is a different ticket (RBICA-14070). For this one (CRA/Commercial, RBICA-14227), the destination should be Commercial/ACA: s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/deply_dtvntmbrrt_aca_stg/${timestamp}/incr/. Can you check where the file actually went, and confirm it's routed to the Commercial path, not Medicare?"
