@@ -1,5 +1,2 @@
 RITM26704813/SCTASK31464285 - CFX Delivery Path Mismatch (CRA RADV/non-RADV - DTVNTMBRRT)
-
-Hey, got a "File Delivery to App team" success notification for deply_dtvntmbrrt_aca.txt.pgp, showing path preprod/BDF/deply_dtvntmbrrt_aca.txt.pgp - but I searched our whole UAT bucket (crln-652798729258-ssm-uat-filetransfer) and can't find it anywhere. Doesn't match the destination path on the RITM (.../commercial/na/deply_dtvntmbrrt_aca_stg/...). Can you confirm which bucket/account this actually went to?
-
-Also still waiting on a delivery confirmation for the RADV file - DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt.pgp (SFTP path uat/raaetl_developers/) - only got reception/validation so far, not delivery. Can you check on that one too?
+Hey, could you share the exact error message you're seeing? Want to confirm if it's the same "No secret key available" error as before, or something different - and which file it's on (today's DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt.pgp, or an older one). I re-tested on my end and confirmed the file is encrypting with the key you gave us (925B09E785B78FF4), so want to make sure we're looking at the same thing before I dig further.
