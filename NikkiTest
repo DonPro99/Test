@@ -2,7 +2,8 @@ Quick update on the PGP key issue in raa_inbound_pgp_sftp_notify.sh - found some
 
 
 
-wc -l /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
+$ wc -l /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
+212 /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
 
 
 ===============
