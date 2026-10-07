@@ -5,3 +5,4 @@ Quick question on the non-RADV side - I saw a delivery notification for deply_dt
 Also, I had sent an email earlier to the group but I'm not seeing it anywhere - not in Sent, Outbox, or Drafts. Not sure what happened there, but wanted to follow up here directly instead.
 
 aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/deply_dtvntmbrrt_rv_aca_stg/ --recursive | grep -i 20261007
+Here is the destination, s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntmbrrt_mra_stg/${timestamp(%Y%m%d_%H%M%S)}/incr/
