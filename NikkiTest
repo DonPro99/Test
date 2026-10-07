@@ -1,13 +1,5 @@
-$ grep -A 5 "DEBUG: Running GPG command" /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/October/07/sftp_transfer.log | tail -10
-2026-10-07 13:15:42 - Encrypted file returned: /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/October/07/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt.pgp
-2026-10-07 13:15:42 - Confirmed for SFTP: Encrypted file to upload: /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/October/07/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt.pgp
-2026-10-07 13:15:42 - Remote destination path: sftp://sftp-raaetl-in-user@sftp.internal.preprod.elevancehealth.com.gld-dig-infoexc.awsdns.internal.das:22/uat/raaetl_developers/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt.pgp
---
-2026-10-07 15:32:26 - DEBUG: Running GPG command:
-gpg --batch --yes --encrypt --recipient "3CA603C9287F1146" --output "/hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/October/07/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt.pgp" "/hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt"
-gpg: 3CA603C9287F1146: There is no assurance this key belongs to the named user
-gpg: /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt: encryption failed: Unusable public key
-2026-10-07 15:32:26 - Encryption FAILED: /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt
-2026-10-07 15:32:26 - Encrypted file returned: 
-$ gpg --batch --yes --trust-model always --encrypt --recipient "$PGP_KEY_ID" --output "$encrypted_file" "$file" 2>>"$LOG_FILE"
--ksh: : cannot open
+gpg --batch --yes --encrypt --recipient "$PGP_KEY_ID" --output "$encrypted_file" "$file" 2>>"$LOG_FILE"
+
+gpg --batch --yes --trust-model always --encrypt --recipient "$PGP_KEY_ID" --output "$encrypted_file" "$file" 2>>"$LOG_FILE"
+
+./raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt
