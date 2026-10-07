@@ -1,1 +1,218 @@
 CFX confirmed they need PGP key 925B09E785B78FF4 to decrypt — but my script is only ever producing 4E25745981D458FB. I traced this down and found the two are actually the same keypair — 925B09E785B78FF4 is the encryption subkey, 4E25745981D458FB is the primary key. The script's logic on line 62 just grabs whichever key is listed first in the keyring (gpg --list-keys --with-colons | awk -F: '/^pub:/ ... {print $5; exit}') and always pulls the primary key ID — it has no vendor-aware or subkey-aware logic at all. It happens to have been working for other interventions purely by coincidence of keyring ordering, not by design.
+
+
+===============
+
+
+$ cat raa_inbound_pgp_sftp_notify.sh
+#!/bin/bash
+##########################################################################################
+# Script Name: raa_pgp_sftp_notify_sit.sh
+# Author: Naseer
+# Last Modified: April 10, 2025
+#
+# Description:
+#   Encrypts files using PGP, transfers via SFTP, archives both original and encrypted
+#   files, and sends a formatted email summary with success and failure lists.
+##########################################################################################
+
+# --- Configuration ---
+PGP_KEY_FILE="/hcaaapck/backup/IT/PROD/scripts/cfx_pgp_pub_key/RAAETL_CFX_pgp_public_key.txt"
+SFTP_USER="sftp-raaetl-in-user"
+SFTP_HOST="sftp.internal.preprod.elevancehealth.com.gld-dig-infoexc.awsdns.internal.das"
+SFTP_PORT=22
+REMOTE_UPLOAD_FOLDER="uat/raaetl_developers"
+
+LOG_BASE_DIR="/hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs"
+ARCHIVE_BASE_DIR="/hcaaapck/backup/SitEnvironment/PGP_Encrypt/archive"
+ENCRYPTED_FILES_DIR="/hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted"
+
+# Email Configuration
+FROM_ADDRESS="dl-raaetldevelopers@anthem.com"
+TO_EMAIL="nasurudddin.mulla@elevancehealth.com"
+CC_EMAIL="AkhilReddy.Pullannagari@elevancehealth.com"
+
+# --- Date & Folder Setup ---
+YEAR=$(date +"%Y")
+MONTH=$(date +"%B")
+DAY=$(date +"%d")
+LOG_DIR="${LOG_BASE_DIR}/${YEAR}/${MONTH}/${DAY}"
+ARCHIVE_DIR="${ARCHIVE_BASE_DIR}/${YEAR}/${MONTH}/${DAY}"
+CURRENT_ENCRYPTED_DIR="${ENCRYPTED_FILES_DIR}/${YEAR}/${MONTH}/${DAY}"
+mkdir -p "$LOG_DIR" "$ARCHIVE_DIR" "$CURRENT_ENCRYPTED_DIR"
+LOG_FILE="${LOG_DIR}/sftp_transfer.log"
+
+SUCCESS_FILES=()
+FAILED_FILES=()
+
+log_message() {
+    echo "$(date +"%Y-%m-%d %H:%M:%S") - $1" | tee -a "$LOG_FILE"
+    sync
+}
+
+ensure_folder_permissions() {
+    local folder="$1"
+    if [[ ! -w "$folder" ]]; then
+        log_message "Fixing permissions on $folder"
+        chmod -R 755 "$folder"
+        [[ ! -w "$folder" ]] && log_message "Still not writable!" && exit 5
+    fi
+}
+
+ensure_folder_permissions "$LOG_DIR"
+ensure_folder_permissions "$ARCHIVE_DIR"
+ensure_folder_permissions "$CURRENT_ENCRYPTED_DIR"
+
+import_pgp_key() {
+    if [[ -f "$PGP_KEY_FILE" ]]; then
+        gpg --import "$PGP_KEY_FILE" 2>&1 | tee -a "$LOG_FILE"
+        PGP_KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub:/ && $5 != "" {print $5; exit}' | tr -d '\r\n ')
+        [[ -z "$PGP_KEY_ID" ]] && log_message "PGP key import failed." && exit 2
+        log_message "PGP Key ID: $PGP_KEY_ID"
+    else
+        log_message "PGP Key file not found: $PGP_KEY_FILE" && exit 2
+    fi
+}
+
+encrypt_file() {
+    local file="$1"
+    local filename
+    filename="$(basename "$file")"
+    local encrypted_file="${CURRENT_ENCRYPTED_DIR}/${filename}.pgp"
+
+    log_message "Encrypting file: $file" >&2
+    log_message "Output file: $encrypted_file" >&2
+    log_message "Using key ID: $PGP_KEY_ID" >&2
+    log_message "Entered encrypt_file function" >&2
+
+    if [[ ! -f "$file" ]]; then
+        log_message "Inside encrypt_file: input file not found -> $file" >&2
+        return 3
+    fi
+
+    echo "$(date +"%Y-%m-%d %H:%M:%S") - DEBUG: Running GPG command:" >> "$LOG_FILE"
+    echo "gpg --batch --yes --encrypt --recipient \"$PGP_KEY_ID\" --output \"$encrypted_file\" \"$file\"" >> "$LOG_FILE"
+
+    gpg --batch --yes --encrypt --recipient "$PGP_KEY_ID" --output "$encrypted_file" "$file" 2>>"$LOG_FILE"
+
+    if [[ $? -eq 0 && -f "$encrypted_file" ]]; then
+        log_message "Encryption successful: $encrypted_file" >&2
+        echo "$encrypted_file"
+    else
+        log_message "Encryption FAILED: $file" >&2
+        return 3
+    fi
+}
+
+sftp_transfer() {
+    local encrypted_file="$1"
+    local original_file="$2"
+    local remote_path="$REMOTE_UPLOAD_FOLDER/$(basename "$encrypted_file")"
+
+    log_message "Confirmed for SFTP: Encrypted file to upload: $encrypted_file"
+    log_message "Remote destination path: sftp://$SFTP_USER@$SFTP_HOST:$SFTP_PORT/$remote_path"
+
+    if [[ ! -f "$encrypted_file" ]]; then
+        log_message "ERROR: Encrypted file not found: $encrypted_file"
+        FAILED_FILES+=("$(basename "$original_file")")
+        return 1
+    fi
+
+    log_message "Uploading via SFTP..."
+
+    sftp -oPort=$SFTP_PORT "$SFTP_USER@$SFTP_HOST" <<EOF >> "$LOG_FILE" 2>&1
+put "$encrypted_file" "$REMOTE_UPLOAD_FOLDER/"
+bye
+EOF
+
+    sftp -oPort=$SFTP_PORT "$SFTP_USER@$SFTP_HOST" <<EOF | grep -q "$(basename "$encrypted_file")"
+ls "$REMOTE_UPLOAD_FOLDER/"
+bye
+EOF
+
+    if [[ $? -eq 0 ]]; then
+        log_message "SFTP Success: $(basename "$encrypted_file")"
+        #log_message "Archiving original file: $original_file"
+        log_message "Archiving encrypted file: $encrypted_file"
+        mv "$encrypted_file" "$ARCHIVE_DIR/"
+        #mv "$original_file" "$ARCHIVE_DIR/"
+        SUCCESS_FILES+=("$(basename "$original_file")")
+    else
+        log_message "SFTP Failed for file: $(basename "$encrypted_file")"
+        log_message "Local path: $encrypted_file"
+        log_message "Remote path attempted: sftp://$SFTP_USER@$SFTP_HOST:$SFTP_PORT/$remote_path"
+        FAILED_FILES+=("$(basename "$original_file")")
+    fi
+}
+
+send_email_summary() {
+    local body="SFTP Summary for RAA SIT\n\n"
+
+    if [[ ${#SUCCESS_FILES[@]} -gt 0 ]]; then
+        body+="Successfully Transferred Files:\n"
+        body+="----------------------------------------\n"
+        for f in "${SUCCESS_FILES[@]}"; do
+            body+=$(printf "%-40s\n" "$f")
+        done
+        body+="\n"
+    fi
+
+    if [[ ${#FAILED_FILES[@]} -gt 0 ]]; then
+        body+="Failed Transfers:\n"
+        body+="----------------------------------------\n"
+        for f in "${FAILED_FILES[@]}"; do
+            body+=$(printf "%-40s\n" "$f")
+        done
+        body+="\n"
+    fi
+
+    {
+        echo "From: $FROM_ADDRESS"
+        echo "To: $TO_EMAIL"
+        echo "Cc: $CC_EMAIL"
+        echo "Subject: UAT - RAA SFTP CFX: INBOUND PGP Encrypted UAT files successfully"
+        echo
+        echo -e "$body"
+    } | /usr/sbin/sendmail -t
+}
+
+# --- Main Logic ---
+if [[ -z "$1" ]]; then
+    echo "Usage: $0 <file_or_directory_path>"
+    exit 1
+fi
+
+import_pgp_key
+
+if [[ -f "$1" ]]; then
+    log_message "Single file mode"
+    log_message "Passed file check: $1"
+    encrypted_file=$(encrypt_file "$1")
+    log_message "Encrypted file returned: $encrypted_file"
+
+    if [[ -n "$encrypted_file" && -f "$encrypted_file" ]]; then
+        sftp_transfer "$encrypted_file" "$1"
+    else
+        log_message "Encrypted file NOT found after encryption: $encrypted_file"
+        FAILED_FILES+=("$(basename "$1")")
+    fi
+elif [[ -d "$1" ]]; then
+    log_message "Directory mode"
+    for file in "$1"/*; do
+        if [[ -f "$file" ]]; then
+            encrypted_file=$(encrypt_file "$file")
+            if [[ -n "$encrypted_file" && -f "$encrypted_file" ]]; then
+                sftp_transfer "$encrypted_file" "$file"
+            else
+                log_message "Encryption failed for: $file"
+                FAILED_FILES+=("$(basename "$file")")
+            fi
+        fi
+    done
+else
+    log_message "Invalid input: $1"
+    exit 1
+fi
+
+send_email_summary
+log_message "Script execution completed."
