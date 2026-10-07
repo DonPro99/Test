@@ -5,13 +5,7 @@ Quick update on the PGP key issue in raa_inbound_pgp_sftp_notify.sh - found some
 ls -l /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
 
 ===============
-cp /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh.bak_$(date +%Y%m%d)
+grep -n "DTVNTMBRRT" /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
+wc -l /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
 
-import_pgp_key
-
-# Scoped override for DTVNTMBRRT (CRA RADV/non-RADV) — CFX requires this specific
-# encryption subkey. Does not affect any other intervention's key selection.
-if [[ "$(basename "$1")" == *DTVNTMBRRT* ]]; then
-    PGP_KEY_ID="925B09E785B78FF4"
-    log_message "Using DTVNTMBRRT-specific PGP Key ID: $PGP_KEY_ID"
-fi
+./raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261001.txt
