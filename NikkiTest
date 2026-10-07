@@ -11,6 +11,7 @@ $ grep -n "DTVNTMBRRT" /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_noti
 184:    log_message "Using DTVNTMBRRT-specific PGP Key ID: $PGP_KEY_ID"
 $ 
 $ 
-$ wc -l /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.s
+$ wc -l /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
+219 /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
 
 ./raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261001.txt
