@@ -1,6 +1,1 @@
-File_Delivery_Status:success.
-Action: File Reception and Validation
-Protocol: SFTP.
-File_Path: uat/raaetl_developers/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt.pgp
-File_Name: DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt.pgp
-Timestamp: 2026-10-07 13:17:36.242980-04:00 America/New_York
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/deply_dtvntmbrrt_rv_aca_stg/ --recursive
