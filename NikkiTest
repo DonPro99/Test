@@ -1,17 +1,3 @@
-$ cd /hcaaapck/backup/IT/SIT/scripts                                                                   
-$ ./raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt
-gpg: key 3CA603C9287F1146: "raa_charts (These keys are for raa_charts client) <CloudFileExchangeDispatch@elevancehealth.com>" not changed
-gpg: Total number processed: 1
-gpg:              unchanged: 1
-2026-10-07 15:32:03 - PGP Key ID: 4E25745981D458FB
-2026-10-07 15:32:25 - Using DTVNTMBRRT-specific PGP Key ID: 3CA603C9287F1146
-2026-10-07 15:32:26 - Single file mode
-2026-10-07 15:32:26 - Passed file check: /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt
-2026-10-07 15:32:26 - Encrypting file: /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt
-2026-10-07 15:32:26 - Output file: /hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted/2026/October/07/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt.pgp
-2026-10-07 15:32:26 - Using key ID: 3CA603C9287F1146
-2026-10-07 15:32:26 - Entered encrypt_file function
-2026-10-07 15:32:26 - Encryption FAILED: /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt
-2026-10-07 15:32:26 - Encrypted file returned: 
-2026-10-07 15:32:26 - Encrypted file NOT found after encryption: 
-2026-10-07 15:32:26 - Script execution completed.
+grep -A 5 "DEBUG: Running GPG command" /hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs/2026/October/07/sftp_transfer.log | tail -10
+
+gpg --batch --yes --trust-model always --encrypt --recipient "$PGP_KEY_ID" --output "$encrypted_file" "$file" 2>>"$LOG_FILE"
