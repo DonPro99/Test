@@ -1,15 +1,1 @@
-File_Delivery_Status:success.
-Action: File Reception and Validation
-Protocol: SFTP.
-File_Path: preprod/BDF/deply_dtvntmbrrt_aca.txt.pgp
-File_Name: deply_dtvntmbrrt_aca.txt.pgp
-Timestamp: 2026-10-07 13:22:35.406863-04:00 America/New_York
-
-=====
-
-File_Delivery_Status:  success.
-Action: File Delivery to App team
-Protocol: S3_FileTransfer.
-File_Path: preprod/BDF/deply_dtvntmbrrt_aca.txt.pgp
-File_Name: deply_dtvntmbrrt_aca.txt.pgp
-Timestamp: 2026-10-07 13:22:38.989001-04:00 America/New_York
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/ --recursive | grep -i "dtvntmbrrt_aca.txt"
