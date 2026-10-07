@@ -1,6 +1,3 @@
-Few more mins Nikhitha. About to finish working on another issue.
- 
-So her is the issue. You are encrypting the file names using the PGP key ID Ending with 8FF4 which is not correct. I have validated the expected key ID that needs to be used for this filenames.
- 
-You need to encrypt the file with the PGP key ID 3CA603C9287F1146 and things should work as expected.
- 
+PGP_KEY_ID="3CA603C9287F1146"
+
+./raa_inbound_pgp_sftp_notify.sh /hcaaapck/backup/IT/SIT/work/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt
