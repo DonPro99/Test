@@ -1,2 +1,6 @@
-RITM26704813/SCTASK31464285 - CFX Delivery Path Mismatch (CRA RADV/non-RADV - DTVNTMBRRT)
-Hey, could you share the exact error message you're seeing? Want to confirm if it's the same "No secret key available" error as before, or something different - and which file it's on (today's DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt.pgp, or an older one). I re-tested on my end and confirmed the file is encrypting with the key you gave us (925B09E785B78FF4), so want to make sure we're looking at the same thing before I dig further.
+Few more mins Nikhitha. About to finish working on another issue.
+ 
+So her is the issue. You are encrypting the file names using the PGP key ID Ending with 8FF4 which is not correct. I have validated the expected key ID that needs to be used for this filenames.
+ 
+You need to encrypt the file with the PGP key ID 3CA603C9287F1146 and things should work as expected.
+ 
