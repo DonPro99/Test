@@ -1,19 +1,7 @@
-Quick update on the PGP key issue in raa_inbound_pgp_sftp_notify.sh - found something more specific. import_pgp_key() actually imports a dedicated key file (RAAETL_CFX_pgp_public_key.txt) - but then it throws that away and re-scans the whole keyring for whichever pub key is listed first, instead of using the ID of the key it just imported. That's why it's pulling the Prod key's primary ID instead of the subkey CFX wants (925B09E785B78FF4). Seems like a pretty small fix - just needs to capture the imported key's ID directly instead of re-scanning. I tried a scoped, SIT-only override for just my intervention (DTVNTMBRRT) to unblock testing - happy to share the diff if useful, but figured this is worth a proper fix on your end too since it's shared across RADV interventions.
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/deply_dtvntmbrrt_rv_aca_stg/ --recursive
+
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/
 
 
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/deply_dtvntmbrrt_aca_stg/ --recursive
 
-ls -l /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
-
-===============
-$ grep -n "DTVNTMBRRT" /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
-180:# Scoped override for DTVNTMBRRT (CRA RADV/non-RADV). CFX requires this specific
-182:if [[ "$(basename "$1")" == *DTVNTMBRRT* ]]; then
-184:    log_message "Using DTVNTMBRRT-specific PGP Key ID: $PGP_KEY_ID"
-$ 
-$ 
-$ wc -l /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
-219 /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
-
-
-
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/deply_dtvntmbrrt_rv_aca_stg/ --recursive | grep -i 20261007
