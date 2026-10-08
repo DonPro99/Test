@@ -1,11 +1,12 @@
--- 1) Does the 09/10 batch exist in prod?
-SELECT recordid, filedatetime, COUNT(*)
-FROM P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
-WHERE TRIM(recordid) IN ('949879444','613170689')
-  AND filedatetime = '20260910135555'
-GROUP BY 1,2;
+grep -n -i -A8 "join" <path>/DatavantMbrProvETL.scala | grep -i -E "join|recordid|filedatetime|chart|add_val"
 
--- 2) Do the deploy's chart IDs exist in UAT under any batch?
-SELECT chartid, filedatetime
-FROM U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
-WHERE TRIM(chartid) IN ('R2C26_949879444_1790177814_2','R2C26_613170689_1275119182_1');
+-- What did prod's deploy load store for this member?
+SELECT recordid, filedatetime, add_val1, add_val2, add_val6, intervention
+FROM P01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
+WHERE TRIM(recordid) = '949879444' AND UPPER(intervention) = 'DTVNTRT';
+
+-- Is the chart stored under a different ID format?
+SELECT chartid, filedatetime, chartdatetime
+FROM P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
+WHERE TRIM(recordid) = '949879444'
+  AND chartid LIKE '%1790177814%';
