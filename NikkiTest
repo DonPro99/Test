@@ -1,5 +1,17 @@
-find /raa1/backup/prodenvironment/sas_repository -iname "*20260910*" 2>/dev/null | head -20
-find /raa1/backup/prodenvironment/sas_repository -iname "*chart*" -newermt 2026-09-09 ! -newermt 2026-09-12 2>/dev/null | head -20
+$ find /raa1/backup/prodenvironment/sas_repository -iname "*20260910*" 2>/dev/null | head -20
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/scores_e24_20260910223718.sas7bdat
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/gaps_e24_20260910223718.sas7bdat
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/pv_20260910192835_20260911152502.sas7bdat
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/mbrs_20260910223718.sas7bdat
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/mbrs_skinny_20260910223718.sas7bdat
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/scores_v28_20260910223718.sas7bdat
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/scores_r08_20260910223718.sas7bdat
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/gaps_r08_20260910223718.sas7bdat
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/gaps_v28_20260910223718.sas7bdat
+$ find /raa1/backup/prodenvironment/sas_repository -iname "*chart*" -newermt 2026-09-09 ! -newermt 2026-09-12 2>/dev/null | head -20
+/raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat
+/raa1/backup/prodenvironment/sas_repository/mcare/charts.sas7bdat
 
 Reply to Pranaya:
 
