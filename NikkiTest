@@ -1,1 +1,19 @@
-Hi Rajesh, found it. While resolving a conflict on the preprod PR, preprod got merged into my feature branch, which is why other changes are showing. My actual changes are just two commits. I can either delete and recreate the branch with only those two, or push them as a new clean branch, whichever is easier for DevOps. Which do you prefer?"
+# put the business test deploy file in deploy_in
+ls -ltr /raa1/backup/prodenvironment/sas_repository/deploy_in | grep -i dtvntrt
+
+cd /hcaaapck/backup/IT/SIT/scripts/
+./start_sas_deploy_copy_hdfs_MN.sh DTVNTRT MRA
+ls -ltr /hcaaapck/backup/IT/work/ | grep -i dtvntrt
+
+# confirm the DTVNTRT ingest folder first (Pre-Match needed the _stg suffix, so check which one DTVNTRT uses)
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/ | grep -i dtvntrt
+
+aws s3 cp deply_dtvntrt_mra.txt \
+  s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/<dtvntrt folder from ls>/
+
+SELECT lob, add_val6, COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
+WHERE UPPER(intervention) = 'DTVNTRT'
+GROUP BY 1, 2;
+
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i datavant
