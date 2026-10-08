@@ -1,24 +1,8 @@
-Starting SFTP for deply_dtvntrt_mra
-INFO: SAS Environment - SIT
-Launching sftp-task-runner: Start Time: 2026-10-08 13:59:53: PID: 294236
-sftp.connection.host: efx2.corp.agp.ads
-sftp.connection.host: 22
-sftp.connection.user: hcaaapck_raa_np
-sftp.destination.dir: /hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa
-Source_file_name: /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
-Email File Name: deply_dtvntrt_mra
-Inside Upload method
-Welcome to the Gateway Interchange SSH server.   
-Connected to efx2.corp.agp.ads.
-sftp>     cd /hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa
-sftp>         mput /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
-Uploading /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt to /hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa/deply_dtvntrt_mra.txt
+ls -t /hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntrt_mra_* | head -1 | xargs grep -i "Deploy file"
+wc -l /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
+cut -d'|' -f1-6 /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt | head -5
 
-/hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt                               100% 3650     2.4MB/s   00:00    
-sftp>         quit
-SUCCESS: Sending Email Notification
-Inside Email method
-MGFT file upload action: Completed
-Log Aggregation: deply_dtvntrt_mra-SFTP-SAS-S3-20261008135953.log
-Task Finished: End Time: 2026-10-08 13:59:53, Duration: 0 seconds.
-Deploy file moved to deploy out location - /raa1/backup/prodenvironment/sas_repository/deploy_out
+SELECT lob, add_val6, filedatetime, COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
+WHERE UPPER(intervention) = 'DTVNTRT'
+GROUP BY 1,2,3 ORDER BY 3 DESC;
