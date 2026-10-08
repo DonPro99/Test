@@ -1,8 +1,24 @@
-ls -t /hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntrt_mra_* | head -1 | xargs grep -i "Deploy file"
-wc -l /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
-cut -d'|' -f1-6 /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt | head -5
+$ ls -t /hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntrt_mra_* | head -1 | xargs grep -i "Deploy file"
+SAS Dataset - Deploy ;Deploy Table - deply_dtvntrt_mra ; Deploy file - deply_dtvntrt_mra_20261008; Intervention - DTVNTRT ; Line of Business - MRA ; USER - srcradcoolbthts ; Environment - ts ; SAS Config file - /hcaaapck/backup/IT/SIT/conf/sas.properties
+$ wc -l /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
+10 /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
+$ cut -d'|' -f1-6 /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt | head -5
+949879444|20260910135555|R2C26_949879444_1790177814_2|DTVNTRT|2026-10-01|AM37177
+949879444|20260910135555|R2C26_949879444_1073127924_1|DTVNTRT|2026-10-01|AM37177
+949879444|20260910135555|R2C26_949879444_1578116661_2|DTVNTRT|2026-10-01|AM37177
+613170689|20260910135555|R2C26_613170689_1275119182_1|DTVNTRT|2026-10-01|AM37177
+613170689|20260910135555|R2C26_613170689_1164042131_1|DTVNTRT|2026-10-01|AM37177
 
 SELECT lob, add_val6, filedatetime, COUNT(*)
 FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
 WHERE UPPER(intervention) = 'DTVNTRT'
 GROUP BY 1,2,3 ORDER BY 3 DESC;
+LOB	ADD_VAL6	FILEDATETIME	COUNT(*)
+MCR	ONSHORE	20260514145424	2
+MCR	OFFSHORE	20260514145424	18
+MCR	ONSHORE	20250408212552	295943
+MCR	OFFSHORE	20250408212552	1729612
+MCR	ONSHORE	20241119175441	3
+MRA	OFFSHORE	20241119175441	21
+MCR	OFFSHORE	20241119175441	7
+MRA	ONSHORE	20241119175441	9
