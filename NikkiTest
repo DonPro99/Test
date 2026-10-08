@@ -1,1 +1,4 @@
-Can this be corrected under the same ticket, or does something else need to happen on your end?
+Hi Nikhitha, there is a matching charts legacy file available. Business creates the test files based on the legacy files
+ 
+also the legacy file should be loaded in the SF prod table else that will be an issue 
+ 
