@@ -1,36 +1,3 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-RRR-Testing)
-$ R=305779b5a^1..305779b5a^2
+git diff 305779b5a^1 305779b5a -- '*pom.xml' | grep -n -B3 -A3 -i 'snapshot\|<!--'
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-RRR-Testing)
-$ git shortlog -sn --no-merges $R -- '*hoschartgenerator*' '*hoscda*' '*cda/pdfgen*'
-   112  Challa
-    50  Sunita,Barman
-    46  Potla
-    34  Srivastava, Asmit
-    16  SureshBellay Venga
-    12  Akula
-    10  Akula, Bhavishya
-     9  Gopi, Prapithu
-     5  Eedupuganti, Manoj
-     5  Nair
-     4  Srivastava
-     2  Eedupuganti
-     2  Potla, Lekhana
-     1  AG82989
-     1  Challa, Chandrika
-     1  Chembravalappil, Shiji
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-RRR-Testing)
-$ git shortlog -sn --no-merges $R -- '*Mdcd*' '*DisEnrollment*' '*DataExtractExec*'
-    28  Reddy
-     9  Mulla, Nasuruddin
-     8  am45700
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-RRR-Testing)
-$ git shortlog -sn --no-merges $R -- '*.idea*' '*.iml'
-     2  Akula
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-RRR-Testing)
-$ git shortlog -sn --no-merges $R -- 'snowpark/AnthemRAUtil/pom.xml'
-    20  Patchipala, Rajesh
-     2  Nair, Rahul Radhakrishnan
+git log --format='%h  %an  %ad  %s' --date=short -G'SNAPSHOT' 305779b5a^1..305779b5a^2 -- '*pom.xml'
