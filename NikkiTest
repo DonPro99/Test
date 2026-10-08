@@ -1,7 +1,6 @@
-ls -l /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat \
-      /raa1/backup/prodenvironment/sas_repository/mcare/archive/pv_20260910192835_20260911152502.sas7bdat \
-      /raa1/backup/prodenvironment/sas_repository/mcare/charts.sas7bdat
-
+-rw-rwSr-- 1 srcpck  ahpck 46360363008 Sep 10 23:20 /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat
+-rw-rw-r-- 1 am37177 ahpck  1656553472 Sep 11 15:39 /raa1/backup/prodenvironment/sas_repository/mcare/archive/pv_20260910192835_20260911152502.sas7bdat
+-rw-rwSr-- 1 srcpck  ahpck 46360363008 Sep 10 23:20 /raa1/backup/prodenvironment/sas_repository/mcare/charts.sas7bdat
 Reply to Pranaya:
 
 Thanks Pranaya, that makes sense. I confirmed the 09/10 charts batch isn't in Snowflake prod: RAD_MASTER_CHARTS_ALL_LOB goes from 09/09 to 10/01, so the 09/10 legacy load is missing. I'll raise it with the team to get it loaded into prod, and also into UAT so I can run the MBR+PROV/CPL test. I'll update you once it's in.
