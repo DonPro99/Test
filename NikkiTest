@@ -1,1 +1,9 @@
 Hi Pranaya, I ran the new deploy file (deply_dtvntrt_mra_20261008, 10 records). The charts it points to aren't in RAD_MASTER_CHARTS_ALL_LOB in UAT or prod. For example, chart 325213266000_1 for recordid 949879444 is from 09/10, but the latest chart batch for that member is 05/14. Without matching charts, the MBR+PROV and CPL job will return no records. Could you check with the MRA team which chart batch this deploy came from, or send a deploy that uses charts that are already loaded? Thanks!
+
+
+
+
+awk -F'|' 'BEGIN{printf "SELECT d.recordid, d.chartid, d.filedatetime,\n  CASE WHEN c.chartid IS NULL THEN '\''MISSING'\'' ELSE '\''FOUND'\'' END AS status\nFROM (VALUES\n"} 
+{printf "%s('\''%s'\'','\''%s'\'','\''%s'\'','\''%s'\'')\n", (NR>1?",":" "), $1,$2,$9,$11}
+END{print ") d(recordid, filedatetime, chartid, chartdatetime)\nLEFT JOIN U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB c\n  ON TRIM(c.recordid)=d.recordid AND TRIM(c.filedatetime)=d.filedatetime\n AND TRIM(c.chartid)=d.chartid AND TRIM(c.chartdatetime)=d.chartdatetime\nORDER BY status;"}' \
+/hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
