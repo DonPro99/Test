@@ -1,52 +1,6 @@
-/raa1/backup/devenvironment/sas_repository/deploy_in/archive/20261008/deply_dtvntrt_mra_20260728.sas7bdat
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/ --recursive | grep -i "deply_dtvntrt_mra" | sort | tail -5
 
-ls -l /raa1/backup/devenvironment/sas_repository/deploy_in/archive/20261008/
-
-
-ls -l /raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt*_2026{0924,1001}*
-ls -l /raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging/ELV_DTVNT_R2C_*
-
-cd /raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging
-head -1 ELV_DTVNT_R2C_MRA_ONSHORE_1_20261001153420.txt
-head -1 ELV_DTVNT_R2C_MRA_ONSHORE_1_202610011654_CPL.txt
-
-python3 ~/compare_projectid.py \
-  --mbr "ELV_DTVNT_R2C_MRA_*_20261001153420.txt" \
-  --cpl "ELV_DTVNT_R2C_MRA_*_202610011654_CPL*.txt"
-===================
-
-# put the business test deploy file in deploy_in
-ls -ltr /raa1/backup/prodenvironment/sas_repository/deploy_in | grep -i dtvntrt
-
-cd /hcaaapck/backup/IT/SIT/scripts/
-./start_sas_deploy_copy_hdfs_MN.sh DTVNTRT MRA
-ls -ltr /hcaaapck/backup/IT/work/ | grep -i dtvntrt
-
-# confirm the DTVNTRT ingest folder first (Pre-Match needed the _stg suffix, so check which one DTVNTRT uses)
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/ | grep -i dtvntrt
-
-aws s3 cp deply_dtvntrt_mra.txt \
-  s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/<dtvntrt folder from ls>/
-
-SELECT lob, add_val6, COUNT(*)
+SELECT lob, add_val6, filedatetime, COUNT(*)
 FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
 WHERE UPPER(intervention) = 'DTVNTRT'
-GROUP BY 1, 2;
-
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i datavant
-
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/ --recursive | grep -iE "dtvnt|datavant" | sort | tail -20
-
-mkdir -p ~/rbica14268 && cd ~/rbica14268
-aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/<job folder>/<run timestamp>/ . --recursive
-wc -l *.txt
-
-head -1 ELV_DTVNT_*CPL*.txt      # check header names
-head -1 <MBR+PROV file>
-
-python3 compare_projectid.py --mbr "<MBR+PROV file pattern>" --cpl "ELV_DTVNT_*CPL*.txt" --key ClientChartID
-
-SELECT PROJECTID, COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL
-WHERE EDL_RUN_ID = '<your run id>' GROUP BY 1;
-
-
+GROUP BY 1,2,3 ORDER BY 3 DESC;
