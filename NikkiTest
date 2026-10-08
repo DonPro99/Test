@@ -1,3 +1,178 @@
-git diff 305779b5a^1 305779b5a -- '*pom.xml' | grep -n -B3 -A3 -i 'snapshot\|<!--'
+$ git diff 305779b5a^1 305779b5a -- '*pom.xml' | grep -n -B3 -A3 -i 'snapshot\|<!--'
+6-             <version>3.4.1</version>
+7-         </dependency>
+8-
+9:-        <!-- RRR jar (system scope, unchanged) -->
+10:+        <!-- RRR jar (system scope, unchanged) - COMMENTED OUT DUE TO MISSING JAR FILE -->
+11:+        <!--
+12-         <dependency>
+13-             <groupId>org.carelon</groupId>
+14-             <artifactId>reduce_reuse_recycle</artifactId>
+15-@@ -106,6 +107,7 @@
+16-             <scope>system</scope>
+17:             <systemPath>/home/bmboagt/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar</systemPath>
+18-         </dependency>
+19-+        -->
+20-
+--
+45-+    </license>
+46-+  </licenses>
+47-+  <build>
+48:+    <!--sourceDirectory>src/main/scala</sourceDirectory>
+49-+    <plugins>
+50-+      <plugin>
+51-+        <executions>
+--
+124-+  <repositories>
+125-+    <repository>
+126-+      <releases />
+127:+      <snapshots>
+128-+        <enabled>false</enabled>
+129:+      </snapshots>
+130-+      <id>anthem</id>
+131-+      <url>https://artifactory.anthem.com:443/artifactory/public</url>
+132-+    </repository>
+--
+589-+                     <releases>
+590-+                           <enabled>true</enabled>
+591-+                     </releases>
+592:+                     <snapshots>
+593-+                           <enabled>false</enabled>
+594:+                     </snapshots>
+595-+              </repository>
+596-+
+597-+        </repositories>
+--
+629-+         <dependency>
+630-+            <groupId>com.anthem.ra</groupId>
+631-+            <artifactId>Anthem-RA-Util</artifactId>
+632:+            <version>0.0.1-SNAPSHOT</version>
+633-+        </dependency>
+634-+
+635-+        <dependency>
+--
+664-+    </dependency>
+665-+    <dependency>
+666-+       <groupId>com.typesafe.play</groupId>
+667:+       <artifactId>play-json_2.12</artifactId> <!-- Adjust the Scala version as needed -->
+668:+       <version>2.9.2</version> <!-- Specify the version of play-json -->
+669-+   </dependency>
+670-+
+671-+           <dependency>
+--
+698-+        </dependency>
+699-+
+700-+
+701:+<!-- https://mvnrepository.com/artifact/com.google.code./ggsonson -->
+702-+<dependency>
+703-+    <groupId>com.google.code.gson</groupId>
+704-+    <artifactId>gson</artifactId>
+705-+    <version>2.10</version>
+706-+</dependency>
+707:+<!-- https://mvnrepository.com/artifact/software.amazon.awssdk/auth -->
+708-+<dependency>
+709-+    <groupId>software.amazon.awssdk</groupId>
+710-+    <artifactId>auth</artifactId>
+711-+    <version>2.19.10</version>
+712-+</dependency>
+713:+<!-- https://mvnrepository.com/artifact/software.amazon.awssdk/regions -->
+714-+<dependency>
+715-+    <groupId>software.amazon.awssdk</groupId>
+716-+    <artifactId>regions</artifactId>
+717-+    <version>2.19.10</version>
+718-+</dependency>
+719:+<!-- https://mvnrepository.com/artifact/software.amazon.awssdk/secretsmanager -->
+720-+<dependency>
+721-+    <groupId>software.amazon.awssdk</groupId>
+722-+    <artifactId>secretsmanager</artifactId>
+--
+738-+
+739-+  <dependency>
+740-+       <groupId>com.typesafe.play</groupId>
+741:+       <artifactId>play-json_2.12</artifactId> <!-- Adjust the Scala version as needed -->
+742:+       <version>2.9.2</version> <!-- Specify the version of play-json -->
+743-+   </dependency>
+744-+        <dependency>
+745-+                   <groupId>com.itextpdf</groupId>
+--
+751-+                   <artifactId>xercesImpl</artifactId>
+752-+                   <version>2.12.0</version>
+753-+           </dependency>
+754:+           <!-- https://mvnrepository.com/artifact/com.itextpdf/html2pdf -->
+755-+           <dependency>
+756-+                   <groupId>com.itextpdf</groupId>
+757-+                   <artifactId>html2pdf</artifactId>
+--
+774-+           </dependency>
+775-+</dependencies>
+776-+<build>
+777:+       <!-- sourceDirectory>src/main/scala</sourceDirectory -->
+778-+        <pluginManagement>
+779-+
+780-+            <plugins>
+--
+848-+        </pluginManagement>
+849-+        <plugins>
+850-+            <plugin>
+851:+                <!-- Build an executable JAR -->
+852-+                <groupId>org.apache.maven.plugins</groupId>
+853-+                <artifactId>maven-jar-plugin</artifactId>
+854-+                <version>3.1.0</version>
+--
+856-+                    <archive>
+857-+                        <manifest>
+858-+                            <addClasspath>true</addClasspath>
+859:+                            <!-- classpathPrefix>dependency/</classpathPrefix -->
+860-+                            <mainClass>com.anthem.hoscda.pdfgen.RptHosPdfGenerator</mainClass>
+861-+                        </manifest>
+862-+                    </archive>
+--
+867-+                                                           <artifactId>maven-assembly-plugin</artifactId>
+868-+                                                           <version>2.4.1</version>
+869-+                                                           <configuration>
+870:+                                                                   <!-- get all project dependencies -->
+871-+                                                                   <descriptorRefs>
+872-+                                                                     <descriptorRef>jar-with-dependencies</descriptorRef>
+873-+                                                                   </descriptorRefs>
+--
+875-+                                                           <executions>
+876-+                                                                    <execution>
+877-+                                                                   <id>make-assembly</id>
+878:+                                                                   <!-- bind to the packaging phase -->
+879-+                                                                   <phase>package</phase>
+880-+                                                                   <goals>
+881-+                                                                    <goal>single</goal>
+--
+917-+                <artifactId>scala-maven-plugin</artifactId>
+918-+                <version>4.5.1</version>
+919-+                <executions>
+920:+                    <!--execution>
+921-+                        <id>scala-compile-first</id>
+922-+                        <phase>process-resources</phase>
+923-+                        <goals>
 
-git log --format='%h  %an  %ad  %s' --date=short -G'SNAPSHOT' 305779b5a^1..305779b5a^2 -- '*pom.xml'
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-RRR-Testing)
+$ git log --format='%h  %an  %ad  %s' --date=short -G'SNAPSHOT' 305779b5a^1..305779b5a^2 -- '*pom.xml'
+d04578b64  Challa  2026-02-05  commenting few dependencies in the pom
+5446cb3ff  Challa  2026-02-03  reverting the pom.xml changes
+3e7a56be8  Challa  2026-01-31  updating jars naming
+51ea7185f  Challa  2026-01-31  adding file formater to mainfest part files
+8d0b34867  Challa  2026-01-28  making changes as per RRR for sparksession
+132c04479  Mulla, Nasuruddin  2025-12-23  pom.xml edited online with Bitbucket
+b65a2362d  Mulla, Nasuruddin  2025-12-10  pom.xml edited online with Bitbucket
+41ad03797  Mulla, Nasuruddin  2025-12-08  pom.xml edited online with Bitbucket
+31da44c5a  Mulla, Nasuruddin  2025-12-08  pom.xml edited online with Bitbucket
+84dc0fdfd  Mulla, Nasuruddin  2025-12-08  pom.xml edited online with Bitbucket
+921b4a166  Mulla, Nasuruddin  2025-12-04  pom.xml edited online with Bitbucket
+40bb67f99  AG82989  2025-11-21  updating code
+678359c4b  AG82989  2025-11-21  updating code
+744f0ad60  AG82989  2025-11-18  reverting the code
+b22f3f43f  Pullannagari  2025-03-05  DOB Changes
+cc2eb8d54  Pullannagari  2025-02-25  SSN Detok
+8a88b0967  Pullannagari  2025-02-13  MRO changes
+704da1fdd  AG82989  2025-02-05  adding virtix folder
+80b828056  AF85529  2025-01-29  removing
+f654b1ea2  AF85529  2025-01-29  update
+0b14e576d  AF85529  2025-01-28  update
+9c57730cf  AG82989  2025-01-28  adding sharecare mra code
+b2ba13a95  AF85529  2025-01-26  adding new sharecare mra files
