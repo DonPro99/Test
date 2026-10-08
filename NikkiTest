@@ -1,12 +1,11 @@
-SELECT lob, add_val6, COUNT(*)
-FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
-WHERE UPPER(intervention) = 'DTVNTRT' AND filedatetime = '20260910135555'
-GROUP BY 1,2;
-
-SELECT COUNT(*), COUNT(DISTINCT chartid)
+-- 1) Do these record IDs exist in UAT charts at all?
+SELECT recordid, filedatetime, COUNT(*)
 FROM U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
-WHERE recordid IN ('949879444','613170689')
-  AND filedatetime = '20260910135555';
+WHERE TRIM(recordid) IN ('949879444','613170689')
+GROUP BY 1,2 ORDER BY 2 DESC;
 
-cut -d'|' -f1 /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt | sort -u
-
+-- 2) Same check against the prod replica
+SELECT recordid, filedatetime, COUNT(*)
+FROM S01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
+WHERE TRIM(recordid) IN ('949879444','613170689')
+GROUP BY 1,2 ORDER BY 2 DESC;
