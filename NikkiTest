@@ -1,1 +1,1 @@
-aws s3 ls s3://crln-070864595727-ssm-uat-filetransfer/inbound/raa/medicare/na/ | grep -i dtvntrt
+Got it. Should I pull the list of all commits that came into master through my PR and check with each author that their changes are approved for prod? Or is there something specific you want me to verify?
