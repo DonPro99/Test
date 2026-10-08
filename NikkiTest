@@ -3,26 +3,25 @@ Hi Pranaya, I ran the new deploy file (deply_dtvntrt_mra_20261008, 10 records). 
 
 
 
-$ EN '\''MISSING'\'' ELSE '\''FOUND'\'' END AS status\nFROM (VALUES\n"}                                         <
-> {printf "%s('\''%s'\'','\''%s'\'','\''%s'\'','\''%s'\'')\n", (NR>1?",":" "), $1,$2,$9,$11}
-> datetime\n AND TRIM(c.chartid)=d.chartid AND TRIM(c.chartdatetime)=d.chartdatetime\nORDER BY status;"}' \     <
-> /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
-SELECT d.recordid, d.chartid, d.filedatetime,
-  CASE WHEN c.chartid IS NULL THEN 'MISSING' ELSE 'FOUND' END AS status
-FROM (VALUES
- ('949879444','20260910135555','325213266000_1','20260910192835')
-,('949879444','20260910135555','323824086100_1','20260910192835')
-,('949879444','20260910135555','321965614200_1','20260910192835')
-,('613170689','20260910135555','293798412400_1','20260910192835')
-,('613170689','20260910135555','293798494300_1','20260910192835')
-,('949879444','20260910135555','324907775400_1','20260910192835')
-,('351071880','20260910135555','26170P055750SA_1','20260910192835')
-,('949879444','20260910135555','322357130000_1','20260910192835')
-,('351071880','20260910135555','26139P069219SA_1','20260910192835')
-,('902006620','20260910135555','324266735900_1','20260910192835')
-) d(recordid, filedatetime, chartid, chartdatetime)
+WITH d(recordid, filedatetime, chartid, chartdatetime) AS (
+  SELECT * FROM VALUES
+   ('949879444','20260910135555','325213266000_1','20260910192835')
+  ,('949879444','20260910135555','323824086100_1','20260910192835')
+  ,('949879444','20260910135555','321965614200_1','20260910192835')
+  ,('613170689','20260910135555','293798412400_1','20260910192835')
+  ,('613170689','20260910135555','293798494300_1','20260910192835')
+  ,('949879444','20260910135555','324907775400_1','20260910192835')
+  ,('351071880','20260910135555','26170P055750SA_1','20260910192835')
+  ,('949879444','20260910135555','322357130000_1','20260910192835')
+  ,('351071880','20260910135555','26139P069219SA_1','20260910192835')
+  ,('902006620','20260910135555','324266735900_1','20260910192835')
+)
+SELECT d.recordid, d.chartid,
+  MAX(CASE WHEN TRIM(c.filedatetime)=d.filedatetime AND TRIM(c.chartdatetime)=d.chartdatetime
+           THEN 'EXACT MATCH' END)                         AS exact_match,
+  MAX(c.filedatetime)                                       AS chart_found_in_batch
+FROM d
 LEFT JOIN U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB c
-  ON TRIM(c.recordid)=d.recordid AND TRIM(c.filedatetime)=d.filedatetime
- AND TRIM(c.chartid)=d.chartid AND TRIM(c.chartdatetime)=d.chartdatetime
-ORDER BY status;
-$ 
+  ON TRIM(c.recordid)=d.recordid AND TRIM(c.chartid)=d.chartid
+GROUP BY 1,2
+ORDER BY 1,2;
