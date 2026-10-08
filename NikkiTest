@@ -1,36 +1,6 @@
-grep -n -i -A8 "join" <path>/DatavantMbrProvETL.scala | grep -i -E "join|recordid|filedatetime|chart|add_val"
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-RRR-Testing)
-$ grep -n -i -A8 "join" snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala | grep -i -E "join|recordid|filedatetime|chart|add_val"
-131:                    inner join $chrtsMasterTable a
-132-                    on trim(a.recordid) = trim(b.recordid) and
-133-                    trim(a.filedatetime) = trim(b.filedatetime) and
-134-                    trim(chartid) = trim(add_val1) and
-135-                    trim(chartdatetime) = trim(add_val2) and
-144:        throw DataFrameEmptyException("Deploy records are not matching with the Charts data based on JOIN criteria, so cannot generate intervention retro Outbound file for " + intervention + " and " + lob)
-577:      val joinLob = if (lob.equalsIgnoreCase("MRA")) "MCR" else lob
-581-              b.add_val4,
-582-              b.add_val6    as ONOFFSHORE,
-583-              b.add_val11   as FTPFLAG,
-585-              b.add_val3,
-600:          inner join $chrtsMasterTable a
-601-              on trim(a.recordid)      = trim(b.recordid)
-602-              and trim(a.filedatetime) = trim(b.filedatetime)
-603-              and trim(chartid)        = trim(add_val1)
-604-              and trim(chartdatetime)  = trim(add_val2)
-607:              and trim(b.lob)          = '$joinLob'
-866:           inner join $chrtsMasterTable a
-867-               on trim(a.recordid)      = trim(b.recordid)
-868-               and trim(a.filedatetime) = trim(b.filedatetime)
-869-               and trim(chartid)        = trim(add_val1)
-870-               and trim(chartdatetime)  = trim(add_val2)
+head -1 /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt | awk -F'|' '{for(i=1;i<=NF;i++) print i": "$i}'
 
--- What did prod's deploy load store for this member?
-SELECT recordid, filedatetime, add_val1, add_val2, add_val6, intervention
-FROM P01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
-WHERE TRIM(recordid) = '949879444' AND UPPER(intervention) = 'DTVNTRT';
-
--- Is the chart stored under a different ID format?
-SELECT chartid, filedatetime, chartdatetime
-FROM P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
+SELECT filedatetime, chartid, chartdatetime
+FROM U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
 WHERE TRIM(recordid) = '949879444'
-  AND chartid LIKE '%1790177814%';
+ORDER BY filedatetime DESC;
