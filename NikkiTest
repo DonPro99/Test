@@ -1,14 +1,1 @@
-Subject: RE: PR #12725 – request to revert on master
-
-Hi team,
-
-Thanks for confirming the merge went into master even though the build failed.
-
-PR #12725 unintentionally brought preprod changes into master, including the pom.xml change that commented out the RRR jar and caused the MVN build failure. Nothing was deployed.
-
-Could we revert merge commit 305779b5a82ad20c89f91108b09cd614ffa40dbe on master? That would take master back to its previous state (4edda1e7b). If possible, we'd like to get this done before tomorrow's deployments.
-
-Is anyone from onshore DevOps available to help with this?
-
-Thanks,
-Nikhitha
+-rw-rwSr--   1 am40147         ahpck      196608 Oct  8 13:51 deply_dtvntrt_mra_20261008.sas7bdat
