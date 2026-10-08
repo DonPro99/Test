@@ -1,6 +1,1 @@
-CHARTID	FILEDATETIME	CHARTDATETIME
-314924523700_1	20260514145424	20260514194419
-315412197400_1	20260514145424	20260514194419
-315819560800_1	20260514145424	20260514194419
-315721637600_1	20260514145424	20260514194419
-312930174200_1	20260410100944	20260410154235
+Hi Pranaya, I ran the new deploy file (deply_dtvntrt_mra_20261008, 10 records). The charts it points to aren't in RAD_MASTER_CHARTS_ALL_LOB in UAT or prod. For example, chart 325213266000_1 for recordid 949879444 is from 09/10, but the latest chart batch for that member is 05/14. Without matching charts, the MBR+PROV and CPL job will return no records. Could you check with the MRA team which chart batch this deploy came from, or send a deploy that uses charts that are already loaded? Thanks!
