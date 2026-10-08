@@ -1,12 +1,1 @@
-preprod/BDF/deply_dtvntmbrrt_aca.txt.pgp --- This file name matched the pattern "preprod/BDF/deply_.*_aca.txt" and got transferred to this destination "s3://crln-raa-uat-sf-dataz-nogbd-nophi-useast1/raa/commercial/na/all_files_deploy_aca/${timestamp(%Y%m%d_%H%M%S)}/incr/"
-
-
-aws s3 ls s3://crln-raa-uat-sf-dataz-nogbd-nophi-useast1/raa/commercial/na/all_files_deploy_aca/ --recursive | grep -i dtvntmbrrt
-[hadoop@ip-10-127-204-148 ~]$ aws s3 ls s3://crln-raa-uat-sf-dataz-nogbd-nophi-useast1/raa/commercial/na/all_files_deploy_aca/ --recursive | grep -i dtvntmbrrt
-2026-09-22 21:37:44     467260 raa/commercial/na/all_files_deploy_aca/20260922_213743/incr/deply_dtvntmbrrt_aca.txt
-2026-10-01 15:27:38     467260 raa/commercial/na/all_files_deploy_aca/20261001_152737/incr/deply_dtvntmbrrt_aca.txt
-2026-10-07 17:22:39     467260 raa/commercial/na/all_files_deploy_aca/20261007_172238/incr/deply_dtvntmbrrt_aca.txt
-
-Confirmed - the file has actually been landing in S3 the whole time, just under the wrong destination. I found it at s3://crln-raa-uat-sf-dataz-nogbd-nophi-useast1/raa/commercial/na/all_files_deploy_aca/, going back to Sept 22, Oct 1, and Oct 7 - every test I've run.
-
-Since the generic pattern (preprod/BDF/deply_.*_aca.txt) is catching it before any DTVNTMBRRT-specific pattern can, can you set up a more specific pattern for deply_dtvntmbrrt_aca.txt that routes to the actual RITM destination (.../commercial/na/deply_dtvntmbrrt_aca_stg/...), with priority over the generic catch-all?
+Just to clarify - the destination path (.../commercial/na/deply_dtvntmbrrt_aca_stg/...) was already specified on the original RITM (RITM26704813/SCTASK31464285)
