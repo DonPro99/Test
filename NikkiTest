@@ -1,3 +1,12 @@
+# 1. Does the folder exist, and what's in it lately?
+ls -ltr /raa1/backup/prodenvironment/sas_repository/deploy_in | tail -20
+
+# 2. Any Datavant deploy file anywhere under the SAS repository?
+find /raa1/backup/prodenvironment/sas_repository -iname "*dtvnt*" 2>/dev/null
+
+# 3. Check the SIT side, since the scripts run from /hcaaapck/backup/IT/SIT
+find /hcaaapck/backup/IT -iname "*dtvnt*" 2>/dev/null | head -20
+
 # put the business test deploy file in deploy_in
 ls -ltr /raa1/backup/prodenvironment/sas_repository/deploy_in | grep -i dtvntrt
 
@@ -17,3 +26,19 @@ WHERE UPPER(intervention) = 'DTVNTRT'
 GROUP BY 1, 2;
 
 aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i datavant
+
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/ --recursive | grep -iE "dtvnt|datavant" | sort | tail -20
+
+mkdir -p ~/rbica14268 && cd ~/rbica14268
+aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/<job folder>/<run timestamp>/ . --recursive
+wc -l *.txt
+
+head -1 ELV_DTVNT_*CPL*.txt      # check header names
+head -1 <MBR+PROV file>
+
+python3 compare_projectid.py --mbr "<MBR+PROV file pattern>" --cpl "ELV_DTVNT_*CPL*.txt" --key ClientChartID
+
+SELECT PROJECTID, COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL
+WHERE EDL_RUN_ID = '<your run id>' GROUP BY 1;
+
+
