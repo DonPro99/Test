@@ -1,1 +1,5 @@
-Got it. Should I pull the list of all commits that came into master through my PR and check with each author that their changes are approved for prod? Or is there something specific you want me to verify?
+git fetch origin
+git log --merges --oneline -n 10 origin/master
+
+git log --no-merges --format='%h  %an  %ad  %s' --date=short <merge-id>^1..<merge-id>^2
+
