@@ -2,3 +2,7 @@ preprod/BDF/deply_dtvntmbrrt_aca.txt.pgp --- This file name matched the pattern 
 
 
 aws s3 ls s3://crln-raa-uat-sf-dataz-nogbd-nophi-useast1/raa/commercial/na/all_files_deploy_aca/ --recursive | grep -i dtvntmbrrt
+[hadoop@ip-10-127-204-148 ~]$ aws s3 ls s3://crln-raa-uat-sf-dataz-nogbd-nophi-useast1/raa/commercial/na/all_files_deploy_aca/ --recursive | grep -i dtvntmbrrt
+2026-09-22 21:37:44     467260 raa/commercial/na/all_files_deploy_aca/20260922_213743/incr/deply_dtvntmbrrt_aca.txt
+2026-10-01 15:27:38     467260 raa/commercial/na/all_files_deploy_aca/20261001_152737/incr/deply_dtvntmbrrt_aca.txt
+2026-10-07 17:22:39     467260 raa/commercial/na/all_files_deploy_aca/20261007_172238/incr/deply_dtvntmbrrt_aca.txt
