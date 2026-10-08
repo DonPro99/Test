@@ -1,3 +1,5 @@
-git checkout <your-branch-name>
-git log --oneline -n 5
+git push origin --delete <your-branch-name>
 git push origin <your-branch-name>
+
+git fetch origin
+git log --oneline -n 5 origin/<your-branch-name>
