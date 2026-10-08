@@ -1,4 +1,12 @@
-Hi Nikhitha, there is a matching charts legacy file available. Business creates the test files based on the legacy files
- 
-also the legacy file should be loaded in the SF prod table else that will be an issue 
- 
+find /raa1/backup/prodenvironment/sas_repository -iname "*20260910*" 2>/dev/null | head -20
+find /raa1/backup/prodenvironment/sas_repository -iname "*chart*" -newermt 2026-09-09 ! -newermt 2026-09-12 2>/dev/null | head -20
+
+Reply to Pranaya:
+
+Thanks Pranaya, that makes sense. I confirmed the 09/10 charts batch isn't in Snowflake prod: RAD_MASTER_CHARTS_ALL_LOB goes from 09/09 to 10/01, so the 09/10 legacy load is missing. I'll raise it with the team to get it loaded into prod, and also into UAT so I can run the MBR+PROV/CPL test. I'll update you once it's in.
+
+Message to Nazir/Akhil (or whoever owns the charts load):
+
+Hi, the 09/10 MRA charts batch (filedatetime 20260910135555, chartdatetime 20260910192835) is missing from P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB. Prod has 09/07, 09/08, 09/09 and then 10/01. The legacy SAS charts file for 09/10 exists, and the MRA team built test deploys from it. Can you check why the 09/10 load didn't run, and backfill it in prod? Can we also get it into U01? I need it for RBICA-14268 UAT testing. Thanks!
+
+After the 09/10 charts land in U01, rerun the 10-row FOUND/MISSING query. Once it shows all 10 as EXACT MATCH, run the ingest and then 780009056.
