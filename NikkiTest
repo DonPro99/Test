@@ -1,1 +1,13 @@
--rw-rwSr--   1 am40147         ahpck      196608 Oct  8 13:51 deply_dtvntrt_mra_20261008.sas7bdat
+ls -l /raa1/backup/devenvironment/sas_repository/deploy_in/ | grep -i dtvntrt
+ls -l /raa1/backup/prodenvironment/sas_repository/deploy_in/ | grep -i dtvntrt
+
+cd /hcaaapck/backup/IT/SIT/scripts/
+./start_sas_deploy_copy_hdfs_MN.sh DTVNTRT MRA
+
+cp -p /raa1/backup/prodenvironment/sas_repository/deploy_in/deply_dtvntrt_mra_20261008.sas7bdat \
+      /raa1/backup/devenvironment/sas_repository/deploy_in/
+cd /hcaaapck/backup/IT/SIT/scripts/
+./start_sas_deploy_copy_hdfs_MN.sh DTVNTRT MRA
+
+ls -t /hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntrt_mra_* | head -1 | xargs cat
+wc -l /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
