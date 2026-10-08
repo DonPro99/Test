@@ -1,5 +1,1 @@
-git push origin --delete <your-branch-name>
-git push origin <your-branch-name>
-
-git fetch origin
-git log --oneline -n 5 origin/<your-branch-name>
+Hi Rajesh, found it. While resolving a conflict on the preprod PR, preprod got merged into my feature branch, which is why other changes are showing. My actual changes are just two commits. I can either delete and recreate the branch with only those two, or push them as a new clean branch, whichever is easier for DevOps. Which do you prefer?"
