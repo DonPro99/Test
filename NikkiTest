@@ -1,4 +1,7 @@
-Hi Pranaya, for RBICA-14268 (Datavant MBR+PROV / CPL ProjectID validation), I found the DTVNTRT MRA deploy file deply_dtvntrt_mra_20260728 in the dev deploy path and I'm using it to generate the test files. Just want to confirm I'm on the right path. Is this the test data you'd like me to use, or is there a newer file for this ticket? If there's a new one, please share it or drop it in the deploy_in folder and I'll rerun with it. Thanks!
+/raa1/backup/devenvironment/sas_repository/deploy_in/archive/20261008/deply_dtvntrt_mra_20260728.sas7bdat
+
+ls -l /raa1/backup/devenvironment/sas_repository/deploy_in/archive/20261008/
+
 
 ls -l /raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt*_2026{0924,1001}*
 ls -l /raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging/ELV_DTVNT_R2C_*
