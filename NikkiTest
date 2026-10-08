@@ -1,10 +1,11 @@
 cd ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files
 git fetch origin
-git log --format='%h  %an  %ad  %s' --date=short -n 10 origin/<your-branch-name>
+git checkout <your-branch-name>
+git pull
+git branch backup-<your-branch-name>
 
-git fetch origin
-git checkout <your-branch-name>-clean
-git cherry-pick <dummy-one-id> <dummy-two-id>
-git push origin <your-branch-name>-clean
+git log --oneline -n 5
 
-git log --oneline origin/master..origin/<your-branch-name>-clean
+git reset --hard <dummy-two-id>
+
+git push --force-with-lease origin <your-branch-name>
