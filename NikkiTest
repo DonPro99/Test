@@ -1,12 +1,3 @@
--rw-rwSr-- 1 srcpck  ahpck 46360363008 Sep 10 23:20 /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat
--rw-rw-r-- 1 am37177 ahpck  1656553472 Sep 11 15:39 /raa1/backup/prodenvironment/sas_repository/mcare/archive/pv_20260910192835_20260911152502.sas7bdat
--rw-rwSr-- 1 srcpck  ahpck 46360363008 Sep 10 23:20 /raa1/backup/prodenvironment/sas_repository/mcare/charts.sas7bdat
-Reply to Pranaya:
-
-Thanks Pranaya, that makes sense. I confirmed the 09/10 charts batch isn't in Snowflake prod: RAD_MASTER_CHARTS_ALL_LOB goes from 09/09 to 10/01, so the 09/10 legacy load is missing. I'll raise it with the team to get it loaded into prod, and also into UAT so I can run the MBR+PROV/CPL test. I'll update you once it's in.
-
-Message to Nazir/Akhil (or whoever owns the charts load):
-
-Hi, the 09/10 MRA charts batch (filedatetime 20260910135555, chartdatetime 20260910192835) is missing from P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB. Prod has 09/07, 09/08, 09/09 and then 10/01. The legacy SAS charts file for 09/10 exists, and the MRA team built test deploys from it. Can you check why the 09/10 load didn't run, and backfill it in prod? Can we also get it into U01? I need it for RBICA-14268 UAT testing. Thanks!
-
-After the 09/10 charts land in U01, rerun the 10-row FOUND/MISSING query. Once it shows all 10 as EXACT MATCH, run the ingest and then 780009056.
+SELECT DATE(EDL_LOAD_DTM) AS load_day, COUNT(*)
+FROM P01_RAA.RAA_RAWZ.rad_master_charts_all_lob
+GROUP BY 1 ORDER BY 1 DESC;
