@@ -1,123 +1,16 @@
-$ ls -ltr /raa1/backup/prodenvironment/sas_repository/deploy_in | tail -20
-total 1290881
--rw-rwSr-- 1 am63423         ahpck  12124160 Jun  3 15:20 deply_optmtrg_oot_mra_20260603.sas7bdat
--rw-rwSr-- 1 am37177         ahpck 200409088 Jun  5 12:13 deply_optmtrg_mra_20260605.sas7bdat
--rw-rwSr-- 1 am63423         ahpck 185925632 Jun  5 13:41 deply_optmtrg_combo_20260605.sas7bdat
-drwxrwsr-x 4 srcradcoolbthpr ahpck      4096 Jun  7 08:00 archive
--rw-rwSr-- 1 am37177         ahpck 197656576 Jun 17 17:18 deply_optmtrg_mra_20260617.sas7bdat
--rw-rwSr-- 1 am37177         ahpck 197656576 Jun 18 15:47 deply_optmtrg_mra_20260618.sas7bdat
--rw-rwSr-- 1 am63423         ahpck 183566336 Jun 18 15:48 deply_optmtrg_combo_20260618.sas7bdat
--rw-rwSr-- 1 am63423         ahpck  36634624 Aug 27 20:04 deply_optmtrg_oot_mra_20260827.sas7bdat
--rw-rwSr-- 1 am63423         ahpck  77266944 Aug 27 20:08 deply_optmtrg_mra_20260827.sas7bdat
--rw-rw-r-- 1 am63423         ahpck 115933184 Aug 27 20:14 deply_optmtrg_combo_20260827.sas7bdat
--rw-r--r-- 1 am40147         ahpck  32636928 Sep 24 13:15 deply_optmtrg_oot_mra_20260924.sas7bdat
--rw-r--r-- 1 am63423         ahpck  82051072 Oct  1 14:34 deply_optmtrg_combo_20261001.sas7bdat
-$ find /raa1/backup/prodenvironment/sas_repository -iname "*dtvnt*" 2>/dev/null
-/raa1/backup/prodenvironment/sas_repository/deploy_in/archive/20260607/deply_dtvntrt_mra_20260605.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_in/archive/20260226/deply_dtvntmbrrt_mra_20260226.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging/ELV_DTVNT_R2C_MRA_ONSHORE_1_20261001153420.txt
-/raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging/ELV_DTVNT_R2C_MRA_ONSHORE_1_202610011654_CPL.txt
-/raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging/ELV_DTVNT_R2C_MRA_OFFSHORE_1_202610011654_CPL_1.txt
-/raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging/ELV_DTVNT_R2C_MRA_OFFSHORE_2_20261001153420.txt
-/raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging/ELV_DTVNT_R2C_MRA_OFFSHORE_1_20261001153420.txt
-/raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging/ELV_DTVNT_R2C_MRA_OFFSHORE_2_202610011654_CPL_2.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1D_MRA_OFFSHORE_1_20260617155411.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1D_MRA_OFFSHORE_2_20260617155411_CPL_2.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_OFFSHORE_1_20260714172511_CPL_1.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_ONSHORE_20260610234550.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_OFFSHORE_20260610234550.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_20260227044649_OLD
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_20260227044649_OLD/Round 1 - QA Approved/ELV_DTVNT_MBR_R1_MRA_OFFSHORE_20260227044649_2.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_20260227044649_OLD/Round 1 - QA Approved/ELV_DTVNT_MBR_R1_MRA_OFFSHORE_20260227044649_3.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_20260227044649_OLD/Round 1 - QA Approved/ELV_DTVNT_MBR_R1_MRA_ONSHORE_20260227044649.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_20260227044649_OLD/Round 1 - QA Approved/ELV_DTVNT_MBR_R1_MRA_OFFSHORE_20260227044649_1.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_20260227044649_OLD/ELV_DTVNT_MBR_R1_MRA_ONSHORE_20260227044649.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_20260227044649_OLD/ELV_DTVNT_MBR_R1_MRA_OFFSHORE_20260227044649.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1D_MRA_ONSHORE_1_20260617155411_CPL.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_ONSHORE_test_20250519122426.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_OFFSHORE_20250805025626.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1D_MRA_ONSHORE_1_20260617155411.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_OFFSHORE_1_20260625165438_CPL_TEST.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_ONSHORE_1_20260520151456.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_OFFSHORE_20260227044649_2.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_ONSHORE_20250629030240.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_PREMATCH_5_20260914154118.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_OFFSHORE_20250702025915.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_ONSHORE_20250805025626.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_OFFSHORE_20260227044649_3.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_PREMATCH_6_20260914154118.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_ONSHORE_20260227044649.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_ONSHORE_20250702025915.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_ONSHORE_20250520070118.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_PREMATCH_OFFSHORE_1_20260914151603.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_ONSHORE_20250424071722.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_OFFSHORE_20250520070118.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_PREMATCH_4_20260914154118.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1D_MRA_OFFSHORE_2_20260617155411.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_OFFSHORE_20260227044649_1.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_ONSHORE_20250610024725.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_OFFSHORE_test_20250519122426.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_OFFSHORE_4_20260520151456.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_OFFSHORE_20250629030240.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_PREMATCH_1_20260914154118.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_ONSHORE_TEST_20250408173510.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_OFFSHORE_1_20260520151456.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_OFFSHORE_3_20260520151456.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_MBR_R1_MRA_OFFSHORE_20250610024725.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_OFFSHORE_20250813025940.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_PREMATCH_3_20260914154118.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1D_MRA_OFFSHORE_1_20260617155411_CPL_1.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_OFFSHORE_2_20260520151456.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_OFFSHORE_20250424071722.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_PREMATCH_2_20260914154118.txt
-/raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R1_MRA_OFFSHORE_TEST_20250408173510.txt
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20260917_2.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20260924_2.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrtpm_mra_20260909.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20260917_1.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrtpm_mra_20260812.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20250701.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntmbrrt_mra_20250609.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20260605.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntmbrrt_mra_20250221.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrtpm_mra_20260914.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20260513.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_nte_mra_20261001.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20260924_1.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20260728.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20250627.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20261001.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvnt_mra_20250609.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20250812.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20250423.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntmbrrt_mra_20260226.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20260618.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20260617.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntmbrrt_mra_2025211.sas7bdat
-/raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt_mra_20250804.sas7bdat
-$ find /hcaaapck/backup/IT -iname "*dtvnt*" 2>/dev/null | head -20
-/hcaaapck/backup/IT/SIT/log/sas_deploy_copy_dtvntmbrrt_radv_2026_10_01_11:32:31.log
-/hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntmbrrt_mra_20260526_14.22.04.log
-/hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntmbrrt_mra_20250211_10.43.22.log
-/hcaaapck/backup/IT/SIT/log/sas_deploy_copy_dtvntmbrrt_aca_2026_09_22_17:30:35.log
-/hcaaapck/backup/IT/SIT/log/deply_dtvntmbrrt_mra-SFTP-SAS-S3-20260526142222.log
-/hcaaapck/backup/IT/SIT/log/deply_dtvntmbrrt_mra-SFTP-SAS-S3-20250214114619.log
-/hcaaapck/backup/IT/SIT/log/deply_dtvntrt_mra-SFTP-SAS-S3-20250407211849.log
-/hcaaapck/backup/IT/SIT/log/deply_dtvntrt_mra-SFTP-SAS-S3-20260622131831.log
-/hcaaapck/backup/IT/SIT/log/sas_deploy_copy_dtvntrtpm_mra_2026_09_14_10:36:02.log
-/hcaaapck/backup/IT/SIT/log/sas_deploy_copy_dtvntrtpm_mra_2026_09_11_11:28:41.log
-/hcaaapck/backup/IT/SIT/log/sas_deploy_copy_dtvntmbrrt_mra_2026_04_10_10:25:30.log
-/hcaaapck/backup/IT/SIT/log/deply_dtvntrt_mra-SFTP-SAS-S3-20260622131936.log
-/hcaaapck/backup/IT/SIT/log/deply_dtvntmbrrt_mra-SFTP-SAS-S3-20250211104338.log
-/hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntrt_mra_20261008_11.07.29.log
-/hcaaapck/backup/IT/SIT/log/sas_deploy_copy_dtvntmbrrt_radv_2026_09_23_15:47:30.log
-/hcaaapck/backup/IT/SIT/log/deply_dtvntrt_mra-SFTP-SAS-S3-20260622132524.log
-/hcaaapck/backup/IT/SIT/log/sas_deploy_copy_dtvntrt_mra_2025_02_17_09:50:08.log
-/hcaaapck/backup/IT/SIT/log/deply_dtvntrt_mra-SFTP-SAS-S3-20261008110856.log
-/hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntrt_mra_20260729_12.31.04.log
-/hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntmbrrt_aca_20261007_13.14.49.log
+cat /hcaaapck/backup/IT/SIT/log/copy_deploy_dataset_dtvntrt_mra_20261008_11.07.29.log
+tail -40 /hcaaapck/backup/IT/SIT/log/deply_dtvntrt_mra-SFTP-SAS-S3-20261008110856.log
 
+ls -l /raa1/backup/prodenvironment/sas_repository/deploy_out/deply_dtvntrt*_2026{0924,1001}*
+ls -l /raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging/ELV_DTVNT_R2C_*
 
+cd /raa1/backup/prodenvironment/sas_repository/Vendor_File_Staging
+head -1 ELV_DTVNT_R2C_MRA_ONSHORE_1_20261001153420.txt
+head -1 ELV_DTVNT_R2C_MRA_ONSHORE_1_202610011654_CPL.txt
+
+python3 ~/compare_projectid.py \
+  --mbr "ELV_DTVNT_R2C_MRA_*_20261001153420.txt" \
+  --cpl "ELV_DTVNT_R2C_MRA_*_202610011654_CPL*.txt"
 ===================
 
 # put the business test deploy file in deploy_in
