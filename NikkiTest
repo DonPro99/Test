@@ -1,3 +1,4 @@
 git log --oneline -n 3 HEAD
 git diff --stat 4edda1e7b HEAD | tail -5
 git diff --summary 4edda1e7b HEAD | head -20
+mdcdMedMembersMasterTable
