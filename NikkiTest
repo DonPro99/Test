@@ -1,2 +1,17 @@
-git branch -r --contains 99e8148f7 | grep -E "preprod|master|uat|develop|sit"
-git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala | head -3
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git branch -r --contains 99e8148f7 | grep -E "preprod|master|uat|develop|sit"
+  origin/HEAD -> origin/master
+  origin/develop
+  origin/feature/AM-71511-fix-pom-preprod
+  origin/master
+  origin/preprod
+  origin/sit
+  origin/uat
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala | head -5
+762f5a581 | Bachamgari, Divya | 2026-02-09 | Pull request #9039: Feature/AM45700 202601 MEDICAIDTESTING
+031e6ce13 | Reddy, Shruthi | 2025-04-19 | Pull request #4716: claim chase extract
+b9090fa12 | Reddy, Shruthi | 2024-06-22 | Pull request #1448: prod fix
+0b3f6f855 | Reddy, Shruthi | 2024-05-24 | Pull request #1204: Create medicaid outbound files separation
+1b97c3745 | Reddy, Shruthi | 2024-05-24 | Pull request #1179: Outbound Files creation
