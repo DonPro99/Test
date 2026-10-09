@@ -11,11 +11,10 @@ git show --no-patch --format='%h | %an <%ae> | %ad | %s' --date=iso 305779b5a
 "Thanks. I've raised a PR that reverts #12725 on master only (no other environments touched). It applied cleanly with no conflicts, and the code is identical to master before #12725 (4edda1e7b). PR: [link]. After it's merged, I'll re-promote only my intended changes from a new branch through the normal path. @Rajesh, can you review?"
 One more note: feature/RAA-14114-mcid-npi-dos-synthesis currently points at the same commit as master (305779b5a), so it contains all the preprod changes from #12725. Whoever owns RBICA-14114 should avoid merging that branch into dev/SIT/UAT. It would be safer to recreate it from master after the revert is merged."
 
+Hi Rajesh, I've raised the revert PR for #12725 and shared it in the group chat: [PR link]
 
-Hi, thanks for getting back to me. I know you're not directly involved, but I'd appreciate a quick opinion.
+It reverts merge commit 305779b5a on master only. It applied cleanly, and the code matches master's state before #12725 (4edda1e7b). Nothing is touched in the lower environments.
 
-Background: my PR #12725 to master accidentally brought in preprod changes, because I had merged preprod into my feature branch while resolving a conflict. The MVN build failed, but the merge still landed in master. Nothing was deployed.
+Also, feature/RAA-14114-mcid-npi-dos-synthesis points at the same commit as master (305779b5a), so it has all the preprod changes. Its owner should avoid merging it into dev/SIT/UAT.
 
-What I did: I created a new branch from master and reverted the merge commit (305779b5a) with git revert -m 1. It applied cleanly with no conflicts, and the code now matches master exactly as it was before my PR (4edda1e7b). It targets master only; no other environments are touched. PR: [link].
-
-Does this look like the right approach to you? If so, would you know who can approve and merge it to master?"
+Could you review when you get a chance? Once it's reviewed, I'll send an email to everyone with the details.
