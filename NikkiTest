@@ -1,27 +1,4 @@
-git diff 4edda1e7b 305779b5a -- snowpark/sdigenerator/.idea/compiler.xml
-
-git diff 4edda1e7b origin/master -- '*pom.xml'
-
-git diff 4edda1e7b feature/AM-71511-revert-pr-12725 -- '*pom.xml'
-
-echo '"Status","File","Last author","Date","Commit message"' > pr12725_review.csv
-git diff --name-status 4edda1e7b 305779b5a -- . ':(exclude)*.idea/libraries/*' |
-while IFS=$'\t' read -r st f; do
-  IFS=$'\t' read -r an ad sub <<< "$(git log -1 --format='%an%x09%ad%x09%s' --date=short 305779b5a^2 -- "$f")"
-  echo "\"$st\",\"$f\",\"$an\",\"$ad\",\"${sub//\"/\'}\""
-done >> pr12725_review.csv
-
-
-ls -l /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat \
-      /raa1/backup/prodenvironment/sas_repository/mcare/archive/pv_20260910192835_20260911152502.sas7bdat
-
-
-git ls-tree -r --name-only 4edda1e7b -- snowpark/hoschartgenerator snowpark/AWSSecretManager; echo "--- end of list"
-
-git ls-tree -r --name-only 4edda1e7b -- snowpark/hoschartgenerator snowpark/AWSSecretManager; echo "--- end of list"
-git ls-tree -r --name-only origin/master -- snowpark/hoschartgenerator snowpark/AWSSecretManager | head
-
-
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-revert-pr-12725)
 $ git ls-tree -r --name-only 4edda1e7b -- snowpark/hoschartgenerator snowpark/AWSSecretManager; echo "--- end of list"
 snowpark/AWSSecretManager/pom.xml
 snowpark/AWSSecretManager/release.md
