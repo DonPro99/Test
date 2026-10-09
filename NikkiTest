@@ -1,20 +1,15 @@
-Subject: PR #12725 – quick summary
+for c in 6bb9be17c 1ffde64ad 5f773864d cd3dca287; do
+  echo "== $c | $(git log -1 --format='%an | %ad | %s' --date=short $c)"
+  git branch -r --contains $c | grep -E "origin/(develop|sit|uat|preprod|master)$"
+done
 
-Hi Rajesh,
 
-Here's a quick summary of what I found so far for PR #12725, compared against master before my PR (4edda1e7b).
-
-- 285 files differ in total.
-- 188 are IntelliJ library files (.idea/libraries), IDE config only.
-- 48 are new files, mostly the hoschartgenerator module and new pdfgen classes. These don't touch existing prod code. Let me know how you'd like to handle these.
-- 44 are modified files. I went through all of them: 37 are just dummy/cosmetic changes (comments, blank lines), and 1 has only commented-out debug code.
-
-That leaves 6 files with real code changes:
-- MdcdRaaCreateOutboundFiles and MdcdRaaMedMembersLoad (Nasuruddin): remove MBR_CNTY_NM from the Medicaid member file. I traced this one: the MN-2026 branch only went up to UAT, and the change reached preprod through PR #9039 (MEDICAIDTESTING) in Feb, then master through my PR. So it was never promoted for prod, and prod still sends MBR_CNTY_NM.
-- RAChartsHOSHealowMerger, RptXmlDiffIdentifier_A5, RptXmlExtractor_McidChaseid (Challa): file fully commented out, sanitizeFileName removed, and a USE SCHEMA added.
-- RptHoscdaXmlExtractorMasterClass (Lekhana): duplicate column in a SELECT.
-
-I'll check with the owners on these. For anything not approved, I can restore the previous version in one small PR. Let me know if that works.
-
-Thanks,
-Nikhitha
+for f in \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RAChartsHOSHealowMerger.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClass.scala
+do
+  echo "== $(basename $f)"
+  git log --first-parent --format='   %h | %an | %ad | %s' --date=short origin/preprod -- "$f" | head -2
+done
