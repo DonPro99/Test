@@ -29,3 +29,8 @@ If you don't have your commit hash handy:
 
 bash
 git log --oneline --author="AM71511" -10 origin/master
+
+
+$ git rev-parse 4edda1e7b^{tree} HEAD^{tree}
+39c31066a14350bff381e42b2ba878a9dde462e7
+3fa19a9875baa6af2377e8365c576f09f821874e
