@@ -1,17 +1,2 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
-$ git fetch origin
-remote: Enumerating objects: 330, done.
-remote: Counting objects: 100% (283/283), done.
-remote: Compressing objects: 100% (32/32), done.
-remote: Total 141 (delta 47), reused 99 (delta 32), pack-reused 0 (from 0)
-Receiving objects: 100% (141/141), 9.64 KiB | 214.00 KiB/s, done.
-Resolving deltas: 100% (47/47), completed with 38 local objects.
-From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_mvn
-   0b79b8493..7da463520  master     -> origin/master
- * [new branch]          feature/AM18673_20261009_PRODDEP -> origin/feature/AM18673_20261009_PRODDEP
- * [new branch]          feature/AM45700-202610-JDBCUpgradecommits -> origin/feature/AM45700-202610-JDBCUpgradecommits
-git checkout -b feature/<her-name>-dummy-dev origin/develop
-git cherry-pick <her-dummy-commit-ids>
-git diff --stat origin/develop
-
-
+git log --oneline -n 5 origin/master
+git log --no-merges --format='%h | %an | %ad | %s' --date=short origin/develop..4edda1e7b | head -20
