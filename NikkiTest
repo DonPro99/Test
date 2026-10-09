@@ -16,4 +16,4 @@ ls -l /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_202609102
       /raa1/backup/prodenvironment/sas_repository/mcare/archive/pv_20260910192835_20260911152502.sas7bdat
 
 
-git diff --stat 4edda1e7b feature/AM-71511-revert-pr-12725; echo "compare done"
+git ls-tree -r --name-only 4edda1e7b -- snowpark/hoschartgenerator snowpark/AWSSecretManager; echo "--- end of list"
