@@ -1,2 +1,7 @@
-git log -1 --format='%an <%ae>' 6bb9be17c
-git log -1 --format='%an <%ae>' f86781cde
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git log -1 --format='%an <%ae>' 6bb9be17c
+Challa <AG90147@ad.wellpoint.com>
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git log -1 --format='%an <%ae>' f86781cde
+Challa, Chandrika <Chandrika.Challa@carelon.com>
