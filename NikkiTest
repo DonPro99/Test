@@ -9,3 +9,4 @@ git show --no-patch --format='%h | %an <%ae> | %ad | %s' --date=iso 305779b5a
 
 
 "Thanks. I've raised a PR that reverts #12725 on master only (no other environments touched). It applied cleanly with no conflicts, and the code is identical to master before #12725 (4edda1e7b). PR: [link]. After it's merged, I'll re-promote only my intended changes from a new branch through the normal path. @Rajesh, can you review?"
+One more note: feature/RAA-14114-mcid-npi-dos-synthesis currently points at the same commit as master (305779b5a), so it contains all the preprod changes from #12725. Whoever owns RBICA-14114 should avoid merging that branch into dev/SIT/UAT. It would be safer to recreate it from master after the revert is merged."
