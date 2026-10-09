@@ -1,19 +1,8 @@
-Since prod still has the fix and this removal only reached master through my PR, I think we should restore this file in master so the next deployment doesn’t remove the security fix from prod.”
+git fetch origin
+git log --no-merges --format='%h | %an | %ad | %s' --date=short origin/develop..4edda1e7b | head -20
 
-Subject: RE: PR #12725 – quick summary
-
-For remaining files:
-
-challa Chandrika's changes:
-- RptXmlDiffIdentifier_A5: removes sanitizeFileName from the input args. Since prod still has the fix and this removal only reached master through my PR, I think we should restore this file in master so the next deployment doesn’t remove the security fix from prod
-- RAChartsHOSHealowMerger: the whole file is commented out. It reached preprod in Jul 2025 (MVN-729) and has been sitting there since.
-- RptXmlExtractor_McidChaseid: adds a USE SCHEMA for RRR (Feb 2026), recently promoted via the athena PR.
-- RptHoscdaXmlExtractorMasterClass: adds a duplicate column in a SELECT (Lekhana's commit). This is part of RBICA-14114, which is actively being promoted (a PR to preprod today), so the new hoschartgenerator/pdfgen files are likely part of it too.
-
-I already let Chandrika know this morning that her RBICA-14114 branch carries the preprod changes, and I'll check with her on these as well.
-
-Thanks,
-Nikhitha
+git checkout -b feature/<her-name>-dummy-dev origin/develop
+git cherry-pick <her-dummy-commit-ids>
+git diff --stat origin/develop
 
 
-“Hi Chandrika, following up from this morning. A few of your changes reached master through my PR #12725: the sanitizeFileName removal in RptXmlDiffIdentifier_A5 (this undoes the #2586 vulnerability fix that prod has), RAChartsHOSHealowMerger fully commented out (MVN-729), the USE SCHEMA change in RptXmlExtractor_McidChaseid, and the RBICA-14114 changes including the new hoschartgenerator files. Could you let me know which of these are approved for prod? Anything that isn’t, we’ll restore in master to match prod.”
