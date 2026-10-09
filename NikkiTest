@@ -1,22 +1,12 @@
-Reverts PR #12725 (merge commit 305779b5a), which unintentionally brought preprod changes into master and caused the MVN build failure. The revert applied cleanly with no conflicts, and the result is identical to master's previous state (4edda1e7b).
+git diff 4edda1e7b 305779b5a -- snowpark/sdigenerator/.idea/compiler.xml
 
-Reply to DevOps:
+git diff 4edda1e7b origin/master -- '*pom.xml'
 
-"I've prepared the revert. It applied cleanly with no conflicts, and the result matches master's state before #12725 (4edda1e7b) exactly. PR: [link]. Could you review and merge it?"
+git diff 4edda1e7b feature/AM-71511-revert-pr-12725 -- '*pom.xml'
 
-
-git show --no-patch --format='%h | %an <%ae> | %ad | %s' --date=iso 305779b5a
-
-
-"Thanks. I've raised a PR that reverts #12725 on master only (no other environments touched). It applied cleanly with no conflicts, and the code is identical to master before #12725 (4edda1e7b). PR: [link]. After it's merged, I'll re-promote only my intended changes from a new branch through the normal path. @Rajesh, can you review?"
-One more note: feature/RAA-14114-mcid-npi-dos-synthesis currently points at the same commit as master (305779b5a), so it contains all the preprod changes from #12725. Whoever owns RBICA-14114 should avoid merging that branch into dev/SIT/UAT. It would be safer to recreate it from master after the revert is merged."
-
-Hi Rajesh, I've raised the revert PR for #12725 and shared it in the group chat: [PR link]
-
-It reverts merge commit 305779b5a on master only. It applied cleanly, and the code matches master's state before #12725 (4edda1e7b). Nothing is touched in the lower environments.
-
-Also, feature/RAA-14114-mcid-npi-dos-synthesis points at the same commit as master (305779b5a), so it has all the preprod changes. Its owner should avoid merging it into dev/SIT/UAT.
-
-Could you review when you get a chance? Once it's reviewed, I'll send an email to everyone with the details.
-
-Hi, quick heads-up about feature/RAA-14114-mcid-npi-dos-synthesis. That branch currently points at a master commit that accidentally included a lot of preprod changes (from PR #12725, which is being reverted). If you're still using it, please avoid merging it into dev, SIT, or UAT, because it would carry those preprod changes along. It's safer to create a fresh branch from master once the revert is merged. Happy to explain if you have any questions!
+echo '"Status","File","Last author","Date","Commit message"' > pr12725_review.csv
+git diff --name-status 4edda1e7b 305779b5a -- . ':(exclude)*.idea/libraries/*' |
+while IFS=$'\t' read -r st f; do
+  IFS=$'\t' read -r an ad sub <<< "$(git log -1 --format='%an%x09%ad%x09%s' --date=short 305779b5a^2 -- "$f")"
+  echo "\"$st\",\"$f\",\"$an\",\"$ad\",\"${sub//\"/\'}\""
+done >> pr12725_review.csv
