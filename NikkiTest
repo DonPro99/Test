@@ -1,1 +1,1 @@
-"Checked all your JDBC branches with git. Use feature/AM45700-202610-JDBCVersion. It brings only your one commit (d4a54007c) into every environment. JDBCUpgradecommits also carries 3 master-only commits from Rajesh and Akhil, and JDBCVersionUpgradetest1 carries thousands of commits, so please don't use those for promotions."
+for c in 4edda1e7b 670f089a7 bc2c09aaf; do echo "== $c"; git branch -r --contains $c | grep -E "origin/(develop|sit|uat|preprod|master)$"; done
