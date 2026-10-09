@@ -1,20 +1,19 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-revert-pr-12725)
-$ git ls-tree -r --name-only 4edda1e7b -- snowpark/hoschartgenerator snowpark/AWSSecretManager; echo "--- end of list"
-snowpark/AWSSecretManager/pom.xml
-snowpark/AWSSecretManager/release.md
-snowpark/AWSSecretManager/src/main/java/com/anthem/GetSecretValue.java
-snowpark/AWSSecretManager/src/main/java/com/anthem/GetSecretValueEC2.java
---- end of list
+git show <commit-id> --stat
+git show <commit-id>
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-revert-pr-12725)
-$ git ls-tree -r --name-only origin/master -- snowpark/hoschartgenerator snowpark/AWSSecretManager | head
-snowpark/AWSSecretManager/AWSSecretManager.iml
-snowpark/AWSSecretManager/pom.xml
-snowpark/AWSSecretManager/release.md
-snowpark/AWSSecretManager/src/main/java/com/anthem/GetSecretValue.java
-snowpark/AWSSecretManager/src/main/java/com/anthem/GetSecretValueEC2.java
-snowpark/hoschartgenerator/dependency-reduced-pom.xml
-snowpark/hoschartgenerator/hoschartgenerator.iml
-snowpark/hoschartgenerator/pom.xml
-snowpark/hoschartgenerator/release.md
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptPdfGenerator.scala
+5. Compare one file across commits
+
+bash
+git log --oneline -- <path/to/file>                 # history of that file
+git diff <older-commit> <newer-commit> -- <path/to/file>
+git diff origin/master <your-branch> -- <path/to/file>   # master version vs yours
+
+For example, with the Datavant file:
+
+bash
+git diff origin/master...<your-branch> -- snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala
+
+6. Side-by-side view (easier to show on screen)
+
+bash
+git difftool origin/master...<your-branch> -- <path/to/file>
