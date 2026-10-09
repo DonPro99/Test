@@ -1,2 +1,3 @@
-git fetch origin
-git log origin/master --oneline --date=short --pretty=format:'%h  %ad  %an  %s' --author="AM71511" -10
+git log --oneline -n 3 HEAD
+git diff --stat 4edda1e7b HEAD | tail -5
+git diff --summary 4edda1e7b HEAD | head -20
