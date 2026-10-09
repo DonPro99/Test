@@ -17,3 +17,6 @@ ls -l /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_202609102
 
 
 git ls-tree -r --name-only 4edda1e7b -- snowpark/hoschartgenerator snowpark/AWSSecretManager; echo "--- end of list"
+
+git ls-tree -r --name-only 4edda1e7b -- snowpark/hoschartgenerator snowpark/AWSSecretManager; echo "--- end of list"
+git ls-tree -r --name-only origin/master -- snowpark/hoschartgenerator snowpark/AWSSecretManager | head
