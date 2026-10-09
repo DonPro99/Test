@@ -14,3 +14,6 @@ done >> pr12725_review.csv
 
 ls -l /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat \
       /raa1/backup/prodenvironment/sas_repository/mcare/archive/pv_20260910192835_20260911152502.sas7bdat
+
+
+git diff --stat 4edda1e7b feature/AM-71511-revert-pr-12725; echo "compare done"
