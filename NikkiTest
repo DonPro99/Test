@@ -3,3 +3,6 @@ Reverts PR #12725 (merge commit 305779b5a), which unintentionally brought prepro
 Reply to DevOps:
 
 "I've prepared the revert. It applied cleanly with no conflicts, and the result matches master's state before #12725 (4edda1e7b) exactly. PR: [link]. Could you review and merge it?"
+
+
+git show --no-patch --format='%h | %an <%ae> | %ad | %s' --date=iso 305779b5a
