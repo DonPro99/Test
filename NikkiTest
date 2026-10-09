@@ -19,4 +19,4 @@ Also, feature/RAA-14114-mcid-npi-dos-synthesis points at the same commit as mast
 
 Could you review when you get a chance? Once it's reviewed, I'll send an email to everyone with the details.
 
-git log --no-merges --format='%h | %an | %ad | %s' --date=short 329e1c800^1..329e1c800^2
+Hi, quick heads-up about feature/RAA-14114-mcid-npi-dos-synthesis. That branch currently points at a master commit that accidentally included a lot of preprod changes (from PR #12725, which is being reverted). If you're still using it, please avoid merging it into dev, SIT, or UAT, because it would carry those preprod changes along. It's safer to create a fresh branch from master once the revert is merged. Happy to explain if you have any questions!
