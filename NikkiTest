@@ -1,8 +1,10 @@
-git diff --name-only --diff-filter=A 4edda1e7b 305779b5a | grep -c '\.idea/libraries'
-git diff --name-only --diff-filter=A 4edda1e7b 305779b5a | grep -vc '\.idea/libraries'
+git fetch origin
+git diff 4edda1e7b origin/master -- snowpark/AnthemRAUtil/pom.xml
 
+git checkout -b feature/AM-71511-fix-anthemrautil-pom origin/master
+git checkout 4edda1e7b -- snowpark/AnthemRAUtil/pom.xml
+git diff --cached --stat
 
-git diff --name-only --diff-filter=A 4edda1e7b 305779b5a | while read f; do git cat-file -e 4edda1e7b:"$f" 2>/dev/null && echo "EXISTED BEFORE: $f"; done; echo "check done"
+git commit -m "Restore AnthemRAUtil pom.xml - uncomment RRR jar dependency"
+git push origin feature/AM-71511-fix-anthemrautil-pom
 
-git log --oneline -n 3 feature/AM-71511-revert-pr-12725
-git diff --stat 4edda1e7b feature/AM-71511-revert-pr-12725 | tail -5
