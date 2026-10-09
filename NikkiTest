@@ -1,1 +1,10 @@
-for c in 4edda1e7b 670f089a7 bc2c09aaf; do echo "== $c"; git branch -r --contains $c | grep -E "origin/(develop|sit|uat|preprod|master)$"; done
+$ for c in 4edda1e7b 670f089a7 bc2c09aaf; do echo "== $c"; git branch -r --contains $c | grep -E "origin/(develop|sit|uat|preprod|master)$"; done
+== 4edda1e7b
+  origin/HEAD -> origin/master
+  origin/master
+== 670f089a7
+  origin/HEAD -> origin/master
+  origin/master
+== bc2c09aaf
+  origin/HEAD -> origin/master
+  origin/master
