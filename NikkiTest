@@ -1,5 +1,27 @@
-git diff origin/uat 4edda1e7b -- $F; echo "--- uat vs master-before done"
-git diff origin/uat origin/preprod -- $F; echo "--- uat vs preprod done"
 
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git diff origin/uat 4edda1e7b -- $F; echo "--- uat vs master-before done"
+diff --git a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+index c9a8418b5..520ae2028 100644
+--- a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
++++ b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+@@ -100,6 +100,7 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+              |MBR_CITY_NM,
+              |MBR_STATE,
+              |MBR_CNTY,
++             |MBR_CNTY_NM,
+              |MBR_ZIP,
+              |MBR_PHONE,
+              |MBR_ALT_PHONE,
+@@ -255,4 +256,4 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+       println("Completed DataFrame write")
+     }
+   }
+-}
++}
+\ No newline at end of file
+--- uat vs master-before done
 
-git branch -rs
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git diff origin/uat origin/preprod -- $F; echo "--- uat vs preprod done"
+--- uat vs preprod done
