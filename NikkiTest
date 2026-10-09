@@ -18,3 +18,13 @@ git checkout -b feature/AM-71511-fix-pom-preprod origin/preprod
 git cherry-pick <fix-commit-id>
 git diff --stat origin/preprod
 git push origin feature/AM-71511-fix-pom-preprod
+
+
+git fetch origin
+git checkout -b feature/AM-71511-fix-pom-preprod origin/preprod
+git cherry-pick e21de1947
+
+git diff --stat origin/preprod
+git diff 4edda1e7b HEAD -- snowpark/AnthemRAUtil/pom.xml; echo "--- pom check done"
+
+git push origin feature/AM-71511-fix-pom-preprod
