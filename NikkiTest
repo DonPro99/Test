@@ -1,11 +1,1 @@
-git log --oneline -n 3 HEAD
-git diff --stat 4edda1e7b HEAD | tail -5
-git diff --summary 4edda1e7b HEAD | head -20
-mdcdMedMembersMasterTable
-
-
-SELECT start_time, user_name, execution_status, query_text
-FROM SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY
-WHERE query_text ILIKE '%<TABLE_NAME>%'
-  AND start_time >= DATEADD(day, -14, CURRENT_TIMESTAMP())
-ORDER BY start_time DESC;
+snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
