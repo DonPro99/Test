@@ -1,2 +1,1 @@
-git fetch origin
-git checkout -b feature/<her-branch-name>-dummy 4edda1e7b
+“4edda1e7b is master as it was before my PR #12725, which is what prod is running right now. Current master still has all the preprod changes my PR brought in, because the revert isn’t merged yet. If you branch from current master, those changes would follow your branch into dev, SIT, and UAT. Branching from 4edda1e7b keeps your branch clean, with only your dummy changes.”
