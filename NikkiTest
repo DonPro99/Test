@@ -1,1 +1,5 @@
-git push origin feature/AM-71511-revert-pr-12725
+Reverts PR #12725 (merge commit 305779b5a), which unintentionally brought preprod changes into master and caused the MVN build failure. The revert applied cleanly with no conflicts, and the result is identical to master's previous state (4edda1e7b).
+
+Reply to DevOps:
+
+"I've prepared the revert. It applied cleanly with no conflicts, and the result matches master's state before #12725 (4edda1e7b) exactly. PR: [link]. Could you review and merge it?"
