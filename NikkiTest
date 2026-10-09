@@ -20,3 +20,24 @@ git ls-tree -r --name-only 4edda1e7b -- snowpark/hoschartgenerator snowpark/AWSS
 
 git ls-tree -r --name-only 4edda1e7b -- snowpark/hoschartgenerator snowpark/AWSSecretManager; echo "--- end of list"
 git ls-tree -r --name-only origin/master -- snowpark/hoschartgenerator snowpark/AWSSecretManager | head
+
+
+$ git ls-tree -r --name-only 4edda1e7b -- snowpark/hoschartgenerator snowpark/AWSSecretManager; echo "--- end of list"
+snowpark/AWSSecretManager/pom.xml
+snowpark/AWSSecretManager/release.md
+snowpark/AWSSecretManager/src/main/java/com/anthem/GetSecretValue.java
+snowpark/AWSSecretManager/src/main/java/com/anthem/GetSecretValueEC2.java
+--- end of list
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM-71511-revert-pr-12725)
+$ git ls-tree -r --name-only origin/master -- snowpark/hoschartgenerator snowpark/AWSSecretManager | head
+snowpark/AWSSecretManager/AWSSecretManager.iml
+snowpark/AWSSecretManager/pom.xml
+snowpark/AWSSecretManager/release.md
+snowpark/AWSSecretManager/src/main/java/com/anthem/GetSecretValue.java
+snowpark/AWSSecretManager/src/main/java/com/anthem/GetSecretValueEC2.java
+snowpark/hoschartgenerator/dependency-reduced-pom.xml
+snowpark/hoschartgenerator/hoschartgenerator.iml
+snowpark/hoschartgenerator/pom.xml
+snowpark/hoschartgenerator/release.md
+snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptPdfGenerator.scala
