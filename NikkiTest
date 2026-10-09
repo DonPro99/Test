@@ -1,4 +1,15 @@
-F=snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaMedMembersLoad.scala
-git log --merges --first-parent --format='%h | %an | %ad | %s' --date=short origin/uat -- $F | head -5
-git log --merges --first-parent --format='%h | %an | %ad | %s' --date=short origin/develop -- $F | head -5
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git log --merges --first-parent --format='%h | %an | %ad | %s' --date=short origin/uat -- $F | head -5
+1ca4b3ac6 | Mulla, Nasuruddin | 2026-01-24 | Pull request #8642: MdcdRaaMedMembersLoad.scala edited online with Bitbucket
+5f5e56a52 | Mulla, Nasuruddin | 2026-01-23 | Pull request #8626: MdcdRaaMedMembersLoad.scala edited online with Bitbucket
+1bf1e440c | Mulla, Nasuruddin | 2026-01-23 | Pull request #8617: MdcdRaaMedMembersLoad.scala edited online with Bitbucket
+a687e20c1 | Mulla, Nasuruddin | 2026-01-23 | Pull request #8616: MdcdRaaMedMembersLoad.scala edited online with Bitbucket
+114920f0e | Mulla, Nasuruddin | 2026-01-23 | Pull request #8611: MdcdRaaMedMembersLoad.scala edited online with Bitbucket
 
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git log --merges --first-parent --format='%h | %an | %ad | %s' --date=short origin/develop -- $F | head -5
+a6d023793 | Bachamgari, Divya | 2026-06-12 | Pull request #10618: Feature/AM45700 202606 PCMSTEST1
+49fa08e99 | Mulla, Nasuruddin | 2026-01-23 | Pull request #8627: Feature/MVN-0126 MN-2026
+202ca956a | Mulla, Nasuruddin | 2026-01-23 | Pull request #8623: Feature/MVN-0126 MN-2026
+ea3a235b5 | Mulla, Nasuruddin | 2026-01-23 | Pull request #8599: MdcdRaaMedMembersLoad.scala edited online with Bitbucket
+f4f018043 | Challa, Chandrika | 2025-06-13 | Pull request #6011: Feature/RA CHARTS PROF INP-12827 A3
