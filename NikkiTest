@@ -1,13 +1,269 @@
-F=snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
-git fetch origin
-
-git log --format='%h | %an | %ad | %s' --date=short origin/master -- $F
 
 
-git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/master -- $F
 
-git diff 4edda1e7b 305779b5a -- $F
 
-git log -p --format='%n===== %h | %an | %ad | %s' --date=short -n 5 origin/master -- $F
 
-git blame --date=short origin/master -- $F
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ F=snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git fetch origin
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git log --format='%h | %an | %ad | %s' --date=short origin/master -- $F
+99e8148f7 | Mulla, Nasuruddin | 2026-01-23 | MdcdRaaCreateOutboundFiles.scala edited online with Bitbucket
+acaab3dec | Reddy | 2025-04-19 | claim chase extract
+0ef883ead | Reddy | 2024-06-22 | prod fix
+b005db8b3 | Reddy | 2024-05-24 | Create medicaid outbound files separation
+77c77adde | Reddy | 2024-05-24 | Outbound Files creation
+3f5e710ff | Reddy | 2024-05-24 | Outbound Files creation
+17eab6b4d | Reddy | 2024-05-23 | Outbound Files creation
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/master -- $F
+305779b5a | Komandla, Nikhitha | 2026-10-05 | Pull request #12725: Feature/AM-71511 RRR Testing
+cc7907737 | Reddy, Shruthi | 2025-04-20 | Pull request #4691: claim chase extract
+fef242715 | Reddy, Shruthi | 2024-06-22 | Pull request #1449: prod fix
+7393efc41 | Reddy, Shruthi | 2024-05-24 | Pull request #1175: Feature/AL11321 01 PROD MVN-04182024
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git diff 4edda1e7b 305779b5a -- $F
+diff --git a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+index 520ae2028..c9a8418b5 100644
+--- a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
++++ b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+@@ -100,7 +100,6 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+              |MBR_CITY_NM,
+              |MBR_STATE,
+              |MBR_CNTY,
+-             |MBR_CNTY_NM,
+              |MBR_ZIP,
+              |MBR_PHONE,
+              |MBR_ALT_PHONE,
+@@ -256,4 +255,4 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+       println("Completed DataFrame write")
+     }
+   }
+-}
+\ No newline at end of file
++}
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git log -p --format='%n===== %h | %an | %ad | %s' --date=short -n 5 origin/master -- $F
+
+===== 99e8148f7 | Mulla, Nasuruddin | 2026-01-23 | MdcdRaaCreateOutboundFiles.scala edited online with Bitbucket
+
+diff --git a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+index 520ae2028..c9a8418b5 100644
+--- a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
++++ b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+@@ -100,7 +100,6 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+              |MBR_CITY_NM,
+              |MBR_STATE,
+              |MBR_CNTY,
+-             |MBR_CNTY_NM,
+              |MBR_ZIP,
+              |MBR_PHONE,
+              |MBR_ALT_PHONE,
+@@ -256,4 +255,4 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+       println("Completed DataFrame write")
+     }
+   }
+-}
+\ No newline at end of file
++}
+
+===== acaab3dec | Reddy | 2025-04-19 | claim chase extract
+
+diff --git a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+index 130b50b1a..520ae2028 100644
+--- a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
++++ b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+@@ -38,6 +38,7 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+     val claimExtractTable = cfg.getString("claim.extract.table")
+     val dxExtTable = cfg.getString("dx.Ext.Table")
+     val rxExtTable = cfg.getString("rx.ext.table")
++    val claimChaseExtractTable = cfg.getString("claim.chase.extract.table")
+
+     val appId = processName
+
+@@ -186,6 +187,14 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+           println(market)
+           CreateOutputFile(null,claimExtractTable,s"""cdps_clm_extract_$market""",market,outBoundLocation)})
+         println("Writing to Claim Extract files Completed")
++      }
++      if(tableName.equals(claimChaseExtractTable)){
++        println("Writing to Claim Chase Extract files")
++        outBoundLocation = "@RAA_SF_SSMOUTBOUND_GBD_PHI" + "/" + "risk-adjustment-adl" + "/" + "MedicaidChaseClaimExtract" + "/" + dt.toString("yyyyMMdd_HHmmss")
++        marketArray.foreach(market => {
++          println(market)
++          CreateOutputFile(null,claimChaseExtractTable,s"""cdps_clm_extract_chase_$market""",market,outBoundLocation)})
++        println("Writing to Claim Chase Extract files Completed")
+       }
+        if(tableName.equals(dxExtTable)){
+         println("Writing to Claim  Dx Extract files")
+
+===== 0ef883ead | Reddy | 2024-06-22 | prod fix
+
+diff --git a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+index 5570a8966..130b50b1a 100644
+--- a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
++++ b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+@@ -10,6 +10,7 @@ import com.typesafe.config.ConfigFactory
+ import scala.collection.mutable
+ import com.snowflake.snowpark.functions.col
+ import org.joda.time.DateTime
++import com.anthem.hca.adl.cli.GlobalContainer._
+
+ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String, var runId: String,val tableName:String) extends DataLoadBase with Serializable {
+
+@@ -26,6 +27,10 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+     val dateStr = DateTime.now().toString()
+     val dt = new DateTime(dateStr)
+     var outBoundLocation = ""
++    val processName = cfg.getString(PROCESS_NAME)
++    val processId = cfg.getString(PROCESS_ID).toInt
++    val source = cfg.getString(SOURCE)
++    val stepId = cfg.getString("StepId1").toInt
+     val mdcdMedMembersMasterTable = cfg.getString("mdcd.medMembers.master.table")
+     val mdcdraaMbrEnrlSt = cfg.getString("mdcd.raa.mbr.enrl.st")
+     val mdcdraaMbrMktKey = cfg.getString("mkt.key.mbr.mdcd.raa")
+@@ -34,6 +39,12 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+     val dxExtTable = cfg.getString("dx.Ext.Table")
+     val rxExtTable = cfg.getString("rx.ext.table")
+
++    val appId = processName
++
++    options += ("applicationId" -> appId)
++    options += ("processName" -> processName)
++    options += ("processId" -> processId)
++
+     val spark = getSession(ConfigurationConstants.CONFIG_FOLDER, dbPropertiesFileName)
+     spark.sql(s"USE $targetDatabase").count()
+
+
+===== b005db8b3 | Reddy | 2024-05-24 | Create medicaid outbound files separation
+
+diff --git a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+index e183fd447..5570a8966 100644
+--- a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
++++ b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+@@ -200,25 +200,27 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+
+     def CreateOutputFile(dataFrame: DataFrame=null,TableName:String,outputFileName:String,market:String,outBoundLocation:String)={
+       val finalOutputFileName = outBoundLocation + "/" + outputFileName
++      println("finalOutputFileName is :",finalOutputFileName)
+       var df = spark.read.table(TableName)
+       df.createOrReplaceTempView("df_vw")
+       df = spark.sql(s"""select * from df_vw where market='$market'""")
+-      df=df.drop("EDL_LOAD_DTM","EDL_RUN_ID","EDL_SCRTY_LVL_CD","EDL_LOB_CD","EDL_EXTRNL_LOAD_CD","EDL_SOR_CD")
+-      if(dataFrame != null && TableName == mdcdMedMembersMasterTable){
++       if(dataFrame != null && TableName == mdcdMedMembersMasterTable){
+         df = dataFrame.filter(col("st_cd") === s"$market")
+         println("mdcdMedMembersMasterTable files")
+       }
+       if(dataFrame != null && TableName == mdcdraaMbrEnrlSt){
+         dataFrame.createOrReplaceTempView("enroll_file_vw")
+         df = spark.sql(s"""select * from enroll_file_vw where st_cd='$market'""")
+-        df=df.drop("EDL_LOAD_DTM","EDL_RUN_ID","EDL_SCRTY_LVL_CD","EDL_LOB_CD","EDL_EXTRNL_LOAD_CD","EDL_SOR_CD","LOAD_MONTH","ST_CD")
++        df=df.drop("LOAD_MONTH","ST_CD")
+         println("mdcdraaMbrEnrlSt files")
+       }
+       if(TableName == mdcdraaMbrMktKey) {
+         df = spark.sql(s"""select * from df_vw where market='$market'""")
+-        df=df.drop("EDL_LOAD_DTM","EDL_RUN_ID","EDL_SCRTY_LVL_CD","EDL_LOB_CD","EDL_EXTRNL_LOAD_CD","EDL_SOR_CD","ST_CD")
++        df=df.drop("EDL_LOAD_DTM","ST_CD")
+         println("mdcdraaMbrMktKey files")
+       }
++      df=df.drop("EDL_LOAD_DTM","EDL_RUN_ID","EDL_SCRTY_LVL_CD","EDL_LOB_CD","EDL_EXTRNL_LOAD_CD","EDL_SOR_CD")
++      println("Started DataFrame write")
+       df
+         .write
+         .option("header", "false")
+@@ -231,6 +233,7 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+         .option("FILE_EXTENSION", "txt")
+         .mode("Overwrite")
+         .csv(finalOutputFileName)
++      println("Completed DataFrame write")
+     }
+   }
+ }
+\ No newline at end of file
+
+===== 77c77adde | Reddy | 2024-05-24 | Outbound Files creation
+
+diff --git a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+index fef0a0e73..e183fd447 100644
+--- a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
++++ b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+@@ -111,7 +111,7 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+
+       }
+
+-      else if (tableName.equals(mdcdraaMbrEnrlSt)) {
++      if (tableName.equals(mdcdraaMbrEnrlSt)) {
+         println("Writing to Enroll files")
+         outBoundLocation="@RAA_SF_SSMOUTBOUND_GBD_PHI" + "/" + "risk-adjustment-adl" + "/" + "MedicaidEnrollExtract" + "/" + dt.toString("yyyyMMdd_HHmmss")
+
+@@ -134,7 +134,7 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+            |frst_nm,
+            |last_nm,
+            |to_varchar(BRTH_DT,'ddMONyyyy'),
+-           |to_varchar(BRTH_DT_MBR,'ddMONyyyy'),
++           |to_varchar(to_date(BRTH_DT_MBR),'ddMONyyyy'),
+            |AGE_LAST,
+            |AGE_MO,
+            |SEX,
+@@ -162,13 +162,13 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+       stateStr.foreach(market => CreateOutputFile(enrollFileDF, mdcdraaMbrEnrlSt, s"""ENROLL_$market""", market,outBoundLocation))
+         println("Writing to Enroll files Completed")
+       }
+-    else if(tableName.equals(mdcdraaMbrMktKey)) {
++     if(tableName.equals(mdcdraaMbrMktKey)) {
+         println("Writing to mbr mkt key files")
+         outBoundLocation="@RAA_SF_SSMOUTBOUND_GBD_PHI" + "/" + "risk-adjustment-adl" + "/" + "MedicaidMbrMktKeyExtract" + "/" + dt.toString("yyyyMMdd_HHmmss")
+         stateStr.foreach(market => CreateOutputFile(null, mdcdraaMbrMktKey, s"""mdcdraa_mbrmkt_key_$market""", market,outBoundLocation))
+         println("Writing to mbr mkt key files Completed")
+       }
+-      else if(tableName.equals(claimExtractTable)){
++      if(tableName.equals(claimExtractTable)){
+         println("Writing to Claim Extract files")
+         outBoundLocation = "@RAA_SF_SSMOUTBOUND_GBD_PHI" + "/" + "risk-adjustment-adl" + "/" + "MedicaidClaimsExtract" + "/" + dt.toString("yyyyMMdd_HHmmss")
+         marketArray.foreach(market => {
+@@ -176,7 +176,7 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+           CreateOutputFile(null,claimExtractTable,s"""cdps_clm_extract_$market""",market,outBoundLocation)})
+         println("Writing to Claim Extract files Completed")
+       }
+-      else if(tableName.equals(dxExtTable)){
++       if(tableName.equals(dxExtTable)){
+         println("Writing to Claim  Dx Extract files")
+         outBoundLocation = "@RAA_SF_SSMOUTBOUND_GBD_PHI" + "/" + "risk-adjustment-adl" + "/" + "MedicaidClaimsDxExtract" + "/" + dt.toString("yyyyMMdd_HHmmss")
+         marketArray.foreach(market => {
+@@ -184,7 +184,7 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+         print("Writing DX claim files to S3 completed")
+
+       }
+-      else if(tableName.equals(rxExtTable)){
++       if(tableName.equals(rxExtTable)){
+         println("Writing to Claim  Rx Extract files")
+         outBoundLocation = "@RAA_SF_SSMOUTBOUND_GBD_PHI" + "/" + "risk-adjustment-adl" + "/" + "MedicaidClaimsRxExtract" + "/" + dt.toString("yyyyMMdd_HHmmss")
+         marketArray.foreach(market => {
+
+
+
+
+
+17eab6b4d0 (Reddy             2024-05-23 245)         .option("header", "false")
+17eab6b4d0 (Reddy             2024-05-23 246)         .option("field_delimiter", "|")
+17eab6b4d0 (Reddy             2024-05-23 247)         .option("empty_field_as_null", false)
+17eab6b4d0 (Reddy             2024-05-23 248)         .option("null_if", (""))
+17eab6b4d0 (Reddy             2024-05-23 249)         .option("COMPRESSION", "NONE")
+17eab6b4d0 (Reddy             2024-05-23 250)         .option("SINGLE","FALSE")
+17eab6b4d0 (Reddy             2024-05-23 251)         .option("MAX_FILE_SIZE",524288000)
+17eab6b4d0 (Reddy             2024-05-23 252)         .option("FILE_EXTENSION", "txt")
+17eab6b4d0 (Reddy             2024-05-23 253)         .mode("Overwrite")
+17eab6b4d0 (Reddy             2024-05-23 254)         .csv(finalOutputFileName)
+b005db8b36 (Reddy             2024-05-24 255)       println("Completed DataFrame write")
+17eab6b4d0 (Reddy             2024-05-23 256)     }
+17eab6b4d0 (Reddy             2024-05-23 257)   }
+99e8148f76 (Mulla, Nasuruddin 2026-01-23 258) }
