@@ -23,6 +23,8 @@ git log --no-merges --pretty=format:'%h,%ad,%an,%s' --date=short <my-commit>..or
 bash
 git log --no-merges --pretty=format:'%h  %ad  %an  %s' --date=short <my-commit>..origin/master -- <path/to/file>
 
+git rev-parse 4edda1e7b^{tree} HEAD^{tree}
+
 If you don't have your commit hash handy:
 
 bash
