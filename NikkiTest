@@ -1,4 +1,5 @@
-for f in \
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ for f in \
   snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala \
   snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaMedMembersLoad.scala \
   snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RAChartsHOSHealowMerger.scala \
@@ -9,3 +10,28 @@ do
   echo "== $(basename $f)"
   git log --no-merges --format='   %h | %an | %ad | %s' --date=short 4edda1e7b..origin/master -- "$f" | head -5
 done
+== MdcdRaaCreateOutboundFiles.scala
+   99e8148f7 | Mulla, Nasuruddin | 2026-01-23 | MdcdRaaCreateOutboundFiles.scala edited online with Bitbucket
+== MdcdRaaMedMembersLoad.scala
+   027151695 | Mulla, Nasuruddin | 2026-01-23 | MdcdRaaMedMembersLoad.scala edited online with Bitbucket
+   bb68a3a0f | Mulla, Nasuruddin | 2026-01-23 | MdcdRaaMedMembersLoad.scala edited online with Bitbucket
+   6a219365f | Mulla, Nasuruddin | 2026-01-23 | MdcdRaaMedMembersLoad.scala edited online with Bitbucket
+   4a0dfbd9a | Mulla, Nasuruddin | 2026-01-23 | MdcdRaaMedMembersLoad.scala edited online with Bitbucket
+   1d362a559 | Mulla, Nasuruddin | 2026-01-23 | MdcdRaaMedMembersLoad.scala edited online with Bitbucket
+== RAChartsHOSHealowMerger.scala
+   e71208cd2 | SureshBellay Venga | 2025-04-16 | made changes in the file to resolve conflict : RptPdfGenerator.scala and RAChartsHOSHealowMerger.scala
+   6bb9be17c | Challa | 2025-04-15 | commented the RAChartsHosHealowMerger
+   e2f8130b0 | SureshBellay Venga | 2025-04-15 | Resolving Conflict in the Branches: UAT for the Files: RAChartsHOSHealowMerger.scala and RptPdfGenerator.scala
+   2caa327f9 | SureshBellay Venga | 2025-04-15 | Made the chnages in the file: RAChartsHOSHealowMerger.scala as per DEV
+   649d3cdc1 | Challa | 2025-04-15 | reverting the changes
+== RptXmlDiffIdentifier_A5.scala
+   1ffde64ad | Challa | 2025-05-29 | remove sanitise function while reading args
+== RptHoscdaXmlExtractorMasterClass.scala
+   cd3dca287 | Potla, Lekhana | 2026-08-03 | added changes
+   727757068 | Potla, Lekhana | 2026-08-03 | added changes
+== RptXmlExtractor_McidChaseid.scala
+   5f773864d | Challa | 2026-02-05 | adding new changes to support rrr
+   f913f47cf | Challa | 2026-02-05 | dummy changes
+   146ecb6c6 | Challa | 2026-02-05 | adding new changes to support rrr
+   d7a0466a5 | Challa | 2026-02-05 | adding new changes to sessioncreator
+   cd45b7597 | Challa | 2026-02-05 | adding new changes to sessioncreator
