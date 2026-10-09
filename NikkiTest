@@ -9,13 +9,10 @@ git commit -m "Restore AnthemRAUtil pom.xml - uncomment RRR jar dependency"
 git push origin feature/AM-71511-fix-anthemrautil-pom
 
 
+preprod needs fix 
 
-git fetch origin
-for b in develop uat preprod; do
-  git diff --quiet 4edda1e7b origin/$b -- snowpark/AnthemRAUtil/pom.xml && echo "$b: OK, already has RRR jar" || echo "$b: needs fix"
-done
-
-git log --oneline -n 1 feature/AM-71511-fix-anthemrautil-pom
+$ git log --oneline -n 1 feature/AM-71511-fix-anthemrautil-pom
+e21de1947 (HEAD -> feature/AM-71511-fix-anthemrautil-pom, origin/feature/AM-71511-fix-anthemrautil-pom) Restore AnthemRAUtil pom.xml - uncomment RRR jar dependency
 
 git checkout -b feature/AM-71511-fix-pom-preprod origin/preprod
 git cherry-pick <fix-commit-id>
