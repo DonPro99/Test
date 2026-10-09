@@ -18,3 +18,5 @@ It reverts merge commit 305779b5a on master only. It applied cleanly, and the co
 Also, feature/RAA-14114-mcid-npi-dos-synthesis points at the same commit as master (305779b5a), so it has all the preprod changes. Its owner should avoid merging it into dev/SIT/UAT.
 
 Could you review when you get a chance? Once it's reviewed, I'll send an email to everyone with the details.
+
+git log --no-merges --format='%h | %an | %ad | %s' --date=short 329e1c800^1..329e1c800^2
