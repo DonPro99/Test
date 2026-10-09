@@ -17,3 +17,7 @@ git diff origin/master...<your-branch> -- snowpark/datavant-mra-etl/src/main/sca
 
 bash
 git difftool origin/master...<your-branch> -- <path/to/file>
+
+
+
+git rev-parse 4edda1e7b^{tree} feature/AM-71511-revert-pr-12725^{tree}
