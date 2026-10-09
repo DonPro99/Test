@@ -1,1 +1,13 @@
-snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+F=snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+git fetch origin
+
+git log --format='%h | %an | %ad | %s' --date=short origin/master -- $F
+
+
+git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/master -- $F
+
+git diff 4edda1e7b 305779b5a -- $F
+
+git log -p --format='%n===== %h | %an | %ad | %s' --date=short -n 5 origin/master -- $F
+
+git blame --date=short origin/master -- $F
