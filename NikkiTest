@@ -1,23 +1,29 @@
-git show <commit-id> --stat
-git show <commit-id>
+git fetch origin
+git shortlog -sne <my-commit>..origin/master
 
-5. Compare one file across commits
+This prints one line per author with their commit count, so you'll see right away who has the most of the 200+.
 
-bash
-git log --oneline -- <path/to/file>                 # history of that file
-git diff <older-commit> <newer-commit> -- <path/to/file>
-git diff origin/master <your-branch> -- <path/to/file>   # master version vs yours
-
-For example, with the Datavant file:
+2. Same count, without merge commits (merges can inflate the numbers)
 
 bash
-git diff origin/master...<your-branch> -- snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala
+git shortlog -sne --no-merges <my-commit>..origin/master
 
-6. Side-by-side view (easier to show on screen)
+3. Full list: hash, date, author, message
 
 bash
-git difftool origin/master...<your-branch> -- <path/to/file>
+git log --no-merges --pretty=format:'%h  %ad  %an  %s' --date=short <my-commit>..origin/master
 
+To save it to a file and show Rajesh:
 
+bash
+git log --no-merges --pretty=format:'%h,%ad,%an,%s' --date=short <my-commit>..origin/master > commits_since_mine.csv
 
-git rev-parse 4edda1e7b^{tree} feature/AM-71511-revert-pr-12725^{tree}
+4. Only commits that touched the same file as yours (usually the useful view)
+
+bash
+git log --no-merges --pretty=format:'%h  %ad  %an  %s' --date=short <my-commit>..origin/master -- <path/to/file>
+
+If you don't have your commit hash handy:
+
+bash
+git log --oneline --author="AM71511" -10 origin/master
