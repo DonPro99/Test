@@ -31,6 +31,6 @@ bash
 git log --oneline --author="AM71511" -10 origin/master
 
 
-$ git rev-parse 4edda1e7b^{tree} HEAD^{tree}
-39c31066a14350bff381e42b2ba878a9dde462e7
-3fa19a9875baa6af2377e8365c576f09f821874e
+git log --oneline -n 3 HEAD
+git diff --stat 4edda1e7b HEAD | tail -5
+git diff --summary 4edda1e7b HEAD | head -20
