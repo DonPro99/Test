@@ -1,3 +1,13 @@
-SELECT DATE(EDL_LOAD_DTM) AS load_day, COUNT(*)
-FROM P01_RAA.RAA_RAWZ.rad_master_charts_all_lob
-GROUP BY 1 ORDER BY 1 DESC;
+git fetch origin
+git log --oneline -n 3 origin/master
+
+Confirm 305779b5a is still on top. If anything new is above it, paste it here before going further.
+
+git status
+git checkout -b revert/pr-12725 origin/master
+git revert -m 1 305779b5a --no-edit
+git diff --stat 4edda1e7b HEAD
+
+Run git status first to make sure you have no uncommitted local changes. The last command should print nothing, which proves master would be exactly as it was before your PR.
+
+git push origin revert/pr-12725
