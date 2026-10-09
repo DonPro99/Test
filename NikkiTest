@@ -1,4 +1,7 @@
-git log --no-merges --format='%h | %an | %ad | %s' --date=short origin/develop..origin/feature/AM45700-202610-JDBCUpgradecommits | head -20
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
+$ git log --no-merges --format='%h | %an | %ad | %s' --date=short origin/develop..origin/feature/AM45700-202610-JDBCUpgradecommits | head -20
+35d3924e8 | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+
 git merge-base --is-ancestor 4edda1e7b origin/feature/AM45700-202610-JDBCUpgradecommits && echo "contains 4edda1e7b" || echo "does NOT contain 4edda1e7b"
 git merge-base --is-ancestor 305779b5a origin/feature/AM45700-202610-JDBCUpgradecommits && echo "WARNING: contains #12725" || echo "clean of #12725"
 
