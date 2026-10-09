@@ -1,3 +1,4 @@
-git log --no-merges --format='%h | %an | %ad | %s' --date=short 762f5a581^1..762f5a581^2 -- snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
 
-
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git log --no-merges --format='%h | %an | %ad | %s' --date=short 762f5a581^1..762f5a581^2 -- snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+99e8148f7 | Mulla, Nasuruddin | 2026-01-23 | MdcdRaaCreateOutboundFiles.scala edited online with Bitbu
