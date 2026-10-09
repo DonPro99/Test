@@ -1,4 +1,5 @@
-git fetch origin
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
+$ git fetch origin
 for br in $(git branch -r | grep -i "AM45700-202610-JDBC"); do
   echo "########## $br"
   for env in develop sit uat preprod master; do
@@ -7,3 +8,87 @@ for br in $(git branch -r | grep -i "AM45700-202610-JDBC"); do
     git log --format='     %h | %an | %ad | %s' --date=short origin/$env..$br | head -5
   done
 done
+remote: Enumerating objects: 21, done.
+remote: Counting objects: 100% (21/21), done.
+remote: Compressing objects: 100% (17/17), done.
+remote: Total 21 (delta 2), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (21/21), 13.05 KiB | 142.00 KiB/s, done.
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_mvn
+ * [new branch]          feature/AM18673_20261009_PRODDEP-develop -> origin/feature/AM18673_20261009_PRODDEP-develop
+   511234490..0fe7005b2  feature/RAA-12487-POC-INPATIT-DATA-ORDER -> origin/feature/RAA-12487-POC-INPATIT-DATA-ORDER
+########## origin/feature/AM45700-202610-JDBCUpgradecommits
+  into develop: 4 commit(s)
+     35d3924e8 | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+     4edda1e7b | Patchipala, Rajesh | 2026-10-04 | Pull request #12656: revopt_claims_ttl_aca_extract_1_all.sql edited online with Bitbucket
+     670f089a7 | Pullannagari, Akhil Reddy | 2026-10-04 | Pull request #12672: Feature/AL94963 94963 RRRCHANGES
+     bc2c09aaf | Pullannagari, Akhil Reddy | 2026-10-04 | Merge pull request #12703 in AEDLNC/ncr_dna2_raa_mvn from feature/AL94963-94963-REVOPT to master
+  into sit: 4 commit(s)
+     35d3924e8 | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+     4edda1e7b | Patchipala, Rajesh | 2026-10-04 | Pull request #12656: revopt_claims_ttl_aca_extract_1_all.sql edited online with Bitbucket
+     670f089a7 | Pullannagari, Akhil Reddy | 2026-10-04 | Pull request #12672: Feature/AL94963 94963 RRRCHANGES
+     bc2c09aaf | Pullannagari, Akhil Reddy | 2026-10-04 | Merge pull request #12703 in AEDLNC/ncr_dna2_raa_mvn from feature/AL94963-94963-REVOPT to master
+  into uat: 4 commit(s)
+     35d3924e8 | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+     4edda1e7b | Patchipala, Rajesh | 2026-10-04 | Pull request #12656: revopt_claims_ttl_aca_extract_1_all.sql edited online with Bitbucket
+     670f089a7 | Pullannagari, Akhil Reddy | 2026-10-04 | Pull request #12672: Feature/AL94963 94963 RRRCHANGES
+     bc2c09aaf | Pullannagari, Akhil Reddy | 2026-10-04 | Merge pull request #12703 in AEDLNC/ncr_dna2_raa_mvn from feature/AL94963-94963-REVOPT to master
+  into preprod: 4 commit(s)
+     35d3924e8 | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+     4edda1e7b | Patchipala, Rajesh | 2026-10-04 | Pull request #12656: revopt_claims_ttl_aca_extract_1_all.sql edited online with Bitbucket
+     670f089a7 | Pullannagari, Akhil Reddy | 2026-10-04 | Pull request #12672: Feature/AL94963 94963 RRRCHANGES
+     bc2c09aaf | Pullannagari, Akhil Reddy | 2026-10-04 | Merge pull request #12703 in AEDLNC/ncr_dna2_raa_mvn from feature/AL94963-94963-REVOPT to master
+  into master: 1 commit(s)
+     35d3924e8 | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+########## origin/feature/AM45700-202610-JDBCVersion
+  into develop: 1 commit(s)
+     d4a54007c | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+  into sit: 1 commit(s)
+     d4a54007c | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+  into uat: 1 commit(s)
+     d4a54007c | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+  into preprod: 1 commit(s)
+     d4a54007c | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+  into master: 1 commit(s)
+     d4a54007c | Bachamgari, Divya | 2026-10-09 | changes for JDBC upgrade
+########## origin/feature/AM45700-202610-JDBCVersionUpgrade
+  into develop: 0 commit(s)
+  into sit: 0 commit(s)
+  into uat: 0 commit(s)
+  into preprod: 6 commit(s)
+     c5c4c30f0 | Bachamgari, Divya | 2026-10-02 | JDBC upgarde testing
+     a5c0ef0dc | Bachamgari, Divya | 2026-10-02 | merge
+     3648b6422 | Bachamgari, Divya | 2026-10-02 | merge branch
+     6fbfaba41 | Bachamgari, Divya | 2026-10-02 | merge change
+     a12c44de1 | Bachamgari, Divya | 2026-10-02 | changes for snowspark/snowflake JDBC version Upgrade.
+  into master: 6 commit(s)
+     c5c4c30f0 | Bachamgari, Divya | 2026-10-02 | JDBC upgarde testing
+     a5c0ef0dc | Bachamgari, Divya | 2026-10-02 | merge
+     3648b6422 | Bachamgari, Divya | 2026-10-02 | merge branch
+     6fbfaba41 | Bachamgari, Divya | 2026-10-02 | merge change
+     a12c44de1 | Bachamgari, Divya | 2026-10-02 | changes for snowspark/snowflake JDBC version Upgrade.
+########## origin/feature/AM45700-202610-JDBCVersionUpgradetest1
+  into develop: 0 commit(s)
+  into sit: 1990 commit(s)
+     e6a54092e | Bachamgari, Divya | 2026-10-02 | merge change
+     4be89b686 | Bachamgari, Divya | 2026-10-02 | Pull request #12666: feature/AM45700-202610-JDBCVersionUpgrade
+     508d8d08a | Potla, Lekhana | 2026-10-01 | Pull request #12658: RptHoscdaXmlExtractorMasterClass.scala edited online with Bitbucket
+     655d69d36 | Potla, Lekhana | 2026-10-01 | Pull request #12657: added changes
+     a8775235d | Patchipala, Rajesh | 2026-10-01 | Pull request #12652: revopt_claims_ttl_aca_extract_1_all.sql edited online with Bitbucket
+  into uat: 1990 commit(s)
+     e6a54092e | Bachamgari, Divya | 2026-10-02 | merge change
+     4be89b686 | Bachamgari, Divya | 2026-10-02 | Pull request #12666: feature/AM45700-202610-JDBCVersionUpgrade
+     508d8d08a | Potla, Lekhana | 2026-10-01 | Pull request #12658: RptHoscdaXmlExtractorMasterClass.scala edited online with Bitbucket
+     655d69d36 | Potla, Lekhana | 2026-10-01 | Pull request #12657: added changes
+     a8775235d | Patchipala, Rajesh | 2026-10-01 | Pull request #12652: revopt_claims_ttl_aca_extract_1_all.sql edited online with Bitbucket
+  into preprod: 5088 commit(s)
+     e6a54092e | Bachamgari, Divya | 2026-10-02 | merge change
+     a12c44de1 | Bachamgari, Divya | 2026-10-02 | changes for snowspark/snowflake JDBC version Upgrade.
+     4be89b686 | Bachamgari, Divya | 2026-10-02 | Pull request #12666: feature/AM45700-202610-JDBCVersionUpgrade
+     476a7750d | Bachamgari, Divya | 2026-10-02 | changes for snowspark/snowflake JDBC version Upgrade.
+     508d8d08a | Potla, Lekhana | 2026-10-01 | Pull request #12658: RptHoscdaXmlExtractorMasterClass.scala edited online with Bitbucket
+  into master: 5117 commit(s)
+     e6a54092e | Bachamgari, Divya | 2026-10-02 | merge change
+     a12c44de1 | Bachamgari, Divya | 2026-10-02 | changes for snowspark/snowflake JDBC version Upgrade.
+     4be89b686 | Bachamgari, Divya | 2026-10-02 | Pull request #12666: feature/AM45700-202610-JDBCVersionUpgrade
+     476a7750d | Bachamgari, Divya | 2026-10-02 | changes for snowspark/snowflake JDBC version Upgrade.
+     508d8d08a | Potla, Lekhana | 2026-10-01 | Pull request #12658: RptHoscdaXmlExtractorMasterClass.scala edited online with Bitbucket
