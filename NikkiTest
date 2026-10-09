@@ -1,4 +1,20 @@
+Subject: PR #12725 – quick summary
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
-$ git log --no-merges --format='%h | %an | %ad | %s' --date=short 762f5a581^1..762f5a581^2 -- snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
-99e8148f7 | Mulla, Nasuruddin | 2026-01-23 | MdcdRaaCreateOutboundFiles.scala edited online with Bitbu
+Hi Rajesh,
+
+Here's a quick summary of what I found so far for PR #12725, compared against master before my PR (4edda1e7b).
+
+- 285 files differ in total.
+- 188 are IntelliJ library files (.idea/libraries), IDE config only.
+- 48 are new files, mostly the hoschartgenerator module and new pdfgen classes. These don't touch existing prod code. Let me know how you'd like to handle these.
+- 44 are modified files. I went through all of them: 37 are just dummy/cosmetic changes (comments, blank lines), and 1 has only commented-out debug code.
+
+That leaves 6 files with real code changes:
+- MdcdRaaCreateOutboundFiles and MdcdRaaMedMembersLoad (Nasuruddin): remove MBR_CNTY_NM from the Medicaid member file. I traced this one: the MN-2026 branch only went up to UAT, and the change reached preprod through PR #9039 (MEDICAIDTESTING) in Feb, then master through my PR. So it was never promoted for prod, and prod still sends MBR_CNTY_NM.
+- RAChartsHOSHealowMerger, RptXmlDiffIdentifier_A5, RptXmlExtractor_McidChaseid (Challa): file fully commented out, sanitizeFileName removed, and a USE SCHEMA added.
+- RptHoscdaXmlExtractorMasterClass (Lekhana): duplicate column in a SELECT.
+
+I'll check with the owners on these. For anything not approved, I can restore the previous version in one small PR. Let me know if that works.
+
+Thanks,
+Nikhitha
