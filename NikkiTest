@@ -1,10 +1,1 @@
-$ for c in 4edda1e7b 670f089a7 bc2c09aaf; do echo "== $c"; git branch -r --contains $c | grep -E "origin/(develop|sit|uat|preprod|master)$"; done
-== 4edda1e7b
-  origin/HEAD -> origin/master
-  origin/master
-== 670f089a7
-  origin/HEAD -> origin/master
-  origin/master
-== bc2c09aaf
-  origin/HEAD -> origin/master
-  origin/master
+You did create the branch correctly from 4edda1e7b. The 3 extra commits are from Rajesh and Akhil's PRs that were merged directly to master on Oct 4 and never went through develop/SIT/UAT/preprod. That's why they show up in your lower-environment PRs. Your JDBCVersion branch is clean (only your one commit), so use that one for promotions
