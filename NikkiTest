@@ -1,24 +1,809 @@
 AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
-$ git diff --name-status 4edda1e7b origin/master -- . ':(exclude)*.idea/libraries/*' | cut -f1 | sort | uniq -c
-     48 A
-     49 M
+$ cat modified_files.txt
+snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriDataETLMra.scala
+snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriETLDriver.scala
+snowpark/carillon-etl/src/main/scala/com/anthem/hca/intervention/carillon/CarillonETL.scala
+snowpark/carillon-etl/src/main/scala/com/anthem/hca/intervention/carillon/CarillonEtlDriver.scala
+snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRadvDriver.scala
+snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRetroDriver.scala
+snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRetroEtl.scala
+snowpark/cobc-prsp-etl/src/main/scala/com/anthem/hca/intervention/cobc/CobcPrspETL.scala
+snowpark/cobc-prsp-etl/src/main/scala/com/anthem/hca/intervention/cobc/CobcPrspETLDriver.scala
+snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspDriver.scala
+snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspETL.scala
+snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroDriver.scala
+snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroETL.scala
+snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala
+snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoader.scala
+snowpark/invpcv-email-campaign/src/main/scala/com/anthem/hca/intervention/etl/PCVEmailCampaignDriver.scala
+snowpark/invpcv-email-campaign/src/main/scala/com/anthem/hca/intervention/etl/PCVEmailCampaignETL.scala
+snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/core/impl/DisEnrollment.scala
+snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataExtractExec.scala
+snowpark/mmdm-etl/src/main/scala/com/anthem/hca/intervention/mmdm/MMDMETLDriver.scala
+snowpark/mrdm-member-extraction/src/main/scala/com/anthem/mrdm/medicaid/MRDMMemberDriver.scala
+snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroDriver.scala
+snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroEtl.scala
+snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroDataETL.scala
+snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroETLDriver.scala
+snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumETLDriver.scala
+snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumMraSecondMapping.scala
+snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryDriver.scala
+snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryRpt.scala
+snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaMedMembersLoad.scala
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/BigDataPdfDownload.scala
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RAChartsHOSHealowMerger.scala
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClass.scala
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLAcaDriver.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLDriver.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixFileETLMra.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLAcaDriver.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLDriver.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixFileETLAca.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLAca.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLMra.scala
 
 AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
-$ git diff --name-only 4edda1e7b origin/master -- '*.idea/libraries/*' | wc -l
-188
+$ cat modified_files.diff
+diff --git a/snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriDataETLMra.scala b/snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriDataETLMra.scala
+index 9ae1185c6..f08ee3bb1 100644
+--- a/snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriDataETLMra.scala
++++ b/snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriDataETLMra.scala
+@@ -79,7 +79,7 @@ class CentauriDataETLMra(propFilePath: String, configFolder: String, configFile:
+       log.info(s"Fetching the recent file datetime from centauri stage table for line of business - $lineOfBusiness")
+       val deploy_temp = spark.sql(s""" select distinct trim(filedatetime) as filedatetime, trim(add_col1) as add_col1,lob from $deployTempTable """)
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
-$ git diff --name-only --diff-filter=M 4edda1e7b origin/master -- . ':(exclude)*.idea/*' > modified_files.txt
+-      //Generate the Centauri file.
++      //Generate Centauri file.
+       if (deploy_temp.count() == 0) throw new Exception(s"Failed:Please check $deployTempTable table")
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
-$ git diff --diff-filter=M 4edda1e7b origin/master -- . ':(exclude)*.idea/*' > modified_files.diff
+       val MemberDeployDf = spark.sql(
+diff --git a/snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriETLDriver.scala b/snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriETLDriver.scala
+index e71a2c5d5..759d785d2 100644
+--- a/snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriETLDriver.scala
++++ b/snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriETLDriver.scala
+@@ -3,7 +3,7 @@ package com.anthem.hca.intervention.centauri
+ import com.anthem.utils.ConfigurationConstants
 
-F=<path from the list>
-git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/master -- $F
-git diff 4edda1e7b origin/master -- $F
-git diff --quiet origin/uat origin/master -- $F && echo "same as UAT" || echo "NOT same as UAT"
+ /**
+- * Driver program to generate Centauri files based on the line of business.tst tests
++ * Driver program to generate the Centauri files based on line of business.tst tests
+  */
+ object CentauriETLDriver {
 
-git checkout -b feature/AM-71511-cleanup-batch1 origin/master
-git checkout 4edda1e7b -- <file1> <file2> ...
-git rm <new-file-to-remove> ...
-git diff --cached --stat
+diff --git a/snowpark/carillon-etl/src/main/scala/com/anthem/hca/intervention/carillon/CarillonETL.scala b/snowpark/carillon-etl/src/main/scala/com/anthem/hca/intervention/carillon/CarillonETL.scala
+index 2dbfe1b31..779ad21de 100644
+--- a/snowpark/carillon-etl/src/main/scala/com/anthem/hca/intervention/carillon/CarillonETL.scala
++++ b/snowpark/carillon-etl/src/main/scala/com/anthem/hca/intervention/carillon/CarillonETL.scala
+@@ -377,3 +377,4 @@ class CarillonETL(propFilePath: String, configFolder: String, configFile: String
+     }
+   }
+ }
++
+diff --git a/snowpark/carillon-etl/src/main/scala/com/anthem/hca/intervention/carillon/CarillonEtlDriver.scala b/snowpark/carillon-etl/src/main/scala/com/anthem/hca/intervention/carillon/CarillonEtlDriver.scala
+index ee2167785..d85481842 100644
+--- a/snowpark/carillon-etl/src/main/scala/com/anthem/hca/intervention/carillon/CarillonEtlDriver.scala
++++ b/snowpark/carillon-etl/src/main/scala/com/anthem/hca/intervention/carillon/CarillonEtlDriver.scala
+@@ -38,3 +38,4 @@ object CarillonEtlDriver {
+     carillonETL.generateCarillonFile(lob)
+   }
+ }
++
+diff --git a/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRadvDriver.scala b/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRadvDriver.scala
+index 69fdb4701..c03688301 100644
+--- a/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRadvDriver.scala
++++ b/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRadvDriver.scala
+@@ -34,4 +34,4 @@ import com.anthem.utils.ConfigurationConstants
+    }
+   }
+
+-}
+\ No newline at end of file
++}
+diff --git a/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRetroDriver.scala b/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRetroDriver.scala
+index 23900b32e..42e4a1cd4 100644
+--- a/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRetroDriver.scala
++++ b/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRetroDriver.scala
+@@ -34,3 +34,5 @@ object CioxRetroDriver extends CioxRetroQueries {
+ }
+
+
++
++
+diff --git a/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRetroEtl.scala b/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRetroEtl.scala
+index 8148772cc..db880bbcb 100644
+--- a/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRetroEtl.scala
++++ b/snowpark/ciox-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/CioxRetroEtl.scala
+@@ -455,3 +455,4 @@ class CioxRetroEtl(propFilePath: String, lineOfBusiness: String, intervention: S
+     throw ioe//new RuntimeException(ioe)
+   }
+ }
++
+diff --git a/snowpark/cobc-prsp-etl/src/main/scala/com/anthem/hca/intervention/cobc/CobcPrspETL.scala b/snowpark/cobc-prsp-etl/src/main/scala/com/anthem/hca/intervention/cobc/CobcPrspETL.scala
+index c3aeaff6c..bccbad42b 100644
+--- a/snowpark/cobc-prsp-etl/src/main/scala/com/anthem/hca/intervention/cobc/CobcPrspETL.scala
++++ b/snowpark/cobc-prsp-etl/src/main/scala/com/anthem/hca/intervention/cobc/CobcPrspETL.scala
+@@ -412,3 +412,4 @@ class CobcPrspETL(propFilePath: String, configFolder:String, configFile:String,
+     }
+   }
+ }
++
+diff --git a/snowpark/cobc-prsp-etl/src/main/scala/com/anthem/hca/intervention/cobc/CobcPrspETLDriver.scala b/snowpark/cobc-prsp-etl/src/main/scala/com/anthem/hca/intervention/cobc/CobcPrspETLDriver.scala
+index 19afdf849..2f9aa2947 100644
+--- a/snowpark/cobc-prsp-etl/src/main/scala/com/anthem/hca/intervention/cobc/CobcPrspETLDriver.scala
++++ b/snowpark/cobc-prsp-etl/src/main/scala/com/anthem/hca/intervention/cobc/CobcPrspETLDriver.scala
+@@ -42,3 +42,4 @@ object CobcPrspETLDriver {
+
+   }
+ }
++
+diff --git a/snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspDriver.scala b/snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspDriver.scala
+index eb9b8ba30..7a4fbfd25 100644
+--- a/snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspDriver.scala
++++ b/snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspDriver.scala
+@@ -7,7 +7,7 @@ import com.anthem.utils.ConfigurationConstants
+  * @author Dikshith Shetty
+  * @version 1.0
+  *
+- * Driver program to generate the Inovalon Prospective outbound files(Gaps and intervention file).
++ * Driver program to generate the the Inovalon Prospective outbound files(Gaps and intervention file).
+  */
+ object InovalonPrspDriver {
+
+diff --git a/snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspETL.scala b/snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspETL.scala
+index 33de3741b..a1277b54b 100644
+--- a/snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspETL.scala
++++ b/snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspETL.scala
+@@ -15,7 +15,7 @@ import java.time.{Year, Month, LocalDate}
+  * @author Carelon
+  * @version 1.0
+  *
+- * class to generate the Inovalon Prospective outbound files.
++ * class to generate Inovalon Prospective outbound files.
+  */
+
+ class InovalonPrspETL(propFilePath: String, configFolder: String, properties: String, runId: String) extends Utilities {
+diff --git a/snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroDriver.scala b/snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroDriver.scala
+index 9fbf7ea34..8a15ada06 100644
+--- a/snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroDriver.scala
++++ b/snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroDriver.scala
+@@ -5,7 +5,7 @@ import com.anthem.utils.ConfigurationConstants
+ /**
+  *
+  * @author Satishkumar Jagadeesan
+- * Driver program to generate the Inovalon retro  outbound file.
++ * Driver program to generate Inovalon retro  outbound file.
+  *
+  */
+
+diff --git a/snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroETL.scala b/snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroETL.scala
+index b6888d197..780650bc3 100644
+--- a/snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroETL.scala
++++ b/snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroETL.scala
+@@ -97,7 +97,7 @@ class InovalonRetroETL(propFilePath: String, configFolder:String, configFile:Str
+       if (res.count == 0 || recentStatus != status1) {
+         throw new Exception(s"No load_log_key entry or failed status for processid = ${processID} and stepid = ${stepID1}.So cannot generate Outbound file for " + intervention + " and " + lob)
+       }
+-      //Get the distinct filedatetime,market and quarter from deploy temp table.
++      //Get distinct filedatetime,market and quarter from deploy temp table.
+
+       runId = sparkSession.sql("select md5(current_timestamp)").first().get.getString(0)
+       println(runId)
+diff --git a/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala b/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala
+index 1407bbc31..71da11e8f 100644
+--- a/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala
++++ b/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala
+@@ -25,7 +25,7 @@ object DeployLoadDriver {
+     val configFolder = ConfigurationConstants.CONFIG_FOLDER
+     val configFile = ConfigurationConstants.sanitizeFileName(args(4).split("/").reverse(0))
+     val runId: String = args(5)
+-    //Valid interventions
++    //Valid interventions allowed
+     val interventionSet = Set("ALLSRCRT","INVRTSP","INVPRSP","INVPRSP_MMDM","AVAILPRSP","PCMS","CARPRSP","CTVIRT","INVRTSP_OOA",
+       "EPISRCRT","CRA_HIGHPROB","GBDMCAID_TN","DIRCONRT","INTMEDRT","ALTEGRT","PLAYBOOKPRSP","CHCSMAS","MDXMPRSP","CIOXRT","COBCPRSP",
+       "BCBSMNRT","MTRXPRSP","OPTUMRT","AHGPRSP","EMLCMPN", "SHRCRRT", "MROCPRT","OPTUMPRSP", "CRAPCVDR","CRASYDR","SURSCRPRSP","CENTRT","DTVNTMBRRT","DTVNTRTPM","DTVNTRT","VRTXRT","VRTXRT_OOA","OPTMRT","OPTMRTT","VRSMART","CENTPRVRT")
+diff --git a/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoader.scala b/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoader.scala
+index 2f85ebae6..76ce365ee 100644
+--- a/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoader.scala
++++ b/snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoader.scala
+@@ -14,7 +14,7 @@ import com.typesafe.config.ConfigFactory
+  * @author Dikshith Shetty
+  * @version 1.0 tes
+  *
+- *          A class for loading persistent deploy table in Hive based on the intervention and line of business.
++ *          A class for loading the persistent deploy table in Hive based on the intervention and line of business.
+  */
+
+ class DeployLoader(propFilePath: String, configFolder:String, configFile:String, var runId:String) extends Utilities {
+diff --git a/snowpark/invpcv-email-campaign/src/main/scala/com/anthem/hca/intervention/etl/PCVEmailCampaignDriver.scala b/snowpark/invpcv-email-campaign/src/main/scala/com/anthem/hca/intervention/etl/PCVEmailCampaignDriver.scala
+index fd4e7027c..b1d04b2df 100644
+--- a/snowpark/invpcv-email-campaign/src/main/scala/com/anthem/hca/intervention/etl/PCVEmailCampaignDriver.scala
++++ b/snowpark/invpcv-email-campaign/src/main/scala/com/anthem/hca/intervention/etl/PCVEmailCampaignDriver.scala
+@@ -40,4 +40,4 @@ object PCVEmailCampaignDriver {
+       }
+       }
+
+-}
+\ No newline at end of file
++}
+diff --git a/snowpark/invpcv-email-campaign/src/main/scala/com/anthem/hca/intervention/etl/PCVEmailCampaignETL.scala b/snowpark/invpcv-email-campaign/src/main/scala/com/anthem/hca/intervention/etl/PCVEmailCampaignETL.scala
+index dbbc0038d..585e3984f 100644
+--- a/snowpark/invpcv-email-campaign/src/main/scala/com/anthem/hca/intervention/etl/PCVEmailCampaignETL.scala
++++ b/snowpark/invpcv-email-campaign/src/main/scala/com/anthem/hca/intervention/etl/PCVEmailCampaignETL.scala
+@@ -369,4 +369,4 @@ class PCVEmailCampaignETL(propFilePath: String, configFolder:String, configFile:
+       }
+     }
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/core/impl/DisEnrollment.scala b/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/core/impl/DisEnrollment.scala
+index 8b196f37b..cd212b97b 100644
+--- a/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/core/impl/DisEnrollment.scala
++++ b/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/core/impl/DisEnrollment.scala
+@@ -40,8 +40,14 @@ class DisEnrollment(propFilePath: String, spark:Session, runId: String) extends
+     println("getting required parameters from config file------------")
+     val cfg = ConfigFactory.parseFile(new File(propFilePath))
+
++
+     val dataBaseName2 = cfg.getString("database.name2")
++/*    log.info(s"[Debug] Reached before reading ")
++    val key = "database.name.rawz"
++    val v = cfg.getValue(key)
++    log.info(s"$key type = ${v.valueType()} value = ${v.render()}")*/
+     val rawzDbName = cfg.getString("database.name.rawz")
++    //val rawzDbName = "U01_RAA.RAA_RAWZ"
+     val restatedMbrshpMnthCntTable = cfg.getString("restated.mbrshp.table")
+     val fnclMbuCfTable = cfg.getString("fncl.mbu.cf.table")
+     val fnclProdCfTable = cfg.getString("fncl.prod.cf.table")
+@@ -80,6 +86,8 @@ class DisEnrollment(propFilePath: String, spark:Session, runId: String) extends
+     val emailTo = cfg.getString("mail.to.address")
+     val dbName = cfg.getString("dbName")
+     val dataBaseName = dbName
++
++
+     try {
+       spark.sql(s"""use SCHEMA ${dataBaseName}""")
+       println("After using database------------")
+diff --git a/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataExtractExec.scala b/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataExtractExec.scala
+index 539896f5c..98d1cadc4 100644
+--- a/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataExtractExec.scala
++++ b/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataExtractExec.scala
+@@ -16,7 +16,7 @@ object DataExtractExec {
+     //logger.info(s"Launching ${appName}...")
+
+     val conf = args(0)//System.getProperty("spark.app.conf")
+-    //val validation = OptionHandler.validate(conf)
++  //  val validation = OptionHandler.validate(conf)
+
+     //logger.info(s"spark.app.conf validation: ${validation}")
+     //logger.info(s"Loading configurations from: ${conf}")
+diff --git a/snowpark/mmdm-etl/src/main/scala/com/anthem/hca/intervention/mmdm/MMDMETLDriver.scala b/snowpark/mmdm-etl/src/main/scala/com/anthem/hca/intervention/mmdm/MMDMETLDriver.scala
+index 5a2915e5d..6356e64cc 100644
+--- a/snowpark/mmdm-etl/src/main/scala/com/anthem/hca/intervention/mmdm/MMDMETLDriver.scala
++++ b/snowpark/mmdm-etl/src/main/scala/com/anthem/hca/intervention/mmdm/MMDMETLDriver.scala
+@@ -49,3 +49,4 @@ object MMDMETLDriver {
+     }
+   }
+ }
++
+diff --git a/snowpark/mrdm-member-extraction/src/main/scala/com/anthem/mrdm/medicaid/MRDMMemberDriver.scala b/snowpark/mrdm-member-extraction/src/main/scala/com/anthem/mrdm/medicaid/MRDMMemberDriver.scala
+index dd2bcf1e3..61bef9f08 100644
+--- a/snowpark/mrdm-member-extraction/src/main/scala/com/anthem/mrdm/medicaid/MRDMMemberDriver.scala
++++ b/snowpark/mrdm-member-extraction/src/main/scala/com/anthem/mrdm/medicaid/MRDMMemberDriver.scala
+@@ -31,3 +31,4 @@ object MRDMMemberDriver {
+
+   }
+ }
++
+diff --git a/snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroDriver.scala b/snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroDriver.scala
+index 59a2cb57b..ed7994e50 100644
+--- a/snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroDriver.scala
++++ b/snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroDriver.scala
+@@ -26,7 +26,7 @@ object MrocpRetroDriver extends MrocpRetroQueries {
+     }
+
+
+-
++    //valid lob
+     val validLinesOfBusiness = Set(ACA,RADV_ACA)
+     if (!validLinesOfBusiness.contains(lob)) {
+       System.err.println(s"Please provide a valid line of business, i.e, ${validLinesOfBusiness.mkString(", ")}.")
+diff --git a/snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroEtl.scala b/snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroEtl.scala
+index 1923c40a7..37427296d 100644
+--- a/snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroEtl.scala
++++ b/snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroEtl.scala
+@@ -3,7 +3,7 @@ package com.anthem.hca.chaselist.automation
+ import java.io.File
+ import java.time.ZonedDateTime
+ import java.time.format.DateTimeFormatter
+-//rrr test
++//upgarde testing
+ import com.anthem.hca.availity.email.Email
+ import com.anthem.hca.availity.log.{LoadLogKey, LogInfo}
+ import com.snowflake.snowpark.Session
+diff --git a/snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroDataETL.scala b/snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroDataETL.scala
+index f43a8008e..666dc7521 100644
+--- a/snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroDataETL.scala
++++ b/snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroDataETL.scala
+@@ -17,7 +17,7 @@ import scala.util.control.NonFatal
+  * @author Carelon
+  * @version 2.0
+  *
+- *          A class responsible for generating the outbound Mro file based on the lob provided.
++ *          A class responsible for generating outbound Mro file based on the lob provided.
+  */
+ class MroFileETLMra(propFilePath: String, configFolder: String, configFile: String,var runId: String) extends Utilities with java.io.Serializable {
+
+diff --git a/snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroETLDriver.scala b/snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroETLDriver.scala
+index 5c2903a96..aa6421485 100644
+--- a/snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroETLDriver.scala
++++ b/snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroETLDriver.scala
+@@ -22,6 +22,7 @@ object MroETLDriver {
+       System.exit(1)
+     }
+
++    //lob validation
+     if( lob.nonEmpty ) {
+       val mroFileETLMra = new MroFileETLMra(propFilePath, configFolder, configFile, runId)
+       mroFileETLMra.generateMroOutboundFile(lob)
+diff --git a/snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumETLDriver.scala b/snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumETLDriver.scala
+index f69c842db..212059618 100644
+--- a/snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumETLDriver.scala
++++ b/snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumETLDriver.scala
+@@ -22,7 +22,7 @@ object OptumETLDriver {
+       System.exit(1)
+     }
+
+-
++    //lob validation
+     if (lob.nonEmpty && lob.equals("MCR") && intervention.equalsIgnoreCase("OPTMRT")) {
+       val optumMra = new OptumMra(propFilePath, configFolder, configFile, runId)
+       optumMra.generateOutboundFile(lob)
+diff --git a/snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumMraSecondMapping.scala b/snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumMraSecondMapping.scala
+index d26d47020..54cfa0a03 100644
+--- a/snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumMraSecondMapping.scala
++++ b/snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumMraSecondMapping.scala
+@@ -1,5 +1,6 @@
+ package com.anthem.hca.intervention.optmrt
+
++//test
+ import com.anthem.hca.availity.email.Email
+ import com.anthem.hca.availity.log.{LoadLogKey, LogInfo}
+ import com.typesafe.config.{Config, ConfigFactory}
+diff --git a/snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryDriver.scala b/snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryDriver.scala
+index 29b5df6cb..6aac99bfb 100644
+--- a/snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryDriver.scala
++++ b/snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryDriver.scala
+@@ -16,7 +16,7 @@ object CdaRaSmryDriver {
+     val properties: String = ConfigurationConstants.sanitizeFileName(args(2).split("/").reverse(0))
+     val runId: String = args(3)
+
+-    // ./conf/cda_ra_smry_rpt-dv.properties ./conf db.properties
++    // ./conf/cda_ra_smry_rpt-dv.properties ./the conf db.properties
+     new CdaRaSmryRpt(propFilePath, ConfigurationConstants.CONFIG_FOLDER, properties, runId).CdaRaSmryLoad()
+   }
+
+diff --git a/snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryRpt.scala b/snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryRpt.scala
+index 08fa41c7a..c89214cf9 100644
+--- a/snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryRpt.scala
++++ b/snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryRpt.scala
+@@ -86,7 +86,7 @@ class CdaRaSmryRpt(propFilePath:String, configFolder:String, properties:String,
+
+       if(last_Partition.count() == 0)
+       {
+-        //logger.info("Partition data frame is empty. Please verify table")
++        //logger.info("Partition data frame is empty. Please verify the table")
+         System.exit(0)
+       }
+
+diff --git a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+index 520ae2028..c9a8418b5 100644
+--- a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
++++ b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+@@ -100,7 +100,6 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+              |MBR_CITY_NM,
+              |MBR_STATE,
+              |MBR_CNTY,
+-             |MBR_CNTY_NM,
+              |MBR_ZIP,
+              |MBR_PHONE,
+              |MBR_ALT_PHONE,
+@@ -256,4 +255,4 @@ class MdcdRaaCreateOutboundFiles(propFilePath: String,dataBaseProperties: String
+       println("Completed DataFrame write")
+     }
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaMedMembersLoad.scala b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaMedMembersLoad.scala
+index 7de13345e..12951717d 100644
+--- a/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaMedMembersLoad.scala
++++ b/snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaMedMembersLoad.scala
+@@ -122,8 +122,8 @@ class MdcdRaaMedMembersLoad(propFilePath: String, dataBaseProperties: String, va
+
+       val snapyearmnthnbr = spark.sql(
+         s"""
+-           |select max(snap_year_mnth_nbr) from ${scndryFactRsttdFnclMbrshp}
+-           |""".stripMargin).collect().head.get(0).toString
++          |select max(snap_year_mnth_nbr) from ${scndryFactRsttdFnclMbrshp}
++          |""".stripMargin).collect().head.get(0).toString
+       println("Snap year mnth number is" +snapyearmnthnbr)
+
+       val scndryFactRsttdFnclMbrshpDF =
+@@ -189,12 +189,12 @@ class MdcdRaaMedMembersLoad(propFilePath: String, dataBaseProperties: String, va
+
+
+       val mbrAdrsDF = s"""SELECT mba.LINE_1_ADRS_TXT,mba.LINE_2_ADRS_TXT,mba.LINE_3_ADRS_TXT,mba.CITY_NM,mba.ST_PRVNC_CD,mba.CNTY_CD,mba.ZIP_CD,
+-                         |mba.PRMRY_PHONE_NBR,mba.ALT_PHONE_NBR,mba.EMAIL_ADRS_TXT,mba.mbr_key,mba.ADRS_TYPE_CD,c.cnty_nm from ${edlDB}.${mbrAdrs} mba
+-                         |JOIN ${edlDB}.mlsa_zip_cd_hist z on mba.zip_cd = z.zip_cd
+-                         |JOIN ${edlDB}.mlsa_cnty c on c.fips_cnty_cd = z.fips_cnty_cd""".stripMargin
++                   |mba.PRMRY_PHONE_NBR,mba.ALT_PHONE_NBR,mba.EMAIL_ADRS_TXT,mba.mbr_key,mba.ADRS_TYPE_CD,c.cnty_nm from ${edlDB}.${mbrAdrs} mba
++                   |JOIN ${edlDB}.mlsa_zip_cd_hist z on mba.zip_cd = z.zip_cd
++                   |JOIN ${edlDB}.mlsa_cnty c on c.fips_cnty_cd = z.fips_cnty_cd""".stripMargin
+       spark.sql(s"""create or replace temporary table temp_db.temp_schema.mbr_adrs_vw as $mbrAdrsDF """).count()
+
+-      val mbrCobDF =
++     val mbrCobDF =
+         s"""
+            |SELECT x.* FROM (SELECT DISTINCT MBR_KEY,COB_EFCTV_DT,COB_TRMNTN_DT,OPL_ORDR_CD,OTHR_INSRNC_TYPE_CD
+            |,rank () over (partition by MBR_KEY order by COB_EFCTV_DT desc,COB_TRMNTN_DT desc) as prfrank
+@@ -334,7 +334,7 @@ class MdcdRaaMedMembersLoad(propFilePath: String, dataBaseProperties: String, va
+         throw new Exception(s"""The Query returned zero records for snap year month number-$snapyearmnthnbr""")
+       }*/
+
+-      spark.sql("""create or replace temporary table temp_db.temp_schema.mbr_keys as select DISTINCT MCID,MBR_KEY from temp_db.temp_schema.extracted_states""").count()
++     spark.sql("""create or replace temporary table temp_db.temp_schema.mbr_keys as select DISTINCT MCID,MBR_KEY from temp_db.temp_schema.extracted_states""").count()
+
+       println("step2")
+       spark.sql(
+@@ -420,11 +420,11 @@ class MdcdRaaMedMembersLoad(propFilePath: String, dataBaseProperties: String, va
+       println(extracted_states_stateCd_column.schema)
+
+
+-      spark.sql(
++     spark.sql(
+         """
+           |create or replace temporary table temp_db.temp_schema.final_states_df_adrs as
+           |select a.*,mba.LINE_1_ADRS_TXT as MBR_ADRS1, mba.LINE_2_ADRS_TXT as MBR_ADRS2, mba.LINE_3_ADRS_TXT as MBR_ADRS3
+-          |, mba.CITY_NM as MBR_CITY_NM, mba.ST_PRVNC_CD as MBR_STATE, mba.CNTY_CD as MBR_CNTY, mba.CNTY_NM as MBR_CNTY_NM,mba.ZIP_CD as MBR_ZIP
++          |, mba.CITY_NM as MBR_CITY_NM, mba.ST_PRVNC_CD as MBR_STATE, mba.CNTY_CD as MBR_CNTY, mba.ZIP_CD as MBR_ZIP
+           |, mba.PRMRY_PHONE_NBR as MBR_PHONE, mba.ALT_PHONE_NBR as MBR_ALT_PHONE, mba.EMAIL_ADRS_TXT
+           |, mb.GNDR_CD as MBR_GNDR, mb.SSN as SSN, mb.PRFX_NM as MBR_PRFX
+           |, mb.FRST_NM as MBR_FRST_NM, mb.LAST_NM as MBR_LAST_NM, mb.SFX_NM as MBR_SUFFIX, mb.MID_INIT_NM as MBR_MIDDLE_NM
+@@ -452,7 +452,7 @@ class MdcdRaaMedMembersLoad(propFilePath: String, dataBaseProperties: String, va
+                                    |, to_varchar(INCRD_END_DT,'ddMONyyyy') as INCRD_END_DT
+                                    |, PRORTD_MBR_MNTH_CNT,SNAP_YEAR_MNTH_NBR
+                                    |, MBR_GNDR, substr(SSN,-4) as SSN, MBR_PRFX, replace(MBR_FRST_NM,'|', ' ') as MBR_FRST_NM, replace(MBR_LAST_NM ,'|', ' ') as MBR_LAST_NM, MBR_SUFFIX
+-                                   |, MBR_MIDDLE_NM, replace(MBR_ADRS1,'|',' ') as MBR_ADRS1, replace(MBR_ADRS2,'|',' ') as MBR_ADRS2, replace(MBR_ADRS3,'|',' ') as MBR_ADRS3, MBR_CITY_NM, MBR_STATE, MBR_CNTY, MBR_CNTY_NM,MBR_ZIP, MBR_PHONE
++                                   |, MBR_MIDDLE_NM, replace(MBR_ADRS1,'|',' ') as MBR_ADRS1, replace(MBR_ADRS2,'|',' ') as MBR_ADRS2, replace(MBR_ADRS3,'|',' ') as MBR_ADRS3, MBR_CITY_NM, MBR_STATE, MBR_CNTY, MBR_ZIP, MBR_PHONE
+                                    |, MBR_ALT_PHONE, replace(EMAIL_ADRS_TXT,'|',' ') as EMAIL_ADRS_TXT, MBR_PROD_ENRLMNT_EFCTV_DT, MBR_PROD_ENRLMNT_TRMNTN_DT
+                                    |,Dual,RA,OPL_ORDR_CD,OTHR_INSRNC_TYPE_CD,LANG_SP,LANG_WR
+                                    |,ST_CD
+@@ -478,22 +478,23 @@ class MdcdRaaMedMembersLoad(propFilePath: String, dataBaseProperties: String, va
+
+ /*
+       val mcidEligDtDF = s"""SELECT DISTINCT mcid, mbr_key, st_cd,
+-                            |CASE
+-                            |    WHEN CURRENT_DATE <= to_date('24' || TO_CHAR(CURRENT_DATE, 'MONyyyy'), 'ddMONyyyy')
+-                            |    THEN ADD_MONTHS(TRUNC(CURRENT_DATE, 'MONTH'), -1)
+-                            |    ELSE TRUNC(CURRENT_DATE, 'MONTH') END AS DateFilter
+-                            |FROM temp_db.temp_schema.final_states_df_adrs
+-                            |WHERE incrd_end_dt >=
+-                            |  CASE
+-                            |    WHEN CURRENT_DATE <= to_date('24' || TO_CHAR(CURRENT_DATE, 'MONyyyy'), 'ddMONyyyy')
+-                            |    THEN ADD_MONTHS(TRUNC(CURRENT_DATE, 'MONTH'), -1)
+-                            |    ELSE TRUNC(CURRENT_DATE, 'MONTH')
+-                            |  END""".stripMargin
++                              |CASE
++                              |    WHEN CURRENT_DATE <= to_date('24' || TO_CHAR(CURRENT_DATE, 'MONyyyy'), 'ddMONyyyy')
++                              |    THEN ADD_MONTHS(TRUNC(CURRENT_DATE, 'MONTH'), -1)
++                              |    ELSE TRUNC(CURRENT_DATE, 'MONTH') END AS DateFilter
++                              |FROM temp_db.temp_schema.final_states_df_adrs
++                              |WHERE incrd_end_dt >=
++                              |  CASE
++                              |    WHEN CURRENT_DATE <= to_date('24' || TO_CHAR(CURRENT_DATE, 'MONyyyy'), 'ddMONyyyy')
++                              |    THEN ADD_MONTHS(TRUNC(CURRENT_DATE, 'MONTH'), -1)
++                              |    ELSE TRUNC(CURRENT_DATE, 'MONTH')
++                              |  END""".stripMargin
+
+       spark.sql(s"""create or replace temporary table temp_db.temp_schema.mcidView as $mcidEligDtDF""").count()
+
+       spark.sql("""select DateFilter from temp_db.temp_schema.mcidView""").show()
+       spark.sql("""select DateFilter from temp_db.temp_schema.mcidView""").show()
++      build test
+ */
+
+ // -----------------------------------------------------------------------------
+@@ -626,7 +627,6 @@ class MdcdRaaMedMembersLoad(propFilePath: String, dataBaseProperties: String, va
+            |MBR_CITY_NM,
+            |MBR_STATE,
+            |MBR_CNTY,
+-           |MBR_CNTY_NM,
+            |MBR_ZIP,
+            |MBR_PHONE,
+            |MBR_ALT_PHONE,
+diff --git a/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/BigDataPdfDownload.scala b/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/BigDataPdfDownload.scala
+index c30a1a33c..250aa053a 100644
+--- a/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/BigDataPdfDownload.scala
++++ b/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/BigDataPdfDownload.scala
+@@ -519,4 +519,4 @@ object BigDataPdfDownload {
+     }
+
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RAChartsHOSHealowMerger.scala b/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RAChartsHOSHealowMerger.scala
+index 03d954e08..b42cb7760 100644
+--- a/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RAChartsHOSHealowMerger.scala
++++ b/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RAChartsHOSHealowMerger.scala
+@@ -1,3 +1,4 @@
++/*
+ package com.anthem.cda.pdfgen
+ import com.anthem.cda.utilities.ConfigConstants
+ import org.apache.pdfbox.multipdf.PDFMergerUtility
+@@ -30,6 +31,7 @@ object RAChartsHOSHealowMerger {
+     pdfMerger.setDestinationFileName(outputFile.getAbsolutePath)
+     files.foreach(file => pdfMerger.addSource(file))
+     pdfMerger.mergeDocuments(null)
++    //pdfMerger.appendDocument(PDDocument outputFile.getAbsolutePath, PDDocument files.getAbsoutePath)
+     println(s"Merged PDF created: ${outputFile.getAbsolutePath}")
+   }
+
+@@ -66,3 +68,4 @@ object RAChartsHOSHealowMerger {
+     }
+   }
+ }
++*/
+\ No newline at end of file
+diff --git a/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClass.scala b/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClass.scala
+index 48205e7fb..37149c669 100644
+--- a/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClass.scala
++++ b/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClass.scala
+@@ -175,6 +175,7 @@ object RptHoscdaXmlExtractorMasterClass {
+               coalesce('"' || r.SRC_ENCNTR_ID || '"',NULL)as src_encntr_id,
+               r.dcmnt_gnrtd_dtm,
+               r.OBSRVTN_DTM,
++              r.dcmnt_gnrtd_dtm,
+               r.HLTH_OS_SRC_SCHMA_NM,
+               r.rpt_type_cd,
+               r.LOAD_DTM,
+diff --git a/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala b/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala
+index 33e307364..5ebc9fb22 100644
+--- a/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala
++++ b/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala
+@@ -17,8 +17,8 @@ import com.snowflake.snowpark.SaveMode
+ object RptXmlDiffIdentifier_A5 {
+   def main(args: Array[String]) {
+
+-       val configDirectory = ConfigConstants.sanitizeFileName(args(5)) // ./config/
+-    val dbFile = ConfigConstants.sanitizeFileName(args(6)) // db.properties
++       val configDirectory = args(5) // ./config/
++    val dbFile = args(6) // db.properties
+     val spark = SessionCreator.getSession(configDirectory, dbFile)
+     import spark.implicits._
+
+@@ -33,11 +33,11 @@ object RptXmlDiffIdentifier_A5 {
+       System.exit(1)
+     }
+     else {
+-      val inputFile = ConfigConstants.sanitizeFileName(args(0))
+-      val ccdaInputFile = ConfigConstants.sanitizeFileName(args(1))
+-      val TRinputPath = ConfigConstants.sanitizeFileName(args(2))
+-      val outputPath = ConfigConstants.sanitizeFileName(args(3))
+-      val date_folder = ConfigConstants.sanitizeFileName(args(4))
++      val inputFile = args(0)
++      val ccdaInputFile = args(1)
++      val TRinputPath = args(2)
++      val outputPath = args(3)
++      val date_folder = args(4)
+       val filename = "File_Found_NotFound.csv"
+
+     /* CCDA */
+@@ -102,6 +102,8 @@ object RptXmlDiffIdentifier_A5 {
+                                  .option("header", "true")
+                                  .option("field_delimiter", ",")
+                                  .option("max_file_size",262144000)
++                                 .option("null_if","")
++                                 .option("empty_field_as_null","false")
+                                  .option("compression", "none")
+                                  .csv(outputPath +"/pdfgen/"+date_folder+"/ccdatrFile/")
+
+diff --git a/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid.scala b/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid.scala
+index d279d9065..5e82af0c7 100644
+--- a/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid.scala
++++ b/snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid.scala
+@@ -19,7 +19,9 @@ object RptXmlExtractor_McidChaseid {
+     val configDirectory = args(4) // ./config/
+     val dbFile = args(5) // db.properties
+        val date_folder=args(6)
++    // calling RRR
+     val spark = SessionCreator.getSession(configDirectory, dbFile)
++
+     import spark.implicits._
+     if (args.length != 17) {
+       println("Error: Incorrect arguments!")
+@@ -440,7 +442,7 @@ object RptXmlExtractor_McidChaseid {
+
+       val TempTbl = "TempTbl_" + driverTbl
+        spark.sql(s"""create or replace temporary table temp_db.temp_schema.$TempTbl as $rptRequireCol_df""").collect()
+-
++       spark.sql(s"""USE SCHEMA temp_db.temp_schema""")
+
+        val rptDataDf = spark.table("temp_db.temp_schema."+TempTbl).select($"mcid", $"CHART_ID", $"rpt_guid", $"admt_dt", $"rptg_rcrd_authrty_nm", $"rpt_cntnt_txt_1",$"rpt_cntnt_txt_2",$"rpt_cntnt_txt_3",$"rpt_cntnt_txt_4",$"rpt_cntnt_txt_5",$"rpt_cntnt_txt_6",$"rpt_cntnt_txt_7",$"rpt_cntnt_txt_8",$"rpt_cntnt_txt_9",$"rpt_cntnt_txt_10")
+        val rptRcrdAuthrtyDf1 = spark.table("temp_db.temp_schema."+TempTbl).select($"mcid", $"CHART_ID", lit("").alias("npi"), $"encntr_guid", $"pat_guid", $"rpt_guid", $"rptg_rcrd_authrty_nm", $"dos_start_date", $"dos_end_date",$"admt_dt",$"dschrg_dt",$"pat_rcrd_authrty_guid",$"src_encntr_id")
+@@ -466,21 +468,21 @@ object RptXmlExtractor_McidChaseid {
+       rptDataDf.write.mode(SaveMode.Overwrite)
+         .option("field_delimiter", ",")
+         .option("header", "false")
+-               .option("compression", "none")
++                   .option("compression", "none")
+         .option("max_file_size",262144000)
+-               .option("null_if","")
+-               .option("empty_field_as_null","false")
+-               .csv(outputPath+"/pdfgen/"+date_folder+"/ccda/xml/part")
++                   .option("null_if","")
++                   .option("empty_field_as_null","false")
++                   .csv(outputPath+"/pdfgen/"+date_folder+"/ccda/xml/part")
+
+       /* holding required columns for memberLogTable  */
+       rptRcrdAuthrty_Mbrlogdf.write.mode(SaveMode.Overwrite)
+         .option("field_delimiter", ",")
+         .option("header", "true")
+-               .option("compression", "none")
++                   .option("compression", "none")
+         .option("max_file_size",262144000)
+-               .option("null_if","")
+-               .option("empty_field_as_null","false")
+-               .csv(outputPath+"/pdfgen/"+date_folder+"/ccda/logtbl/mbrlogtbl")
++                   .option("null_if","")
++                   .option("empty_field_as_null","false")
++                   .csv(outputPath+"/pdfgen/"+date_folder+"/ccda/logtbl/mbrlogtbl")
+
+      /* holding required columns for manifest memberLogTable  */
+        //rptRcrdAuthrty_df.write
+diff --git a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLAcaDriver.scala b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLAcaDriver.scala
+index 14553a39a..8e27b434a 100644
+--- a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLAcaDriver.scala
++++ b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLAcaDriver.scala
+@@ -5,7 +5,7 @@ import com.anthem.utils.ConfigurationConstants
+  * @author Praveen Sannakki
+  * @version 1.0
+  *
+- * Driver program to generate virtix files based on the line of business, virtix extract name and property file provided..
++ * Driver program to generate the virtix files based on line of business, virtix extract name and property file provided..
+  * @version 1.1 - Adding MRA
+  */
+ object VirtixETLAcaDriver {
+@@ -40,3 +40,4 @@ object VirtixETLAcaDriver {
+     }*/
+   }
+ }
++
+diff --git a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLDriver.scala b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLDriver.scala
+index c039e650c..b7409e476 100644
+--- a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLDriver.scala
++++ b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLDriver.scala
+@@ -42,3 +42,5 @@ object VirtixETLDriver {
+   }
+ }
+
++
++
+diff --git a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixFileETLMra.scala b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixFileETLMra.scala
+index cab8337b3..19371cc9a 100644
+--- a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixFileETLMra.scala
++++ b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixFileETLMra.scala
+@@ -17,7 +17,7 @@ import scala.util.control.NonFatal
+  * @author Carelon
+  * @version 2.0
+  *
+- *          A class responsible for generating the outbound VrtxrtINa file based on the lob provided.
++ *          A class responsible for generating the outbound VrtxrtINa file based on the lob provided
+  */
+ class VirtixFileETLMra(propFilePath: String, configFolder: String, configFile: String,var runId: String) extends Utilities with java.io.Serializable {
+
+@@ -201,8 +201,8 @@ class VirtixFileETLMra(propFilePath: String, configFolder: String, configFile: S
+       val VrtxrtINaFileTempDf = chartDeployDf.filter(col("Chase_ID").is_not_null && col("Chase_ID").=!=(""))
+       val row_count = VrtxrtINaFileTempDf.count()
+       VrtxrtINaFileTempDf.createOrReplaceTempView("VRTXRT_RECENT_DATA")
+-
+-
++
++
+       def generateOutboundFile(finalDataFrame: DataFrame, fileInd:String) : Unit = {
+
+         var Rvalue: String = spark.sql(s"""Select Substr(add_val4,1,2) as Aval from VRTXRT_RECENT_DATA""").first().get.getString(0)
+@@ -224,10 +224,10 @@ class VirtixFileETLMra(propFilePath: String, configFolder: String, configFile: S
+           .csv(fileOutBoundLocation)
+
+       }
+-
++
+       println(s"Row count is: $row_count")
+       println(s"deplyRecordCnt count is: $deplyRecordCnt")
+-
++
+       //Audit check
+       if (VrtxrtINaFileTempDf.first(1).isEmpty || row_count > deplyRecordCnt) {
+         log.info(s"Batch $batchId: No Records matched to generate VrtxrtINa Members outbound file after filter.")
+@@ -261,7 +261,7 @@ class VirtixFileETLMra(propFilePath: String, configFolder: String, configFile: S
+         val VrtxrtINaFileTempDf1= spark.sql(s"""select  ProjectId , ProjectName , ClientRequestid , MemberLastName , MemberFirstName , MemberMI , MemberId , MemberDOB , ProviderGroupName , ProviderGroupTIN , ProviderNPI , ProviderId , ProviderLastName , ProviderFirstName , ProviderAddress1 , ProviderAddress2 , ProviderCity , ProviderState , ProviderZip , ProviderPhone , ProviderFax , ProviderContactName , CentralContactName , CentralContactPhone , CentralContactFax , MemberZip , ClaimNumber , RecordRank , SSN , MemberAddress1 , MemberAddress2 , MemberCity , MemberState , HomePhone , MobilePhone , InsuranceID , ClaimID , Gender , BeginDOS , EndDOS , ClientSiteID , ReturnFileName , BusinessUnit , LOB , RecordType , ContractNumber , CodingVendor , AltCodingVendor , UserDefinedText1 , UserDefinedText2 , UserDefinedText3 , OnshoreIndicator , ClientCode , HealthPlanProduct ,ONOFFSHORE, P01_PROTEGRITY.SCRTY_ACS_CNTRL.ANTM_MBR_IDENTIFIERS_DETOK(MBI) AS "MBI" from VRTXRT_RECENT_DATA """)
+
+         log.info("Write the transformed results of VrtxrtINa data to the hadoop file ..")
+-
++
+         val OnOffCnt = spark.sql(s"""Select count(distinct ONOFFSHORE) from VRTXRT_RECENT_DATA where length(ONOFFSHORE) > 0 """).first().get.getLong(0).toInt
+         log.info("Write the transformed results of Cotiviti data to file ...")
+
+@@ -449,4 +449,4 @@ class VirtixFileETLMra(propFilePath: String, configFolder: String, configFile: S
+   }
+
+   case class DataFrameEmptyException(s: String) extends Exception(s) {}
+-}
++}
+\ No newline at end of file
+diff --git a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLAcaDriver.scala b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLAcaDriver.scala
+index 570b6d531..8047bf224 100644
+--- a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLAcaDriver.scala
++++ b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLAcaDriver.scala
+@@ -35,3 +35,4 @@ object VirtixOoaETLAcaDriver {
+     }
+   }
+ }
++
+diff --git a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLDriver.scala b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLDriver.scala
+index eb296b1aa..4a1234712 100644
+--- a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLDriver.scala
++++ b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLDriver.scala
+@@ -36,3 +36,4 @@ object VirtixOoaETLDriver {
+     }
+   }
+ }
++
+diff --git a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixFileETLAca.scala b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixFileETLAca.scala
+index aa3971f6b..92ad6bbe9 100644
+--- a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixFileETLAca.scala
++++ b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixFileETLAca.scala
+@@ -17,7 +17,7 @@ import scala.util.control.NonFatal
+  * @author Carelon
+  * @version 2.0
+  *
+- *          A class responsible for generating the outbound VrtxrtINa file based on the lob provided.
++ *          A class responsible for generating the outbound VrtxrtINa file based on the lob provided
+  */
+ class VirtixFileETLAca(propFilePath: String, configFolder: String, configFile: String,var runId: String) extends Utilities with java.io.Serializable {
+
+@@ -435,3 +435,4 @@ class VirtixFileETLAca(propFilePath: String, configFolder: String, configFile: S
+
+   case class DataFrameEmptyException(s: String) extends Exception(s) {}
+ }
++
+diff --git a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLAca.scala b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLAca.scala
+index 50cddb7f4..3e0d81d0a 100644
+--- a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLAca.scala
++++ b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLAca.scala
+@@ -17,7 +17,7 @@ import scala.util.control.NonFatal
+  * @author Carelon
+  * @version 2.0
+  *
+- *          A class responsible for generating the outbound vrtxrt_ooaINa file based on the lob provided.
++ *          A class responsible for generating the outbound vrtxrt_ooaINa file based on the lob provided
+  */
+ class virtixOoaFileETLAca(propFilePath: String, configFolder: String, configFile: String,var runId: String) extends Utilities with java.io.Serializable {
+
+diff --git a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLMra.scala b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLMra.scala
+index 50df6dbfc..864779020 100644
+--- a/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLMra.scala
++++ b/snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLMra.scala
+@@ -17,7 +17,7 @@ import scala.util.control.NonFatal
+  * @author Carelon
+  * @version 2.0
+  *
+- *          A class responsible for generating the outbound vrtxrt_ooaINa file based on the lob provided.
++ *          A class responsible for generating the outbound vrtxrt_ooaINa file based on the lob provided
+  */
+ class virtixOoaFileETLMra(propFilePath: String, configFolder: String, configFile: String,var runId: String) extends Utilities with java.io.Serializable {
