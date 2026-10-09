@@ -1,1 +1,8 @@
-git diff origin/develop origin/uat -- $F; echo "--- develop vs uat done"
+git diff --name-only --diff-filter=A 4edda1e7b 305779b5a | grep -c '\.idea/libraries'
+git diff --name-only --diff-filter=A 4edda1e7b 305779b5a | grep -vc '\.idea/libraries'
+
+
+git diff --name-only --diff-filter=A 4edda1e7b 305779b5a | while read f; do git cat-file -e 4edda1e7b:"$f" 2>/dev/null && echo "EXISTED BEFORE: $f"; done; echo "check done"
+
+git log --oneline -n 3 feature/AM-71511-revert-pr-12725
+git diff --stat 4edda1e7b feature/AM-71511-revert-pr-12725 | tail -5
