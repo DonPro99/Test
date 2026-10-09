@@ -1,1 +1,17 @@
-Hi Rajesh, FYI: master still has the preprod changes from #12725 (only the pom fix is merged), so any new branch from master will carry those changes into the lower environments. I’ve asked Divya to branch from 4edda1e7b (master before #12725) for her dummy changes instead. Should we tell the team to do the same until the revert is merged? I can create a clean-base branch so people can pick it in Bitbucket
+git fetch origin
+git diff --name-status 4edda1e7b origin/master -- . ':(exclude)*.idea/libraries/*' | cut -f1 | sort | uniq -c
+git diff --name-only 4edda1e7b origin/master -- '*.idea/libraries/*' | wc -l
+
+
+git diff --name-only --diff-filter=M 4edda1e7b origin/master -- . ':(exclude)*.idea/*' > modified_files.txt
+git diff --diff-filter=M 4edda1e7b origin/master -- . ':(exclude)*.idea/*' > modified_files.diff
+
+F=<path from the list>
+git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/master -- $F
+git diff 4edda1e7b origin/master -- $F
+git diff --quiet origin/uat origin/master -- $F && echo "same as UAT" || echo "NOT same as UAT"
+
+git checkout -b feature/AM-71511-cleanup-batch1 origin/master
+git checkout 4edda1e7b -- <file1> <file2> ...
+git rm <new-file-to-remove> ...
+git diff --cached --stat
