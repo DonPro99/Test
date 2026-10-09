@@ -1,10 +1,17 @@
-git fetch origin
-git diff --name-status 4edda1e7b origin/master -- . ':(exclude)*.idea/libraries/*' | cut -f1 | sort | uniq -c
-git diff --name-only 4edda1e7b origin/master -- '*.idea/libraries/*' | wc -l
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git diff --name-status 4edda1e7b origin/master -- . ':(exclude)*.idea/libraries/*' | cut -f1 | sort | uniq -c
+     48 A
+     49 M
 
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git diff --name-only 4edda1e7b origin/master -- '*.idea/libraries/*' | wc -l
+188
 
-git diff --name-only --diff-filter=M 4edda1e7b origin/master -- . ':(exclude)*.idea/*' > modified_files.txt
-git diff --diff-filter=M 4edda1e7b origin/master -- . ':(exclude)*.idea/*' > modified_files.diff
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git diff --name-only --diff-filter=M 4edda1e7b origin/master -- . ':(exclude)*.idea/*' > modified_files.txt
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (master)
+$ git diff --diff-filter=M 4edda1e7b origin/master -- . ':(exclude)*.idea/*' > modified_files.diff
 
 F=<path from the list>
 git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/master -- $F
