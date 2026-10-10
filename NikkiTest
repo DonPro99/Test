@@ -1,1 +1,9 @@
-One thing to note for this deployment window: master still has the unapproved #12725 changes. If a deployment builds sdigenerator or risk-adjustment-adl from master, the sanitize removal and the MBR_CNTY_NM change would go to prod with it. No need to reply over the weekend, but if you see this before any deployment of those modules, let me know whether I should restore those files first.
+   git fetch origin
+   git checkout -b feature/<name> origin/master
+
+(make changes, commit, push)
+
+For each lower environment: a branch from that environment, with her commits cherry-picked onto it.
+   git checkout -b feature/<name>-dev origin/develop
+   git cherry-pick <her-commit-ids>
+   git diff --stat origin/develop
