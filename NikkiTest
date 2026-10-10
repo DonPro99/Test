@@ -12,3 +12,6 @@ For each lower environment: a branch from that environment, with her commits che
    git fetch origin
    git log --oneline origin/preprod..origin/<her-branch>
    git log --oneline origin/master..origin/<her-branch>
+
+
+git branch -r --sort=-committerdate | grep -i am45700 | head -10
