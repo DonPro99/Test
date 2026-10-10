@@ -7,3 +7,8 @@ For each lower environment: a branch from that environment, with her commits che
    git checkout -b feature/<name>-dev origin/develop
    git cherry-pick <her-commit-ids>
    git diff --stat origin/develop
+
+
+   git fetch origin
+   git log --oneline origin/preprod..origin/<her-branch>
+   git log --oneline origin/master..origin/<her-branch>
