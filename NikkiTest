@@ -128,7 +128,102 @@ else
 
 # how each one handles charts and where it reads/writes
 grep -n -i -E "chart|mcare|usage|\$1|\$2|hdfs|sftp|s3" start_sas_copy_hdfs_MN.sh | head -40
+3:#This script will load the SAS datasets(MBRS,CHARTS,SCORES and GAPS) to the HDFS location.It will take master table and line of business as arguments.
+22:# Usage      :
+23:#   - Single (existing): start_sas_copy_hdfs.sh ACA MBRS
+24:#   - Batch  (new)     : start_sas_copy_hdfs.sh ACA ALL
+25:#                        start_sas_copy_hdfs.sh MCAID ALL
+26:#                        start_sas_copy_hdfs.sh MCARE ALL
+27:#                        start_sas_copy_hdfs.sh MRA ALL
+31:  echo "Please provide correct arguments.Usage- $0 <line of business> <master table>"
+32:  echo "Example : $0 ACA/MCAID/MCARE MBRS/CHARTS/GAPS/PROVIDERS/RISKSCORE/ALL"
+71:   [[ "${LINE_OF_BUSINESS}" != "MCARE" ]] && [[ "${LINE_OF_BUSINESS}" != "MRA" ]] && \
+73:   echo "Please provide the valid line of business. Either ACA/MCAID/MCARE/MRA/MCD"
+78:if [[ "${MASTER_TABLE}" != "MBRS" ]] && [[ "${MASTER_TABLE}" != "CHARTS" ]] && \
+84:   echo "Please provide the correct master table. Either MBRS/CHARTS/GAPS/PROVIDERS/RISKSCORE/PLINKO/IH_MCD/JCODE/ALL"
+108:export LOG_FILE="sas_master_copy_to_hdfs_`date +'%Y_%m_%d_%H_%M_%S'`.log"
+164:      "${SAS_HOME}/copy_PcnPrefix_Jcode_SASDatasetsToHDFS.sh" jcode_ind sas.properties pr
+170:  # For MCD IH_MCD we skip SAS_COPY_TO_HDFS and just FTP the files
+193:       SAS_DATA_LOCATION=${MCARE_SAS_DATA_LOCATION}
+214:      COPY_SCRIPT="copyGapSASDatasetsToHDFS.sh"
+237:          overwrite_config="mra-sftp-sas-mgft.conf"
+239:          TRIGGER_FILE_LOCATION=${MCARE_MBRS_TRIGGER_FILE_LOCATION}
+242:      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+254:          TRIGGER_FILE_LOCATION=${MCARE_PLINKO_TRIGGER_FILE_LOCATION}
+256:      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+260:    if [ "${FILETYPE}" == "CHARTS" ]
+264:         TRIGGER_FILE_LOCATION=${ACA_CHARTS_TRIGGER_FILE_LOCATION}
+266:         FILE_NAME=${ACA_CHARTS_FILE_PATTERN}
+267:         overwrite_config="charts-sftp-sas-mgft.conf"
+270:          TRIGGER_FILE_LOCATION=${MCAID_CHARTS_TRIGGER_FILE_LOCATION}
+274:          FILE_NAME=${MCAID_CHARTS_FILE_PATTERN}
+275:          overwrite_config="charts-sftp-sas-mgft.conf"
+278:          TRIGGER_FILE_LOCATION=${MRA_CHARTS_TRIGGER_FILE_LOCATION}
+280:          MRA_CHARTS_FILE_PATTERN=${CHARTS_FILE_NAME}
+281:          FILE_NAME=${MRA_CHARTS_FILE_PATTERN}
+282:          overwrite_config="mra-sftp-sas-mgft.conf"
+284:          TRIGGER_FILE_LOCATION=${MCARE_CHARTS_TRIGGER_FILE_LOCATION}
+285:          FILE_NAME=${CHARTS_FILE_NAME}
+287:      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+299:          TRIGGER_FILE_LOCATION=${MCARE_PROVIDER_TRIGGER_FILE_LOCATION}
+301:      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+316:      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+
+
 grep -n -i -E "chart|mcare|usage|\$1|\$2|hdfs|sftp|s3" start_sas_master_MN.sh | head -40
 
+$ grep -n -i -E "chart|mcare|usage|\$1|\$2|hdfs|sftp|s3" start_sas_master_MN.sh | head -40
+3:#This script will load the SAS datasets(MBRS,CHARTS,SCORES and GAPS) to the HDFS location.It will take master table and line of business as arguments.
+19:# Usage      :
+20:#   - Single (existing): start_sas_copy_hdfs.sh ACA CHARTS
+21:#   - Batch  (new)     : start_sas_copy_hdfs.sh ACA ALL
+22:#                        start_sas_copy_hdfs.sh MCAID ALL
+23:#                        start_sas_copy_hdfs.sh MCARE ALL
+24:#                        start_sas_copy_hdfs.sh MRA ALL
+28:  echo "Please provide correct arguments.Usage- $0 <line of business> <master table>"
+29:  echo "Example : $0 ACA/MCAID/MCARE MBRS/CHARTS/GAPS/PROVIDERS/RISKSCORE"
+66:if [[ "${LINE_OF_BUSINESS}" != "ACA" ]] && [[ "${LINE_OF_BUSINESS}" != "MCAID" ]] && [[ "${LINE_OF_BUSINESS}" != "MCARE" ]] && [[ "${LINE_OF_BUSINESS}" != "MRA" ]] && [[ "${LINE_OF_BUSINESS}" != "MCD" ]] ;then
+67:   echo "Please provide the valid line of business. Either ACA/MCAID/MCARE/MRA/MCD"
+72:if [[ "${MASTER_TABLE}" != "MBRS" ]] && [[ "${MASTER_TABLE}" != "CHARTS" ]] && [[ "${MASTER_TABLE}" != "GAPS" ]] && [[ "${MASTER_TABLE}" != "PROVIDERS" ]] && [[ "${MASTER_TABLE}" != "RISKSCORE" ]] && [[ "${MASTER_TABLE}" != "PLINKO" ]] && [[ "${MASTER_TABLE}" != "IH_MCD" ]] && [[ "${MASTER_TABLE}" != "ALL" ]]
+74:   echo "Please provide the correct master table. Either MBRS/CHARTS/GAPS/PROVIDERS/RISKSCORE/PLINKO/IH_MCD/ALL"
+99:export LOG_FILE="sas_master_copy_to_hdfs_`date +'%Y_%m_%d_%H_%M_%S'`.log"
+131:#Function to copy the SAS datasets to HDFS.
+135: # - ACA,MCAID and MCARE are lines of business.
+137:SAS_COPY_TO_HDFS() {
+152:   SAS_DATA_LOCATION=${MCARE_SAS_DATA_LOCATION}
+175:  COPY_SCRIPT="copyGapSASDatasetsToHDFS.sh"
+198:      overwrite_config="mra-sftp-sas-mgft.conf"
+200:      TRIGGER_FILE_LOCATION=${MCARE_MBRS_TRIGGER_FILE_LOCATION}
+204:  COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+216:      TRIGGER_FILE_LOCATION=${MCARE_PLINKO_TRIGGER_FILE_LOCATION}
+219:  COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+223:if [ "${FILETYPE}" == "CHARTS" ]
+227:     TRIGGER_FILE_LOCATION=${ACA_CHARTS_TRIGGER_FILE_LOCATION}
+229:     FILE_NAME=${ACA_CHARTS_FILE_PATTERN}
+230:     overwrite_config="charts-sftp-sas-mgft.conf"
+233:      TRIGGER_FILE_LOCATION=${MCAID_CHARTS_TRIGGER_FILE_LOCATION}
+237:      FILE_NAME=${MCAID_CHARTS_FILE_PATTERN}
+238:      overwrite_config="charts-sftp-sas-mgft.conf"
+241:      TRIGGER_FILE_LOCATION=${MRA_CHARTS_TRIGGER_FILE_LOCATION}
+243:      MRA_CHARTS_FILE_PATTERN=${CHARTS_FILE_NAME}
+244:      FILE_NAME=${MRA_CHARTS_FILE_PATTERN}   
+245:      overwrite_config="mra-sftp-sas-mgft.conf"
+247:      TRIGGER_FILE_LOCATION=${MCARE_CHARTS_TRIGGER_FILE_LOCATION}
+248:      FILE_NAME=${CHARTS_FILE_NAME}
+250:  COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+263:      TRIGGER_FILE_LOCATION=${MCARE_PROVIDER_TRIGGER_FILE_LOCATION}
+266:  COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh" 
+
 # which one ran most recently (shows which is actually in use)
-ls -lt /hcaaapck/backup/IT/SIT/log/ | grep -i -E "master|copy_hdfs|sas_copy" | head -10
+$ 
+$ ls -lt /hcaaapck/backup/IT/SIT/log/ | grep -i -E "master|copy_hdfs|sas_copy" | head -10
+-rw-r--r-- 1 srcradcoolbthts ahpck     844 Jul  8 15:33 sas_master_copy_to_hdfs_2026_07_08_15_27_47.log
+-rw-rw-r-- 1 srcradcoolbthts ahpck    1011 Jul  8 15:31 copy_master_dataset_20260708_15.27.47.log
+-rw-r--r-- 1 srcradcoolbthts ahpck     647 Jul  8 15:25 sas_master_copy_to_hdfs_2026_07_08_15_25_24.log
+-rw-r--r-- 1 srcradcoolbthts ahpck    2073 Jul  8 14:18 sas_master_copy_to_hdfs_2026_07_08_14_18_25.log
+-rw-rw-r-- 1 srcradcoolbthts ahpck    1015 Jul  8 14:18 copy_master_dataset_20260708_14.18.25.log
+-rw-r--r-- 1 srcradcoolbthts ahpck    2415 Jul  8 14:16 sas_master_copy_to_hdfs_2026_07_08_14_16_54.log
+-rw-rw-r-- 1 srcradcoolbthts ahpck     477 Jul  8 14:16 copy_master_dataset_20260708_14.16.54.log
+-rw-r--r-- 1 srcradcoolbthts ahpck    2122 Jul  8 14:16 sas_master_copy_to_hdfs_2026_07_08_14_16_14.log
+-rw-r--r-- 1 srcradcoolbthts ahpck    2122 Jul  8 14:09 sas_master_copy_to_hdfs_2026_07_08_14_09_06.log
+-rw-r--r-- 1 srcradcoolbthts ahpck     647 Jul  7 10:02 sas_master_copy_to_hdfs_2026_07_07_10_02_26.log
