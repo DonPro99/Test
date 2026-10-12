@@ -4,9 +4,4 @@ I_ELV_CFX_GLD011
 CFX (
 
 
-File_Delivery_Status:success.
-Action: File Reception and Validation
-Protocol: SFTP.
-File_Path: preprod/BDF/rad_charts_mra.txt.pgp
-File_Name: rad_charts_mra.txt.pgp
-Timestamp: 2026-10-12 13:33:31.039790-04:00 America/New_York
+   aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/
