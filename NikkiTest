@@ -1,5 +1,6 @@
-Thanks Lekhana! To confirm what we discussed: RptHoscdaXmlExtractorMasterClass stays as it is in master. These files are not needed in prod, so I'll remove them from master:
-
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/: HosRptPdfGenerator.scala, RptHosPdfGenerator.scala
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/: RptHoscdaXmlExtractorWithDOS.scala, RptHoscdaXmlExtractorWithNpi.scala, RptHoscdaXmlExtractorWithNpi_McidChaseID.scala, RptHoscdaXmlExtractor_McidChaseid.scala, RptHoscdaXmlExtractorMasterClassUpdated.scala, RptHoscdaXmltoPdf.scala, HosccdaXmlDownloader.scala
-Please let me know if anything's wrong.
+F=snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/PatientDecryptloader.scala
+git fetch origin
+for b in develop sit uat preprod; do
+  git diff --quiet origin/$b origin/master -- $F && echo "master SAME as $b" || echo "master DIFFERENT from $b"
+done
+git log --no-merges --format='%h | %an | %ad | %s' --date=short -5 origin/master -- $F
