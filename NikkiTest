@@ -1,5 +1,4 @@
-hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa/
-                           PRE clncl/
-                           PRE commercial/
-                           PRE macess/
-                           PRE mraprsp/
+rad_charts_mra
+rad_charts_mra.txt
+I_ELV_CFX_GLD011
+CFX (
