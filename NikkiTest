@@ -1,26 +1,11 @@
-$ git diff --name-only --diff-filter=A 4edda1e7b 305779b5a -- snowpark/hoschartgenerator snowpark/hoschargenerator snowpark/patient-encounter-etl | while read f; do
-  echo "$f | $(git log --no-merges --diff-filter=A -1 --format='%an <%ae> | %ad | %s' --date=short 305779b5a -- "$f")"
-done
-snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/pdfgen/RptXmlExtractor.scala | Doddi <AG40917@ad.wellpoint.com> | 2024-12-06 | hoscda new scala scripts migration
-snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/utilities/ConfigConstants.scala | Doddi <AG40917@ad.wellpoint.com> | 2024-12-06 | hoscda new scala scripts migration
-snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/utilities/SessionCreator.scala | Doddi <AG40917@ad.wellpoint.com> | 2024-12-06 | hoscda new scala scripts migration
-snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/utils/dq_query_executor.scala | Doddi <AG40917@ad.wellpoint.com> | 2024-12-06 | hoscda new scala scripts migration
-snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/utils/excel_loader.scala | Doddi <AG40917@ad.wellpoint.com> | 2024-12-06 | hoscda new scala scripts migration
-snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/utils/gbdmerger.scala | Doddi <AG40917@ad.wellpoint.com> | 2024-12-06 | hoscda new scala scripts migration
-snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/utils/select_cols.scala | Doddi <AG40917@ad.wellpoint.com> | 2024-12-06 | hoscda new scala scripts migration
-snowpark/hoschartgenerator/dependency-reduced-pom.xml | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | adding dependency pom.xml
-snowpark/hoschartgenerator/hoschartgenerator.iml | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | hoscda scala code
-snowpark/hoschartgenerator/pom.xml | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | hoscda scala code
-snowpark/hoschartgenerator/release.md | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | adding md file
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptPdfGenerator.scala | Potla <AM18673@ad.wellpoint.com> | 2024-12-27 | added new file pdfgen
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptXmlExtractor.scala | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | hoscda scala code
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptXmlExtractorWithDOS.scala | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | Adding hos scala changes
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptXmlExtractorWithNpi.scala | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | Adding hos scala changes
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptXmlExtractorWithNpi_McidChaseID.scala | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | Adding hos scala changes
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptXmlExtractorWithNpi_McidChaseID_A7.scala | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | Adding hos scala changes
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptXmlExtractorWithNpi_McidChaseID_Emergency.scala | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | Adding hos scala changes
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptXmlExtractor_McidChaseid.scala | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | Adding hos scala changes
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/RptHosPdfGenerator.scala | Potla <AM18673@ad.wellpoint.com> | 2025-01-26 | pom.xml,class added
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/utilities/ConfigConstants.scala | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | hoscda scala code
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/utilities/SessionCreator.scala | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | hoscda scala code
-snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/PatientDecryptloader.scala | Nair <AL97154@ad.wellpoint.com> | 2025-05-28 | Changes to the data
+Hi Rajesh, I've traced the owners for all the new and changed files from #12725:
+
+Sunita: 26 new files (HosRpt*/HosTranscribedReport* in sdigenerator, and most of hoschartgenerator)
+Lekhana: 9 new files, plus the duplicate-column change in RptHoscdaXmlExtractorMasterClass (already fixed in preprod via #12800)
+Doddi: the separate hoschargenerator folder (7 files)
+Chandrika: 3 new files, plus the sanitize removal, the commented-out HealowMerger and the USE SCHEMA change
+Nair: PatientDecryptloader (1 file)
+Bhavishya: 188 IntelliJ library files, other .idea xml files and 2 .iml files (likely accidental)
+Nasuruddin: the MBR_CNTY_NM change (already shared)
+
+Although the PR shows about 4,990 commits, that's because preprod and master histories had drifted apart and the merge linked them. The actual change to master is 286 files, and the owners are below.
