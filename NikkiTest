@@ -1,4 +1,21 @@
-SELECT filedatetime, COUNT(*), MAX(EDL_LOAD_DTM)
-FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA
-GROUP BY 1 ORDER BY 1 DESC;
+UAT – rad_charts_mra.txt delivered by CFX but not found at expected S3 path
 
+Description:
+
+As part of RBICA-14268 UAT testing, rad_charts_mra.txt (~55 GB) was uploaded to MGFT UAT (mgftuat.wellpoint.com:/tpraasftp001/I_ELV_CFX_GLD011/to_elvhlth/uat/raa) on 10/12/2026 at 12:49 PM ET.
+
+CFX notifications received:
+
+File Reception and Validation: success, 1:33 PM ET (File_Path: preprod/BDF/rad_charts_mra.txt.pgp)
+File Delivery to App team (S3_FileTransfer): success, 3:25 PM ET
+
+However, the file is not in the expected location, the source path for AEDL ingest job 790009494:
+s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/
+The ingest job has not been triggered and the staging table has not been loaded.
+
+Could you please confirm:
+
+The exact S3 bucket and path where rad_charts_mra.txt was delivered.
+Whether a CFX route/pattern exists for rad_charts_mra.txt to the S3 path above. If it was routed through a generic pattern, please set up or correct the route to this destination.
+
+Thank you.
