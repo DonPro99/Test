@@ -1,17 +1,6 @@
-   git fetch origin
-   git checkout -b feature/<name> origin/master
+git fetch origin
+git diff --name-only --diff-filter=A 4edda1e7b 305779b5a -- . ':(exclude)*.idea/*' | while read f; do echo "$f | $(git log -1 --format='%an' 305779b5a^2 -- "$f")"; done | grep -i "challa" > chandrika_new_files.txt
+cat chandrika_new_files.txt
 
-(make changes, commit, push)
-
-For each lower environment: a branch from that environment, with her commits cherry-picked onto it.
-   git checkout -b feature/<name>-dev origin/develop
-   git cherry-pick <her-commit-ids>
-   git diff --stat origin/develop
-
-
-   git fetch origin
-   git log --oneline origin/preprod..origin/<her-branch>
-   git log --oneline origin/master..origin/<her-branch>
-
-
-git branch -r --sort=-committerdate | grep -i am45700 | head -10
+git diff --name-only --diff-filter=M 4edda1e7b 305779b5a -- . ':(exclude)*.idea/*' | while read f; do echo "$f | $(git log -1 --format='%an' 305779b5a^2 -- "$f")"; done | grep -i "challa" > chandrika_modified_files.txt
+cat chandrika_modified_files.txt
