@@ -1,1 +1,9 @@
-ls -l /hcaaapck/backup/IT/SIT/work/ | grep -i chart
+$ ls -l /hcaaapck/backup/IT/SIT/work/ | grep -i chart
+-rw-r----- 1         5982370 ahpck     4865691 Jun  1  2019 ChartData_ANTWAQ22019_20190504.txt
+-rw-r--r-- 1 srcradcoolbthts ahpck       68787 Jan 13  2026 charts_radv_export.log
+-rw-r--r-- 1 srcradcoolbthts ahpck 11309503177 Jul  8 15:31 rad_charts_aca.txt
+-rw-r--r-- 1 srcradcoolbthts ahpck   981609732 Jul  8  2025 rad_charts_mcaid.txt
+-rw-r--r-- 1 srcradcoolbthts ahpck    93728931 Jul  8 14:18 rad_charts_mra1.txt
+-rw-r--r-- 1 srcradcoolbthpr ahpck 11179157738 Jun 25  2025 rad_charts_mra_bkp.txt
+-rw-r--r-- 1 srcradcoolbthts ahpck 59444598812 Oct 12 12:38 rad_charts_mra.txt
+-rw-r--r-- 1 srcradcoolbthts ahpck   145295687 Jul 15 11:44 rad_charts_radv.txt
