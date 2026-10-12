@@ -1,2 +1,8 @@
-grep -il "charts" /hcaaapck/backup/IT/SIT/scripts/*.sh
-grep -ri "charts" /hcaaapck/backup/IT/SIT/conf/*.properties | head
+grep -il "charts" /hcaaapck/backup/IT/SIT/scripts/*.sh /hcaaapck/backup/IT/PROD/scripts/*.sh 2>/dev/null
+grep -il "mcare" /hcaaapck/backup/IT/SIT/scripts/*.sh /hcaaapck/backup/IT/PROD/scripts/*.sh 2>/dev/null
+
+grep -ri "chart" /hcaaapck/backup/IT/SIT/conf/*.properties | head -20
+ls -t /hcaaapck/backup/IT/SIT/log/ | grep -i chart | head -10
+ls -t /hcaaapck/backup/IT/PROD/log/ 2>/dev/null | grep -i chart | head -10
+
+grep -ril "rad_master_charts_all_lob" ~/NikkiProjectWorkspace/ncr_dna2_raa_files ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn | head -20
