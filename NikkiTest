@@ -1,5 +1,16 @@
-Not prod. Nothing from my PR was deployed. I'm cleaning up master file by file, removing the files that came in through my PR by mistake unless the owner needs them there. So if you're OK with it, PatientDecryptloader.scala would be removed from master. It stays in develop, SIT, UAT and preprod either way, so nothing is lost, and you can promote it to master normally when it's ready. Is that fine, or do you need it to stay in master?
-
+I have below details for specific consumers to be removed:
+Cotivity: P_EXT_VERSPRIN_P 🡺 Remove P_INT_COTVTYNONGBD_C
+ 
+Virtix: P_EXT_VIRTGHY_P 🡺 Remove Consumer: P_INT_CFE301_C
+ 
+Centauri: P_EXT_CNTURACAC_P 🡺 P_INT_CENONGBD_C
+ 
+Sharecare: Prod_Dwbd_2/p_wlp_Dwbd_2 🡺 P_INT_SHRCRENONGBD_C
+ 
+CIOX: Prod_Ciox_1/p_wlp_ciox_1 🡺 Remove P_INT_CIOXCNGBD_C
+ 
+Verisma: P_EXT_IOCFX_P856 ConsumerName: P_INT_VERISMA301_C
+ 
 
 Since the file is ~46 GB, should I load only the 10 matching charts or the full 09/10 file?
 
