@@ -1,8 +1,7 @@
 CFX received and validated rad_charts_mra.txt.pgp at 13:33 ET (File_Path: preprod/BDF/rad_charts_mra.txt.pgp), but no delivery confirmation was received and the file is not in s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/. Please confirm where it was delivered and whether a route exists for this destination.
 
 
-[hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-raa-uat-sf-dataz-nogbd-nophi-useast1/raa/commercial/na/
-                           PRE all_files_deploy_aca/
+aws s3 ls s3://crln-raa-uat-sf-dataz-nogbd-phi-useast1/raa/
 
 
 Short description:
