@@ -1,8 +1,14 @@
-ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/
-ls -l /hcaaapck/backup/IT/SIT/trigger/mrachartsprocesstrigger.txt
-
-libname src "/raa1/backup/prodenvironment/sas_repository/mcare/archive";
-libname tgt "/hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE";
+$ ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/
+total 71489
+drwxrwsr-x 3 srcradcoolbthts ahpck     4096 Jul  8 14:18 archive
+-rw-r--r-- 1 srcradcoolbthts ahpck 73072640 Jul  8 14:15 charts.sas7bdat
+-rw-r--r-- 1 srcradcoolbthts ahpck   131072 Jul  8 14:18 hadoop_charts_columns.sas7bdat
+$ ls -l /hcaaapck/backup/IT/SIT/trigger/mrachartsprocesstrigger.txt
+-rw-r--r-- 1 srcradcoolbthts ahpck 0 Jul  8 14:18 /hcaaapck/backup/IT/SIT/trigger/mrachartsprocesstrigger.txt
+$ libname src "/raa1/backup/prodenvironment/sas_repository/mcare/archive";
+-ksh: libname: not found
+$ libname tgt "/hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE";
+-ksh: libname: not found
 
 proc sql;
   create table tgt.charts as
