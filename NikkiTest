@@ -1,15 +1,11 @@
+git log --no-merges -S'USE SCHEMA temp_db' --format='%h | %an <%ae> | %ad | %s' --date=short 4edda1e7b..305779b5a -- '*RptXmlExtractor_McidChaseid.scala'
 
-
-$ cat chandrika_new_files.txt
-snowpark/pdfgen/src/main/java/pdfgen/Filemerger_CCDA_TR_PDFBOX.java | Challa
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseidCombined.scala | Challa
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid_IP.scala | Challa
-
-$ cat chandrika_modified_files.txt
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/BigDataPdfDownload.scala | Challa, Chandrika
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClass.scala | Challa, Chandrika
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala | Challa
-
+for f in snowpark/pdfgen/src/main/java/pdfgen/Filemerger_CCDA_TR_PDFBOX.java \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseidCombined.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid_IP.scala; do
+  echo "== $(basename $f) created by:"
+  git log --no-merges --diff-filter=A --format='   %h | %an <%ae> | %ad | %s' --date=short 305779b5a -- "$f"
+done
 
 v)
 $ git log --no-merges --diff-filter=A --format='%h | %an <%ae> | %ad | %s' --date=short 4edda1e7b..305779b5a -- '*.idea/libraries/*'
