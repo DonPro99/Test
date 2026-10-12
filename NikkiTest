@@ -1,5 +1,5 @@
-aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa/medicare/na/rad_charts_mra/
-
-aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa/medicare/na/rad_charts_mra/
-
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/
+hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa/
+                           PRE clncl/
+                           PRE commercial/
+                           PRE macess/
+                           PRE mraprsp/
