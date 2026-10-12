@@ -1,24 +1,26 @@
-$ ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/
-total 71489
-drwxrwsr-x 3 srcradcoolbthts ahpck     4096 Jul  8 14:18 archive
--rw-r--r-- 1 srcradcoolbthts ahpck 73072640 Jul  8 14:15 charts.sas7bdat
--rw-r--r-- 1 srcradcoolbthts ahpck   131072 Jul  8 14:18 hadoop_charts_columns.sas7bdat
-$ ls -l /hcaaapck/backup/IT/SIT/trigger/mrachartsprocesstrigger.txt
--rw-r--r-- 1 srcradcoolbthts ahpck 0 Jul  8 14:18 /hcaaapck/backup/IT/SIT/trigger/mrachartsprocesstrigger.txt
-$ libname src "/raa1/backup/prodenvironment/sas_repository/mcare/archive";
--ksh: libname: not found
-$ libname tgt "/hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE";
--ksh: libname: not found
+cp -p /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat \
+      /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat.bak_20261012
+
+cat > ~/charts_subset.sas <<'EOF'
+libname src "/raa1/backup/prodenvironment/sas_repository/mcare/archive";
+libname tgt "/hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE";
+
+proc contents data=src.charts_20260910223718 short; run;
 
 proc sql;
-  create table tgt.charts as
+  create table work.charts_sub as
   select *
   from src.charts_20260910223718
   where strip(chartid) in (
     '325213266000_1','323824086100_1','321965614200_1','293798412400_1',
     '293798494300_1','324907775400_1','26170P055750SA_1','322357130000_1',
     '26139P069219SA_1','324266735900_1');
+  select count(*) as n from work.charts_sub;
 quit;
+EOF
 
-proc sql; select count(*) as n from tgt.charts; quit;
 
+which sas
+grep -n -i -E "sas_cmd|sasgsub|/sas |SAS_EXEC|\bsas\b -" /hcaaapck/backup/IT/SIT/scripts/copyMasterSASDatasetsToHDFS.sh | head
+
+sas ~/charts_subset.sas -log ~/charts_subset.log -print ~/charts_subset.lst
