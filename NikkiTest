@@ -1,5 +1,3 @@
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicaid/na/rad_charts_mra/
-
-  SELECT filedatetime, COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA GROUP BY 1;
-
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicaid/na/ | grep -i chart
