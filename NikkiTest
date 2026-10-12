@@ -1,11 +1,21 @@
-Hi Rajesh, I've traced the owners for all the new and changed files from #12725:
+Hi Bhavishya, quick question about the PR #12725 cleanup. Some IntelliJ files from your commits have reached master through my PR:
 
-Sunita: 26 new files (HosRpt*/HosTranscribedReport* in sdigenerator, and most of hoschartgenerator)
-Lekhana: 9 new files, plus the duplicate-column change in RptHoscdaXmlExtractorMasterClass (already fixed in preprod via #12800)
-Doddi: the separate hoschargenerator folder (7 files)
-Chandrika: 3 new files, plus the sanitize removal, the commented-out HealowMerger and the USE SCHEMA change
-Nair: PatientDecryptloader (1 file)
-Bhavishya: 188 IntelliJ library files, other .idea xml files and 2 .iml files (likely accidental)
-Nasuruddin: the MBR_CNTY_NM change (already shared)
+188 library files (commit f93976f65, Feb 2025):
 
-Although the PR shows about 4,990 commits, that's because preprod and master histories had drifted apart and the merge linked them. The actual change to master is 286 files, and the owners are below.
+snowpark/sdigenerator/.idea/libraries/
+
+.idea config files:
+
+snowpark/sdigenerator/.idea/compiler.xml
+snowpark/sdigenerator/.idea/jarRepositories.xml
+snowpark/sdigenerator/.idea/misc.xml
+snowpark/ciox-retro-etl/.idea/jarRepositories.xml
+snowpark/ciox-retro-etl/.idea/misc.xml
+
+.iml files:
+
+snowpark/AWSSecretManager/AWSSecretManager.iml
+snowpark/sdigenerator/anthem-sdiGenerator-full.iml
+
+these are IntelliJ project files, and as far as I can tell they're not used by the Maven build. Were they meant to be committed, or is it OK to remove them from master?
+
