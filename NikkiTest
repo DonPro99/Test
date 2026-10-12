@@ -5,18 +5,30 @@ git log --no-merges --author='Potla' --name-only --format= 4edda1e7b..305779b5a 
 comm -12 changed.txt potla_touched.txt
 
 
-git log --all --format='%an <%ae>' | grep -i "AG83024" | sort -u
+$ git log --all --format='%an <%ae>' | grep -i "AG83024" | sort -u
+Akula <AG83024@ad.wellpoint.com>
 
-git log --merges --ancestry-path --format='%h | %an | %ad | %s' --date=short f93976f65..origin/develop | tail -3
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
+$ git log --merges --ancestry-path --format='%h | %an | %ad | %s' --date=short f93976f65..origin/develop | tail -3
+1f881c13f | Akula, Bhavishya | 2025-02-05 | Pull request #3388: Feature/RAA STORY 12000 12 10 2024
+392586763 | Akula, Bhavishya | 2025-02-05 | Pull request #3387: Feature/RAA STORY 12000 12 10 2024
+58c3d3976 | Akula | 2025-02-05 | deleting test ip class
 
 =====
 
-git log --no-merges --diff-filter=A --format='%h | %an <%ae> | %ad | %s' --date=short 305779b5a -- snowpark/hoschartgenerator snowpark/hoschargenerator
+$ git log --no-merges --diff-filter=A --format='%h | %an <%ae> | %ad | %s' --date=short 305779b5a -- snowpark/hoschartgenerator snowpark/hoschargenerator
+07d3da22b | Potla <AM18673@ad.wellpoint.com> | 2025-01-26 | pom.xml,class added
+c667f8125 | Potla <AM18673@ad.wellpoint.com> | 2024-12-27 | added new file pdfgen
+cf33a6efe | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | Adding hos scala changes
+53c5be81a | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | adding dependency pom.xml
+c1a5aa06b | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | adding md file
+040bc053d | Sunita,Barman <sunita.barman@legatohealth.com> | 2024-12-16 | hoscda scala code
+e8f70664c | Doddi <AG40917@ad.wellpoint.com> | 2024-12-06 | hoscda new scala scripts migration
 
-git log --no-merges --format='%an <%ae>' 4edda1e7b..305779b5a -- snowpark/hoschartgenerator snowpark/hoschargenerator | sort | uniq -c | sort -rn
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
+$ git log --no-merges --format='%an <%ae>' 4edda1e7b..305779b5a -- snowpark/hoschartgenerator snowpark/hoschargenerator | sort | uniq -c | sort -rn
+      3 Potla <AM18673@ad.wellpoint.com>
 
-git log --no-merges --format='%an <%ae>' 4edda1e7b..305779b5a -- snowpark/hoschartgenerator snowpark/hoschargenerator | sort | uniq -c | sort -rn
-
-git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- snowpark/hoschartgenerator snowpark/hoschargenerator | tail -3
-
-git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- snowpark/hoschartgenerator snowpark/hoschargenerator | tail -3
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
+$ git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- snowpark/hoschartgenerator snowpark/hoschargenerator | tail -3
+1e0484ca3 | Kurakula, Meghana | 2025-07-29 | Pull request #6699: Feature/MVN-729
