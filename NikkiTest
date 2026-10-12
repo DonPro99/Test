@@ -8,3 +8,13 @@ comm -12 changed.txt potla_touched.txt
 git log --all --format='%an <%ae>' | grep -i "AG83024" | sort -u
 
 git log --merges --ancestry-path --format='%h | %an | %ad | %s' --date=short f93976f65..origin/develop | tail -3
+
+=====
+
+git log --no-merges --diff-filter=A --format='%h | %an <%ae> | %ad | %s' --date=short 305779b5a -- snowpark/hoschartgenerator snowpark/hoschargenerator
+
+git log --no-merges --format='%an <%ae>' 4edda1e7b..305779b5a -- snowpark/hoschartgenerator snowpark/hoschargenerator | sort | uniq -c | sort -rn
+
+git log --no-merges --format='%an <%ae>' 4edda1e7b..305779b5a -- snowpark/hoschartgenerator snowpark/hoschargenerator | sort | uniq -c | sort -rn
+
+git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- snowpark/hoschartgenerator snowpark/hoschargenerator | tail -3
