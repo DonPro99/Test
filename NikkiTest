@@ -1,4 +1,3 @@
-snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/PatientDecryptloader.scala
-
+Thanks Rahul! To confirm: PatientDecryptloader.scala was test code and isn't needed in prod, so I'll remove it from master. It stays in develop/SIT/UAT/preprod. Let me know if that changes."
 
 Thanks Tagore. I checked S01 as well. It only has these members up to the 05/14 batch, so pointing to S01 won't match the 09/10 deploy. I'll go with option 1. I only need the 10 charts the deploy references, to validate ProjectID across MBR+PROV and CPL. Could you share the SAS script/Ctl-M job name and the AEDL ingest/load job IDs for the charts master, so I can run them for UAT?
