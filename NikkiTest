@@ -1,3 +1,7 @@
-D=snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/utils
-git log --no-merges --diff-filter=A --format='%h | %an <%ae> | %ad | %s' --date=short 305779b5a -- $D
-git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- $D | tail -2
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
+$ git log --no-merges --diff-filter=A --format='%h | %an <%ae> | %ad | %s' --date=short 305779b5a -- $D
+e8f70664c | Doddi <AG40917@ad.wellpoint.com> | 2024-12-06 | hoscda new scala scripts migration
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
+$ git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- $D | tail -2
+1e0484ca3 | Kurakula, Meghana | 2025-07-29 | Pull request #6699: Feature/MVN-729
