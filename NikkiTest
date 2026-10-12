@@ -1,18 +1,4 @@
-I have below details for specific consumers to be removed:
-Cotivity: P_EXT_VERSPRIN_P 🡺 Remove P_INT_COTVTYNONGBD_C
- 
-Virtix: P_EXT_VIRTGHY_P 🡺 Remove Consumer: P_INT_CFE301_C
- 
-Centauri: P_EXT_CNTURACAC_P 🡺 P_INT_CENONGBD_C
- 
-Sharecare: Prod_Dwbd_2/p_wlp_Dwbd_2 🡺 P_INT_SHRCRENONGBD_C
- 
-CIOX: Prod_Ciox_1/p_wlp_ciox_1 🡺 Remove P_INT_CIOXCNGBD_C
- 
-Verisma: P_EXT_IOCFX_P856 ConsumerName: P_INT_VERISMA301_C
- 
-
-Since the file is ~46 GB, should I load only the 10 matching charts or the full 09/10 file?
+snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/PatientDecryptloader.scala
 
 
 Thanks Tagore. I checked S01 as well. It only has these members up to the 05/14 batch, so pointing to S01 won't match the 09/10 deploy. I'll go with option 1. I only need the 10 charts the deploy references, to validate ProjectID across MBR+PROV and CPL. Could you share the SAS script/Ctl-M job name and the AEDL ingest/load job IDs for the charts master, so I can run them for UAT?
