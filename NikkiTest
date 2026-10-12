@@ -1,33 +1,13 @@
-$ cat > ~/charts_subset.sas <<'EOF'
-> libname src "/raa1/backup/prodenvironment/sas_repository/mcare/archive";
-> libname tgt "/hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE";
-> 
-> 
-> 
-> proc contents data=src.charts_20260910223718 short; run;
-> 
-> proc sql;
->   create table work.charts_sub as
->   select *
->   from src.charts_20260910223718
->   where strip(chartid) in (
->     '325213266000_1','323824086100_1','321965614200_1','293798412400_1',
->     '293798494300_1','324907775400_1','26170P055750SA_1','322357130000_1',
->     '26139P069219SA_1','324266735900_1');
->   select count(*) as n from work.charts_sub;
-> quit;
-> EOF
-$ which sas
-/usr/bin/which: no sas in (/lsf/lsf10/10.1/linux2.6-glibc2.3-x86_64/etc:/lsf/lsf10/10.1/linux2.6-glibc2.3-x86_64/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sasconfig/scripts:/opt/teradata/client/17.20/bin)
-$ grep -n -i -E "sas_cmd|sasgsub|/sas |SAS_EXEC|\bsas\b -" /hcaaapck/backup/IT/SIT/scripts/copyMasterSASDatasetsToHDFS.sh | head
-136:   LOG_MESG "FAILED: Kinit on SAS - $0."
-165:${SAS_BIN}/sassubmit -gridsubmitpgm ${SAS_CODE_LOC}/RAA_CHARTS_${LINE_OF_BUSINESS}_write_hdfs_v1.sas -gridwaitresults -gridsasopts "(-log ${SAS_LOG_LOCATION}/RAA_CHARTS_${LINE_OF_BUSINESS}_"`date '+%Y%m%d_%H.%M.%S.log'`")"
-168:${SAS_BIN}/sassubmit -gridsubmitpgm ${SAS_CODE_LOC}/RAA_Providers_write_hdfs_v1.sas -gridwaitresults -gridsasopts "(-log ${SAS_LOG_LOCATION}/RAA_Providers_"`date '+%Y%m%d_%H.%M.%S.log'`")"
-171:#${SAS_BIN}/sassubmit -gridsubmitpgm ${SAS_CODE_LOC}/RAA_Riskscore_write_hdfs_v1.sas -gridwaitresults -gridsasopts "(-log ${SAS_LOG_LOCATION}/RAA_Riskscore_"`date '+%Y%m%d_%H.%M.%S.log'`")"
-174:  ${SAS_BIN}/sassubmit -gridsubmitpgm ${SAS_CODE_LOC}/RAA_Riskscore_MRA_write_hdfs_v1.sas -gridwaitresults -gridsasopts "(-log ${SAS_LOG_LOCATION}/RAA_Riskscore_MRA_$(date '+%Y%m%d_%H.%M.%S.log'))"
-177:  ${SAS_BIN}/sassubmit -gridsubmitpgm ${SAS_CODE_LOC}/RAA_Riskscore_write_hdfs_v1.sas -gridwaitresults -gridsasopts "(-log ${SAS_LOG_LOCATION}/RAA_Riskscore_$(date '+%Y%m%d_%H.%M.%S.log'))"
-180:${SAS_BIN}/sassubmit -gridsubmitpgm ${SAS_CODE_LOC}/RAA_Plinko_write_hdfs_v1.sas -gridwaitresults -gridsasopts "(-log ${SAS_LOG_LOCATION}/RAA_Plinko_"`date '+%Y%m%d_%H.%M.%S.log'`")"
-183:${SAS_BIN}/sassubmit -gridsubmitpgm ${SAS_CODE_LOC}/RAA_MBRs_${LINE_OF_BUSINESS}_write_hdfs_v1.sas -gridwaitresults -gridsasopts "(-log ${SAS_LOG_LOCATION}/RAA_Mbrs_${LINE_OF_BUSINESS}"`date '+%Y%m%d_%H.%M.%S.log'`")"
-247:#rm -r SASGSUB-*
-$ sas ~/charts_subset.sas -log ~/charts_subset.log -print ~/charts_subset.lst
--ksh: sas: not found
+df -h /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
+
+cd /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
+mv charts.sas7bdat charts.sas7bdat.bak_20261012
+
+cp /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat \
+   /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
+ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/
+
+cd /hcaaapck/backup/IT/SIT/scripts
+./start_sas_copy_hdfs_MN.sh MRA CHARTS
+
+ls -t /hcaaapck/backup/IT/SIT/log/sas_master_copy_to_hdfs_* | head -1 | xargs cat
