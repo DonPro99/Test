@@ -18,3 +18,5 @@ git log --no-merges --format='%an <%ae>' 4edda1e7b..305779b5a -- snowpark/hoscha
 git log --no-merges --format='%an <%ae>' 4edda1e7b..305779b5a -- snowpark/hoschartgenerator snowpark/hoschargenerator | sort | uniq -c | sort -rn
 
 git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- snowpark/hoschartgenerator snowpark/hoschargenerator | tail -3
+
+git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- snowpark/hoschartgenerator snowpark/hoschargenerator | tail -3
