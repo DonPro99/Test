@@ -1,1 +1,1 @@
-Checked it: the PatientDecryptloader.scala in master is identical to develop, SIT, UAT and preprod, and all the changes on it are yours (latest from June 12, 2025). Nothing has overwritten it. It's in master but hasn't been deployed to prod yet. Should it stay in master for prod, or should I remove it for now?
+do u need help with loading master table from sas in uat ?, you should be able to do all that is needed, 
