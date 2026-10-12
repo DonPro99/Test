@@ -1,4 +1,3 @@
-snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/utils
- 
-ncr_dna2_raa_mvn/snowpark/sdigenerator/.idea/libraries/
- 
+D=snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/utils
+git log --no-merges --diff-filter=A --format='%h | %an <%ae> | %ad | %s' --date=short 305779b5a -- $D
+git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- $D | tail -2
