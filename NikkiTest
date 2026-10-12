@@ -1,13 +1,5 @@
-git fetch origin
-for f in \
-  snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptPdfGenerator.scala \
-  snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/RptHosPdfGenerator.scala \
-  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorWithDOS.scala \
-  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorWithNpi.scala \
-  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorWithNpi_McidChaseID.scala \
-  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractor_McidChaseid.scala \
-  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClassUpdated.scala \
-  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmltoPdf.scala \
-  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/HosccdaXmlDownloader.scala; do
-  git cat-file -e origin/master:"$f" 2>/dev/null && echo "IN MASTER: $(basename $f)" || echo "NOT in master: $(basename $f)"
-done
+Thanks Lekhana! To confirm what we discussed: RptHoscdaXmlExtractorMasterClass stays as it is in master. These files are not needed in prod, so I'll remove them from master:
+
+snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/: HosRptPdfGenerator.scala, RptHosPdfGenerator.scala
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/: RptHoscdaXmlExtractorWithDOS.scala, RptHoscdaXmlExtractorWithNpi.scala, RptHoscdaXmlExtractorWithNpi_McidChaseID.scala, RptHoscdaXmlExtractor_McidChaseid.scala, RptHoscdaXmlExtractorMasterClassUpdated.scala, RptHoscdaXmltoPdf.scala, HosccdaXmlDownloader.scala
+Please let me know if anything's wrong.
