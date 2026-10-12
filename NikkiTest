@@ -1,73 +1,13 @@
-Sunita:
-
-"Hi Sunita, quick question about the PR #12725 cleanup. These files you created have reached master through my PR:
-
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/ (Feb/Mar 2025)
-
-HosRptXmlExtractor.scala, HosRptXmlExtractorIP.scala, HosRptXmlExtractorWithDOS.scala, HosRptXmlExtractorWithNpi.scala, HosRptXmlExtractorWithNpi_McidChaseID.scala, HosRptXmlExtractorWithNpi_McidChaseID_A7.scala, HosRptXmlExtractorWithNpi_McidChaseID_Emergency.scala, HosRptXmlExtractor_McidChaseid.scala
-HosTranscribedReport_Mcid.scala, HosTranscribedReport_McidChaseID.scala, HosTranscribedReport_McidChaseIDNpi.scala, HosTranscribedReport_McidDOS.scala, HosTranscribedReport_McidNpi.scala
-
-snowpark/hoschartgenerator/ (Dec 2024)
-
-pom.xml, dependency-reduced-pom.xml, release.md, hoschartgenerator.iml
-src/main/scala/com/anthem/hoscda/pdfgen/: HosRptXmlExtractor.scala, HosRptXmlExtractorWithDOS.scala, HosRptXmlExtractorWithNpi.scala, HosRptXmlExtractorWithNpi_McidChaseID.scala, HosRptXmlExtractorWithNpi_McidChaseID_A7.scala, HosRptXmlExtractorWithNpi_McidChaseID_Emergency.scala, HosRptXmlExtractor_McidChaseid.scala
-src/main/scala/com/anthem/hoscda/utilities/: ConfigConstants.scala, SessionCreator.scala
-
-Are these approved for prod, or should they be removed from master for now?"
-
-Lekhana:
-
-"Hi Lekhana, a couple of questions about the PR #12725 cleanup:
-
-I saw PR #12800 fixed the duplicate dcmnt_gnrtd_dtm column in preprod, in snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClass.scala. Is the same fix going to master? Master currently has the version from my PR.
-These new files you created have reached master through my PR:
-
-snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/
-
-HosRptPdfGenerator.scala, RptHosPdfGenerator.scala
-
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/
-
-RptHoscdaXmlExtractorWithDOS.scala, RptHoscdaXmlExtractorWithNpi.scala, RptHoscdaXmlExtractorWithNpi_McidChaseID.scala, RptHoscdaXmlExtractor_McidChaseid.scala
-RptHoscdaXmlExtractorMasterClassUpdated.scala, RptHoscdaXmltoPdf.scala, HosccdaXmlDownloader.scala
-
-Are these approved for prod, or should they be removed from master for now? Thanks!"
-
-Doddi:
-
-"Hi, quick question about the PR #12725 cleanup. These files you created in Dec 2024 ('hoscda new scala scripts migration') have reached master through my PR. Note that this folder is spelled hoschargenerator, separate from hoschartgenerator:
-
-snowpark/hoschargenerator/src/main/scala/com/anthem/hoscda/
-
-pdfgen/RptXmlExtractor.scala
-utilities/ConfigConstants.scala, utilities/SessionCreator.scala
-utils/dq_query_executor.scala, utils/excel_loader.scala, utils/gbdmerger.scala, utils/select_cols.scala
-
-Is this folder still needed, and is it approved for prod, or should it be removed from master for now?"
-
-Nair:
-
-"Hi, quick question about the PR #12725 cleanup. This file you added in May 2025 has reached master through my PR:
-
-snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/PatientDecryptloader.scala
-
-Is it approved for prod, or should it be removed from master for now?"
-
-Chandrika:
-
-"Hi Chandrika, here's the full list of your files that reached master through PR #12725:
-
-New files:
-
-snowpark/pdfgen/src/main/java/pdfgen/Filemerger_CCDA_TR_PDFBOX.java
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseidCombined.scala
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid_IP.scala
-
-Modified files (all in snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/):
-
-RptXmlDiffIdentifier_A5.scala: sanitizeFileName removed from the input args (this undoes the #2586 vulnerability fix that prod has)
-RAChartsHOSHealowMerger.scala: whole file commented out
-RptXmlExtractor_McidChaseid.scala: USE SCHEMA added (RRR support)
-BigDataPdfDownload.scala: only a newline at end of file
-
-Could you let us know which of these should stay in master and which should be removed? Thanks!"
+git fetch origin
+for f in \
+  snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/HosRptPdfGenerator.scala \
+  snowpark/hoschartgenerator/src/main/scala/com/anthem/hoscda/pdfgen/RptHosPdfGenerator.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorWithDOS.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorWithNpi.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorWithNpi_McidChaseID.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractor_McidChaseid.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClassUpdated.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmltoPdf.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/HosccdaXmlDownloader.scala; do
+  git cat-file -e origin/master:"$f" 2>/dev/null && echo "IN MASTER: $(basename $f)" || echo "NOT in master: $(basename $f)"
+done
