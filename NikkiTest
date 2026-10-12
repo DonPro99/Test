@@ -1,6 +1,16 @@
-F=snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/PatientDecryptloader.scala
-git fetch origin
+$ git fetch origin
 for b in develop sit uat preprod; do
   git diff --quiet origin/$b origin/master -- $F && echo "master SAME as $b" || echo "master DIFFERENT from $b"
 done
-git log --no-merges --format='%h | %an | %ad | %s' --date=short -5 origin/master -- $F
+master SAME as develop
+master SAME as sit
+master SAME as uat
+master SAME as preprod
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
+$ git log --no-merges --format='%h | %an | %ad | %s' --date=short -5 origin/master -- $F
+85a25370c | Nair | 2025-06-12 | Changes to the data
+e773c89a7 | Nair | 2025-06-11 | Changes to the data
+fafee53c7 | Nair | 2025-06-10 | Changes to the data
+8e802c2fe | Nair | 2025-06-10 | Changes to the data
+18899a462 | Nair | 2025-06-10 | Changes to the data
