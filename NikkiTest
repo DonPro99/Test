@@ -2,5 +2,15 @@ git fetch origin
 git diff --name-only --diff-filter=A 4edda1e7b 305779b5a -- . ':(exclude)*.idea/*' | while read f; do echo "$f | $(git log -1 --format='%an' 305779b5a^2 -- "$f")"; done | grep -i "challa" > chandrika_new_files.txt
 cat chandrika_new_files.txt
 
+$ cat chandrika_new_files.txt
+snowpark/pdfgen/src/main/java/pdfgen/Filemerger_CCDA_TR_PDFBOX.java | Challa
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseidCombined.scala | Challa
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid_IP.scala | Challa
+
 git diff --name-only --diff-filter=M 4edda1e7b 305779b5a -- . ':(exclude)*.idea/*' | while read f; do echo "$f | $(git log -1 --format='%an' 305779b5a^2 -- "$f")"; done | grep -i "challa" > chandrika_modified_files.txt
 cat chandrika_modified_files.txt
+
+$ cat chandrika_modified_files.txt
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/BigDataPdfDownload.scala | Challa, Chandrika
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClass.scala | Challa, Chandrika
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala | Challa
