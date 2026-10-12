@@ -1,1 +1,1 @@
-Yes, I remember you mentioned loading the matching master file from SAS → S3 → U01 master table. I've found the 09/10 legacy file (mcare/archive/charts_20260910223718). Is there an existing job/script that does the charts load, which I can run for UAT, or should I follow the same deploy pattern (SAS convert → S3 → AEDL load)? Also, since it's ~46 GB, should I load only the 10 matching charts or the full file?"
+Since the file is ~46 GB, should I load only the 10 matching charts or the full 09/10 file?
