@@ -1,30 +1,7 @@
-cd /hcaaapck/backup/IT/SIT/scripts
-./start_sas_copy_hdfs_MN.sh MRA CHARTS
+bjobs -u srcradcoolbthts
 
+ls -lh /hcaaapck/backup/IT/SIT/work/ | grep -i chart
 
-$ ./start_sas_copy_hdfs_MN.sh MRA CHARTS
-SIT
-/hcaaapck/backup/IT/SIT/log
-Environment is set to SIT and Master config file - /hcaaapck/backup/IT/SIT/conf/master.properties
-Source the master config file - /hcaaapck/backup/IT/SIT/conf/master.properties
-------------------------------------------------------------
-Starting master table run for MASTER_TABLE=CHARTS; LOB=MRA
-Master table - CHARTS ; ENVIRONMENT - ts
-CHARTS MRA SAS file is newer than the MRA trigger process file - /hcaaapck/backup/IT/SIT/trigger/mrachartsprocesstrigger.txt.
-Starting the copying process for CHARTS MRA SAS dataset - /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat.
-Getting the file list
-sassrc.charts
-Executing the SAS program to copy the sas dataset to Hadoop
-/hcaaapck/backup/IT/SIT/log
-/hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
-Initiating the Kinit process on SAS for user - srcradcoolbthts
-Keytab file does not exist -/export/home/srcradcoolbthts/srcradcoolbthts.keytab
-Using srcradcoolbthts
-/hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
-
-Master dataset - CHARTS ; Line of Business - MRA ; USER - srcradcoolbthts ; Environment - ts ; SAS Config file - /hcaaapck/backup/IT/SIT/conf/sas.properties
-Submitting the SAS program for CHARTS and MRA
-
-
-
-ls -t /hcaaapck/backup/IT/SIT/log/sas_master_copy_to_hdfs_* | head -1 | xargs cat
+grep -n "SAS_LOG_LOCATION" /hcaaapck/backup/IT/SIT/conf/sas.properties
+ls -lt <that SAS_LOG_LOCATION path> | head -3
+tail -20 <newest RAA_CHARTS_MRA_*.log>
