@@ -1,4 +1,25 @@
 CFX received and validated rad_charts_mra.txt.pgp at 13:33 ET (File_Path: preprod/BDF/rad_charts_mra.txt.pgp), but no delivery confirmation was received and the file is not in s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/. Please confirm where it was delivered and whether a route exists for this destination.
 
 
-   aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/
+aws s3 ls s3://crln-raa-uat-sf-dataz-nogbd-nophi-useast1/raa/ 
+aws s3 ls s3://crln-raa-uat-sf-dataz-nogbd-phi-useast1/raa/
+
+
+Short description:
+UAT – rad_charts_mra.txt received by CFX but not delivered to S3; please confirm route
+
+Description:
+
+As part of RBICA-14268 UAT testing, we loaded the MRA charts master dataset using the standard SAS process (start_sas_copy_hdfs_MN.sh MRA CHARTS). The SAS export and HDFS copy completed, and the file was uploaded to MGFT UAT:
+
+File: rad_charts_mra.txt (~55 GB)
+MGFT path: mgftuat.wellpoint.com:/tpraasftp001/I_ELV_CFX_GLD011/to_elvhlth/uat/raa/rad_charts_mra.txt
+Upload completed: 10/12/2026 12:49 PM ET
+
+CFX sent a "File Reception and Validation" success notification at 1:33 PM ET (File_Path: preprod/BDF/rad_charts_mra.txt.pgp). No "File Delivery" notification has been received since, and the file has not arrived at the expected S3 location (source path for AEDL ingest job 790009494):
+s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/
+
+Could you please confirm:
+
+Whether rad_charts_mra.txt was delivered anywhere in S3 after reception (bucket and path), or whether delivery failed or is still in progress.
+Whether a CFX route/pattern exists for rad_charts_mra.txt from MGFT UAT to the S3 path above. If not, please let us know what's needed to set it up.
