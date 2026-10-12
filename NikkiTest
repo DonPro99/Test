@@ -1,16 +1,4 @@
-[hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/ 
-                           PRE clncl/
-                           PRE commercial/
-                           PRE medicare/
-[hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/
-                           PRE na/
-[hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na
-                           PRE na/
-[hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/na
-[hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-070864595727-ssm-uat-filetransfer/inbound/raa/medicare/na/ | grep -i chart
-
-An error occurred (AccessDenied) when calling the ListObjectsV2 operation: User: arn:aws:sts::652798729258:assumed-role/CRLN-RAA-uat-EC2EMR-Role/i-03159a6df28e71d63 is not authorized to perform: s3:ListBucket on resource: "arn:aws:s3:::crln-070864595727-ssm-uat-filetransfer" because no resource-based policy allows the s3:ListBucket action
-
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/
 
 SELECT filedatetime, COUNT(*)
 FROM U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
