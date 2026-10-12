@@ -1,11 +1,4 @@
-saisrinivasareddy.vustela@elevancehealth.com;dl-RAAETLDevelopers
-File_Delivery_Status:  success.
-Action: File Delivery to App team
-Protocol: S3_FileTransfer.
-File_Path: preprod/BDF/rad_charts_mra.txt.pgp
-File_Name: rad_charts_mra.txt.pgp
-Timestamp: 2026-10-12 15:25:00.955849-04:00 America/New_York
-aws s3 ls s3://crln-raa-uat-sf-dataz-nogbd-phi-useast1/raa/
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/
 
 
 Short description:
