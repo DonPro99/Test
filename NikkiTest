@@ -1,3 +1,5 @@
+Hi Tagore, FYI: I ran start_sas_copy_hdfs_MN.sh MRA CHARTS in SIT with the 09/10 legacy charts file. It's the full file (~46 GB SAS / ~55 GB text). The SAS export and MGFT upload to UAT completed successfully. Next I'll run the AEDL ingest and load jobs into U01 RAD_MASTER_CHARTS_ALL_LOB. Let me know if there's anything I should watch out for with a load this size.
+
 aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/ --recursive | grep -i "rad_charts_mra" | sort | tail -5
 
 aws s3 ls s3://crln-070864595727-ssm-uat-filetransfer/ --recursive | grep -i "rad_charts_mra" | tail -5
