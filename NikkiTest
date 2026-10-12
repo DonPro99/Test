@@ -1,3 +1,3 @@
-Hi, following up on my earlier message about your files from PR #12725. Could you let us know whether they should stay in master (approved for prod) or be removed for now? Removing them from master doesn't lose anything, since they stay in develop/SIT/UAT/preprod.
+cp /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
 
-If possible, please reply by end of day tomorrow, so we can include your files in the next cleanup PR. Thanks!"
+ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/
