@@ -5,3 +5,7 @@ e8f70664c | Doddi <AG40917@ad.wellpoint.com> | 2024-12-06 | hoscda new scala scr
 AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
 $ git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- $D | tail -2
 1e0484ca3 | Kurakula, Meghana | 2025-07-29 | Pull request #6699: Feature/MVN-729
+
+
+git rev-list --count 4edda1e7b..305779b5a
+git diff --shortstat 4edda1e7b 305779b5a
