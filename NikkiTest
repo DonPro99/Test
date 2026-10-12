@@ -18,3 +18,6 @@ f93976f65 | Akula <AG83024@ad.wellpoint.com> | 2025-02-05 | deleting test class 
 AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
 $ git log --no-merges --format='%an' 4edda1e7b..305779b5a -- '*.idea*' '*.iml' | sort | uniq -c
       2 Akula
+
+
+"Hi, quick question about PR #12725 cleanup. Commit f93976f65 (Feb 2025, 'deleting test class - IP') added 188 IntelliJ library files under snowpark/sdigenerator/.idea/libraries/, and they've now reached master through my PR. They look like they were committed accidentally along with that change. They don't affect the build, but they shouldn't be in the repo. Is it OK if we remove them from master?"
