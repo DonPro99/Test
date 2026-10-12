@@ -3,3 +3,8 @@ Hi, quick question about PR #12725 cleanup. Your commit f93976f65 (Feb 2025, 'de
 
 git log --no-merges --author='Potla' --name-only --format= 4edda1e7b..305779b5a | sort -u > potla_touched.txt
 comm -12 changed.txt potla_touched.txt
+
+
+git log --all --format='%an <%ae>' | grep -i "AG83024" | sort -u
+
+git log --merges --ancestry-path --format='%h | %an | %ad | %s' --date=short f93976f65..origin/develop | tail -3
