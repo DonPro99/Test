@@ -2,7 +2,129 @@ cd /hcaaapck/backup/IT/SIT/scripts
 
 # header comments, usage, arguments
 head -60 start_sas_copy_hdfs_MN.sh
+#!/bin/bash
+#Created by : Dikshith Shetty(af59015)
+#This script will load the SAS datasets(MBRS,CHARTS,SCORES and GAPS) to the HDFS location.It will take master table and line of business as arguments.
+#05/22/2018 - Dikshith - Added support for provider data.
+#10/22/2019 - Shruthi - Added support for Scores data
+#05/05/2020 - Rama krishna chirumamilla - Added support for plinko data
+#12/07/2022 - Manoj Eedupuganti - Added code changes to include cohort dataset
+#04/27/2023 - Sai Srinivasa Reddy Vustela -Added code chanegs to include Mutiple MCAID GAPS state files.
+#10/12/2025 - Naseer - Added unconditional JCODE run after FTP and before trigger update; logs start and rc.
+# =============================================================================
+# Date       : Mar 2026
+# Author     : Naseer
+# Change     : Add batch execution mode (MASTER_TABLE=ALL) and fix args handling.
+# Description: 1) Existing behavior remains unchanged for single master table runs.
+#              2) New behavior: when MASTER_TABLE=ALL, the script reads
+#                 BATCH_MASTER_TABLES_<LOB> from master.properties and runs all
+#                 master tables for that LOB one-by-one.
+#              3) Continue-on-failure: all tables are attempted; failures reported
+#                 in a summary at the end with an alert email.
+#              4) Going forward, to add/remove master tables for batch runs,
+#                 update only master.properties (no script changes, no Control-M changes).
+# Usage      :
+#   - Single (existing): start_sas_copy_hdfs.sh ACA MBRS
+#   - Batch  (new)     : start_sas_copy_hdfs.sh ACA ALL
+#                        start_sas_copy_hdfs.sh MCAID ALL
+#                        start_sas_copy_hdfs.sh MCARE ALL
+#                        start_sas_copy_hdfs.sh MRA ALL
+# =============================================================================
+
+if [ $# -ne 2 ];then
+  echo "Please provide correct arguments.Usage- $0 <line of business> <master table>"
+  echo "Example : $0 ACA/MCAID/MCARE MBRS/CHARTS/GAPS/PROVIDERS/RISKSCORE/ALL"
+  exit 1
+fi
+
+#args.
+export LINE_OF_BUSINESS=$1
+export MASTER_TABLE=$2
+
+export TABLE=`echo $MASTER_TABLE | tr [:upper:] [:lower:]`
+
+#Determine the environment based on the user.
+export SERVICE_USER=`echo $USER`
+
+if [[ $SERVICE_USER == "srcradcoolbthts" ]]
+then
+    export ENVIRONMENT="ts"
+elif [[ $SERVICE_USER == "srcradcoolbthpr" ]]
+then
+    export ENVIRONMENT="pr"
+else
+    export ENVIRONMENT="dv"
+fi
+
+export ENV=$ENVIRONMENT
+
+if [[ "${ENVIRONMENT}" == "ts" ]]
+then
+  export SAS_ENV="SIT"
+-======================================================
 head -60 start_sas_master_MN.sh
+#!/usr/bin/ksh
+#Created by : Dikshith Shetty(af59015)
+#This script will load the SAS datasets(MBRS,CHARTS,SCORES and GAPS) to the HDFS location.It will take master table and line of business as arguments.
+#05/22/2018 - Dikshith - Added support for provider data.
+#10/22/2019 - Shruthi - Added support for Scores data
+#05/05/2020 - Rama krishna chirumamilla - Added support for plinko data
+#12/07/2022 - Manoj Eedupuganti - Added code changes to include cohort dataset
+#04/27/2023 - Sai Srinivasa Reddy Vustela -Added code chanegs to include Mutiple MCAID GAPS state files.
+#10/12/2025 - Naseer - Added unconditional JCODE run after FTP and before trigger update; logs start and rc.
+# =============================================================================
+# Date       : Mar 2026
+# Author     : Akhil
+# Change     : Add batch execution mode (MASTER_TABLE=ALL).
+# Description: 1) Existing behavior remains unchanged for single table runs.
+#              2) New: when MASTER_TABLE=ALL, reads BATCH_TABLES_<LOB> from
+#                 master.properties and runs each table for that LOB one-by-one.
+#              3) To add/remove tables for batch runs, update only
+#                 master.properties — no script or Control-M changes needed.
+# Usage      :
+#   - Single (existing): start_sas_copy_hdfs.sh ACA CHARTS
+#   - Batch  (new)     : start_sas_copy_hdfs.sh ACA ALL
+#                        start_sas_copy_hdfs.sh MCAID ALL
+#                        start_sas_copy_hdfs.sh MCARE ALL
+#                        start_sas_copy_hdfs.sh MRA ALL
+# =============================================================================
+
+if [ $# -ne 2 ];then
+  echo "Please provide correct arguments.Usage- $0 <line of business> <master table>"
+  echo "Example : $0 ACA/MCAID/MCARE MBRS/CHARTS/GAPS/PROVIDERS/RISKSCORE"
+  exit 1
+fi
+
+#args.
+export LINE_OF_BUSINESS=$1
+export MASTER_TABLE=$2
+
+export TABLE=`echo $MASTER_TABLE | tr [:upper:] [:lower:]`
+
+#Determine the environment based on the user.
+export SERVICE_USER=`echo $USER`
+
+if [[ $SERVICE_USER == "srcradcoolbthts" ]]
+then
+    export ENVIRONMENT="ts"
+elif [[ $SERVICE_USER == "srcradcoolbthpr" ]]
+then
+    export ENVIRONMENT="pr"
+else
+    export ENVIRONMENT="dv"
+fi
+
+export ENV=$ENVIRONMENT
+
+if [[ "${ENVIRONMENT}" == "ts" ]]
+then
+  export SAS_ENV="SIT"
+elif [[ "${ENVIRONMENT}" == "dv" ]] 
+then
+  export SAS_ENV="DEV"
+else
+===============================
+=================================
 
 # how each one handles charts and where it reads/writes
 grep -n -i -E "chart|mcare|usage|\$1|\$2|hdfs|sftp|s3" start_sas_copy_hdfs_MN.sh | head -40
