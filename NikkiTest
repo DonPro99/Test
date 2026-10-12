@@ -1,10 +1,5 @@
-df -h /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
+cp /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
 
-cd /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
-mv charts.sas7bdat charts.sas7bdat.bak_20261012
-
-cp /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat \
-   /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
 ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/
 
 cd /hcaaapck/backup/IT/SIT/scripts
