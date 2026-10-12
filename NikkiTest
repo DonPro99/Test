@@ -1,15 +1,5 @@
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/
-[hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/
-                           PRE cda/
-                           PRE clncl/
-                           PRE commercial/
-                           PRE hoscda/
-                           PRE medicare/
-2026-10-12 10:04:58  299057175 common-ingestion-1.0.0-jar-with-dependencies.jar
-2026-10-12 10:04:56  323572524 risk-adjustment-adl-etl-1.0-jar-with-dependencies.jar
+aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa/medicare/na/rad_charts_mra/
 
+aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa/medicare/na/rad_charts_mra/
 
-[hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/
-                           PRE deply_dtvntrtpm_mra_stg/
-
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicaid/na/ | grep -i chart
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/
