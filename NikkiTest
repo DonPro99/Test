@@ -1,1 +1,8 @@
-git log --no-merges --format='%h | %an <%ae> | %ad | %s' --date=short 4edda1e7b..305779b5a -- '*.idea/compiler.xml' '*.idea/jarRepositories.xml' '*.idea/misc.xml'
+P=snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen
+git diff --name-only --diff-filter=A 4edda1e7b 305779b5a -- $P | while read f; do
+  echo "$(basename $f) | $(git log --no-merges --diff-filter=A -1 --format='%an <%ae> | %ad | %s' --date=short 305779b5a -- "$f")"
+done > pdfgen_new_files.txt
+cat pdfgen_new_files.txt
+cut -d'|' -f2 pdfgen_new_files.txt | sort | uniq -c | sort -rn
+
+git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/preprod -- $P | head -10
