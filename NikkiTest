@@ -2,3 +2,8 @@ Not prod. Nothing from my PR was deployed. I'm cleaning up master file by file, 
 
 
 Since the file is ~46 GB, should I load only the 10 matching charts or the full 09/10 file?
+
+
+we hv to run 1) script/ctlm job on sas, 2) run ingesting AEDL job, 3) run AEDL load job for any file from sas to SF. 
+another option is to point uat configs to S01 for master to have deploy file loaded in u01 matched correctly.
+it depends on what you need to test ? you hv to understand underlying data points that you need, then follow the above steps.
