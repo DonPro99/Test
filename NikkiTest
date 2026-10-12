@@ -2,3 +2,11 @@ rad_charts_mra
 rad_charts_mra.txt
 I_ELV_CFX_GLD011
 CFX (
+
+
+File_Delivery_Status:success.
+Action: File Reception and Validation
+Protocol: SFTP.
+File_Path: preprod/BDF/rad_charts_mra.txt.pgp
+File_Name: rad_charts_mra.txt.pgp
+Timestamp: 2026-10-12 13:33:31.039790-04:00 America/New_York
