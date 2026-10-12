@@ -1,3 +1,6 @@
-cp /raa1/backup/prodenvironment/sas_repository/mcare/archive/charts_20260910223718.sas7bdat /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
-
-ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/
+$ ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/
+total 45345281
+drwxrwsr-x 3 srcradcoolbthts ahpck        4096 Jul  8 14:18 archive
+-rw-r--r-- 1 srcradcoolbthts ahpck 46360363008 Oct 12 12:03 charts.sas7bdat
+-rw-r--r-- 1 srcradcoolbthts ahpck    73072640 Jul  8 14:15 charts.sas7bdat.bak_20261012
+-rw-r--r-- 1 srcradcoolbthts ahpck      131072 Jul  8 14:18 hadoop_charts_columns.sas7bdat
