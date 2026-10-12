@@ -1,14 +1,5 @@
-{
-  "dpndnt_job_id_lst": [
-    "790009494"
-  ],
-  "dpndnt_btch_id_lst": [],
-  "scheduled_cutoff_time": "na",
-  "dpndnt_cutoff_dt": "na",
-  "scheduled_day": "na",
-  "check_all_dpndnt_job_steps": "no",
-  "scheduled_dt": "na",
-  "dpndnt_job_process_type": "na",
-  "dependency_check_window": "na",
-  "retry": "yes"
-}
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicaid/na/rad_charts_mra/
+
+  SELECT filedatetime, COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA GROUP BY 1;
+
