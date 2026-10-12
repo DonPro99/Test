@@ -1,7 +1,1 @@
-bjobs -u srcradcoolbthts
-
-ls -lh /hcaaapck/backup/IT/SIT/work/ | grep -i chart
-
-grep -n "SAS_LOG_LOCATION" /hcaaapck/backup/IT/SIT/conf/sas.properties
-ls -lt <that SAS_LOG_LOCATION path> | head -3
-tail -20 <newest RAA_CHARTS_MRA_*.log>
+ls -l /hcaaapck/backup/IT/SIT/work/ | grep -i chart
