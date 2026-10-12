@@ -1,3 +1,6 @@
+hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/
+                           PRE deply_dtvntrtpm_mra/
+                           PRE deply_optmrtt_mra_stg/
 [hadoop@ip-10-127-204-114 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/medicare/na/deply_dtvntrtpm_mra/
                            PRE 20260911_161957/
                            PRE 20260911_162926/
