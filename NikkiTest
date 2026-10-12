@@ -1,1 +1,1 @@
-do u need help with loading master table from sas in uat ?, you should be able to do all that is needed, 
+Sure, I can take care of the UAT load. Could you point me to the existing process or job that loads the MRA charts (mcare/charts.sas7bdat) into RAD_MASTER_CHARTS_ALL_LOB, so I follow the same steps? Also, the 09/10 batch is missing in prod Snowflake too (it goes from 09/09 to 10/01). Should I raise that separately?
