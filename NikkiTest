@@ -1,3 +1,4 @@
-“Thanks Chandrika! Just to make sure I understand: should your files stay exactly as they are in master now (the version that came in with #12725), or should I restore them to how master had them before (the current prod version)?
-
-Especially for RptXmlDiffIdentifier_A5: the current master version removes sanitizeFileName, which undoes the #2586 vulnerability fix that prod has. Should that one stay removed?”
+SELECT column_name, ordinal_position, is_nullable, column_default
+FROM D01_RAA.INFORMATION_SCHEMA.COLUMNS
+WHERE table_schema='RAA_RAWZ' AND table_name='RAD_CHARTS_MRA' AND ordinal_position >= 445
+ORDER BY ordinal_position;
