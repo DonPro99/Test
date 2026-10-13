@@ -1,25 +1,7 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
-$ git grep -il "rad_charts_table_nm\|rad_master_charts" origin/master | head
-origin/master:snowpark/ciox-retro-etl/src/test/scala/com/anthem/hca/chaselist/automation/CioxRetroEtlTests.scala
-origin/master:snowpark/intervention-loader/conf/application_prod.properties
-origin/master:snowpark/intervention-loader/conf/application_uat.properties
-origin/master:snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/ValidateSASDatasetsTesting.scala
-origin/master:snowpark/risk-adjustment-adl/src/main/resources/conf/chasestatus_allvendors_dev.conf
-origin/master:snowpark/risk-adjustment-adl/src/main/resources/conf/chasestatus_allvendors_prod.conf
-origin/master:snowpark/risk-adjustment-adl/src/main/resources/conf/chasestatus_allvendors_sit.conf
-origin/master:snowpark/risk-adjustment-adl/src/main/resources/conf/chasestatus_allvendors_uat.conf
+The file reached UAT S3 fine (CFX delivered at 3:25 PM), so the MGFT route worked and no bypass is needed. Ingest 790009494 ran at 3:39 PM but failed: Numeric value '990334225' is out of range.
 
-==
+Hi Nazir / Tagore, the MRA charts file reached UAT S3 fine (CFX delivered at 3:25 PM), so no MGFT bypass is needed. Ingest 790009494 ran at 3:39 PM but failed: Numeric value '990334225' is out of range.
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/AM-71511-RRR-Testing)
-$ git grep -il "rad_charts_table_nm\|rad_master_charts" origin/master | head
-origin/master:snowpark/Centauri-aca-etl/config/Centauri-aca-prov.json
-origin/master:snowpark/Centauri-aca-etl/config/Centauri-radv-aca-prov.json
-origin/master:snowpark/altegra-retro-etl/conf/altegrart-common-dev.properties
-origin/master:snowpark/altegra-retro-etl/conf/altegrart-common-prod.properties
-origin/master:snowpark/altegra-retro-etl/conf/altegrart-common-sit.properties
-origin/master:snowpark/altegra-retro-etl/conf/altegrart-common-uat.properties
-origin/master:snowpark/ciox-retro-etl/conf/cioxrt_application_dev.properties
-origin/master:snowpark/ciox-retro-etl/conf/cioxrt_application_prod.properties
-origin/master:snowpark/ciox-retro-etl/conf/cioxrt_application_radv_dev.properties
-origin/master:snowpark/ciox-retro-etl/conf/cioxrt_application_radv_prod.properties
+When I looked into it, the last 15 columns are shifted by 3. RAD_CHARTS_MRA has KF_TMS / EDL_CREAT_DTM / EDL_INCRMNTL_LOAD_DTM before OOS_FLG…MRN_CLM, and the Glue ingest has no column mapping, so it loads by position. The tax ID ends up in OOS_FLG (a number column).
+
+Prod has the same column order, and MRA charts haven't loaded to prod since 05/14. There was a June incident [INC#] on this same job, closed as a "data issue." It might be the same problem.
