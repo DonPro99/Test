@@ -1,2 +1,25 @@
-git grep -n -i "copy into\|copyInto" origin/master -- snowpark/common-ingestion | head
-git grep -il "rad_charts_table_nm\|rad_master_charts" origin/master | head
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
+$ git grep -il "rad_charts_table_nm\|rad_master_charts" origin/master | head
+origin/master:snowpark/ciox-retro-etl/src/test/scala/com/anthem/hca/chaselist/automation/CioxRetroEtlTests.scala
+origin/master:snowpark/intervention-loader/conf/application_prod.properties
+origin/master:snowpark/intervention-loader/conf/application_uat.properties
+origin/master:snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/ValidateSASDatasetsTesting.scala
+origin/master:snowpark/risk-adjustment-adl/src/main/resources/conf/chasestatus_allvendors_dev.conf
+origin/master:snowpark/risk-adjustment-adl/src/main/resources/conf/chasestatus_allvendors_prod.conf
+origin/master:snowpark/risk-adjustment-adl/src/main/resources/conf/chasestatus_allvendors_sit.conf
+origin/master:snowpark/risk-adjustment-adl/src/main/resources/conf/chasestatus_allvendors_uat.conf
+
+==
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/AM-71511-RRR-Testing)
+$ git grep -il "rad_charts_table_nm\|rad_master_charts" origin/master | head
+origin/master:snowpark/Centauri-aca-etl/config/Centauri-aca-prov.json
+origin/master:snowpark/Centauri-aca-etl/config/Centauri-radv-aca-prov.json
+origin/master:snowpark/altegra-retro-etl/conf/altegrart-common-dev.properties
+origin/master:snowpark/altegra-retro-etl/conf/altegrart-common-prod.properties
+origin/master:snowpark/altegra-retro-etl/conf/altegrart-common-sit.properties
+origin/master:snowpark/altegra-retro-etl/conf/altegrart-common-uat.properties
+origin/master:snowpark/ciox-retro-etl/conf/cioxrt_application_dev.properties
+origin/master:snowpark/ciox-retro-etl/conf/cioxrt_application_prod.properties
+origin/master:snowpark/ciox-retro-etl/conf/cioxrt_application_radv_dev.properties
+origin/master:snowpark/ciox-retro-etl/conf/cioxrt_application_radv_prod.properties
