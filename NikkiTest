@@ -1,5 +1,57 @@
-git fetch origin
-git grep -il "rad_charts_mra" origin/master
-git grep -n -i "MATCH_BY_COLUMN_NAME" origin/master | head -20
-git grep -n -i "COPY INTO" origin/master | head -20
-git grep -il "common-ingestion\|common_ingestion\|CFXIngest\|cfx_ingest" origin/master | head
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev)
+$ git grep -il "common-ingestion\|common_ingestion\|CFXIngest\|cfx_ingest" origin/master | head
+origin/master:snowpark/common-ingestion/pom.xml
+origin/master:snowpark/common-ingestion/release.md
+origin/master:snowpark/common-ingestion/src/main/resources/conf/centauri-retro-medicaid-load-dev.conf
+origin/master:snowpark/common-ingestion/src/main/resources/conf/centauri-retro-medicaid-load-prod.conf
+origin/master:snowpark/common-ingestion/src/main/resources/conf/centauri-retro-medicaid-load-sit.conf
+origin/master:snowpark/common-ingestion/src/main/resources/conf/centauri-retro-medicaid-load-uat.conf
+origin/master:snowpark/common-ingestion/src/main/resources/conf/reveleer-retro-medicaid-extract-dev.conf
+origin/master:snowpark/common-ingestion/src/main/resources/conf/revopt-claims-sdc-coding-list-dev.conf
+origin/master:snowpark/common-ingestion/src/main/resources/conf/revopt-claims-sdc-coding-list-prod.conf
+origin/master:snowpark/common-ingestion/src/main/resources/conf/revopt-claims-sdc-coding-list-sit.conf
+
+==================
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/AM-71511-RRR-Testing)
+$ git grep -il "rad_charts_mra" origin/master
+origin/master:snowpark/risk-adjustment-adl/bin/ACA_Email_Notification.py
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/AM-71511-RRR-Testing)
+$ git grep -n -i "MATCH_BY_COLUMN_NAME" origin/master | head -20
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/AM-71511-RRR-Testing)
+$ git grep -n -i "COPY INTO" origin/master | head -20
+origin/master:RA_Charts/scripts/adhoc_encrypt_decrypt.py:302:                    f"<<< There are no files exists in the Path {src_loc} to copy into the S3 location : {target_bucket}/{bucket_prefix}  ...!")
+origin/master:RA_Charts/scripts/encrypt_process_handler.py:193:                    f"<<< There are no files exists in the Path {src_loc} to copy into the S3 location : {target_bucket}/{bucket_prefix}  ...!")
+origin/master:snowpark/Centauri-aca-etl/etl/CentauriProvUtils.py:42:        session.sql(f"""COPY INTO @{snowflake_stage}/{folder}/{sub_folder}/{datetime.now().strftime("%Y%m%d_%H%M%S")}/{file_name}
+origin/master:snowpark/Centauri-aca-etl/etl/CentauriUtils.py:42:        session.sql(f"""COPY INTO @{snowflake_stage}/{folder}/{sub_folder}/{datetime.now().strftime("%Y%m%d_%H%M%S")}/{file_name}
+origin/master:snowpark/Common-transact-post-processor/legacy/raa_chartview_s3_process_handler.py:22:          - Implemented external Snowflake stage loading using COPY INTO with inline CSV formatting.
+origin/master:snowpark/Common-transact-post-processor/legacy/raa_chartview_s3_process_handler.py:24:          - Added validation against empty result sets from COPY INTO execution.
+origin/master:snowpark/Common-transact-post-processor/legacy/raa_chartview_s3_process_handler.py:531:            COPY INTO {Constants.db_part}_RAA.RAA_RAWZ.{Constants.RAA_CHARTVIEW_S3}
+origin/master:snowpark/Common-transact-post-processor/legacy/raa_chartview_s3_process_handler.py:583:                LOGGER.info(f"[{thread_name}] Executing COPY INTO from stage path: {target_stage_path} (Attempt {retry})")
+origin/master:snowpark/Common-transact-post-processor/legacy/raa_chartview_s3_process_handler.py:587:                    raise RuntimeError(f"COPY INTO returned no status rows for stage path: {target_stage_path}")
+origin/master:snowpark/Common-transact-post-processor/legacy/raa_chartview_s3_process_handler.py:597:                    raise DataQualityException(f"Strict DQ Failure: {rejected} row(s) were rejected during COPY INTO.")
+origin/master:snowpark/Common-transact-post-processor/legacy/raa_chartview_s3_process_handler.py:617:                    LOGGER.error(f"[{thread_name}] [ERROR] COPY INTO failed after {Constants.MAX_RETRY} attempts: {err}")
+origin/master:snowpark/chartextraction/bin/ChartView7Days.py:112:            snow_spark.sql(f"""COPY INTO @{sf_stage}//s3_chartview/report/{datetime.now().strftime("%Y%m%d_%H%M%S")}/ACA_raa_chartview_s3_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv
+origin/master:snowpark/chartextraction/bin/decrypt_encrypt_handler.py:800:                print(f"<<< There are no files exists in the Path {files_path} to copy into the S3 location : {target_bucket}/{pdf_prefix}  ...!")
+origin/master:snowpark/chartextraction/bin/decrypt_encrypt_handler_new.py:621:                print(f"<<< There are no files exists in the Path {files_path} to copy into the S3 location : {target_bucket}/{pdf_prefix}  ...!")
+origin/master:snowpark/chartextraction/bin/decrypt_encrypt_handler_new2.py:787:                print(f"<<< There are no files exists in the Path {files_path} to copy into the S3 location : {target_bucket}/{pdf_prefix}  ...!")
+origin/master:snowpark/chartextraction/bin/mratransactload.py:402:            # Use COPY INTO with transformations to load the data into Snowflake
+origin/master:snowpark/chartextraction/bin/mratransactload.py:404:            COPY INTO {Constants.use_database}.RAA_RAWZ.{reject_audit_table} (
+origin/master:snowpark/chartextraction/bin/mratransactload.py:438:            self.logging.info(f"COPY INTO result: {result}")
+origin/master:snowpark/chartextraction/bin/raa_chartview_s3_process_handler.py:17:          streaming/partitioned metadata, Snowflake COPY INTO, retry/DQ handling,
+origin/master:snowpark/chartextraction/bin/raa_chartview_s3_process_handler.py:735:            COPY INTO {Constants.db_part}_RAA.RAA_RAWZ.{Constants.RAA_CHARTVIEW_S3}
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/AM-71511-RRR-Testing)
+$ git grep -il "common-ingestion\|common_ingestion\|CFXIngest\|cfx_ingest" origin/master | head
+origin/master:snowpark/common-ingestion/bin/all-lob-txn-file-import.sh
+origin/master:snowpark/common-ingestion/bin/allscripts-npi-load.sh
+origin/master:snowpark/common-ingestion/bin/altegra-pia-diagnosis-extract.sh
+origin/master:snowpark/common-ingestion/bin/altegra-pia-diagnosis-load.sh
+origin/master:snowpark/common-ingestion/bin/altegra-pia-diagnosis-sftp.sh
+origin/master:snowpark/common-ingestion/bin/availity-cha-medicaid-extract.sh
+origin/master:snowpark/common-ingestion/bin/availity-cha-medicaid-sftp.sh
+origin/master:snowpark/common-ingestion/bin/centauri-retro-medicaid-extract.sh
+origin/master:snowpark/common-ingestion/bin/centauri-retro-medicaid-load.sh
+origin/master:snowpark/common-ingestion/bin/centauri-retro-medicaid-sftp.sh
