@@ -1,1 +1,15 @@
-Quick follow-up: I checked master_charts_etl_mra.sql. It generates KF_TMS / EDL_CREAT_DTM / EDL_INCRMNTL_LOAD_DTM with current_timestamp() and reads staging by column name, so staging doesn’t need those 3 columns in the middle. I’m going ahead with moving them to the end of RAD_CHARTS_MRA (staging only, no change to master or the SQL). I’ll prepare the DDL and raise the U01 migration request. If you see a better approach, let me know before then.
+ALTER TABLE D01_RAA.RAA_RAWZ.RAD_CHARTS_MRA DROP COLUMN KF_TMS, EDL_CREAT_DTM, EDL_INCRMNTL_LOAD_DTM;
+
+ALTER TABLE D01_RAA.RAA_RAWZ.RAD_CHARTS_MRA ADD COLUMN
+  KF_TMS TIMESTAMP_NTZ(9),
+  EDL_CREAT_DTM TIMESTAMP_NTZ(9),
+  EDL_INCRMNTL_LOAD_DTM TIMESTAMP_NTZ(9);
+
+SELECT column_name, ordinal_position
+FROM D01_RAA.INFORMATION_SCHEMA.COLUMNS
+WHERE table_schema='RAA_RAWZ' AND table_name='RAD_CHARTS_MRA' AND ordinal_position >= 430
+ORDER BY ordinal_position;
+
+Moves 3 unused system columns to the end of the staging table so the CFX ingest aligns with the file. Re-added as nullable (the master load SQL populates them). P01 to follow after U01 is validated
+
+   SELECT GET_DDL('TABLE', 'D01_RAA.RAA_RAWZ.RAD_CHARTS_MRA');
