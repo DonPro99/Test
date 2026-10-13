@@ -1,1 +1,16 @@
-grep -m1 "990334225" /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt | tr '|' '\n' | cat -n | tail -16
+   425
+   426
+   427
+   428  1065
+   429  990334225
+   430  1053358119
+   431  CHRISTOPHER
+   432  LUM
+   433  UNK
+   434
+   435  S5596
+   436  844
+   437
+   438
+   439  HPL0597198
+   440  NA
