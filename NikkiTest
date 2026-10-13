@@ -1,16 +1,5 @@
-  425
-   426
-   427
-   428  1104
-   429  934322276
-   430  1245081413
-   431
-   432
-   433  UNK
-   434  2NY2X92RF11
-   435  H5471
-   436  123
-   437  West
-   438  FL
-   439  UNK
-   440  UNK
+SELECT table_catalog, column_name, ordinal_position, data_type
+FROM P01_RAA.INFORMATION_SCHEMA.COLUMNS
+WHERE table_schema = 'RAA_RAWZ' AND table_name = 'RAD_CHARTS_MRA'
+  AND ordinal_position >= 425
+ORDER BY ordinal_position;
