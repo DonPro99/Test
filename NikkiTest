@@ -3,3 +3,20 @@ FROM P01_RAA.INFORMATION_SCHEMA.COLUMNS
 WHERE table_schema = 'RAA_RAWZ' AND table_name = 'RAD_CHARTS_MRA'
   AND ordinal_position >= 425
 ORDER BY ordinal_position;
+
+
+SELECT table_name, created, last_altered
+FROM U01_RAA.INFORMATION_SCHEMA.TABLES
+WHERE table_schema = 'RAA_RAWZ' AND table_name = 'RAD_CHARTS_MRA';
+
+SELECT start_time, user_name, query_text
+FROM SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY
+WHERE query_text ILIKE '%RAD_CHARTS_MRA%'
+  AND query_type IN ('ALTER_TABLE_ADD_COLUMN','ALTER','CREATE_TABLE','CREATE_TABLE_AS_SELECT')
+ORDER BY start_time DESC
+LIMIT 20;
+
+SELECT column_name, ordinal_position
+FROM DDL_REPOSITORY_01.INFORMATION_SCHEMA.COLUMNS
+WHERE table_name = 'RAD_CHARTS_MRA' AND ordinal_position >= 425
+ORDER BY ordinal_position;
