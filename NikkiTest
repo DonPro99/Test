@@ -1,4 +1,5 @@
-cd ~/NikkiProjectWorkspace
-grep -ril "rad_charts_mra" ncr_dna2_raa_files ncr_dna2_raa_mvn | head
-grep -ril "common-ingestion\|common_ingestion" ncr_dna2_raa_files ncr_dna2_raa_mvn | head
-grep -rn -i "COPY INTO\|MATCH_BY_COLUMN_NAME\|ON_ERROR" ncr_dna2_raa_files ncr_dna2_raa_mvn | head -20
+git fetch origin
+git grep -il "rad_charts_mra" origin/master
+git grep -n -i "MATCH_BY_COLUMN_NAME" origin/master | head -20
+git grep -n -i "COPY INTO" origin/master | head -20
+git grep -il "common-ingestion\|common_ingestion\|CFXIngest\|cfx_ingest" origin/master | head
