@@ -1,7 +1,10 @@
-The file reached UAT S3 fine (CFX delivered at 3:25 PM), so the MGFT route worked and no bypass is needed. Ingest 790009494 ran at 3:39 PM but failed: Numeric value '990334225' is out of range.
+Update the scripts to call RRR for creating Snowpark session.
 
-Hi Nazir / Tagore, the MRA charts file reached UAT S3 fine (CFX delivered at 3:25 PM), so no MGFT bypass is needed. Ingest 790009494 ran at 3:39 PM but failed: Numeric value '990334225' is out of range.
+missing_pdf_mail_notification.py 
+mra_daily_email_notification.py
+mraprsp_daily_email_notification.txt 
+mratransactloademailnotification.py 
+raa_extract_transact_from_zip_adhoc.py
 
-When I looked into it, the last 15 columns are shifted by 3. RAD_CHARTS_MRA has KF_TMS / EDL_CREAT_DTM / EDL_INCRMNTL_LOAD_DTM before OOS_FLG…MRN_CLM, and the Glue ingest has no column mapping, so it loads by position. The tax ID ends up in OOS_FLG (a number column).
-
-Prod has the same column order, and MRA charts haven't loaded to prod since 05/14. There was a June incident [INC#] on this same job, closed as a "data issue." It might be the same problem.
+DIvya worked on hese two scripts raa_extract_transact_from_zip_adhoc.py, mraprsp_daily_email_notification.txt .
+ 
