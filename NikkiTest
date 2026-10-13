@@ -1,5 +1,2 @@
--- Did June's load land shifted? (taxid-looking values in OOS_FLG, or names in TAXID column)
-SELECT OOS_FLG, OOA_FLG, PROV_SOR_CD_CLM, RNDRG_PROV_TAXID, RNDRG_PROV_NPI, RNDRG_PROV_FRSTNM
-FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA
-WHERE RNDRG_PROV_TAXID IS NOT NULL OR OOS_FLG IS NOT NULL
-LIMIT 10;
+awk -F'|' '$429!=""' /hcaaapck/backup/IT/SIT/work/rad_charts_mra1.txt | wc -l
+awk -F'|' '$429!=""' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt | head -1000 | wc -l
