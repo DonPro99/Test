@@ -4,3 +4,6 @@ SELECT 'staging' src, COUNT(*) FROM P01_RAA.RAA_RAWZ.RAD_CHARTS_MRA WHERE fileda
 UNION ALL
 SELECT 'master', COUNT(*) FROM P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
 WHERE filedatetime = '20260514145424' AND lob = 'MCR';
+
+
+Hi team, I need to re-migrate RAD_CHARTS_MRA (RAA_RAWZ) to T01 and U01. The change moves KF_TMS / EDL_CREAT_DTM / EDL_INCRMNTL_LOAD_DTM to the end of the table. It’s already updated in D01 and DDL_REPOSITORY_01. Which creation type should I use in the DB object workbook for a column reorder? Do you need the SQL attached? This is a full-load landing table and T01/U01 are empty, so a recreate is fine.
