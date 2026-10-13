@@ -1,2 +1,1 @@
-awk -F'|' '$429!=""' /hcaaapck/backup/IT/SIT/work/rad_charts_mra1.txt | wc -l
-awk -F'|' '$429!=""' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt | head -1000 | wc -l
+   head -1 /hcaaapck/backup/IT/SIT/work/rad_charts_mra1.txt | tr '|' '\n' | cat -n | tail -16
