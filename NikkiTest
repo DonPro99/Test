@@ -1,11 +1,4 @@
-SELECT filedatetime, lob, COUNT(*)
-FROM P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
-WHERE filedatetime > '20260514145424'
-  AND lob IN ('MCR','MRA')
-GROUP BY 1, 2
-ORDER BY 1 DESC;
-
-
-SELECT EDL_RUN_ID, MIN(EDL_LOAD_DTM), MAX(EDL_LOAD_DTM), COUNT(*)
-FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA
-GROUP BY 1;
+cd ~/NikkiProjectWorkspace
+grep -ril "rad_charts_mra" ncr_dna2_raa_files ncr_dna2_raa_mvn | head
+grep -ril "common-ingestion\|common_ingestion" ncr_dna2_raa_files ncr_dna2_raa_mvn | head
+grep -rn -i "COPY INTO\|MATCH_BY_COLUMN_NAME\|ON_ERROR" ncr_dna2_raa_files ncr_dna2_raa_mvn | head -20
