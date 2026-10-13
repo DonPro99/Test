@@ -1,4 +1,3 @@
 cd /hcaaapck/backup/IT/SIT/work
-head -1 rad_charts_mra.txt  | awk -F'|' '{print "new 09/10 file:", NF}'
-head -1 rad_charts_mra1.txt | awk -F'|' '{print "July file:", NF}'
-
+grep -m1 "990334225" rad_charts_mra.txt | awk -F'|' '{print "bad row fields:", NF}'
+awk -F'|' 'NF!=440' rad_charts_mra.txt | wc -l
