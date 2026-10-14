@@ -1,18 +1,5 @@
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i carillon-etl
-aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/ --recursive | grep -i carillon-etl
+# on the prod cluster
+rm /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar.bak
 
-aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
-  s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar.bak-20260704
-
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
-  s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
-
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
-  s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
-
-aws s3 cp s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
-  s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
-
-cp /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar.bak
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar /home/hadoop/jars/
-chmod 777 /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar
+# S3 backup
+aws s3 rm s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar.bak-20260704
