@@ -1,4 +1,5 @@
-ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
+$ ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
+-rw-r--r-- 1 srcradcoolbthts ahpck 17849909248 Oct 14 13:44 /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
 
 
 grep -i -m5 "error" "/hcaaapck/backup/IT/SIT/scripts/SASGSUB-2026-10-14_13.46.52.315_RAA_CHARTS_MRA_write_hdfs_v1/RAA_CHARTS_MRA_write_hdfs_v1.log"
