@@ -1,5 +1,3 @@
-# on the prod cluster
-rm /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar.bak
-
-# S3 backup
-aws s3 rm s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar.bak-20260704
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar /home/hadoop/jars/
+chmod 777 /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar
+ls -l /home/hadoop/jars/ | grep carillon
