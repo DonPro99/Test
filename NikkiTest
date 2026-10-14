@@ -1,5 +1,21 @@
 aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/
+[hadoop@ip-10-127-204-249 ~]$ aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa/commercial/na/
+                           PRE deply_ahgprsp_aca_stg/
+                           PRE deply_cioxrt_aca_stg/
+                           PRE deply_cioxrt_radv_aca_stg/
+                           PRE deply_dtvntmbrrt_aca_stg/
+                           PRE deply_dtvntmbrrt_radv_aca_stg/
+                           PRE deply_emlcmpn_aca_stg/
+                           PRE deply_invprsp_aca_stg/
+                           PRE deply_mrocprt_aca_stg/
+                           PRE deply_mtrxprsp_aca_stg/
+                           PRE deply_shrcrrt_aca_stg/
+                           PRE deply_vrtxrt_ooa_aca_stg/
+                           PRE rad_adl_hcc_dx_source_stg/
+                           PRE rad_charts_radv/
+
 aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa-medicare/na/rad_charts_mra/ --recursive | tail -5
+nthg
 
 aws s3 cp <archived file path> s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/
 
