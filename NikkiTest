@@ -1,8 +1,8 @@
 cp /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar.bak 2>/dev/null
 aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar /home/hadoop/jars/
 chmod 777 /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar
-ls -l /home/hadoop/jars/ | grep carillon
-
-
+ls -l /home/hadoop/jars/ | grep carillon[hadoop@ip-10-197-212-165 ~]$ ls -l /home/hadoop/jars/ | grep carillon
+-rwxrwxrwx. 1 hadoop hadoop 321249327 Oct 14 15:26 carillon-etl-1.0-jar-with-dependencies.jar
+-rwxrwxr-x. 1 hadoop hadoop 310774310 Oct 14 15:31 carillon-etl-1.0-jar-with-dependencies.jar.bak
 cd ~
 java -cp /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar com.anthem.hca.intervention.carillon.CarillonEtlDriver ACA /home/hadoop/config/carillon_application_prod.properties /home/hadoop/config/ db.properties <edl_run_id>
