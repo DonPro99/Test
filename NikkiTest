@@ -1,6 +1,1 @@
-$ ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
--rw-r--r-- 1 srcradcoolbthts ahpck 36621516800 Oct 14 13:41 /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
-$   df -h /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
-Filesystem      Size  Used Avail Use% Mounted on
-hcaaapckrw       70T   61T  8.7T  88% /hcaaapck-rw
-$ 
+ps -ef | grep "cp /hcaaapck" | grep -v grep
