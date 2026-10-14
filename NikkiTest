@@ -1,19 +1,5 @@
-$ ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/20261012/
-total 45273920
--rw-r--r-- 1 srcradcoolbthts ahpck 46360363008 Oct 12 12:39 charts.sas7bdat
--rw-r--r-- 1 srcradcoolbthts ahpck      131072 Oct 12 12:39 hadoop_charts_columns.sas7bdat
-$ cp /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/20261012/<file from step 1> /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
--ksh: file: cannot open [No such file or directory]
-$ 
+cp /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/20261012/charts.sas7bdat /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
 
-
-cp /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/20261012/<file from step 1> /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
-
+ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/
 cd /hcaaapck/backup/IT/SIT/scripts
 ./start_sas_copy_hdfs_MN.sh MRA CHARTS
-
-
-
-
-SELECT filedatetime, COUNT(*), COUNT(RNDRG_PROV_TAXID) AS taxid, COUNT(OOS_FLG) AS oos
-FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA GROUP BY 1;
