@@ -1,5 +1,2 @@
-cd /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
-rm charts.sas7bdat
-mv archive/20261012/charts.sas7bdat charts.sas7bdat
-touch charts.sas7bdat
-ls -l charts.sas7bdat
+$ ls -l charts.sas7bdat
+-rw-r--r-- 1 srcradcoolbthts ahpck 46360363008 Oct 14 13:50 charts.sas7bdat
