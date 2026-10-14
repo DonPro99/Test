@@ -1,1 +1,2 @@
-aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/ | grep carillon
+[hadoop@ip-10-197-212-115 ~]$ aws s3 ls s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/ | grep carillon
+2026-10-14 15:26:16  321249327 carillon-etl-1.0-jar-with-dependencies.jar
