@@ -1,3 +1,2 @@
-[hadoop@ip-10-197-212-115 ~]$ aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep carillon
-2026-07-04 03:04:42  310774310 carillon-etl-1.0-jar-with-dependencies.jar
-2026-10-14 14:52:32  310774310 carillon-etl-1.0-jar-with-dependencies.jar.bak-20260704
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
+  s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
