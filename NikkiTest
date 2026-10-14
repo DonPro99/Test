@@ -1,2 +1,4 @@
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
+[hadoop@ip-10-127-204-185 ~]$ aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
   s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
+copy failed: s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar to s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar An error occurred (AccessDenied) when calling the CreateMultipartUpload operation: User: arn:aws:sts::652798729258:assumed-role/CRLN-RAA-uat-EC2EMR-Role/i-036e5a88515424b0d is not authorized to perform: s3:PutObject on resource: "arn:aws:s3:::crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar" because no resource-based policy allows the s3:PutObject action
+[hadoop@ip-10-127-204-185 ~]$ 
