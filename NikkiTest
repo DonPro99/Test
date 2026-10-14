@@ -1,6 +1,5 @@
-File_Delivery_Status:  success.
-Action: File Delivery to App team
-Protocol: S3_FileTransfer.
-File_Path: preprod/BDF/rad_charts_mra.txt.pgp
-File_Name: rad_charts_mra.txt.pgp
-Timestamp: 2026-10-14 16:59:42.264054-04:00 America/New_York
+SELECT filedatetime, COUNT(*), COUNT(RNDRG_PROV_TAXID) AS taxid, COUNT(OOS_FLG) AS oos
+FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA GROUP BY 1;
+
+SELECT filedatetime, COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
+WHERE filedatetime = '20260910135555' GROUP BY 1;
