@@ -1,5 +1,1 @@
-I’m following up on this request. The non-RADV file (deply_dtvntmbrrt_aca.txt) is currently being picked up by the generic _aca.txt pattern and delivered to all_files_deploy_aca, instead of the destination configured on this RITM (.../commercial/na/deply_dtvntmbrrt_aca_stg/).
-
-The correct destination path is already included in the original request and the attached details on this ticket, so I’d appreciate it if this could be updated here: a DTVNTMBRRT-specific pattern with priority over the generic catch-all.
-
-I’ve been following up on Teams since last Thursday (10/8) and haven’t received a response yet. This is the remaining item blocking closeout of our ticket. If a separate or modified ticket is required, please let me know and I’ll raise it right away.
+DESCRIBE TABLE P01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_PREMATCH;
