@@ -1,7 +1,6 @@
-SELECT column_name, ordinal_position
-FROM U01_RAA.INFORMATION_SCHEMA.COLUMNS
-WHERE table_schema='RAA_RAWZ' AND table_name='RAD_CHARTS_MRA' AND ordinal_position >= 445
-ORDER BY ordinal_position;
-
-SELECT filedatetime, COUNT(*), COUNT(RNDRG_PROV_TAXID) AS taxid, COUNT(OOS_FLG) AS oos
-FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA GROUP BY 1;
+File_Delivery_Status:success.
+Action: File Reception and Validation
+Protocol: SFTP.
+File_Path: preprod/BDF/rad_charts_mra.txt.pgp
+File_Name: rad_charts_mra.txt.pgp
+Timestamp: 2026-10-14 15:08:34.652946-04:00 America/New_York
