@@ -1,3 +1,4 @@
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar /home/hadoop/jars/
-chmod 777 /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar
-ls -l /home/hadoop/jars/ | grep carillon
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
+  s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
+
+aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep carillon
