@@ -1,2 +1,19 @@
-$ ls -l charts.sas7bdat
--rw-r--r-- 1 srcradcoolbthts ahpck 46360363008 Oct 14 13:50 charts.sas7bdat
+sftp.connection.host: 4027
+sftp.connection.user: tpraasftp001
+sftp.destination.dir: /tpraasftp001/I_ELV_CFX_GLD011/to_elvhlth/uat/raa
+Source_file_name: /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
+Email File Name: rad_charts_mra
+Inside Upload method
+Welcome to the Gateway Interchange SSH server.   
+Connected to mgftuat.wellpoint.com.
+sftp>     cd /tpraasftp001/I_ELV_CFX_GLD011/to_elvhlth/uat/raa
+sftp>         mput /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
+Uploading /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt to /tpraasftp001/I_ELV_CFX_GLD011/to_elvhlth/uat/raa/rad_charts_mra.txt
+/hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt                                                                                                                                                          32%   18GB  90.6MB/s   07:02 ETA^/hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt                                                                                                                                                          32%   18GB  90.4MB/s   07:02 ETA^/hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt                                                                                                                                                          32%   18GB  90.9MB/s   06:59 ETA^/hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt                                                                                                                                                          32%   18GB  90.8MB/s   06:59 ETA^/hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt                                                                                                                                                         100%   55GB  90.7MB/s   10:24    
+sftp>         quit
+SUCCESS: Sending Email Notification
+Inside Email method
+MGFT file upload action: Completed
+Log Aggregation: rad_charts_mra-SFTP-SAS-S3-20261014141223.log
+Task Finished: End Time: 2026-10-14 14:22:51, Duration: 628 seconds.
+Updating the trigger file - /hcaaapck/backup/IT/SIT/trigger/mrachartsprocesstrigger.txt
