@@ -1,8 +1,9 @@
-cp /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar.bak 2>/dev/null
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar /home/hadoop/jars/
-chmod 777 /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar
-ls -l /home/hadoop/jars/ | grep carillon[hadoop@ip-10-197-212-165 ~]$ ls -l /home/hadoop/jars/ | grep carillon
--rwxrwxrwx. 1 hadoop hadoop 321249327 Oct 14 15:26 carillon-etl-1.0-jar-with-dependencies.jar
--rwxrwxr-x. 1 hadoop hadoop 310774310 Oct 14 15:31 carillon-etl-1.0-jar-with-dependencies.jar.bak
-cd ~
-java -cp /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar com.anthem.hca.intervention.carillon.CarillonEtlDriver ACA /home/hadoop/config/carillon_application_prod.properties /home/hadoop/config/ db.properties <edl_run_id>
+hi nikhitha 
+radv : s3://crln-652798729258-ssm-uat-filetransfer/srcfiles/withouttrlfile/raa/commercial/na/deply_dtvntmbrrt_rv_aca_stg/20261007_193737/incr/DEPLOY_DTVNTMBRRT_RADV_ACA_20261007.txt
+ 
+here for the radv the file name is DEPLOY_DTVNTMBRRT_RADV_ACA_20261007 it follows the naming convention DEPLOY_DTVNTMBRRT_RADV_ACA_yyyymmdd but  the folder for this file does not deply_dtvntmbrrt_rv_aca_stg can you raise a request to rename the folder from  deply_dtvntmbrrt_rv_aca_stg to deply_dtvntmbrrt_radv_aca_stg 
+ 
+non_radv : 
+s3://crln-raa-uat-sf-dataz-nogbd-nophi-useast1/raa/commercial/na/all_files_deploy_aca/20261007_172238/incr/deply_dtvntmbrrt_aca.txt
+ 
+here for the non radv the file name is deply_dtvntmbrrt_aca.txt but from the mappig document i saw the file name is mentioned as deply_dtvntmbrrt_aca_yyyymmdd.txt
