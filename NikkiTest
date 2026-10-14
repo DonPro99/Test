@@ -1,3 +1,4 @@
-On RADV — the staging folder’s _rv_ naming matches the raw deploy dataset convention used by every RADV intervention (SAS’s 32-char dataset limit), not the output file’s naming. The output file’s RADV naming is a separate, intentional convention from a different stage of the pipeline — these were never meant to match. I don’t think we should rename the folder, since it’d make this the only inconsistent one across all RADV interventions. Want me to double check with Akhil first?
-
-On non-RADV — good catch, you’re right. The script never appends a date to that output filename — it’s always literally deply_dtvntmbrrt_aca.txt, confirmed from the SFTP logs. That looks like it needs a fix on the SAS side (likely affects all non-RADV interventions using this same script path, not just ours). I’ll flag it to Akhil.”
+SELECT column_name, ordinal_position
+FROM U01_RAA.INFORMATION_SCHEMA.COLUMNS
+WHERE table_schema='RAA_RAWZ' AND table_name='RAD_CHARTS_MRA' AND ordinal_position >= 445
+ORDER BY ordinal_position;
