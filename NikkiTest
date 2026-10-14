@@ -1,4 +1,1 @@
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
-  s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
-
-aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep carillon
+“Yes, I pinged Sunita separately about her files (the HosRptXmlExtractor* and HosTranscribedReport* classes, and most of the hoschartgenerator module). Lekhana has already replied for hers. I’m still waiting on yours and Sunita’s. If it’s easier, we can cover both on tomorrow’s call. Feel free to add Sunita.”
