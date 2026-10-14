@@ -1,1 +1,6 @@
-aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | sort -r
+[hadoop@ip-10-197-212-115 ~]$ aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | sort -r
+2026-10-14 14:52:32  310774310 carillon-etl-1.0-jar-with-dependencies.jar.bak-20260704
+2026-10-12 06:27:07  321280526 mrdm-etl-1.0-jar-with-dependencies.jar
+2026-10-12 06:25:14  321388776 patient-encounter-etl-1.0-jar-with-dependencies.jar
+2026-10-12 06:23:50  321294982 optmrt-etl-1.0-jar-with-dependencies.jar
+2026-10-12 06:22:32  321280342 mro-etl-1.0-jar-with-dependencies.jar
