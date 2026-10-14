@@ -1,1 +1,4 @@
-ps -ef | grep "cp /hcaaapck" | grep -v grep
+rm /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
+cp /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/20261012/charts.sas7bdat /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
+echo "exit code: $?"
+ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
