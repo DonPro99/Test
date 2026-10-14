@@ -1,2 +1,43 @@
-$ ls -l /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
--rw-r--r-- 1 srcradcoolbthts ahpck 17849909248 Oct 14 13:44 /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
+$ ./start_sas_copy_hdfs_MN.sh MRA CHARTS                                                                                                                       
+SIT
+/hcaaapck/backup/IT/SIT/log
+Environment is set to SIT and Master config file - /hcaaapck/backup/IT/SIT/conf/master.properties
+Source the master config file - /hcaaapck/backup/IT/SIT/conf/master.properties
+------------------------------------------------------------
+Starting master table run for MASTER_TABLE=CHARTS; LOB=MRA
+Master table - CHARTS ; ENVIRONMENT - ts
+CHARTS MRA SAS file is newer than the MRA trigger process file - /hcaaapck/backup/IT/SIT/trigger/mrachartsprocesstrigger.txt.
+Starting the copying process for CHARTS MRA SAS dataset - /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat.
+Getting the file list
+sassrc.charts
+Executing the SAS program to copy the sas dataset to Hadoop
+/hcaaapck/backup/IT/SIT/log
+/hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
+Initiating the Kinit process on SAS for user - srcradcoolbthts
+Keytab file does not exist -/export/home/srcradcoolbthts/srcradcoolbthts.keytab
+Using srcradcoolbthts
+/hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
+
+Master dataset - CHARTS ; Line of Business - MRA ; USER - srcradcoolbthts ; Environment - ts ; SAS Config file - /hcaaapck/backup/IT/SIT/conf/sas.properties
+Submitting the SAS program for CHARTS and MRA
+ERROR : Job submission failed with error code 112
+ 
+SAS Grid Manager Client Utility Version 9.48 (build date: Jan 18 2023)
+Copyright (C) 2009-2023, SAS Institute Inc., Cary, NC, USA. All Rights Reserved
+ 
+Job <883953> is submitted to default queue <normal>.
+Job ID:         883953
+Job directory: "/sasconfig/gridshare/srcradcoolbthts/SASGSUB-2026-10-14_13.46.52.315_RAA_CHARTS_MRA_write_hdfs_v1"
+Job log file:  "/sasconfig/gridshare/srcradcoolbthts/SASGSUB-2026-10-14_13.46.52.315_RAA_CHARTS_MRA_write_hdfs_v1/RAA_CHARTS_MRA_write_hdfs_v1.log"
+Waiting for grid job to complete...
+Grid job complete.
+  883953 (RAA_CHARTS_MRA_write_hdfs_v1) has Failed:   Submitted: 14Oct2026:13:46:52, Started: 14Oct2026:13:46:52 on Host dc04plpsas106, Ended: 14Oct2026:13:46:52, RC:112
+    Moving job information to "./SASGSUB-2026-10-14_13.46.52.315_RAA_CHARTS_MRA_write_hdfs_v1"
+ 
+    Copying log and output to current directory.
+Grid job return code is 112 (0x70)
+Cleaning up SASGSUB intermediate files
+/tmp/3705858.SASSUBMIT.log
+Failure encountered while copying the master sas dataset - CHARTS for line of business - MRA to Hadoop
+Copying failed for CHARTS MRA SAS dataset.
+Error encountered while running sas script for CHARTS SAS Datasets.
