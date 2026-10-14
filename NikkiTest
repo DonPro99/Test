@@ -1,6 +1,10 @@
-ALTER TABLE RAA_RAWZ.RAD_CHARTS_MRA DROP COLUMN KF_TMS, EDL_CREAT_DTM, EDL_INCRMNTL_LOAD_DTM;
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast2/ --recursive | grep -i carillon-etl
 
-ALTER TABLE RAA_RAWZ.RAD_CHARTS_MRA ADD COLUMN
-  KF_TMS TIMESTAMP_NTZ(9),
-  EDL_CREAT_DTM TIMESTAMP_NTZ(9),
-  EDL_INCRMNTL_LOAD_DTM TIMESTAMP_NTZ(9);
+
+aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast2/ --recursive | grep -i carillon-etl
+
+aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast2/<path>/carillon-etl-1.0-jar-with-dependencies.jar \
+  s3://crln-raa-prod-codez-nogbd-phi-useast2/<path>/carillon-etl-1.0-jar-with-dependencies.jar.bak-20261014
+
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast2/<path>/carillon-etl-1.0-jar-with-dependencies.jar \
+  s3://crln-raa-prod-codez-nogbd-phi-useast2/<path>/carillon-etl-1.0-jar-with-dependencies.jar
