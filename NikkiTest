@@ -1,10 +1,18 @@
-aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/
-aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa-medicare/na/rad_charts_mra/ --recursive | tail -5
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i carillon-etl
+aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/ --recursive | grep -i carillon-etl
 
-aws s3 cp <archived file path> s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/
+aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
+  s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar.bak-20260704
 
-cp /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/20261012/charts.sas7bdat /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
-cd /hcaaapck/backup/IT/SIT/scripts && ./start_sas_copy_hdfs_MN.sh MRA CHARTS
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
+  s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
 
-SELECT filedatetime, COUNT(*), COUNT(RNDRG_PROV_TAXID) AS taxid, COUNT(OOS_FLG) AS oos
-FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA GROUP BY 1;
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
+  s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
+
+aws s3 cp s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar \
+  s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
+
+cp /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar.bak
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar /home/hadoop/jars/
+chmod 777 /home/hadoop/jars/carillon-etl-1.0-jar-with-dependencies.jar
