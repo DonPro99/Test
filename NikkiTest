@@ -1,19 +1,10 @@
-Here’s a meeting title and invite note you can paste in:
+aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/
+aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa-medicare/na/rad_charts_mra/ --recursive | tail -5
 
-Title: PR #12725 cleanup – review of files in master (Chandrika / Sunita)
+aws s3 cp <archived file path> s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/
 
-Note:
+cp /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/20261012/charts.sas7bdat /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
+cd /hcaaapck/backup/IT/SIT/scripts && ./start_sas_copy_hdfs_MN.sh MRA CHARTS
 
-PR #12725 accidentally carried some preprod files into master (nothing was deployed to prod). Let’s confirm whether each file should stay in master or be restored/removed.
-
-Chandrika (snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/ unless noted)
-
-New: snowpark/pdfgen/src/main/java/pdfgen/Filemerger_CCDA_TR_PDFBOX.java, RptXmlExtractor_McidChaseidCombined.scala, RptXmlExtractor_McidChaseid_IP.scala
-Modified: RptXmlDiffIdentifier_A5.scala (sanitizeFileName removed, which undoes the #2586 vulnerability fix), RAChartsHOSHealowMerger.scala (whole file commented out), RptXmlExtractor_McidChaseid.scala (USE SCHEMA added), BigDataPdfDownload.scala (newline only)
-
-Sunita
-
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/: HosRptXmlExtractor* (8 files), HosTranscribedReport_* (5 files)
-snowpark/hoschartgenerator/: pom.xml, dependency-reduced-pom.xml, release.md, hoschartgenerator.iml, HosRptXmlExtractor* classes (7), utilities/ConfigConstants and SessionCreator
-
-For each: keep in master (approved for prod), or restore/remove?
+SELECT filedatetime, COUNT(*), COUNT(RNDRG_PROV_TAXID) AS taxid, COUNT(OOS_FLG) AS oos
+FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA GROUP BY 1;
