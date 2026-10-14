@@ -1,4 +1,10 @@
-SELECT column_name, ordinal_position
-FROM U01_RAA.INFORMATION_SCHEMA.COLUMNS
-WHERE table_schema='RAA_RAWZ' AND table_name='RAD_CHARTS_MRA' AND ordinal_position >= 445
-ORDER BY ordinal_position;
+aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/
+aws s3 ls s3://crln-raa-uat-archz-nogbd-phi-useast1/raa-medicare/na/rad_charts_mra/ --recursive | tail -5
+
+aws s3 cp <archived file path> s3://crln-652798729258-ssm-uat-filetransfer/inbound/raa/medicare/na/rad_charts_mra/
+
+cp /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/20261012/charts.sas7bdat /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
+cd /hcaaapck/backup/IT/SIT/scripts && ./start_sas_copy_hdfs_MN.sh MRA CHARTS
+
+SELECT filedatetime, COUNT(*), COUNT(RNDRG_PROV_TAXID) AS taxid, COUNT(OOS_FLG) AS oos
+FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA GROUP BY 1;
