@@ -1,7 +1,12 @@
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast2/ --recursive | grep -i carillon-etl
+
+[hadoop@ip-10-127-204-185 ~]$ aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i carillon-etl
+2026-10-03 20:23:29  321249327 etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
+2024-06-15 06:06:54          0 files/.git/logs/refs/remotes/origin/feature/raa-sf-carillon-etl
 
 
-aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast2/ --recursive | grep -i carillon-etl
+hadoop@ip-10-197-212-115 ~]$ aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/ --recursive | grep -i carillon-etl
+2026-07-04 03:04:42  310774310 etl/raa/build/libs/carillon-etl-1.0-jar-with-dependencies.jar
+2023-09-18 16:32:09        186 files/.git/logs/refs/remotes/origin/feature/raa-sf-carillon-etl
 
 aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast2/<path>/carillon-etl-1.0-jar-with-dependencies.jar \
   s3://crln-raa-prod-codez-nogbd-phi-useast2/<path>/carillon-etl-1.0-jar-with-dependencies.jar.bak-20261014
