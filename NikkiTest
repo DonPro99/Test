@@ -1,14 +1,7 @@
-$ ls -l /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
--rw-r--r-- 1 srcradcoolbthts ahpck 3650 Oct  8 13:59 /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
-$ wc -l /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
-10 /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
-$ ls -lt /hcaaapck/backup/IT/SIT/log/ | grep -i dtvntrt | head -5
--rw-r--r-- 1 srcradcoolbthts ahpck     781 Oct  8 13:59 sas_deploy_copy_dtvntrt_mra_2026_10_08_13:59:16.log
--rw-r--r-- 1 srcradcoolbthts ahpck     596 Oct  8 13:59 deply_dtvntrt_mra-SFTP-SAS-S3-20261008135953.log
--rw-rw-r-- 1 srcradcoolbthts ahpck    1088 Oct  8 13:59 copy_deploy_dataset_dtvntrt_mra_20261008_13.59.16.log
--rw-r--r-- 1 srcradcoolbthts ahpck     781 Oct  8 11:08 sas_deploy_copy_dtvntrt_mra_2026_10_08_11:07:29.log
--rw-r--r-- 1 srcradcoolbthts ahpck     597 Oct  8 11:08 deply_dtvntrt_mra-SFTP-SAS-S3-20261008110856.log
-$ 
+cat /hcaaapck/backup/IT/SIT/log/deply_dtvntrt_mra-SFTP-SAS-S3-20261008135953.log
+
+head -1 /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt | tr '|' '\n' | grep -n '2026091013'
+
 SELECT table_schema, table_name, row_count, last_altered
 FROM U01_RAA.INFORMATION_SCHEMA.TABLES
 WHERE table_name ILIKE '%DTVNTRT%'
