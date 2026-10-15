@@ -12,3 +12,13 @@ ACA	9396660
 SELECT COUNT(*)
 FROM P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
 WHERE filedatetime = '20260910135555';
+
+
+ls -l --time-style=long-iso /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/charts.sas7bdat
+ls -l --time-style=long-iso /hcaaapck/backup/IT/SIT/work/rad_charts_mra*.txt
+
+head -1 /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt | tr '|' '\n' | grep -n '20260910135555'
+
+SELECT 'U01' AS env, COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB WHERE filedatetime = '20260910135555'
+UNION ALL
+SELECT 'P01', COUNT(*) FROM P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB WHERE filedatetime = '20260910135555';
