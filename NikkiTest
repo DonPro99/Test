@@ -1,19 +1,5 @@
-$ t just a lone backslash: "e+0; for(i in f) print "field "i": "f[i]}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt                                               <
-awk: cmd. line:1: (FILENAME=/hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt FNR=296) warning: Invalid multibyte data detected. There may be a mismatch between your data and your locale.
-lines with backslash: 5062
-fields that are not just a lone backslash: 5096
-field 69: 29
-field 142: 24
-field 143: 1
-field 144: 1
-field 145: 5
-field 340: 24
-field 341: 1
-field 342: 1
-field 343: 5
-field 392: 54
-field 399: 5
-field 400: 1
-field 401: 1
-field 439: 4948
-field 440: 1
+df -h /hcaaapck/backup/IT/SIT/work
+
+LC_ALL=C sed 's/|\\|/||/g; s/|\\|/||/g' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt > /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
+
+LC_ALL=C awk -F'|' '{for(i=1;i<=NF;i++) if($i=="\\") n++} END{print n+0}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
