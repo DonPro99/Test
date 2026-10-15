@@ -1,1 +1,27 @@
-grep -n -i -E 'hdfs|mgft|sftp|scp|pgp|gpg|put |rad_charts' <path-to>/start_sas_copy_hdfs_MN.sh
+$ grep -n -i -E 'hdfs|mgft|sftp|scp|pgp|gpg|put |rad_charts' /hcaaapck/backup/IT/SIT/scripts/start_sas_copy_hdfs_MN.sh
+3:#This script will load the SAS datasets(MBRS,CHARTS,SCORES and GAPS) to the HDFS location.It will take master table and line of business as arguments.
+23:#   - Single (existing): start_sas_copy_hdfs.sh ACA MBRS
+24:#   - Batch  (new)     : start_sas_copy_hdfs.sh ACA ALL
+25:#                        start_sas_copy_hdfs.sh MCAID ALL
+26:#                        start_sas_copy_hdfs.sh MCARE ALL
+27:#                        start_sas_copy_hdfs.sh MRA ALL
+108:export LOG_FILE="sas_master_copy_to_hdfs_`date +'%Y_%m_%d_%H_%M_%S'`.log"
+164:      "${SAS_HOME}/copy_PcnPrefix_Jcode_SASDatasetsToHDFS.sh" jcode_ind sas.properties pr
+170:  # For MCD IH_MCD we skip SAS_COPY_TO_HDFS and just FTP the files
+214:      COPY_SCRIPT="copyGapSASDatasetsToHDFS.sh"
+237:          overwrite_config="mra-sftp-sas-mgft.conf"
+242:      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+256:      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+267:         overwrite_config="charts-sftp-sas-mgft.conf"
+275:          overwrite_config="charts-sftp-sas-mgft.conf"
+282:          overwrite_config="mra-sftp-sas-mgft.conf"
+287:      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+301:      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+316:      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+393:     LOG_MESG "Special FTP case for MRA GAPS - using raa_inbound_pgp_sftp_notify.sh"
+394:     ${SAS_HOME}/raa_inbound_pgp_sftp_notify.sh "${work_file_local}"
+396:       LOG_MESG "WARNING: raa_inbound_pgp_sftp_notify.sh failed for ${MASTER_TABLE} and ${LINE_OF_BUSINESS}"
+413:         "${SAS_HOME}/raa_inbound_pgp_sftp_notify.sh" "${file}"
+428:     ${SAS_HOME}/common-sftp-sas-mgft-task.sh "${work_file_local}" $overwrite_config
+430:        LOG_MESG "Error encountered while running MGFT script for ${MASTER_TABLE} SAS Datasets."
+$ 
