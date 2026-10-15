@@ -1,6 +1,14 @@
-“Hi Gopi, Sunita suggested I check with you about some of her files that reached master through my PR #12725 (by mistake, from preprod; nothing was deployed to prod):
+SELECT filedatetime, COUNT(*) AS rows_loaded,
+       COUNT(RNDRG_PROV_TAXID) AS taxid, COUNT(OOS_FLG) AS oos
+FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA
+GROUP BY 1;
 
-snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/: HosRptXmlExtractor* (8 files) and HosTranscribedReport_* (5 files)
-snowpark/hoschartgenerator/: pom.xml, dependency-reduced-pom.xml, release.md, hoschartgenerator.iml, the HosRptXmlExtractor* classes (7) and utilities/ConfigConstants, SessionCreator
+SELECT OOS_FLG, OOA_FLG, COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA
+GROUP BY 1, 2
+ORDER BY 3 DESC;
 
-Are these approved for prod, or is it OK to remove them from master for now? They’ll stay in develop/SIT/UAT/preprod, so nothing is lost.”
+SELECT filedatetime, COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
+WHERE filedatetime = '20260910135555'
+GROUP BY 1;
