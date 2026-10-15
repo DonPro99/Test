@@ -1,5 +1,1 @@
-df -h /hcaaapck/backup/IT/SIT/work
-
-LC_ALL=C sed 's/|\\|/||/g; s/|\\|/||/g' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt > /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
-
-LC_ALL=C awk -F'|' '{for(i=1;i<=NF;i++) if($i=="\\") n++} END{print n+0}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
+"escape_unenclosed_field": "NONE"
