@@ -1,3 +1,1 @@
 find /hcaaapck -name 'start_sas_copy_hdfs_MN.sh' 2>/dev/null
-
-grep -n -i -E 'hdfs|mgft|sftp|scp|pgp|gpg|put |\.txt|rad_charts' <path from step 1>
