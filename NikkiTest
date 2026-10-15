@@ -1,1 +1,5 @@
-awk -F'|' 'NR==30715829{for(i=1;i<=NF;i++) if(index($i,"\\")) print i": ["$i"]"; print "429: "$429; exit}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
+SELECT filedatetime, chartdatetime, MAX(edl_creat_dtm) AS loaded_at, COUNT(*)
+FROM P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
+WHERE edl_creat_dtm >= '2026-05-01'
+GROUP BY 1, 2
+ORDER BY loaded_at DESC;
