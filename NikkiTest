@@ -1,23 +1,14 @@
-$ cat /hcaaapck/backup/IT/SIT/log/deply_dtvntrt_mra-SFTP-SAS-S3-20261008135953.log
-Launching sftp-task-runner: Start Time: 2026-10-08 13:59:53: PID: 294236
-sftp.connection.host: efx2.corp.agp.ads
-sftp.connection.host: 22
-sftp.connection.user: hcaaapck_raa_np
-sftp.destination.dir: /hcaaapck_raa_np/Amerigroup_Sftp/Inbound/uat/raa
-Source_file_name: /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt
-Email File Name: deply_dtvntrt_mra
-Inside Upload method
-SUCCESS: Sending Email Notification
-Inside Email method
-MGFT file upload action: Completed
-Log Aggregation: deply_dtvntrt_mra-SFTP-SAS-S3-20261008135953.log
-Task Finished: End Time: 2026-10-08 13:59:53, Duration: 0 seconds.
-$ head -1 /hcaaapck/backup/IT/SIT/work/deply_dtvntrt_mra.txt | tr '|' '\n' | grep -n '2026091013'
-2:20260910135555
+SELECT d.recordid, d.filedatetime, d.add_val1 AS chartid, d.add_val2 AS chartdatetime,
+       CASE WHEN EXISTS (
+              SELECT 1 FROM U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB c
+              WHERE c.recordid      = d.recordid
+                AND c.filedatetime  = d.filedatetime
+                AND c.chartid       = d.add_val1
+                AND c.chartdatetime = d.add_val2)
+            THEN 'EXACT MATCH' ELSE 'NO MATCH' END AS result
+FROM U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRT_MRA_STG d;
 
-==================
-
-TABLE_SCHEMA	TABLE_NAME	ROW_COUNT	LAST_ALTERED
-RAA_RAWZ_STG	DEPLY_DTVNTRT_MRA_STG	10	2026-10-08 14:11:06.169 -0400
-RAA_RAWZ_STG	DEPLY_DTVNTRTPM_MRA_STG	10	2026-09-14 10:49:22.371 -0400
-RAA_RAWZ_STG_NOGBD	DEPLY_DTVNTRTPM_MRA_STG		2026-09-11 10:41:24.840 -0400
+SELECT filedatetime, COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
+WHERE filedatetime = '20260910135555'
+GROUP BY 1;
