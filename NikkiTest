@@ -1,10 +1,12 @@
-SELECT d.recordid, d.filedatetime, d.add_val1 AS chartid, d.add_val2 AS chartdatetime,
-       CASE WHEN EXISTS (
-              SELECT 1 FROM U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB c
-              WHERE c.recordid      = d.recordid
-                AND c.filedatetime  = d.filedatetime
-                AND c.chartid       = d.add_val1
-                AND c.chartdatetime = d.add_val2)
-            THEN 'EXACT MATCH' ELSE 'NO MATCH' END AS result
-FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB d
-WHERE d.filedatetime = '20260910135555';
+FILEDATETIME	COUNT(*)
+20260910135555	31656363
+20260705211428	89542
+20260705210747	635844
+20260705205701	396653
+20260705202822	464271
+20260705201107	582268
+20260705194858	342026
+20260705192259	74745
+20260705191035	417676
+20260705185649	15679
+
