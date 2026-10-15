@@ -1,7 +1,5 @@
-ls -l --time-style=long-iso /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/
-
-
-ls -l --time-style=long-iso /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/*/
-
-
-head -1 /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt | tr '|' '\n' | grep -n '20260910135555'
+$ awk -F'|' 'NR==30715829{for(i=1;i<=NF;i++) if(index($i,"\\")) print i": ["$i"]"; print "429: "$429; exit}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
+144: [\]
+342: [\]
+401: [\]
+429: 990334225
