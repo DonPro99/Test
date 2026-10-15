@@ -1,14 +1,4 @@
-$ ls -d /raa*/backup/*/sas_repository/deploy_in 2>/dev/null
-/raa1/backup/devenvironment/sas_repository/deploy_in  /raa1/backup/prodenvironment/sas_repository/deploy_in  /raa2/backup/prodenvironment/sas_repository/deploy_in
-$ ls -l /hcaaapck/backup/IT/SIT/scripts/ | grep -i deploy
--rwxrwx--- 1         6040194 ahpck     7437 Mar  3  2025 copyDeploySASDatasetsToHDFS-bkp.sh
--rwxrwxrwx 1 srcradcoolbthts ahpck     6873 Jun  3 11:22 copyDeploySASDatasetsToHDFS_bkp.sh
--rwxrwxrwx 1 srcradcoolbthts ahpck     6854 Aug  7 10:01 copyDeploySASDatasetsToHDFS.sh
--rwxrwxr-x 1 srcradcoolbthts ahpck    19343 May 26 14:26 RAA_Deploy_MRA_OPTMRTT_write_hdfs_v1.log
--rwxrwxr-x 1 srcradcoolbthts ahpck    19066 Oct  8 13:59 RAA_Deploy_MRA_write_hdfs_v1.log
--rwxrwxr-x 1 srcradcoolbthts ahpck    19195 Oct  7 13:14 RAA_Deploy_write_hdfs_v1.log
--rw-r----- 1 srcradcoolbthts ahpck     5674 Jun  2  2022 start_sas_deploy_copy_hdfs-bkp.sh
--rwxrwx--- 1         6040194 ahpck     5839 Feb 11  2025 start_sas_deploy_copy_hdfs_bkp.sh
--rwxr-xr-x 1 srcradcoolbthpr ahpck    12396 Jan 28  2026 start_sas_deploy_copy_hdfs_MN_backup.sh
--rwxrwxrwx 1 srcradcoolbthts ahpck    18010 Jul  8 12:04 start_sas_deploy_copy_hdfs_MN.sh
--rwxrwxrwx 1 srcradcoolbthts ahpck     5156 Apr 25  2025 start_sas_deploy_copy_hdfs.sh
+tail -80 /hcaaapck/backup/IT/SIT/scripts/RAA_Deploy_MRA_write_hdfs_v1.log
+
+
+cat /hcaaapck/backup/IT/SIT/scripts/start_sas_deploy_copy_hdfs_MN.sh
