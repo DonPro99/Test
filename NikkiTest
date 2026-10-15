@@ -1,1 +1,10 @@
-20260910135555	31656363
+SELECT d.recordid, d.filedatetime, d.add_val1 AS chartid, d.add_val2 AS chartdatetime,
+       CASE WHEN EXISTS (
+              SELECT 1 FROM U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB c
+              WHERE c.recordid      = d.recordid
+                AND c.filedatetime  = d.filedatetime
+                AND c.chartid       = d.add_val1
+                AND c.chartdatetime = d.add_val2)
+            THEN 'EXACT MATCH' ELSE 'NO MATCH' END AS result
+FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB d
+WHERE d.filedatetime = '20260910135555';
