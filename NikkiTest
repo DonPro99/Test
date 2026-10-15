@@ -1,10 +1,14 @@
-LC_ALL=C grep -c '|\\$' /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
+{
+  "trim_string_clmns": "rtrim",
+  "replace_invalid_characters": "y",
+  "ignore_utf8_errors": "y",
+  "escape_unenclosed_field": "NONE"
+}
 
-df -h /hcaaapck/backup/IT/SIT/work
 
-LC_ALL=C sed 's/|\\$/|/' /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt > /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed2.txt
-ls -l /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed2.txt
-
-
-rm /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
-mv /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed2.txt /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
+SELECT start_time, execution_status,
+       CONTAINS(UPPER(query_text), 'ESCAPE_UNENCLOSED_FIELD') AS escape_added
+FROM TABLE(U01_RAA.INFORMATION_SCHEMA.QUERY_HISTORY(RESULT_LIMIT => 1000))
+WHERE query_text ILIKE 'COPY INTO raa_rawz.rad_charts_mra%'
+ORDER BY start_time DESC
+LIMIT 3;
