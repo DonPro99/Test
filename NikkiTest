@@ -6,9 +6,8 @@
 }
 
 
-SELECT start_time, execution_status,
-       CONTAINS(UPPER(query_text), 'ESCAPE_UNENCLOSED_FIELD') AS escape_added
-FROM TABLE(U01_RAA.INFORMATION_SCHEMA.QUERY_HISTORY(RESULT_LIMIT => 1000))
-WHERE query_text ILIKE 'COPY INTO raa_rawz.rad_charts_mra%'
-ORDER BY start_time DESC
-LIMIT 3;
+git fetch origin
+git merge-base --is-ancestor f93976f65 4edda1e7b && echo "f93976f65 WAS in master before #12725" || echo "f93976f65 was NOT in master before #12725"
+git log --first-parent --format='%h | %an | %ad | %s' --date=short origin/master -- snowpark/sdigenerator/.idea/libraries | head
+
+“Thanks Bhavishya! From git history, the .idea/libraries files were never in master before my PR; they came in with #12725 from preprod. The pipeline builds with Maven, which doesn’t use .idea files, so removing them from master won’t affect the jar build. Rajesh also saved a copy in a backup branch. If you need them locally for IntelliJ, they’ll still be in the lower branches. Is that OK?”
