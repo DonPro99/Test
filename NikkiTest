@@ -1,1 +1,3 @@
-Small correction: the 09/10 MRA batch reached SIT on 10/12, not 09/10. It’s been failing in the UAT ingest because of backslash-only values in the data. Snowflake treats them as escape characters and the columns shift (line 30,715,829 puts the tax ID into OOS_FLG). I’ve cleaned those values in a copy of the file and will resend it to UAT today
+find /hcaaapck -name 'start_sas_copy_hdfs_MN.sh' 2>/dev/null
+
+grep -n -i -E 'hdfs|mgft|sftp|scp|pgp|gpg|put |\.txt|rad_charts' <path from step 1>
