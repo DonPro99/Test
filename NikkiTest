@@ -1,1 +1,3 @@
-"escape_unenclosed_field": "NONE"
+LC_ALL=C grep -c '|\\|' /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
+
+ls -l /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
