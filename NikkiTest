@@ -1,4 +1,1 @@
-cd /hcaaapck/backup/IT/SIT/conf
-ls *sftp*mgft*.conf
-grep -n -E 'sftp\.(connection|destination)' mra-sftp-sas-mgft.conf charts-sftp-sas-mgft.conf common-sftp-sas-mgft.conf
-grep -n 'REMOTE_UPLOAD_FOLDER' /hcaaapck/backup/IT/SIT/scripts/raa_inbound_pgp_sftp_notify.sh
+awk -F'|' 'NR==30715829{for(i=1;i<=NF;i++) if(index($i,"\\")) print i": ["$i"]"; print "429: "$429; exit}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
