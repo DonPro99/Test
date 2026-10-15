@@ -1,4 +1,6 @@
-############################################################################
-$ ls -l /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
--rw-r--r-- 1 srcradcoolbthts ahpck 59444598808 Oct 14 22:08 /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
--rw-r--r-- 1 srcradcoolbthts ahpck 59444598812 Oct 14 14:11 /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
+LC_ALL=C grep -c '|\\$' /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
+
+df -h /hcaaapck/backup/IT/SIT/work
+
+LC_ALL=C sed 's/|\\$/|/' /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt > /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed2.txt
+ls -l /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed2.txt
