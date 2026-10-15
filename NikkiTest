@@ -1,1 +1,513 @@
-cat /hcaaapck/backup/IT/SIT/scripts/start_sas_copy_hdfs_MN.sh
+$ cat /hcaaapck/backup/IT/SIT/scripts/start_sas_copy_hdfs_MN.sh
+#!/bin/bash
+#Created by : Dikshith Shetty(af59015)
+#This script will load the SAS datasets(MBRS,CHARTS,SCORES and GAPS) to the HDFS location.It will take master table and line of business as arguments.
+#05/22/2018 - Dikshith - Added support for provider data.
+#10/22/2019 - Shruthi - Added support for Scores data
+#05/05/2020 - Rama krishna chirumamilla - Added support for plinko data
+#12/07/2022 - Manoj Eedupuganti - Added code changes to include cohort dataset
+#04/27/2023 - Sai Srinivasa Reddy Vustela -Added code chanegs to include Mutiple MCAID GAPS state files.
+#10/12/2025 - Naseer - Added unconditional JCODE run after FTP and before trigger update; logs start and rc.
+# =============================================================================
+# Date       : Mar 2026
+# Author     : Naseer
+# Change     : Add batch execution mode (MASTER_TABLE=ALL) and fix args handling.
+# Description: 1) Existing behavior remains unchanged for single master table runs.
+#              2) New behavior: when MASTER_TABLE=ALL, the script reads
+#                 BATCH_MASTER_TABLES_<LOB> from master.properties and runs all
+#                 master tables for that LOB one-by-one.
+#              3) Continue-on-failure: all tables are attempted; failures reported
+#                 in a summary at the end with an alert email.
+#              4) Going forward, to add/remove master tables for batch runs,
+#                 update only master.properties (no script changes, no Control-M changes).
+# Usage      :
+#   - Single (existing): start_sas_copy_hdfs.sh ACA MBRS
+#   - Batch  (new)     : start_sas_copy_hdfs.sh ACA ALL
+#                        start_sas_copy_hdfs.sh MCAID ALL
+#                        start_sas_copy_hdfs.sh MCARE ALL
+#                        start_sas_copy_hdfs.sh MRA ALL
+# =============================================================================
+
+if [ $# -ne 2 ];then
+  echo "Please provide correct arguments.Usage- $0 <line of business> <master table>"
+  echo "Example : $0 ACA/MCAID/MCARE MBRS/CHARTS/GAPS/PROVIDERS/RISKSCORE/ALL"
+  exit 1
+fi
+
+#args.
+export LINE_OF_BUSINESS=$1
+export MASTER_TABLE=$2
+
+export TABLE=`echo $MASTER_TABLE | tr [:upper:] [:lower:]`
+
+#Determine the environment based on the user.
+export SERVICE_USER=`echo $USER`
+
+if [[ $SERVICE_USER == "srcradcoolbthts" ]]
+then
+    export ENVIRONMENT="ts"
+elif [[ $SERVICE_USER == "srcradcoolbthpr" ]]
+then
+    export ENVIRONMENT="pr"
+else
+    export ENVIRONMENT="dv"
+fi
+
+export ENV=$ENVIRONMENT
+
+if [[ "${ENVIRONMENT}" == "ts" ]]
+then
+  export SAS_ENV="SIT"
+elif [[ "${ENVIRONMENT}" == "dv" ]] 
+then
+  export SAS_ENV="DEV"
+else
+  export SAS_ENV="PROD"
+fi
+
+echo "$SAS_ENV"
+
+# Validate the line of business.
+if [[ "${LINE_OF_BUSINESS}" != "ACA" ]] && [[ "${LINE_OF_BUSINESS}" != "MCAID" ]] && \
+   [[ "${LINE_OF_BUSINESS}" != "MCARE" ]] && [[ "${LINE_OF_BUSINESS}" != "MRA" ]] && \
+   [[ "${LINE_OF_BUSINESS}" != "MCD" ]] ;then
+   echo "Please provide the valid line of business. Either ACA/MCAID/MCARE/MRA/MCD"
+   exit 1
+fi
+
+# Validate the master table - allow ALL for batch mode
+if [[ "${MASTER_TABLE}" != "MBRS" ]] && [[ "${MASTER_TABLE}" != "CHARTS" ]] && \
+   [[ "${MASTER_TABLE}" != "GAPS" ]] && [[ "${MASTER_TABLE}" != "PROVIDERS" ]] && \
+   [[ "${MASTER_TABLE}" != "RISKSCORE" ]] && [[ "${MASTER_TABLE}" != "PLINKO" ]] && \
+   [[ "${MASTER_TABLE}" != "IH_MCD" ]] && [[ "${MASTER_TABLE}" != "JCODE" ]] && \
+   [[ "${MASTER_TABLE}" != "ALL" ]]
+then
+   echo "Please provide the correct master table. Either MBRS/CHARTS/GAPS/PROVIDERS/RISKSCORE/PLINKO/IH_MCD/JCODE/ALL"
+   exit 1
+fi
+
+export SAS_HOME="/hcaaapck/backup/IT/${SAS_ENV}/scripts"
+export LOG_LOCATION="/hcaaapck/backup/IT/${SAS_ENV}/log"
+export SAS_CONFIG_FILE="/hcaaapck/backup/IT/${SAS_ENV}/conf/sas.properties"
+export MASTER_CONFIG_FILE="/hcaaapck/backup/IT/${SAS_ENV}/conf/master.properties"
+export ENV=${ENVIRONMENT}
+
+# --- BEGIN: Always-available vars for logging and FTP ---
+FILETYPE="${MASTER_TABLE}"
+i="${LINE_OF_BUSINESS}"
+LOB="${LINE_OF_BUSINESS}"
+
+FILETYPE_LOWER=$(echo "${FILETYPE}" | tr 'A-Z' 'a-z')
+LOB_LOWER=$(echo "${LOB}" | tr 'A-Z' 'a-z')
+
+work_file="/hcaaapck/backup/IT/${SAS_ENV}/work/rad_${FILETYPE_LOWER}_${LOB_LOWER}.txt"
+# --- END: Always-available vars for logging and FTP ---
+
+echo ${LOG_LOCATION}
+
+export LOG_PATH=${LOG_LOCATION}
+export LOG_FILE="sas_master_copy_to_hdfs_`date +'%Y_%m_%d_%H_%M_%S'`.log"
+
+#Check if the log dir exists if not create.
+if [ ! -d "${LOG_PATH}" ];then
+  echo "LOG Location provided in the sas config file does not exist.Creating the directory."
+  mkdir -p ${LOG_PATH}
+fi
+
+#Function to generate log.
+LOG_MESG() {
+echo "$1"
+echo "$1" >> ${LOG_PATH}/${LOG_FILE}
+}
+
+if [ ! -f ${SAS_CONFIG_FILE} ]
+then
+   LOG_MESG "SAS Configuration file does not exist - ${SAS_CONFIG_FILE}"
+   exit 1
+fi
+
+if [ ! -f ${MASTER_CONFIG_FILE} ]
+then
+   LOG_MESG "Master Configuration file does not exist - ${MASTER_CONFIG_FILE}"
+   exit 1
+fi
+
+#source the master config file
+LOG_MESG "Environment is set to $SAS_ENV and Master config file - ${MASTER_CONFIG_FILE}"
+LOG_MESG "Source the master config file - ${MASTER_CONFIG_FILE}"
+
+. ${MASTER_CONFIG_FILE}
+
+# =========================================================================
+# Core single-table processing function.
+# All existing logic preserved exactly as-is — wrapped into this function
+# so it can be called once directly OR iterated over in batch mode.
+# =========================================================================
+run_one_master_table() {
+  local one_table="$1"
+
+  # Override globals for this iteration
+  MASTER_TABLE="$one_table"
+  FILETYPE="$one_table"
+  TABLE=$(echo "$one_table" | tr '[:upper:]' '[:lower:]')
+  i="${LINE_OF_BUSINESS}"
+  overwrite_config=""
+  FLAG=0
+
+  LOG_MESG "------------------------------------------------------------"
+  LOG_MESG "Starting master table run for MASTER_TABLE=${MASTER_TABLE}; LOB=${LINE_OF_BUSINESS}"
+
+  # -------------------------------------------------------------------------
+  # JCODE standalone execution (handled fully inside JCODE script)
+  # -------------------------------------------------------------------------
+  if [[ "${LINE_OF_BUSINESS}" == "ACA" && "${MASTER_TABLE}" == "JCODE" ]]; then
+      LOG_MESG "ACA JCODE detected. Delegating full processing to JCODE script."
+      "${SAS_HOME}/copy_PcnPrefix_Jcode_SASDatasetsToHDFS.sh" jcode_ind sas.properties pr
+      rc=$?
+      LOG_MESG "JCODE script finished with rc=${rc}"
+      return ${rc}
+  fi
+
+  # For MCD IH_MCD we skip SAS_COPY_TO_HDFS and just FTP the files
+  if [[ "${LINE_OF_BUSINESS}" == "MCD" && "${MASTER_TABLE}" == "IH_MCD" ]]; then
+      LOG_MESG "Processing MCD IH_MCD – skipping SAS copy and performing FTP for all IH_MCD_* files."
+      skip_copy=1
+  else
+      skip_copy=0
+  fi
+
+  # -------------------------------------------------------------------
+  # Inner SAS copy function (all existing logic, unchanged)
+  # -------------------------------------------------------------------
+  _do_sas_copy() {
+
+    if [ "$i" == "ACA" ]
+    then
+       SAS_DATA_LOCATION=${ACA_SAS_DATA_LOCATION}
+    elif [ "$i" == "MCAID" ]
+    then
+       SAS_DATA_LOCATION=${MCAID_SAS_DATA_LOCATION}
+    elif [ "$i" == "MRA" ]
+    then
+       SAS_DATA_LOCATION=${MRA_SAS_DATA_LOCATION}
+    else
+       SAS_DATA_LOCATION=${MCARE_SAS_DATA_LOCATION}
+    fi
+
+    if [ "${FILETYPE}" == "GAPS" ]
+    then
+      if [ "$i" == "ACA" ]
+      then
+         TRIGGER_FILE_LOCATION=${ACA_GAPS_TRIGGER_FILE_LOCATION}
+         SAS_DATA_LOCATION=${ACA_SAS_DATA_LOCATION}
+         FILE_NAME=${ACA_GAPS_FILE_PATTERN}
+      elif [ "$i" == "MCAID" ]
+      then
+          TRIGGER_FILE_LOCATION=${MCAID_GAPS_TRIGGER_FILE_LOCATION}
+          filetype=$(echo ${FILETYPE} | tr '[:upper:]' '[:lower:]')
+          SAS_DATA_LOCATION=${MCAID_SAS_DATA_LOCATION}/${filetype}
+          TABLE=$(echo $TABLE | sed 's/.$//')
+          FILE_NAME=${MCAID_GAPS_FILE_PATTERN}
+      else
+          TRIGGER_FILE_LOCATION=${MRA_GAPS_TRIGGER_FILE_LOCATION}
+          FILE_NAME=${MRA_GAPS_FILE_PATTERN}
+      fi
+      COPY_SCRIPT="copyGapSASDatasetsToHDFS.sh"
+    fi
+
+    if [ "${FILETYPE}" == "MBRS" ]
+    then
+       if [ "$i" == "ACA" ]
+      then
+         TRIGGER_FILE_LOCATION=${ACA_MBRS_TRIGGER_FILE_LOCATION}
+         SAS_DATA_LOCATION=${ACA_SAS_DATA_LOCATION}
+         FILE_NAME=${ACA_MBRS_FILE_PATTERN}
+      elif [ "$i" == "MCAID" ]
+      then
+          TRIGGER_FILE_LOCATION=${MCAID_MBRS_TRIGGER_FILE_LOCATION}
+          filetype=$(echo ${FILETYPE} | tr '[:upper:]' '[:lower:]')
+          SAS_DATA_LOCATION=${MCAID_SAS_DATA_LOCATION}/${filetype}
+          TABLE=$(echo $TABLE | sed 's/.$//')
+          FILE_NAME=${MCAID_MBRS_FILE_PATTERN}
+       elif [ "$i" == "MRA" ]
+       then
+          TRIGGER_FILE_LOCATION=${MRA_MBRS_TRIGGER_FILE_LOCATION}
+          SAS_DATA_LOCATION=${MRA_SAS_DATA_LOCATION}
+          MRA_MBRS_FILE_PATTERN=${MBRS_FILE_NAME}
+          FILE_NAME=${MRA_MBRS_FILE_PATTERN}
+          overwrite_config="mra-sftp-sas-mgft.conf"
+      else
+          TRIGGER_FILE_LOCATION=${MCARE_MBRS_TRIGGER_FILE_LOCATION}
+          FILE_NAME=${MBRS_FILE_NAME}
+      fi
+      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+    fi
+
+    if [ "${FILETYPE}" == "PLINKO" ]
+    then
+       if [ "$i" == "ACA" ]
+      then
+         TRIGGER_FILE_LOCATION=${ACA_PLINKO_TRIGGER_FILE_LOCATION}
+      elif [ "$i" == "MCAID" ]
+      then
+          TRIGGER_FILE_LOCATION=${MCAID_PLINKO_TRIGGER_FILE_LOCATION}
+      else
+          TRIGGER_FILE_LOCATION=${MCARE_PLINKO_TRIGGER_FILE_LOCATION}
+      fi
+      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+      FILE_NAME=${PLINKO_FILE_NAME}
+    fi
+
+    if [ "${FILETYPE}" == "CHARTS" ]
+    then
+      if [ "$i" == "ACA" ]
+      then
+         TRIGGER_FILE_LOCATION=${ACA_CHARTS_TRIGGER_FILE_LOCATION}
+         SAS_DATA_LOCATION=${ACA_SAS_DATA_LOCATION}
+         FILE_NAME=${ACA_CHARTS_FILE_PATTERN}
+         overwrite_config="charts-sftp-sas-mgft.conf"
+      elif [ "$i" == "MCAID" ]
+      then
+          TRIGGER_FILE_LOCATION=${MCAID_CHARTS_TRIGGER_FILE_LOCATION}
+          filetype=$(echo ${FILETYPE} | tr '[:upper:]' '[:lower:]')
+          SAS_DATA_LOCATION=${MCAID_SAS_DATA_LOCATION}/${filetype}
+          TABLE=$(echo $TABLE | sed 's/.$//')
+          FILE_NAME=${MCAID_CHARTS_FILE_PATTERN}
+          overwrite_config="charts-sftp-sas-mgft.conf"
+       elif [ "$i" == "MRA" ]
+       then
+          TRIGGER_FILE_LOCATION=${MRA_CHARTS_TRIGGER_FILE_LOCATION}
+          SAS_DATA_LOCATION=${MRA_SAS_DATA_LOCATION}
+          MRA_CHARTS_FILE_PATTERN=${CHARTS_FILE_NAME}
+          FILE_NAME=${MRA_CHARTS_FILE_PATTERN}
+          overwrite_config="mra-sftp-sas-mgft.conf"
+      else
+          TRIGGER_FILE_LOCATION=${MCARE_CHARTS_TRIGGER_FILE_LOCATION}
+          FILE_NAME=${CHARTS_FILE_NAME}
+      fi
+      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+    fi
+
+    if [ "${FILETYPE}" == "PROVIDERS" ]
+    then
+      if [ "$i" == "ACA" ]
+      then
+         TRIGGER_FILE_LOCATION=${ACA_PROVIDER_TRIGGER_FILE_LOCATION}
+      elif [ "$i" == "MCAID" ]
+      then
+          TRIGGER_FILE_LOCATION=${MCAID_PROVIDER_TRIGGER_FILE_LOCATION}
+      else
+          TRIGGER_FILE_LOCATION=${MCARE_PROVIDER_TRIGGER_FILE_LOCATION}
+      fi
+      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+      FILE_NAME=${PROVIDER_FILE_NAME}
+    fi
+
+    if [ "${FILETYPE}" == "RISKSCORE" ]
+    then
+      if [ "$i" == "ACA" ]
+      then
+         TRIGGER_FILE_LOCATION=${ACA_RISKSCORE_TRIGGER_FILE_LOCATION}
+      elif [ "$i" == "MCAID" ]
+      then
+          TRIGGER_FILE_LOCATION=${MCAID_RISKSCORE_TRIGGER_FILE_LOCATION}
+      else
+          TRIGGER_FILE_LOCATION=${MRA_RISKSCORE_TRIGGER_FILE_LOCATION}
+      fi
+      COPY_SCRIPT="copyMasterSASDatasetsToHDFS.sh"
+      FILE_NAME=${RISKSCORE_FILE_NAME}
+    fi
+
+    SASDATALOC=${SAS_DATA_LOCATION}
+    TRIGGERFILELOC=${TRIGGER_FILE_LOCATION}
+
+    LOG_MESG "Master table - ${MASTER_TABLE} ; ENVIRONMENT - ${ENVIRONMENT}"
+
+    if [ ! -f "${TRIGGERFILELOC}" ]
+    then
+       LOG_MESG "The trigger process file does not exist - ${TRIGGERFILELOC}"
+       return 1
+    fi
+
+    if [ ! `ls -1 ${SASDATALOC}/${FILE_NAME} 2>/dev/null | wc -l` -gt 0 ]; then
+        LOG_MESG "${FILETYPE} $i SAS dataset does not exist - ${SASDATALOC}/${FILE_NAME}"
+        return 2
+    fi
+
+    export FILE_LIST=`find "${SASDATALOC}" -type f -name "${FILE_NAME}" -newer "${TRIGGERFILELOC}" -exec basename {} \;`
+    if [ ! -z "$FILE_LIST" ]; then
+         LOG_MESG "${FILETYPE} $i SAS file is newer than the $i trigger process file - ${TRIGGERFILELOC}."
+         LOG_MESG "Starting the copying process for ${FILETYPE} $i SAS dataset - ${SASDATALOC}/${FILE_NAME}."
+         LOG_MESG "Getting the file list"
+
+         FILES=`echo $FILE_LIST | sed "s/${TABLE}/sassrc.${TABLE}/g" | sed 's/.sas7bdat//g'`
+         echo $FILES
+
+         LOG_MESG "Executing the SAS program to copy the sas dataset to Hadoop"
+
+         if [ "${FILETYPE}" == "GAPS" ]
+         then
+           "${SAS_HOME}/${COPY_SCRIPT}" $i ${SAS_CONFIG_FILE} ${ENV} "${FILES}"
+         else
+           "${SAS_HOME}/${COPY_SCRIPT}" $i ${FILETYPE} ${SAS_CONFIG_FILE} ${ENV} "${FILES}"
+         fi
+
+         if [ $? -ne 0 ];then
+            LOG_MESG "Copying failed for ${FILETYPE} $i SAS dataset."
+            return 1
+         else
+            LOG_MESG "Copying successful for ${FILETYPE} $i SAS dataset."
+            FLAG=1
+         fi
+    else
+         LOG_MESG "${FILETYPE} $i SAS file is older than the ${FILETYPE} $i trigger process file - ${TRIGGERFILELOC}."
+         LOG_MESG "Copying process not initiated for ${FILETYPE} $i SAS dataset - ${SASDATALOC}/${FILE_NAME}"
+         return 2
+    fi
+  }
+  # -------------------------------------------------------------------
+  # End inner _do_sas_copy
+  # -------------------------------------------------------------------
+
+  if [ "${skip_copy}" -eq 0 ]; then
+      _do_sas_copy
+      copy_rc=$?
+      if [ $copy_rc -eq 1 ]; then
+          LOG_MESG "Error encountered while running sas script for ${MASTER_TABLE} SAS Datasets."
+          return 1
+      elif [ $copy_rc -eq 2 ]; then
+          LOG_MESG "Skipping FTP for ${MASTER_TABLE} - no new data to process."
+          return 0
+      fi
+      # copy_rc=0 means copy succeeded, fall through to FTP
+  fi
+
+  # -------------------------------------------------------------------
+  # FTP section (all existing logic, unchanged)
+  # -------------------------------------------------------------------
+  LOG_MESG "Starting FTP for ${FILETYPE} and $i file"
+  local lowercasefilename=$(echo "$FILETYPE" | tr 'A-Z' 'a-z')
+  local lowercaselob=$(echo "$i" | tr 'A-Z' 'a-z')
+  local work_file_local="/hcaaapck/backup/IT/${SAS_ENV}/work/rad_${lowercasefilename}_${lowercaselob}.txt"
+
+  if [[ "${LINE_OF_BUSINESS}" == "MRA" && "${MASTER_TABLE}" == "GAPS" ]]; then
+     LOG_MESG "Special FTP case for MRA GAPS - using raa_inbound_pgp_sftp_notify.sh"
+     ${SAS_HOME}/raa_inbound_pgp_sftp_notify.sh "${work_file_local}"
+     if [ $? -ne 0 ]; then
+       LOG_MESG "WARNING: raa_inbound_pgp_sftp_notify.sh failed for ${MASTER_TABLE} and ${LINE_OF_BUSINESS}"
+       LOG_MESG "Continuing execution despite failure."
+     fi
+
+  elif [[ "${LINE_OF_BUSINESS}" == "MCD" && "${MASTER_TABLE}" == "IH_MCD" ]]; then
+     LOG_MESG "Special FTP case for MCD IH_MCD - FTP files matching IH_MCD_* from deploy_in to CFX, then archive."
+
+     SRC_DIR="/raa2/backup/prodenvironment/sas_repository/deploy_in"
+     ARCHIVE_DIR="/raa2/backup/prodenvironment/archive/wvextract_$(date +%Y%m%d_%H%M%S)"
+     mkdir -p "${ARCHIVE_DIR}"
+
+     shopt -s nullglob 2>/dev/null || true
+     found_any=0
+     for file in "${SRC_DIR}"/IH_MCD_*; do
+         [ -f "${file}" ] || continue
+         found_any=1
+         LOG_MESG "FTP'ing file: ${file}"
+         "${SAS_HOME}/raa_inbound_pgp_sftp_notify.sh" "${file}"
+         rc=$?
+         if [ ${rc} -eq 0 ]; then
+             LOG_MESG "FTP successful, moving ${file} to archive"
+             mv "${file}" "${ARCHIVE_DIR}/"
+         else
+             LOG_MESG "ERROR: FTP failed for ${file} (rc=${rc})"
+         fi
+     done
+
+     if [ ${found_any} -eq 0 ]; then
+         LOG_MESG "No files found to FTP: ${SRC_DIR}/IH_MCD_*"
+     fi
+
+  else
+     ${SAS_HOME}/common-sftp-sas-mgft-task.sh "${work_file_local}" $overwrite_config
+     if [ $? -ne 0 ]; then
+        LOG_MESG "Error encountered while running MGFT script for ${MASTER_TABLE} SAS Datasets."
+        return 1
+     fi
+  fi
+
+  # -------------------------------------------------------------------
+  # Update trigger file
+  # -------------------------------------------------------------------
+  if [[ ${FLAG} == "1" && -f "${TRIGGERFILELOC}" ]]
+  then
+     LOG_MESG "Updating the trigger file - ${TRIGGERFILELOC}"
+     touch ${TRIGGERFILELOC}
+     if [ $? -ne 0 ]
+     then
+        LOG_MESG "Failure encountered while updating the trigger file - ${TRIGGERFILELOC}"
+        return 1
+     fi
+  fi
+
+  return 0
+}
+
+# =============================================================================
+# Batch mode: MASTER_TABLE=ALL
+# Reads BATCH_MASTER_TABLES_<LOB> from master.properties and runs each table.
+# =============================================================================
+if [ "${MASTER_TABLE}" == "ALL" ]; then
+  batch_var="BATCH_MASTER_TABLES_${LINE_OF_BUSINESS}"
+  batch_list=$(eval echo "\$$batch_var")
+
+  if [ -z "${batch_list}" ]; then
+    LOG_MESG "ERROR: ${batch_var} is not defined in ${MASTER_CONFIG_FILE}"
+    exit 1
+  fi
+
+  LOG_MESG "Batch mode activated for LOB=${LINE_OF_BUSINESS}"
+  LOG_MESG "Tables to process: ${batch_list}"
+
+  IFS=',' read -r -a tables <<< "${batch_list}"
+
+  failed_list=""
+  success_list=""
+
+  for t in "${tables[@]}"; do
+    t=$(echo "$t" | tr -d ' ')
+    if [ -z "$t" ]; then
+      continue
+    fi
+
+    run_one_master_table "$t"
+    rc=$?
+
+    if [ $rc -ne 0 ]; then
+      failed_list="${failed_list}${t},"
+      LOG_MESG "FAILED: ${t}"
+    else
+      success_list="${success_list}${t},"
+      LOG_MESG "SUCCEEDED: ${t}"
+    fi
+  done
+
+  LOG_MESG "==================== Batch Summary for LOB=${LINE_OF_BUSINESS} ===================="
+  LOG_MESG "Succeeded: ${success_list%,}"
+  if [ -n "${failed_list}" ]; then
+    LOG_MESG "Failed: ${failed_list%,}"
+
+    ALERT_SUBJECT="ALERT: SAS Master Copy Batch Failed - LOB=${LINE_OF_BUSINESS} - $(date +'%Y-%m-%d %H:%M:%S')"
+    ALERT_BODY="SAS Master Copy Batch run FAILED.\n\nEnvironment : ${SAS_ENV}\nLOB         : ${LINE_OF_BUSINESS}\nLog File    : ${LOG_PATH}/${LOG_FILE}\n\nSucceeded   : ${success_list%,}\nFailed      : ${failed_list%,}\n\nPlease review the log file for details."
+
+    echo -e "${ALERT_BODY}" | mail -s "${ALERT_SUBJECT}" AkhilReddy.Pullannagari@elevancehealth.com
+
+    exit 1
+  else
+    LOG_MESG "Failed: None"
+    exit 0
+  fi
+fi
+
+# =============================================================================
+# Existing behavior: single master table processing.
+# No changes to logic for existing Control-M jobs.
+# =============================================================================
+run_one
