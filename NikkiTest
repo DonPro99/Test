@@ -2,3 +2,6 @@ ls -l --time-style=long-iso /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE
 
 
 ls -l --time-style=long-iso /hcaaapck/backup/SitEnvironment/SAS_Repository/MCARE/archive/*/
+
+
+head -1 /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt | tr '|' '\n' | grep -n '20260910135555'
