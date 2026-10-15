@@ -1,4 +1,20 @@
-SELECT filedatetime, COUNT(*), COUNT(RNDRG_PROV_TAXID) AS taxid, COUNT(OOS_FLG) AS oos
-FROM U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA
-GROUP BY 1;
+$ nohup /hcaaapck/backup/IT/SIT/scripts/common-sftp-sas-mgft-task.sh /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt mra-sftp-sas-mgft.conf > /hcaaapck/backup/IT/SIT/log/manual_mgft_mra_charts_$(date +%Y%m%d_%H%M).log 2>&1 &
+[1]     1866257
+$ tail -f /hcaaapck/backup/IT/SIT/log/manual_mgft_mra_charts_*.log
+sftp.connection.user: tpraasftp001
+sftp.destination.dir: /tpraasftp001/I_ELV_CFX_GLD011/to_elvhlth/uat/raa
+Source_file_name: /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
+Email File Name: rad_charts_mra
+Inside Upload method
+Welcome to the Gateway Interchange SSH server.   
+Connected to mgftuat.wellpoint.com.
+sftp>     cd /tpraasftp001/I_ELV_CFX_GLD011/to_elvhlth/uat/raa
+sftp>         mput /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
+Uploading /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt to /tpraasftp001/I_ELV_CFX_GLD011/to_elvhlth/uat/raa/rad_charts_mra.txt
 
+sftp>         quit
+SUCCESS: Sending Email Notification
+Inside Email method
+MGFT file upload action: Completed
+Log Aggregation: rad_charts_mra-SFTP-SAS-S3-20261015104438.log
+Task Finished: End Time: 2026-10-15 10:54:16, Duration: 578 seconds.
