@@ -1,1 +1,1 @@
-find /hcaaapck -name 'start_sas_copy_hdfs_MN.sh' 2>/dev/null
+cat /hcaaapck/backup/IT/SIT/scripts/start_sas_copy_hdfs_MN.sh
