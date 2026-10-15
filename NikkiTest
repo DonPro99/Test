@@ -1,6 +1,1 @@
-$ d "i": ["$i"]"} NR>30715829{exit}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt                                                                                 <
-LINE 30715828 NF=440
-LINE 30715829 NF=440
-  BACKSLASH in field 144: [\]
-  BACKSLASH in field 342: [\]
-  BACKSLASH in field 401: [\]
+awk -F'|' 'index($0,"\\"){n++; for(i=1;i<=NF;i++) if(index($i,"\\")){f[i]++; if($i!="\\") e++}} END{print "lines with backslash: "n; print "fields that are not just a lone backslash: "e+0; for(i in f) print "field "i": "f[i]}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
