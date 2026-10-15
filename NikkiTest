@@ -4,3 +4,7 @@ df -h /hcaaapck/backup/IT/SIT/work
 
 LC_ALL=C sed 's/|\\$/|/' /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt > /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed2.txt
 ls -l /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed2.txt
+
+
+rm /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
+mv /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed2.txt /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
