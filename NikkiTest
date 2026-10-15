@@ -1,5 +1,1 @@
-$ awk -F'|' 'NR==30715829{for(i=1;i<=NF;i++) if(index($i,"\\")) print i": ["$i"]"; print "429: "$429; exit}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
-144: [\]
-342: [\]
-401: [\]
-429: 990334225
+Small correction: the 09/10 MRA batch reached SIT on 10/12, not 09/10. It’s been failing in the UAT ingest because of backslash-only values in the data. Snowflake treats them as escape characters and the columns shift (line 30,715,829 puts the tax ID into OOS_FLG). I’ve cleaned those values in a copy of the file and will resend it to UAT today
