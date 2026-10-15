@@ -1,3 +1,116 @@
-cd /hcaaapck/backup/IT/SIT/scripts
-grep -n -i -E 'host|server|remote|dest|target|dir|path' mra-sftp-sas-mgft.conf charts-sftp-sas-mgft.conf
-grep -n -i -E 'pgp|gpg|encrypt|sftp|put |recipient|key' raa_inbound_pgp_sftp_notify.sh common-sftp-sas-mgft-task.sh
+$ grep -n -i -E 'host|server|remote|dest|target|dir|path' mra-sftp-sas-mgft.conf charts-sftp-sas-mgft.conf
+grep: mra-sftp-sas-mgft.conf: No such file or directory
+grep: charts-sftp-sas-mgft.conf: No such file or directory
+$ cd /hcaaapck/backup/IT/SIT/scripts                                                                                  
+$ grep -n -i -E 'host|server|remote|dest|target|dir|path' mra-sftp-sas-mgft.conf charts-sftp-sas-mgft.conf
+grep: mra-sftp-sas-mgft.conf: No such file or directory
+grep: charts-sftp-sas-mgft.conf: No such file or directory
+$ grep -n -i -E 'pgp|gpg|encrypt|sftp|put |recipient|key' raa_inbound_pgp_sftp_notify.sh common-sftp-sas-mgft-task.sh
+raa_inbound_pgp_sftp_notify.sh:3:# Script Name: raa_pgp_sftp_notify_sit.sh
+raa_inbound_pgp_sftp_notify.sh:8:#   Encrypts files using PGP, transfers via SFTP, archives both original and encrypted
+raa_inbound_pgp_sftp_notify.sh:13:PGP_KEY_FILE="/hcaaapck/backup/IT/PROD/scripts/cfx_pgp_pub_key/RAAETL_CFX_pgp_public_key.txt"
+raa_inbound_pgp_sftp_notify.sh:14:SFTP_USER="sftp-raaetl-in-user"
+raa_inbound_pgp_sftp_notify.sh:15:SFTP_HOST="sftp.internal.preprod.elevancehealth.com.gld-dig-infoexc.awsdns.internal.das"
+raa_inbound_pgp_sftp_notify.sh:16:SFTP_PORT=22
+raa_inbound_pgp_sftp_notify.sh:19:LOG_BASE_DIR="/hcaaapck/backup/SitEnvironment/PGP_Encrypt/logs"
+raa_inbound_pgp_sftp_notify.sh:20:ARCHIVE_BASE_DIR="/hcaaapck/backup/SitEnvironment/PGP_Encrypt/archive"
+raa_inbound_pgp_sftp_notify.sh:21:ENCRYPTED_FILES_DIR="/hcaaapck/backup/SitEnvironment/PGP_Encrypt/encrypted"
+raa_inbound_pgp_sftp_notify.sh:34:CURRENT_ENCRYPTED_DIR="${ENCRYPTED_FILES_DIR}/${YEAR}/${MONTH}/${DAY}"
+raa_inbound_pgp_sftp_notify.sh:35:mkdir -p "$LOG_DIR" "$ARCHIVE_DIR" "$CURRENT_ENCRYPTED_DIR"
+raa_inbound_pgp_sftp_notify.sh:36:LOG_FILE="${LOG_DIR}/sftp_transfer.log"
+raa_inbound_pgp_sftp_notify.sh:57:ensure_folder_permissions "$CURRENT_ENCRYPTED_DIR"
+raa_inbound_pgp_sftp_notify.sh:59:import_pgp_key() {
+raa_inbound_pgp_sftp_notify.sh:60:    if [[ -f "$PGP_KEY_FILE" ]]; then
+raa_inbound_pgp_sftp_notify.sh:61:        gpg --import "$PGP_KEY_FILE" 2>&1 | tee -a "$LOG_FILE"
+raa_inbound_pgp_sftp_notify.sh:62:        PGP_KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub:/ && $5 != "" {print $5; exit}' | tr -d '\r\n ')
+raa_inbound_pgp_sftp_notify.sh:63:        [[ -z "$PGP_KEY_ID" ]] && log_message "PGP key import failed." && exit 2
+raa_inbound_pgp_sftp_notify.sh:64:        log_message "PGP Key ID: $PGP_KEY_ID"
+raa_inbound_pgp_sftp_notify.sh:66:        log_message "PGP Key file not found: $PGP_KEY_FILE" && exit 2
+raa_inbound_pgp_sftp_notify.sh:70:encrypt_file() {
+raa_inbound_pgp_sftp_notify.sh:74:    local encrypted_file="${CURRENT_ENCRYPTED_DIR}/${filename}.pgp"
+raa_inbound_pgp_sftp_notify.sh:76:    log_message "Encrypting file: $file" >&2
+raa_inbound_pgp_sftp_notify.sh:77:    log_message "Output file: $encrypted_file" >&2
+raa_inbound_pgp_sftp_notify.sh:78:    log_message "Using key ID: $PGP_KEY_ID" >&2
+raa_inbound_pgp_sftp_notify.sh:79:    log_message "Entered encrypt_file function" >&2
+raa_inbound_pgp_sftp_notify.sh:82:        log_message "Inside encrypt_file: input file not found -> $file" >&2
+raa_inbound_pgp_sftp_notify.sh:86:    echo "$(date +"%Y-%m-%d %H:%M:%S") - DEBUG: Running GPG command:" >> "$LOG_FILE"
+raa_inbound_pgp_sftp_notify.sh:87:    echo "gpg --batch --yes --encrypt --recipient \"$PGP_KEY_ID\" --output \"$encrypted_file\" \"$file\"" >> "$LOG_FILE"
+raa_inbound_pgp_sftp_notify.sh:89:    gpg --batch --yes --trust-model always --encrypt --recipient "$PGP_KEY_ID" --output "$encrypted_file" "$file" 2>>"$LOG_FILE"
+raa_inbound_pgp_sftp_notify.sh:91:    if [[ $? -eq 0 && -f "$encrypted_file" ]]; then
+raa_inbound_pgp_sftp_notify.sh:92:        log_message "Encryption successful: $encrypted_file" >&2
+raa_inbound_pgp_sftp_notify.sh:93:        echo "$encrypted_file"
+raa_inbound_pgp_sftp_notify.sh:95:        log_message "Encryption FAILED: $file" >&2
+raa_inbound_pgp_sftp_notify.sh:100:sftp_transfer() {
+raa_inbound_pgp_sftp_notify.sh:101:    local encrypted_file="$1"
+raa_inbound_pgp_sftp_notify.sh:103:    local remote_path="$REMOTE_UPLOAD_FOLDER/$(basename "$encrypted_file")"
+raa_inbound_pgp_sftp_notify.sh:105:    log_message "Confirmed for SFTP: Encrypted file to upload: $encrypted_file"
+raa_inbound_pgp_sftp_notify.sh:106:    log_message "Remote destination path: sftp://$SFTP_USER@$SFTP_HOST:$SFTP_PORT/$remote_path"
+raa_inbound_pgp_sftp_notify.sh:108:    if [[ ! -f "$encrypted_file" ]]; then
+raa_inbound_pgp_sftp_notify.sh:109:        log_message "ERROR: Encrypted file not found: $encrypted_file"
+raa_inbound_pgp_sftp_notify.sh:114:    log_message "Uploading via SFTP..."
+raa_inbound_pgp_sftp_notify.sh:116:    sftp -oPort=$SFTP_PORT "$SFTP_USER@$SFTP_HOST" <<EOF >> "$LOG_FILE" 2>&1
+raa_inbound_pgp_sftp_notify.sh:117:put "$encrypted_file" "$REMOTE_UPLOAD_FOLDER/"
+raa_inbound_pgp_sftp_notify.sh:121:    sftp -oPort=$SFTP_PORT "$SFTP_USER@$SFTP_HOST" <<EOF | grep -q "$(basename "$encrypted_file")"
+raa_inbound_pgp_sftp_notify.sh:127:        log_message "SFTP Success: $(basename "$encrypted_file")"
+raa_inbound_pgp_sftp_notify.sh:129:        log_message "Archiving encrypted file: $encrypted_file"
+raa_inbound_pgp_sftp_notify.sh:130:        mv "$encrypted_file" "$ARCHIVE_DIR/"
+raa_inbound_pgp_sftp_notify.sh:134:        log_message "SFTP Failed for file: $(basename "$encrypted_file")"
+raa_inbound_pgp_sftp_notify.sh:135:        log_message "Local path: $encrypted_file"
+raa_inbound_pgp_sftp_notify.sh:136:        log_message "Remote path attempted: sftp://$SFTP_USER@$SFTP_HOST:$SFTP_PORT/$remote_path"
+raa_inbound_pgp_sftp_notify.sh:142:    local body="SFTP Summary for RAA SIT\n\n"
+raa_inbound_pgp_sftp_notify.sh:166:        echo "Subject: UAT - RAA SFTP CFX: INBOUND PGP Encrypted UAT files successfully"
+raa_inbound_pgp_sftp_notify.sh:178:import_pgp_key
+raa_inbound_pgp_sftp_notify.sh:181:# encryption subkey. Does not affect any other intervention's key selection.
+raa_inbound_pgp_sftp_notify.sh:183:    PGP_KEY_ID="3CA603C9287F1146"
+raa_inbound_pgp_sftp_notify.sh:184:    log_message "Using DTVNTMBRRT-specific PGP Key ID: $PGP_KEY_ID"
+raa_inbound_pgp_sftp_notify.sh:190:    encrypted_file=$(encrypt_file "$1")
+raa_inbound_pgp_sftp_notify.sh:191:    log_message "Encrypted file returned: $encrypted_file"
+raa_inbound_pgp_sftp_notify.sh:193:    if [[ -n "$encrypted_file" && -f "$encrypted_file" ]]; then
+raa_inbound_pgp_sftp_notify.sh:194:        sftp_transfer "$encrypted_file" "$1"
+raa_inbound_pgp_sftp_notify.sh:196:        log_message "Encrypted file NOT found after encryption: $encrypted_file"
+raa_inbound_pgp_sftp_notify.sh:203:            encrypted_file=$(encrypt_file "$file")
+raa_inbound_pgp_sftp_notify.sh:204:            if [[ -n "$encrypted_file" && -f "$encrypted_file" ]]; then
+raa_inbound_pgp_sftp_notify.sh:205:                sftp_transfer "$encrypted_file" "$file"
+raa_inbound_pgp_sftp_notify.sh:207:                log_message "Encryption failed for: $file"
+common-sftp-sas-mgft-task.sh:36:# title        :common-sftp-sas-mgft-task.sh
+common-sftp-sas-mgft-task.sh:40:# usage        :bash common-sftp-sas-mgft-task.sh -c common-sftp-sas-mgft-task.conf -f <filename>
+common-sftp-sas-mgft-task.sh:51:  echo "Example : $0 /hcaaapck/backup/IT/PROD/work/rad_provider_aca.txt /hcaaapck/backup/IT/${SAS_ENV}/conf/common-sftp-sas-mgft.conf"
+common-sftp-sas-mgft-task.sh:59:# Key used to get the value of filename pattern to identify the file(s)
+common-sftp-sas-mgft-task.sh:62:# the configuration file against this key.
+common-sftp-sas-mgft-task.sh:86:  export conf_file="/hcaaapck/backup/IT/${SAS_ENV}/conf/common-sftp-sas-mgft.conf"
+common-sftp-sas-mgft-task.sh:89:# Key used to get the Hostname of the remote server (ftp) from
+common-sftp-sas-mgft-task.sh:91:# present in the configutaion file against this key. The value of 
+common-sftp-sas-mgft-task.sh:92:# this key can be a valid IP Address of the remote server (ftp) too.
+common-sftp-sas-mgft-task.sh:93:declare readonly SFTP_CONNECTION_HOST="sftp.connection.host"
+common-sftp-sas-mgft-task.sh:95:# Key used to get the port of the remote server (ftp) from
+common-sftp-sas-mgft-task.sh:99:declare readonly SFTP_CONNECTION_PORT="sftp.connection.port"
+common-sftp-sas-mgft-task.sh:101:# Default SFTP port. SFTP usually uses port 22 but can be configured 
+common-sftp-sas-mgft-task.sh:103:# connection via SSH. SFTP is just one of protocols which can be run 
+common-sftp-sas-mgft-task.sh:104:# over SSH (others include virtual terminal). In fact, the SFTP is 
+common-sftp-sas-mgft-task.sh:106:declare readonly DEFAULT_SFTP_PORT=22
+common-sftp-sas-mgft-task.sh:108:# Key used to get the remote server username (ftp). There must be
+common-sftp-sas-mgft-task.sh:109:# a valid ftp username mapped against this key in the configuration
+common-sftp-sas-mgft-task.sh:111:declare readonly SFTP_CONNECTION_USER="sftp.connection.user"
+common-sftp-sas-mgft-task.sh:115:declare readonly SFTP_DESTINATION_DIR="sftp.destination.dir"
+common-sftp-sas-mgft-task.sh:119:export LOG_FILE=$(basename "$Source_file_name" | awk -F'[-.]' '{print $1}')-SFTP-SAS-S3-$(date '+%Y%m%d%H%M%S').log
+common-sftp-sas-mgft-task.sh:134:# Returns the value to which the specified key is mapped in the given 
+common-sftp-sas-mgft-task.sh:136:# contains no mapping for the key.
+common-sftp-sas-mgft-task.sh:139:#  $1: the key to be used to get the mapped value from the given
+common-sftp-sas-mgft-task.sh:141:# Returns: the value to which the specified key is mapped in the given 
+common-sftp-sas-mgft-task.sh:144:  local key=$1
+common-sftp-sas-mgft-task.sh:145:  local value=$(cat $conf_file | grep "$key" | cut -d'=' -f2)
+common-sftp-sas-mgft-task.sh:146:  if [ -z "${key}" ]; then
+common-sftp-sas-mgft-task.sh:147:    LOG_MESG "IllegalConfigurationError: No value found for key $key in $conf_file"
+common-sftp-sas-mgft-task.sh:191:  sftp -oPort=$port $user@$host <<EOF
+common-sftp-sas-mgft-task.sh:193:        mput $upload_file_name
+common-sftp-sas-mgft-task.sh:213:#  $2: the filename pattern to be used to select the files for SFTP transfer.
+common-sftp-sas-mgft-task.sh:272:  LOG_MESG "Launching sftp-task-runner: Start Time: ${date_created}: PID: $(echo $$)"
+common-sftp-sas-mgft-task.sh:279:  local host=$(option $SFTP_CONNECTION_HOST)
+common-sftp-sas-mgft-task.sh:280:  local port=$(option $SFTP_CONNECTION_PORT)
+common-sftp-sas-mgft-task.sh:281:  port=${port:-$DEFAULT_SFTP_PORT}
+common-sftp-sas-mgft-task.sh:282:  local user=$(option $SFTP_CONNECTION_USER)
+common-sftp-sas-mgft-task.sh:283:  local file_target=$(option $SFTP_DESTINATION_DIR)
+common-sftp-sas-mgft-task.sh:287:  LOG_MESG "$SFTP_CONNECTION_HOST: $host"
+common-sftp-sas-mgft-task.sh:288:  LOG_MESG "$SFTP_CONNECTION_HOST: $port"
+common-sftp-sas-mgft-task.sh:289:  LOG_MESG "$SFTP_CONNECTION_USER: $user"
+common-sftp-sas-mgft-task.sh:290:  LOG_MESG "$SFTP_DESTINATION_DIR: $file_target"
