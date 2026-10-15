@@ -1,11 +1,7 @@
-LC_ALL=C awk -F'|' 'index($0,"\\|"){for(i=1;i<NF;i++) if(substr($i,length($i),1)=="\\") f[i]++} END{for(k in f) print "field "k": "f[k]; print "done"}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra_fixed.txt
-
 cd /hcaaapck/backup/IT/SIT/work
+LC_ALL=C sed 's/\\|\([^|]*\)$/|\1/' rad_charts_mra_fixed.txt > rad_charts_mra_fixed2.txt
+ls -l rad_charts_mra_fixed.txt rad_charts_mra_fixed2.txt
+
+rm rad_charts_mra_fixed.txt
 mv rad_charts_mra.txt rad_charts_mra_original.txt
-mv rad_charts_mra_fixed.txt rad_charts_mra.txt
-ls -l rad_charts_mra*.txt
-
-export ENV=ts ENVIRONMENT=ts SAS_ENV=SIT LOG_PATH=/hcaaapck/backup/IT/SIT/log
-nohup /hcaaapck/backup/IT/SIT/scripts/common-sftp-sas-mgft-task.sh /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt mra-sftp-sas-mgft.conf > /hcaaapck/backup/IT/SIT/log/manual_mgft_mra_charts_$(date +%Y%m%d_%H%M).log 2>&1 &
-
-tail -f /hcaaapck/backup/IT/SIT/log/manual_mgft_mra_charts_*.log
+mv rad_charts_mra_fixed2.txt rad_charts_mra.txt
