@@ -1,5 +1,23 @@
-you need to get the PHI refreshed for this - WARNING: For row#128, Table:U01_RAA.RAA_RAWZ.RAD_CHARTS_MRA is created after PHI view. Please verify. (Table created on 2026-10-14 12:32:43.190000 and PHI created on 2025-04-01 09:13:45.294000).
-
-
-
-awk -F'|' 'NR==30715829{print "NF="NF; for(i=1;i<=NF;i++) if(index($i,"\"")) print "QUOTE in field "i": "$i; for(i=420;i<=NF;i++) print i": "$i; exit}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
+$ UOTE in field "i": "$i; for(i=420;i<=NF;i++) print i": "$i; exit}' /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt                                   <
+NF=440
+420: 
+421: 
+422: 
+423: 
+424: 
+425: 
+426: 
+427: 
+428: UNK
+429: 990334225
+430: 1053358119
+431: CHRISTOPHER
+432: LUM
+433: 47120252312016400
+434: 8F71P51PF29
+435: H4036
+436: 033
+437: Teal
+438: GA
+439: HPL0641592
+440: UNK
