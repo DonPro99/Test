@@ -1,6 +1,4 @@
-SELECT filedatetime, MAX(edl_load_dtm) AS loaded_at, COUNT(*)
-FROM D01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
-WHERE filedatetime = '20260910135555'
-GROUP BY 1;
-
-find / -iname '*dtvntrt*20261008*' -ls 2>/dev/null | head -20
+-rw-rw-r-- 1 srcradcoolbthts ahpck 196608 Oct  8 11:07 deply_dtvntrt_mra_20260728.sas7bdat
+-rw-rw-r-- 1 srcradcoolbthts ahpck 196608 Oct  8 13:59 deply_dtvntrt_mra_20261008.sas7bdat
+$ pwd
+/raa1/backup/devenvironment/sas_repository/deploy_in/archive/20261008
