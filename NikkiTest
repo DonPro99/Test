@@ -1,10 +1,1 @@
-{
-  "trim_string_clmns": "rtrim",
-  "replace_invalid_characters": "y",
-  "ignore_utf8_errors": "y",
-  "escape_unenclosed_field": "NONE"
-}
-
-
-
-Thanks Bhavishya! I checked the git history: the .idea/libraries files were never in master before; they only came in with my PR #12725 (from preprod). The only .idea files master had before were compiler.xml, jarRepositories.xml and misc.xml, and those will go back to their previous versions, not be deleted. Since the pipeline builds with Maven, which doesn’t use .idea files, removing the library files from master shouldn’t affect the jar build. Rajesh also saved a copy in a backup branch, just in case. Is that OK with you?
+grep -n -i -E 'hdfs|mgft|sftp|scp|pgp|gpg|put |rad_charts' <path-to>/start_sas_copy_hdfs_MN.sh
