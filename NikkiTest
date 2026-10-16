@@ -6,6 +6,8 @@ An error occurred (AccessDenied) when calling the ListObjectsV2 operation: User:
 [hadoop@ip-10-127-204-158 ~]$ 
 
 
+aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
+
 ============
 
 aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/<JAR> \
