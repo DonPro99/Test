@@ -1,49 +1,5 @@
-git show 713012f8e -- snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
-
-git checkout --ours -- snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
-git add snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
-git status
-
-git cherry-pick --continue
-git diff --stat origin/develop
-git diff --ignore-all-space --ignore-blank-lines --stat origin/develop
-
-
-git push origin feature/AM71511-snowflake-jdbc-dummy-develop
-
 git checkout feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
 git checkout origin/master -- snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
 git commit -m "Restore DataLoadExec.scala (keep dummy change in DataExtractExec only)"
 git push origin feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
 git log --oneline -n 1
-
-
-nothing added to commit but untracked files present (use "git add" to track)
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-develop)
-$ git log --oneline -n 5
-4e321ffe1 (HEAD -> feature/AM71511-snowflake-jdbc-dummy-develop, origin/develop) Pull request #12846: added radv_aca and aca seperation for datavantmbrrt
-fa347ca8d added radv_aca and aca seperation for datavantmbrrt
-39413e893 Pull request #12841: Feature/MVN-0206 MN RRR SCALA-082026
-735a8eb52 (origin/feature/MVN-0206-MN-RRR-SCALA-082026) AltegraRetroETL.scala edited online with Bitbucket
-729e8faf0 AhgPrspDriver.scala edited online with Bitbucket
-
-git fetch origin
-git checkout -b feature/AM71511-snowflake-jdbc-dummy-develop origin/develop
-git cherry-pick <commit-id>
-git diff --stat origin/develop
-
-git push origin feature/AM71511-snowflake-jdbc-dummy-develop
-
-git fetch origin
-git checkout -b feature/AM71511-snowflake-jdbc-dummy-sit origin/sit
-git cherry-pick <commit-id>
-git diff --stat origin/sit
-git push origin feature/AM71511-snowflake-jdbc-dummy-sit
-
-git fetch origin
-git checkout -b feature/AM71511-snowflake-jdbc-dummy-uat origin/uat
-git cherry-pick <commit-id>
-git diff --stat origin/uat
-git push origin feature/AM71511-snowflake-jdbc-dummy-uat
-
