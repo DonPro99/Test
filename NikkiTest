@@ -1,11 +1,6 @@
-git fetch origin
-git checkout -b feature/AM71511-snowflake-jdbc-dummy-master origin/master
-git cherry-pick 713012f8e
-git checkout origin/master -- snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
-git commit --amend --no-edit
-
-git log --oneline origin/master..HEAD
-git diff --stat origin/master | tail -1
-git diff --ignore-all-space --ignore-blank-lines --stat origin/master
-
-git push origin feature/AM71511-snowflake-jdbc-dummy-master
+   git fetch origin uat:refs/remotes/origin/uat
+   git fetch origin preprod:refs/remotes/origin/preprod
+   git fetch origin master:refs/remotes/origin/master
+   git log origin/uat --oneline --grep="14240"
+   git log origin/preprod --oneline --grep="14240"
+   git log origin/master --oneline --grep="14240"
