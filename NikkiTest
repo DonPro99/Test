@@ -1,1 +1,1 @@
-Once you confirm, I’ll proceed with loading the 09/10 MRA charts batch into Snowflake prod.
+As you mentioned earlier, the 09/10 legacy MRA charts batch also needs to be loaded into Snowflake prod. Once you confirm these results, I’ll proceed with the prod load through the standard change process.
