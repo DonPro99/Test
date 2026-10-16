@@ -1,26 +1,10 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
-$ git log --oneline origin/master..feature/AM71511-pr12725-cleanup
-dfe566bbb (HEAD -> feature/AM71511-pr12725-cleanup, origin/feature/AM71511-pr12725-cleanup) PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
+This targets master only: it undoes the accidental #12725 merge, so it shouldn’t go to the lower environments, which keep these files
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
-$ git diff --name-only dfe566bbb^ dfe566bbb | sort > pr_files.txt
+Hi Rajesh, I’ve raised the cleanup PR for #12725: [PR link]. It removes the 236 files added by #12725 and restores 11 modified files to their prod versions, all approved by the owners. MasterClass and the pom fix are untouched, and I verified that nothing still references the removed classes. Could you review when you get a chance?
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
-$ git diff --name-only 4edda1e7b 305779b5a | sort > pr12725_files.txt
+Cleans up files that came into master by mistake through PR #12725 (from preprod; nothing was deployed to prod). Each owner approved: Lekhana, Rahul, Chandrika, Sunita (via Gopi), Suresh, Bhavishya (IntelliJ files backed up in feature/AG15138-CONFLICTTEST), Nasuruddin.
 
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
-$ comm -23 pr_files.txt pr12725_files.txt; echo "--- extra-files check done"
---- extra-files check done
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
-$ while read f; do
-  git diff --quiet 4edda1e7b dfe566bbb -- "$f" || echo "DIFFERS FROM PROD: $f"
-done < pr_files.txt; echo "--- prod-match check done"
---- prod-match check done
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
-$
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
-$ grep -E "RptHoscdaXmlExtractorMasterClass.scala|AnthemRAUtil/pom.xml" pr_files.txt; echo "--- protected check done"
---- protected check done
+Removes all 236 files added by #12725 (188 IntelliJ library files + 48 new files); they remain in develop/SIT/UAT/preprod.
+Restores 11 modified files to their prod versions, including the sanitizeFileName vulnerability fix in RptXmlDiffIdentifier_A5 and MBR_CNTY_NM in the Medicaid files.
+Not changed: RptHoscdaXmlExtractorMasterClass (per Lekhana), AnthemRAUtil pom (already fixed), cosmetic-only files.
+Verified: no remaining code imports the removed classes, and no pom references the removed folders.
