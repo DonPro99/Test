@@ -1,7 +1,2 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
-$ git merge origin/master
-Merge made by the 'ort' strategy.
- .../BigDataProtectorTranscribeDecryptDemoApp.scala | 575 ++++++++++-----------
- .../anthem/cda/pdfgen/RptXmlExtractorWithNpi.scala |  89 ++--
- .../cda/pdfgen/TranscribedReport_McidNpi.scala     | 123 +++--
- 3 files changed, 399 insertions(+), 388 deletions(-)
+git diff --stat origin/master
+git diff --ignore-all-space --ignore-blank-lines --stat origin/master
