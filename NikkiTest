@@ -1,6 +1,1 @@
-   git fetch origin uat:refs/remotes/origin/uat
-   git fetch origin preprod:refs/remotes/origin/preprod
-   git fetch origin master:refs/remotes/origin/master
-   git log origin/uat --oneline --grep="14240"
-   git log origin/preprod --oneline --grep="14240"
-   git log origin/master --oneline --grep="14240"
+git ls-remote --heads origin | grep -i prematch
