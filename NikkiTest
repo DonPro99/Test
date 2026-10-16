@@ -1,28 +1,5 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
-$ git status -sb feature/AM71511-snowflake-jdbc-dummy-develop 2>/dev/null; git log --oneline -n 1 origin/feature/AM71511-snowflake-jdbc-dummy-develop
-## feature/AM71511-snowflake-jdbc-upgrade-dummyChanges...origin/feature/AM71511-snowflake-jbdc-upgrade-dummyChanges [gone]
-383e30315 (origin/feature/AM71511-snowflake-jdbc-dummy-develop, feature/AM71511-snowflake-jdbc-dummy-develop) Dummy changes to rebuild jars for Snowflake JDBC upgrade
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
-$ git log --oneline -n 1 feature/AM71511-snowflake-jdbc-dummy-develop
-383e30315 (origin/feature/AM71511-snowflake-jdbc-dummy-develop, feature/AM71511-snowflake-jdbc-dummy-develop) Dummy changes to rebuild jars for Snowflake JDBC upgrade
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
-$ git log --oneline -n 5 feature/AM71511-snowflake-jdbc-dummy-develop
-383e30315 (origin/feature/AM71511-snowflake-jdbc-dummy-develop, feature/AM71511-snowflake-jdbc-dummy-develop) Dummy changes to rebuild jars for Snowflake JDBC upgrade
-4e321ffe1 (origin/develop) Pull request #12846: added radv_aca and aca seperation for datavantmbrrt
-fa347ca8d added radv_aca and aca seperation for datavantmbrrt
-39413e893 Pull request #12841: Feature/MVN-0206 MN RRR SCALA-082026
-735a8eb52 (origin/feature/MVN-0206-MN-RRR-SCALA-082026) AltegraRetroETL.scala edited online with Bitbucket
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
-$ git checkout feature/AM71511-snowflake-jdbc-dummy-develop
-Switched to branch 'feature/AM71511-snowflake-jdbc-dummy-develop'
-Your branch is ahead of 'origin/develop' by 1 commit.
-  (use "git push" to publish your local commits)
-
-
-git push origin feature/AM71511-snowflake-jdbc-dummy-develop
-
+git checkout feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+git branch --set-upstream-to=origin/feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+git push origin feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
 git log --oneline -n 1 origin/feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
-git log --oneline -n 1 feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+git log --oneline -n 1
