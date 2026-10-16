@@ -1,11 +1,5 @@
- git status
-On branch origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev
-Your branch is behind 'origin/develop' by 31 commits, and can be fast-forwarded.
-  (use "git pull" to update your local branch)
+git fetch origin
+git checkout -b feature/AM71511-dummy-uat origin/uat
 
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   snowpark/verscend-etl/src/main/scala/com/anthem/hca/intervention/verscend/VerscendETLDriver.scala
-
-no changes added to commit (use "git add" and/or "git commit -a")
+git commit -am "Dummy change to rebuild jar"
+git push origin feature/AM71511-dummy-uat
