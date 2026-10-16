@@ -1,15 +1,2 @@
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/verscend-etl-1.0-jar-with-dependencies.jar \
-  s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/verscend-etl-1.0-jar-with-dependencies.jar
-
-aws s3 cp s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/verscend-etl-1.0-jar-with-dependencies.jar \
-  s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/verscend-etl-1.0-jar-with-dependencies.jar
-
-=-=====
-
-aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/verscend-etl-1.0-jar-with-dependencies.jar \
-  s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/backup/verscend-etl-1.0-jar-with-dependencies.jar
-
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/verscend-etl-1.0-jar-with-dependencies.jar \
-  s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/verscend-etl-1.0-jar-with-dependencies.jar
-
-aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
+[hadoop@ip-10-197-212-189 ~]$ aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
+2026-10-16 14:03:53  321299563 verscend-etl-1.0-jar-with-dependencies.jar
