@@ -1,5 +1,7 @@
-cp datavantmbrprov-etl_uat.properties.bkp_20261016 datavantmbrprov-etl_uat.properties
-printf '\nintervention.master.hive.table.datavantcpl=U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL\n' >> datavantmbrprov-etl_uat.properties
-tail -3 datavantmbrprov-etl_uat.properties
-
-aws s3 cp datavantmbrprov-etl_uat.properties s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
+[hadoop@ip-10-127-204-158 ~]$ tail -3 datavantmbrprov-etl_uat.properties
+emailTo=dl-RAAETLDevelopers@anthem.com
+emailToList=dl-RAAETLDevelopers@anthem.com
+intervention.master.hive.table.datavantcpl=U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL
+[hadoop@ip-10-127-204-158 ~]$ aws s3 cp datavantmbrprov-etl_uat.properties s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
+upload: ./datavantmbrprov-etl_uat.properties to s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
+[hadoop@ip-10-127-204-158 ~]$ 
