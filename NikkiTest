@@ -1,2 +1,23 @@
-cp datavantmbrprov-etl_uat.properties /home/hadoop/config/datavantmbrprov-etl_uat.properties
-grep -n datavantcpl /home/hadoop/config/datavantmbrprov-etl_uat.properties
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
+aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
+
+
+============
+
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/<JAR> \
+  s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/<JAR>
+
+aws s3 cp s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/<JAR> \
+  s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/<JAR>
+
+==============
+
+aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/<JAR> \
+  s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/backup/<JAR>
+
+aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/<JAR> \
+  s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/<JAR>
+
+===========
+
+aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
