@@ -1,1 +1,2 @@
-rm /hcaaapck/backup/IT/SIT/work/rad_charts_mra_original.txt
+ls -lh /hcaaapck/backup/IT/SIT/work/rad_charts_mra*.txt
+df -h /hcaaapck/backup/IT/SIT/work
