@@ -1,3 +1,20 @@
-git diff --cached --shortstat
-git diff --cached --name-only | grep "RptHoscdaXmlExtractorMasterClass.scala"
-git diff --cached --name-status | grep -v "^D"
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
+$ git diff --cached --shortstat
+ 247 files changed, 50 insertions(+), 17181 deletions(-)
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
+$ git diff --cached --name-only | grep "RptHoscdaXmlExtractorMasterClass.scala"
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
+$ git diff --cached --name-status | grep -v "^D"
+M       snowpark/ciox-retro-etl/.idea/jarRepositories.xml
+M       snowpark/ciox-retro-etl/.idea/misc.xml
+M       snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala
+M       snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaMedMembersLoad.scala
+M       snowpark/sdigenerator/.idea/compiler.xml
+M       snowpark/sdigenerator/.idea/jarRepositories.xml
+M       snowpark/sdigenerator/.idea/misc.xml
+M       snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/BigDataPdfDownload.scala
+M       snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RAChartsHOSHealowMerger.scala
+M       snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala
+M       snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid.scala
