@@ -48,8 +48,7 @@ GROUP BY 1, 2, 3;
 
 ================
 
-{mv /raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_*_2026101613*.txt /raa1/backup/devenvironment/sas_repository/outbound/
-ls -l /raa1/backup/devenvironment/sas_repository/outbound/ | grep 2026101613
+{
   "etl_stp_parms": {
     "src_s3_bucket": "crln-652798729258-ssm-uat-filetransfer",
     "src_s3_path": "outbound/raa/datavantprov-retro-etl/20261016_134809/",
@@ -65,6 +64,9 @@ ls -lt /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i DTVNT_R2
 cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R2_MRA_*_2026101613*.pgp /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
 cd /hcaaapck/backup/IT/PROD/scripts
 ./pgp_decrypt_and_archive.sh MRA "ELV_DTVNT_R2_MRA_*_2026101613*"
+
+mv /raa1/backup/prodenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_*_2026101613*.txt /raa1/backup/devenvironment/sas_repository/outbound/
+ls -l /raa1/backup/devenvironment/sas_repository/outbound/ | grep 2026101613
 
 
 
