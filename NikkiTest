@@ -1,2 +1,13 @@
-git fetch origin
-git branch -r | grep -i -E "AG15138|conflict"
+$ git branch -r | grep -i -E "AG15138|conflict"
+  origin/feature/AG15138-0515-VULFIX
+  origin/feature/AG15138-1001
+  origin/feature/AG15138-1002
+  origin/feature/AG15138-1017
+  origin/feature/AG15138-205-MVN
+  origin/feature/AG15138-CONFLICTTEST
+  origin/feature/AG15138_MVN-0530-REL
+  origin/feature/AG15138_MVN-0808-REL
+  origin/feature/AG15138_RAA_FILES-0214-REL
+  origin/feature/AH53730-20240621-conflictsresolve
+  origin/feature/AH53730-20240621-mmaconflict
+  origin/feature/RESOLVE_CONFLICTS_15-04-2025
