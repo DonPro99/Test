@@ -1,1 +1,15 @@
-cat new_files.txt | xargs git rm -q
+for f in \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RAChartsHOSHealowMerger.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/BigDataPdfDownload.scala \
+  snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala \
+  snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaMedMembersLoad.scala \
+  snowpark/sdigenerator/.idea/compiler.xml \
+  snowpark/sdigenerator/.idea/jarRepositories.xml \
+  snowpark/sdigenerator/.idea/misc.xml \
+  snowpark/ciox-retro-etl/.idea/jarRepositories.xml \
+  snowpark/ciox-retro-etl/.idea/misc.xml
+do
+  git cat-file -e 4edda1e7b:"$f" 2>/dev/null && git checkout 4edda1e7b -- "$f" && echo "restored: $f"
+done
