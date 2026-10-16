@@ -1,13 +1,4 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-develop)
-$ git status
-On branch feature/AM71511-snowflake-jdbc-dummy-develop
-Your branch is up to date with 'origin/develop'.
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        new_files.txt
-        pr12725_files.txt
-        pr_files.txt
+git log --oneline -n 2 feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
 
 nothing added to commit but untracked files present (use "git add" to track)
 
