@@ -1,1 +1,3 @@
-git ls-remote --heads origin | grep -i prematch
+$ git ls-remote --heads origin | grep -i prematch
+72ed2ff1e8c7e76632f65e24e6499ff8e88e5e77        refs/heads/feature/RBICA-14070-datavant-prematch
+20c05d58465bf24cad342d4d5f7b356251ae28f3        refs/heads/feature/RBICA-14240-datavant-prematch-no-split-files
