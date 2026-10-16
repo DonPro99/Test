@@ -1,4 +1,5 @@
-git fetch origin
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
+$ git fetch origin
 for env in sit uat preprod; do
   git checkout -b feature/AM71511-snowflake-jdbc-dummy-$env origin/$env || break
   if ! git cherry-pick 713012f8e; then
@@ -9,3 +10,48 @@ for env in sit uat preprod; do
   echo "== $env:"; git diff --stat origin/$env | tail -1
   git diff --ignore-all-space --ignore-blank-lines --stat origin/$env
 done
+branch 'feature/AM71511-snowflake-jdbc-dummy-sit' set up to track 'origin/sit'.
+Switched to a new branch 'feature/AM71511-snowflake-jdbc-dummy-sit'
+Auto-merging snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataExtractExec.scala
+Auto-merging snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
+CONFLICT (content): Merge conflict in snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
+Auto-merging snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLAcaDriver.scala
+error: could not apply 713012f8e... Dummy changes to rebuild jars for Snowflake JDBC upgrade
+hint: After resolving the conflicts, mark them with
+hint: "git add/rm <pathspec>", then run
+hint: "git cherry-pick --continue".
+hint: You can instead skip this commit with "git cherry-pick --skip".
+hint: To abort and get back to the state before "git cherry-pick",
+hint: run "git cherry-pick --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+[feature/AM71511-snowflake-jdbc-dummy-sit 4d1f804de] Dummy changes to rebuild jars for Snowflake JDBC upgrade
+ Date: Fri Oct 16 15:19:50 2026 -0400
+ 10 files changed, 7 insertions(+), 4 deletions(-)
+== sit:
+ 10 files changed, 7 insertions(+), 4 deletions(-)
+branch 'feature/AM71511-snowflake-jdbc-dummy-uat' set up to track 'origin/uat'.
+Switched to a new branch 'feature/AM71511-snowflake-jdbc-dummy-uat'
+Auto-merging snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataExtractExec.scala
+Auto-merging snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
+CONFLICT (content): Merge conflict in snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
+Auto-merging snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixETLAcaDriver.scala
+error: could not apply 713012f8e... Dummy changes to rebuild jars for Snowflake JDBC upgrade
+hint: After resolving the conflicts, mark them with
+hint: "git add/rm <pathspec>", then run
+hint: "git cherry-pick --continue".
+hint: You can instead skip this commit with "git cherry-pick --skip".
+hint: To abort and get back to the state before "git cherry-pick",
+hint: run "git cherry-pick --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+[feature/AM71511-snowflake-jdbc-dummy-uat a777575ff] Dummy changes to rebuild jars for Snowflake JDBC upgrade
+ Date: Fri Oct 16 15:19:50 2026 -0400
+ 10 files changed, 7 insertions(+), 4 deletions(-)
+== uat:
+ 10 files changed, 7 insertions(+), 4 deletions(-)
+branch 'feature/AM71511-snowflake-jdbc-dummy-preprod' set up to track 'origin/preprod'.
+Switched to a new branch 'feature/AM71511-snowflake-jdbc-dummy-preprod'
+[feature/AM71511-snowflake-jdbc-dummy-preprod 22589c000] Dummy changes to rebuild jars for Snowflake JDBC upgrade
+ Date: Fri Oct 16 15:19:50 2026 -0400
+ 11 files changed, 7 insertions(+), 5 deletions(-)
+== preprod:
+ 11 files changed, 7 insertions(+), 5 deletions(-)
