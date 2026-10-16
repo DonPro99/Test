@@ -1,24 +1,19 @@
-[hadoop@ip-10-127-204-201 ~]$ mkdir -p ~/rbica14268 && cd ~/rbica14268
-[hadoop@ip-10-127-204-201 rbica14268]$ aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134701/ ./mbrprov/ --recursive
-download: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134701/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt to mbrprov/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt
-download: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134701/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt to mbrprov/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt
-[hadoop@ip-10-127-204-201 rbica14268]$ aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/ ./cpl/ --recursive
-ls -l mbrprov cpl
-download: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt to cpl/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt
-download: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_CPL_1.txt to cpl/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_CPL_1.txt
-cpl:
-total 8
--rw-rw-r--. 1 hadoop hadoop 1094 Oct 16 13:48 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_CPL_1.txt
--rw-rw-r--. 1 hadoop hadoop 1518 Oct 16 13:48 ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt
-
-mbrprov:
-total 8
--rw-rw-r--. 1 hadoop hadoop 2717 Oct 16 13:47 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt
--rw-rw-r--. 1 hadoop hadoop 3705 Oct 16 13:47 ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt
-[hadoop@ip-10-127-204-201 rbica14268]$ head -2 mbrprov/*ONSHORE*.txt
-ContractNumber|MemberId|MemberHIC|MemberFirstName|MemberLastName|MemberGender|MemberDOB|Source|BusinessUnit|LOB|FacilityType|ProviderID|ProviderSpecialty|ProviderFirstName|ProviderLastName|ProviderAddress1|ProviderAddress2|ProviderCity|ProviderState|ProviderZip|ProviderPhone|ProviderFax|ProviderContact|ProviderGroupName|ProjectID|ProjectName|CentralizedHandling|CentralizedHandlingCode|CentralizedHandlingContactName|CentralizedHandlingContactPhone|SpecialHandlingInstructions|ClientChartID|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4|UserDefinedCategory1|UserDefinedCategory2|UserDefinedDate1|UserDefinedDate2|UserDefinedNumber1|UserDefinedNumber2|BegDOS|EndDOS|GroupTIN|ClaimId|MemberZip|MemberSSN|NPI|MBI|MemberAddress1|MemberAddress2|MemberAlias|MemberCity|MemberState|MemberInsuranceID|OSEligible
-H4694|A0S2P8URSTU|M3G3K2O2C|69FYQYM|O83QB|M|08/24/1983||IND|MULTI-BCBS|Outpatient|1083808695|A0|GAURAV|GUPTA|1250 E MARSHALL ST|INTERNAL MEDICINE|RICHMOND|VA|23298|8048284104|8048280854||541848065 - VIRGINIA COMMONWEALTH UNIV|R2B_2026_1_20261008135134|R2B_2026_ONSHORE_20261008135134||||||R2C26V0205536766DVT|CIOX_RAMRA_IC20261008135134_322357130000_1|003|Orange_VA|null|||||||1/1/2025||541848065|H19902809915300|23322||1083808695|A0S2P8URSTU|249 INDIAN CREEK RD|||CHESAPEAKE|VA|M3G3K2O2C|0
-[hadoop@ip-10-127-204-201 rbica14268]$ head -2 cpl/*ONSHORE*.txt
-ProjectID|ClientChartID|RenderingProviderGroupName|RenderingProviderFirstName|RenderingProviderLastName|SpecificLocationofCareAddress1|SpecificLocationofCareAddress2|SpecificLocationOfCareCity|SpecificLocationofCareState|SpecificLocationOfCareZIP|SpecificDOS|ClaimNumber|AccountNumber|LocationCode|SupplementalNPI|SupplementalNPISpecialtyCode|HMO_PPOFlag|SpecificLocationOfCarePhone
-R2B_2026_1_20261008135134|R2C26V0205536778DVT|541848065 - VIRGINIA COMMONWEALTH UNIV|LAYLA|KAMAL|1250 E MARSHALL ST||RICHMOND|VA|23298|08/17/2026||H19902884217800|||||8048284104
-[hadoop@ip-10-127-204-201 rbica14268]$ 
+cd ~/rbica14268
+awk -F'|' '
+{sub(/\r$/,"")}
+FNR==1{p=c=0; for(i=1;i<=NF;i++){if($i=="ProjectID")p=i; if($i=="ClientChartID")c=i}; next}
+NF<2{next}
+FILENAME ~ /^mbrprov\//{mb[$c]=$p; keys[$c]=1; nm++; next}
+{cp[$c]=$p; keys[$c]=1; nc++}
+END{
+  for(k in keys){
+    if(!(k in mb))      {print k, "MISSING in MBR+PROV, CPL=" cp[k]; bad++}
+    else if(!(k in cp)) {print k, "MISSING in CPL, MBR+PROV=" mb[k]; bad++}
+    else if(mb[k]==cp[k]) {print k, mb[k], "MATCH"; ok++}
+    else                {print k, "MBR+PROV=" mb[k], "CPL=" cp[k], "MISMATCH"; bad++}
+  }
+  print "----"
+  print "MBR+PROV records: " nm "   CPL records: " nc
+  print "Matched: " ok+0 "   Problems: " bad+0
+  print (bad ? "RESULT: FAIL" : "RESULT: PASS - ProjectID identical in both files")
+}' mbrprov/*.txt cpl/*.txt
