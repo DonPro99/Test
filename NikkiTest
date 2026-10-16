@@ -1,5 +1,2 @@
-git fetch origin
-git checkout -b feature/AM71511-dummy-uat origin/uat
-
 git commit -am "Dummy change to rebuild jar"
 git push origin feature/AM71511-dummy-uat
