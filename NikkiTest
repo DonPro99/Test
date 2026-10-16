@@ -2,9 +2,8 @@ Hi Rajesh, I’ve raised the cleanup PR for #12725: [PR link]. It removes the 23
 
 
 ========
-no results produced
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/ --recursive | grep -i -E 'dtvnt|datavant' | grep 20261016
 
-2026-09-08 10:46:55.552	ae8d9f1726369187662c32a89c5a6efc	NA	MCR	NA	1104		2026-09-08 10:46:55.552	8888-12-31 00:00:00.000	R1C_2025_2_20250423145757	R1C25V0209226411DVT		MONADNOCK COMMUNITY HOSPITAL	MONADNOCK COMMUNITY HOSPITAL	452 OLD STREET RD		PETERBOROUGH	NH	03458	06/28/2024		24000408040001					6039247191
 
 sed -n '1,15p' /home/hadoop/scripts/Datavant_Prov_Lambda_Notification.py
 aws secretsmanager list-secrets --query "SecretList[].Name" --output text | tr '\t' '\n' | grep -i snowflake
