@@ -1,40 +1,9 @@
-sanitizeFileName:: datavantmbrprov-etl_uat.properties
-sanitizeFileName:: db.properties
-WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
-Oct 16, 2026 3:02:39 AM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
-INFO: Initializing new connection
-Oct 16, 2026 3:02:39 AM net.snowflake.client.core.SFSession open
-INFO: Opening session with server: https://carelon-eda-preprod.privatelink.snowflakecomputing.com:443/, account: carelon-eda-preprod, user: SRCRAADU, password is not provided, role: SRCRAADU_PRIVS, database: U01_RAA, schema: , warehouse: U01_LOAD_02_WH_XL, validate default parameters: null, authenticator: null, ocsp mode: FAIL_OPEN, passcode in password: null, passcode is not provided, private key is provided, disable socks proxy: null, application: null, app id: Snowpark, app version: 1.15.0, login timeout: null, retry timeout: null, network timeout: null, query timeout: null, connection timeout: null, socket timeout: null, tracing: null, private key file: null, private key pwd is not provided, enable_diagnostics: not provided, diagnostics_allowlist_path: null, session parameters: client store temporary credential: null, gzip disabled: null, browser response timeout: null
-Oct 16, 2026 3:02:39 AM net.snowflake.client.core.SFBaseSession logHttpClientInitInfo
-INFO: Driver OCSP mode: FAIL_OPEN, gzip disabled: false and no proxy
-Oct 16, 2026 3:02:39 AM net.snowflake.client.core.SFSession open
-INFO: Connecting to GLOBAL Snowflake domain
-Oct 16, 2026 3:02:39 AM net.snowflake.client.core.FileUtil logFileUsage
-INFO: Cache file creation: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
-Oct 16, 2026 3:02:39 AM net.snowflake.client.core.FileUtil logFileUsage
-INFO: Read cache: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
-Oct 16, 2026 3:02:39 AM net.snowflake.client.core.FileUtil logFileUsage
-INFO: Write to cache: Accessing file: /home/hadoop/.cache/snowflake/ocsp_response_cache.json
-Oct 16, 2026 3:02:40 AM net.snowflake.client.core.SFSession open
-INFO: Session 15658177031952894 opened in 928 ms.
-Oct 16, 2026 3:02:40 AM net.snowflake.client.jdbc.SnowflakeConnectionV1 initConnectionWithImpl
-INFO: Connection initialized successfully in 1,120 ms. Session id: 15658177031952894
-Oct 16, 2026 3:02:43 AM net.snowflake.client.jdbc.internal.apache.arrow.memory.BaseAllocator <clinit>
-INFO: Debug mode disabled. Enable with the VM option -Darrow.memory.debug.allocator=true.
-Oct 16, 2026 3:02:43 AM net.snowflake.client.jdbc.internal.apache.arrow.memory.DefaultAllocationManagerOption getDefaultAllocationManagerFactory
-INFO: allocation manager type not specified, using netty as the default type
-Oct 16, 2026 3:02:43 AM net.snowflake.client.jdbc.internal.apache.arrow.memory.CheckAllocator reportResult
-INFO: Using DefaultAllocationManager at memory/unsafe/DefaultAllocationManagerFactory.class
-Exception in thread "main" com.typesafe.config.ConfigException$Missing: No configuration setting found for key 'intervention.master.hive.table.datavantcpl'
-	at com.typesafe.config.impl.SimpleConfig.findKeyOrNull(SimpleConfig.java:156)
-	at com.typesafe.config.impl.SimpleConfig.findOrNull(SimpleConfig.java:174)
-	at com.typesafe.config.impl.SimpleConfig.findOrNull(SimpleConfig.java:180)
-	at com.typesafe.config.impl.SimpleConfig.findOrNull(SimpleConfig.java:180)
-	at com.typesafe.config.impl.SimpleConfig.findOrNull(SimpleConfig.java:180)
-	at com.typesafe.config.impl.SimpleConfig.findOrNull(SimpleConfig.java:180)
-	at com.typesafe.config.impl.SimpleConfig.find(SimpleConfig.java:188)
-	at com.typesafe.config.impl.SimpleConfig.find(SimpleConfig.java:193)
-	at com.typesafe.config.impl.SimpleConfig.getString(SimpleConfig.java:250)
-	at com.anthem.hca.intervention.datavantmbr.DatavantMbrProvFileETL.generateDatavantCPLOutboundFile(DatavantMbrProvETL.scala:778)
-	at com.anthem.hca.intervention.datavantmbr.DatavantMbrProvETLDriver$.main(DatavantMbrProvETLDriver.scala:26)
-	at com.anthem.hca.intervention.datavantmbr.DatavantMbrProvETLDriver.main(DatavantMbrProvETLDriver.scala)
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/ --recursive | grep -i datavantmbrprov-etl_uat
+
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties .
+grep -n -i cpl datavantmbrprov-etl_uat.properties
+
+cp datavantmbrprov-etl_uat.properties datavantmbrprov-etl_uat.properties.bkp_20261016
+echo 'intervention.master.hive.table.datavantcpl=U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL' >> datavantmbrprov-etl_uat.properties
+tail -3 datavantmbrprov-etl_uat.properties
+aws s3 cp datavantmbrprov-etl_uat.properties s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties
