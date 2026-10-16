@@ -1,2 +1,24 @@
-git grep -n "DTVNTRTPM" origin/master
-git grep -n "dtvntrtpm" origin/master -- "*application_prod.properties"
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$  git show --stat 20c05d584
+commit 20c05d58465bf24cad342d4d5f7b356251ae28f3 (origin/feature/RBICA-14240-datavant-prematch-no-split-files, feature/RBICA-14240-datavant-prematch-no-split-files)
+Author: Komandla, Nikhitha <Nikhitha.Komandla@elevancehealth.com>
+Date:   Fri Sep 18 17:02:19 2026 -0400
+
+    RBICA-14240: PreMatch File with no split
+
+ .../datavantmbr/DatavantMbrProvETL.scala           | 38 +++++-----------------
+ 1 file changed, 9 insertions(+), 29 deletions(-)
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$ git log origin/master..origin/feature/RBICA-14070-datavant-prematch --no-merges --format="%h  %an  %ad  %s" --date=short
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$ git grep -n "DTVNTRTPM" origin/master
+origin/master:snowpark/intervention-loader/conf/application_prod.properties:200:dtvntrtpm.mra.processname=DTVNTRTPM Commercial Outbound File Generation
+origin/master:snowpark/intervention-loader/conf/application_uat.properties:200:dtvntrtpm.mra.processname=DTVNTRTPM Commercial Outbound File Generation
+origin/master:snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala:31:      "BCBSMNRT","MTRXPRSP","OPTUMRT","AHGPRSP","EMLCMPN", "SHRCRRT", "MROCPRT","OPTUMPRSP", "CRAPCVDR","CRASYDR","SURSCRPRSP","CENTRT","DTVNTMBRRT","DTVNTRTPM","DTVNTRT","VRTXRT","VRTXRT_OOA","OPTMRT","OPTMRTT","VRSMART","CENTPRVRT")
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$ git grep -n "dtvntrtpm" origin/master -- "*application_prod.properties"
+origin/master:snowpark/intervention-loader/conf/application_prod.properties:200:dtvntrtpm.mra.processname=DTVNTRTPM Commercial Outbound File Generation
+origin/master:snowpark/intervention-loader/conf/application_prod.properties:201:dtvntrtpm.mra.processid=4500
