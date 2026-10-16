@@ -1,1 +1,3 @@
-git push origin feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+find /hcaaapck/backup/ProdEnvironment /raa2/backup/prodenvironment -iname "charts.sas7bdat" -exec ls -l {} \; 2>/dev/null
+
+grep -ril "charts" /hcaaapck/backup/IT/PROD/logs/ 2>/dev/null | xargs ls -lt | head -10
