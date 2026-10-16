@@ -1,4 +1,7 @@
-git log --oneline -n 2 feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-develop)
+$ git log --oneline -n 2 feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+713012f8e (origin/feature/AM71511-snowflake-jdbc-upgrade-dummyChanges, feature/AM71511-snowflake-jdbc-upgrade-dummyChanges) Dummy changes to rebuild jars for Snowflake JDBC upgrade
+38ad15b77 Pull request #12852: PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
 
 nothing added to commit but untracked files present (use "git add" to track)
 
