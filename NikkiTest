@@ -1,2 +1,5 @@
-git grep -n "def main" -- snowpark/medicaid-disenrl-automation
-git grep -n -i "mainClass" -- snowpark/medicaid-disenrl-automation/pom.xml
+git status
+git diff --stat
+
+git commit -am "Dummy changes to rebuild jars for Snowflake JDBC upgrade"
+git push origin <your-branch-name>
