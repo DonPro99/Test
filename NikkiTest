@@ -76,6 +76,8 @@ REPORT RequestId: 5e4b4ab8-b269-4508-809b-7875922bd5d7	Duration: 680.42 ms	Bille
 
 ls -lt /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i DTVNT_R2_MRA | head
 
+ls -lt /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i DTVNT_R2_MRA | head
+
 cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R2_MRA_*_2026101613*.pgp /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
 cd /hcaaapck/backup/IT/PROD/scripts
 ./pgp_decrypt_and_archive.sh MRA "ELV_DTVNT_R2_MRA_*_2026101613*"
