@@ -74,6 +74,11 @@ REPORT RequestId: 5e4b4ab8-b269-4508-809b-7875922bd5d7	Duration: 680.42 ms	Bille
 
 ===================
 
+aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134701/ s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ --recursive
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/
+
+aws s3 rm s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ --recursive
+
 ls -lt /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i DTVNT_R2_MRA | head
 
 ls -lt /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i DTVNT_R2_MRA | head
