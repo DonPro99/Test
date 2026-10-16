@@ -1,4 +1,4 @@
-every file in this PR matches the prod version exactly, no remaining code imports the removed classes, and no pom references the removed folders.
+Hi Rajesh, I’ve raised the cleanup PR for #12725: [PR link]. It removes the 236 files added by #12725 and restores 11 modified files to their prod versions, all approved by the owners. MasterClass and the pom fix are untouched, and I verified that nothing still references the removed classes. Could you review when you get a chance?”
 
 
 ========
