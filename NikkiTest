@@ -7,7 +7,8 @@ An error occurred (AccessDenied) when calling the ListObjectsV2 operation: User:
 
 
 aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
-
+[hadoop@ip-10-197-212-109 ~]$ aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
+2026-07-11 11:57:02  311247371 verscend-etl-1.0-jar-with-dependencies.jar
 ============
 
 aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/<JAR> \
