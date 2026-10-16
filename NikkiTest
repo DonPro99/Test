@@ -1,6 +1,3 @@
-$ git log --oneline -n 5 origin/master
-38ad15b77 (HEAD -> feature/AM71511-snowflake-jbdc-upgrade-dummyChanges, origin/master, origin/feature/AM71511-snowflake-jbdc-upgrade-dummyChanges, origin/HEAD) Pull request #12852: PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
-fd1ff40f3 Pull request #12777: Feature/MVN-0407 Repo
-dfe566bbb (origin/feature/AM71511-pr12725-cleanup, feature/AM71511-pr12725-cleanup) PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
-2554b68dd (origin/feature/AM18673-20261012-MBRERRLOG) Pull request #12823: Feature/AM45700 202607 snapyearmbryearmo
-bf4730003 Pull request #12818: Feature/AM45700 202610 JDBCVersion
+   git branch -m feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+   git push origin feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+   git push origin --delete feature/AM71511-snowflake-jbdc-upgrade-dummyChanges
