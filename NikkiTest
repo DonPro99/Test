@@ -36,7 +36,21 @@ WHERE FILEDATETIME = '20260910135555'
 GROUP BY 1, 2, 3;
 9	DTVNTRT	MCR	2026-10-15 17:52:56.844	10
 
-START RequestId: 5e4b4ab8-b269-4508-809b-7875922bd5d7 Version: $LATEST
+
+===============
+[hadoop@ip-10-127-204-201 ~]$ aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134701/ s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ --recursive
+copy: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134701/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt to s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt
+copy: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134701/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt to s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt
+[hadoop@ip-10-127-204-201 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/
+2026-10-16 16:26:06       2717 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt
+2026-10-16 16:26:06       3705 ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt
+[hadoop@ip-10-127-204-201 ~]$ aws s3 rm s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ --recursive
+delete: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt
+delete: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt
+[hadoop@ip-10-127-204-201 ~]$ 
+
+
+START RequestId: 1576952c-fa08-4c26-9eae-dbdad9db5679 Version: $LATEST
 outbound/raa/datavantprov-retro-etl/20261016_134809/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_CPL_1.txt
 latest_date_str 20261016_134809
 <<< file count in path outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ is: 0>>>
@@ -47,8 +61,9 @@ CFX copy file devenvironment_CFX_STG/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_
 CFX copy file devenvironment_CFX_STG/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt - started
 CFX copy file devenvironment_CFX_STG/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt - completed
 ***** Files Copy Has Completed Successfully *****
-END RequestId: 5e4b4ab8-b269-4508-809b-7875922bd5d7
-REPORT RequestId: 5e4b4ab8-b269-4508-809b-7875922bd5d7	Duration: 680.42 ms	Billed Duration: 681 ms	Memory Size: 9912 MB	Max Memory Used: 113 MB	
+END RequestId: 1576952c-fa08-4c26-9eae-dbdad9db5679
+REPORT RequestId: 1576952c-fa08-4c26-9eae-dbdad9db5679	Duration: 497.98 ms	Billed Duration: 498 ms	Memory Size: 9912 MB	Max Memory Used: 113 MB	
+
 
 
 
