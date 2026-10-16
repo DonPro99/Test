@@ -26,14 +26,23 @@ SELECT DISTINCT BATCH_ID, INTERVENTION, LOB, MAX(EDL_LOAD_DTM) AS EDL_LOAD_DTM, 
 FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
 WHERE FILEDATETIME = '20260910135555'
 GROUP BY 1, 2, 3;
+9	DTVNTRT	MCR	2026-10-15 17:52:56.844	10
 
 SELECT DISTINCT BATCH_ID, INTERVENTION, LOB, MAX(EDL_LOAD_DTM) AS EDL_LOAD_DTM, COUNT(*)
 FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
 WHERE FILEDATETIME = '20260910135555'
 GROUP BY 1, 2, 3;
+9	DTVNTRT	MCR	2026-10-15 17:52:56.844	10
 
 
 
-ls -d /hcaaapck/backup/*Environment/SAS_Repository/CFX_STG 2>/dev/null
-find /hcaaapck/backup/DevEnvironment /hcaaapck/backup/SitEnvironment /raa1/backup/devenvironment -iname '*DTVNT_R2_MRA*2026101613*' 2>/dev/null
+
+$ ls -d /hcaaapck/backup/*Environment/SAS_Repository/CFX_STG 2>/dev/null
+/hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG  /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG  /hcaaapck/backup/SitEnvironment/SAS_Repository/CFX_STG
+$ find /hcaaapck/backup/DevEnvironment /hcaaapck/backup/SitEnvironment /raa1/backup/devenvironment -iname '*DTVNT_R2_MRA*2026101613*' 2>/dev/null
+$ 
+
+
+
+
 
