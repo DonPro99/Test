@@ -1,6 +1,23 @@
 git diff --stat origin/master -- snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala; echo "--- DataLoadExec check done"
 git diff --stat origin/master
 
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
+$ git diff --stat origin/master
+ .../intervention/carillon/CarillonEtlDriver.scala  |   1 +
+ .../hca/chaselist/automation/CioxRetroDriver.scala |   1 +
+ .../hca/chaselist/automation/CioxRetroEtl.scala    |   1 +
+ .../hca/intervention/cobc/CobcPrspETLDriver.scala  |   1 +
+ .../intervention/etl/PCVEmailCampaignDriver.scala  |   1 +
+ .../com/anthem/hca/adl/exec/DataExtractExec.scala  |   2 +-
+ .../BigDataProtectorTranscribeDecryptDemoApp.scala | 575 +++++++++++----------
+ .../anthem/cda/pdfgen/RptXmlExtractorWithNpi.scala |  89 ++--
+ .../cda/pdfgen/TranscribedReport_McidNpi.scala     | 123 ++---
+ .../intervention/virtix/VirtixETLAcaDriver.scala   |   1 +
+ .../hca/intervention/virtix/VirtixETLDriver.scala  |   1 -
+ .../virtix/VirtixOoaETLAcaDriver.scala             |   1 -
+ .../intervention/virtix/VirtixOoaETLDriver.scala   |   1 -
+ 13 files changed, 395 insertions(+), 403 deletions(-)
+
 git log --oneline -n 2 feature/AM71511-snowflake-jdbc-dummy-develop
 git diff --stat origin/develop feature/AM71511-snowflake-jdbc-dummy-develop
 
