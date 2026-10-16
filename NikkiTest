@@ -36,7 +36,14 @@ WHERE FILEDATETIME = '20260910135555'
 GROUP BY 1, 2, 3;
 9	DTVNTRT	MCR	2026-10-15 17:52:56.844	10
 
-
+{
+  "errorMessage": "'Contents'",
+  "errorType": "KeyError",
+  "requestId": "db6ca59a-c833-4eec-844d-bf6d5ca2dd5f",
+  "stackTrace": [
+    "  File \"/var/task/CopyFile.py\", line 30, in lambda_handler\n    for file in s3.list_objects(Bucket=src_s3_bucket, Prefix=final_prefix + cfx)['Contents']:\n"
+  ]
+}
 
 
 {
