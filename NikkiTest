@@ -34,8 +34,6 @@ GROUP BY 1, 2, 3;
 
 
 
-find /hcaaapck /raa1 -iname '*DTVNT_R2_MRA*2026101613*' 2>/dev/null
-ls -lt /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG | grep -i dtvnt | head
+ls -d /hcaaapck/backup/*Environment/SAS_Repository/CFX_STG 2>/dev/null
+find /hcaaapck/backup/DevEnvironment /hcaaapck/backup/SitEnvironment /raa1/backup/devenvironment -iname '*DTVNT_R2_MRA*2026101613*' 2>/dev/null
 
-cd /hcaaapck/backup/IT/PROD/scripts
-./pgp_decrypt_and_archive.sh MRA "ELV_DTVNT_R2_MRA_*_2026101613*"
