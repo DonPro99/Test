@@ -1,7 +1,31 @@
-cd ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn
-git fetch origin
-git ls-tree -r --name-only origin/feature/AG15138-conflict-test -- snowpark/sdigenerator/.idea/libraries | wc -l
-git diff --name-only 305779b5a origin/master
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-Verscend-dummy-uat)
+$ git ls-tree -r --name-only origin/feature/AG15138-conflict-test -- snowpark/sdigenerator/.idea/libraries | wc -l
+fatal: Not a valid object name origin/feature/AG15138-conflict-test
+0
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-Verscend-dummy-uat)
+$ git diff --name-only 305779b5a origin/master
+snowpark/AnthemRAUtil/pom.xml
+snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriDataETLMra.scala
+snowpark/Centauri-etl/src/main/scala/com/anthem/hca/intervention/centauri/CentauriETLDriver.scala
+snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspDriver.scala
+snowpark/inovalon-prsp-etl/src/main/scala/com/anthem/hca/intervention/etl/InovalonPrspETL.scala
+snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroDriver.scala
+snowpark/inovalon-retro-etl/src/main/scala/com/anthem/hca/intervention/inovalon/InovalonRetroETL.scala
+snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala
+snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoader.scala
+snowpark/mrdm-etl/src/main/scala/com/anthem/hca/intervention/mrdm/MRDMPCMSETL.scala
+snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroDriver.scala
+snowpark/mrocp-retro-etl/src/main/scala/com/anthem/hca/chaselist/automation/MrocpRetroEtl.scala
+snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroDataETL.scala
+snowpark/mrocprt-etl/src/main/scala/com/anthem/hca/intervention/mro/MroETLDriver.scala
+snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumETLDriver.scala
+snowpark/optmrt-etl/src/main/scala/com/anthem/hca/intervention/optmrt/OptumMraSecondMapping.scala
+snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryDriver.scala
+snowpark/patient-encounter-etl/src/main/scala/com/anthem/hca/chaselist/automation/CdaRaSmryRpt.scala
+snowpark/pdfgen/src/main/java/pdfgen/FileMerger_GenericProcess_withInput.java
+snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptHoscdaXmlExtractorMasterClass.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/VirtixOoaETLAcaDriver.scala
 
 ===========
 git checkout -b feature/AM71511-pr12725-cleanup origin/master
