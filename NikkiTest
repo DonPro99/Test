@@ -1,1 +1,1 @@
-aws emr describe-cluster --cluster-id j-061126310J2IP9G7IUS4 --query 'Cluster.[Name,Status.State]' --output text
+rm /hcaaapck/backup/IT/SIT/work/rad_charts_mra_original.txt
