@@ -1,3 +1,20 @@
 aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134701/ s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ --recursive
+START RequestId: b7108bea-7044-4401-9f44-1ad5bd3459ff Version: $LATEST
+outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt
+latest_date_str 20261016_134809
+<<< file count in path outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ is: 2>>>
+None
+<<< files fetching directory: outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ >>>>
+CFX copy file devenvironment_CFX_STG/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt - started
+CFX copy file devenvironment_CFX_STG/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt - completed
+CFX copy file devenvironment_CFX_STG/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt - started
+CFX copy file devenvironment_CFX_STG/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt - completed
+***** Files Copy Has Completed Successfully *****
+END RequestId: b7108bea-7044-4401-9f44-1ad5bd3459ff
+REPORT RequestId: b7108bea-7044-4401-9f44-1ad5bd3459ff	Duration: 488.47 ms	Billed Duration: 489 ms	Memory Size: 9912 MB	Max Memory Used: 114 MB	
+
 
 aws s3 rm s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ --recursive
+[hadoop@ip-10-127-204-201 ~]$ aws s3 rm s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ --recursive
+delete: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt
+delete: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/cfx/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt
