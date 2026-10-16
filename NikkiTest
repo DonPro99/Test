@@ -8,3 +8,70 @@ Removes all 236 files added by #12725 (188 IntelliJ library files + 48 new files
 Restores 11 modified files to their prod versions, including the sanitizeFileName vulnerability fix in RptXmlDiffIdentifier_A5 and MBR_CNTY_NM in the Medicaid files.
 Not changed: RptHoscdaXmlExtractorMasterClass (per Lekhana), AnthemRAUtil pom (already fixed), cosmetic-only files.
 Verified: no remaining code imports the removed classes, and no pom references the removed folders.
+
+
+========
+
+Traceback (most recent call last):
+  File "/home/hadoop/scripts/Datavant_Prov_Lambda_Notification.py", line 11, in <module>
+    secretsConfig = client.get_secret_value(SecretId=f'{environment}/snowflake/raa')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/botocore/client.py", line 606, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/botocore/context.py", line 123, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/botocore/client.py", line 1094, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+botocore.errorfactory.ResourceNotFoundException: An error occurred (ResourceNotFoundException) when calling the GetSecretValue operation: Secrets Manager can't find the specified secret.
+Command exiting with ret '1'
+
+2026-10-16T13:49:44.357496892Z INFO Ensure step 2 jar file command-runner.jar
+2026-10-16T13:49:44.359098216Z INFO Running step with ProcessBuilder
+2026-10-16T13:49:44.359320821Z INFO StepRunner: Created Runner for step 2
+INFO startExec 'hadoop jar /var/lib/aws/emr/step-runner/hadoop-jars/command-runner.jar python3.11 /home/hadoop/scripts/Datavant_Prov_Lambda_Notification.py'
+INFO Environment:
+  PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/opt/aws/puppet/bin/:/opt/puppetlabs/bin
+  INVOCATION_ID=2f0d36befe8742d5a40a72ac764790fe
+  SECURITY_PROPERTIES=/emr/instance-controller/lib/security.properties
+  HISTCONTROL=ignoredups
+  MANPATH=:/opt/puppetlabs/puppet/share/man
+  PIDFILE=/emr/instance-controller/run/instance-controller.pid
+  HISTSIZE=1000
+  HADOOP_ROOT_LOGGER=INFO,DRFA
+  AWS_DEFAULT_REGION=us-east-1
+  JAVA_HOME=/etc/alternatives/jre
+  BASH_FUNC_which%%=() {  ( alias; eval ${which_declare} ) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot "$@"}
+  LANG=en_US.UTF-8
+  JOURNAL_STREAM=9:87576
+  MAIL=/var/spool/mail/hadoop
+  which_declare=declare -f
+  LOGNAME=hadoop
+  PWD=/
+  HADOOP_CLIENT_OPTS=-Djava.io.tmpdir=/mnt/var/lib/hadoop/steps/s-01611563J10TYOQ3YEZJ/tmp
+  _=/usr/lib/jvm/jre-17/bin/java
+  S_COLORS=auto
+  LESSOPEN=||/usr/bin/lesspipe.sh %s
+  SHELL=/bin/bash
+  USER=hadoop
+  GEM_HOME=/home/hadoop/.local/share/gem/ruby
+  HADOOP_LOGFILE=syslog
+  SYSTEMD_COLORS=false
+  HOSTNAME=ip-10-127-204-101.652798729258.awsdns.internal.das
+  HADOOP_LOG_DIR=/mnt/var/log/hadoop/steps/s-01611563J10TYOQ3YEZJ
+  SYSTEMD_EXEC_PID=13211
+  EMR_STEP_ID=s-01611563J10TYOQ3YEZJ
+  SHLVL=0
+  HOME=/home/hadoop
+  HADOOP_IDENT_STRING=hadoop
+INFO redirectOutput to /mnt/var/log/hadoop/steps/s-01611563J10TYOQ3YEZJ/stdout
+INFO redirectError to /mnt/var/log/hadoop/steps/s-01611563J10TYOQ3YEZJ/stderr
+INFO Working dir /mnt/var/lib/hadoop/steps/s-01611563J10TYOQ3YEZJ
+INFO ProcessRunner started child process 36240
+2026-10-16T13:49:44.362546698Z INFO HadoopJarStepRunner.Runner: startRun() called for s-01611563J10TYOQ3YEZJ Child Pid: 36240
+INFO Synchronously wait child process to complete : hadoop jar /var/lib/aws/emr/step-runner/hadoop-...
+INFO waitProcessCompletion ended with exit code 1 : hadoop jar /var/lib/aws/emr/step-runner/hadoop-...
+INFO total process run time: 4 seconds
+2026-10-16T13:49:48.445772611Z INFO Step created jobs: 
+2026-10-16T13:49:48.446130946Z WARN Step failed with exitCode 1 and took 4 seconds
