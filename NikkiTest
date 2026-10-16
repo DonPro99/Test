@@ -1,30 +1,11 @@
-[hadoop@ip-10-127-204-158 ~]$ aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
-2026-07-11 11:23:04  311247371 verscend-etl-1.0-jar-with-dependencies.jar
-[hadoop@ip-10-127-204-158 ~]$ aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
+ git status
+On branch origin/feature/AM45700-202610-JDBCUpgradecommits/overview-dummy-dev
+Your branch is behind 'origin/develop' by 31 commits, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
 
-An error occurred (AccessDenied) when calling the ListObjectsV2 operation: User: arn:aws:sts::652798729258:assumed-role/CRLN-RAA-uat-EC2EMR-Role/i-06845ead12d6cf402 is not authorized to perform: s3:ListBucket on resource: "arn:aws:s3:::crln-raa-prod-codez-nogbd-phi-useast1" because no resource-based policy allows the s3:ListBucket action
-[hadoop@ip-10-127-204-158 ~]$ 
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   snowpark/verscend-etl/src/main/scala/com/anthem/hca/intervention/verscend/VerscendETLDriver.scala
 
-
-aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
-[hadoop@ip-10-197-212-109 ~]$ aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
-2026-07-11 11:57:02  311247371 verscend-etl-1.0-jar-with-dependencies.jar
-============
-
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/<JAR> \
-  s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/<JAR>
-
-aws s3 cp s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/<JAR> \
-  s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/<JAR>
-
-==============
-
-aws s3 cp s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/<JAR> \
-  s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/backup/<JAR>
-
-aws s3 cp s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/<JAR> \
-  s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/<JAR>
-
-===========
-
-aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
+no changes added to commit (use "git add" and/or "git commit -a")
