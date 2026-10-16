@@ -1,5 +1,16 @@
-git status
-git diff --stat
-
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
+$ git diff --stat
+ .../scala/com/anthem/hca/intervention/carillon/CarillonEtlDriver.scala  | 1 +
+ .../scala/com/anthem/hca/chaselist/automation/CioxRetroDriver.scala     | 1 +
+ .../main/scala/com/anthem/hca/chaselist/automation/CioxRetroEtl.scala   | 1 +
+ .../main/scala/com/anthem/hca/intervention/cobc/CobcPrspETLDriver.scala | 1 +
+ .../scala/com/anthem/hca/intervention/etl/PCVEmailCampaignDriver.scala  | 1 +
+ .../src/main/scala/com/anthem/hca/adl/exec/DataExtractExec.scala        | 2 +-
+ .../src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala           | 1 -
+ .../scala/com/anthem/hca/intervention/virtix/VirtixETLAcaDriver.scala   | 1 +
+ .../main/scala/com/anthem/hca/intervention/virtix/VirtixETLDriver.scala | 1 -
+ .../com/anthem/hca/intervention/virtix/VirtixOoaETLAcaDriver.scala      | 1 -
+ .../scala/com/anthem/hca/intervention/virtix/VirtixOoaETLDriver.scala   | 1 -
+ 11 files changed, 7 insertions(+), 5 deletions(-)
 git commit -am "Dummy changes to rebuild jars for Snowflake JDBC upgrade"
 git push origin <your-branch-name>
