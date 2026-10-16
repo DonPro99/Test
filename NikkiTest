@@ -1,5 +1,1 @@
-git status
-git fetch origin
-git checkout -b feature/AM71511-pr12725-cleanup origin/master
-git diff --name-only --diff-filter=A 4edda1e7b 305779b5a > new_files.txt
-wc -l new_files.txt
+cat new_files.txt | xargs git rm -q
