@@ -1,2 +1,1 @@
-$ git log origin/preprod..origin/feature/RBICA-14240-datavant-prematch-no-split-files --no-merges --format="%h  %an  %ad  %s" --date=short
-20c05d584  Komandla, Nikhitha  2026-09-18  RBICA-14240: PreMatch File with no split
+git diff --stat origin/preprod origin/feature/RBICA-14240-datavant-prematch-no-split-files
