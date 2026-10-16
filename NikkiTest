@@ -1,5 +1,7 @@
-git checkout feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
-git checkout origin/master -- snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
-git commit -m "Restore DataLoadExec.scala (keep dummy change in DataExtractExec only)"
-git push origin feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
-git log --oneline -n 1
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
+$ git log --oneline -n 5
+fa34d9181 (HEAD -> feature/AM71511-snowflake-jdbc-upgrade-dummyChanges, origin/feature/AM71511-snowflake-jdbc-upgrade-dummyChanges) Restore dataLoadExec.scala dummy change
+713012f8e Dummy changes to rebuild jars for Snowflake JDBC upgrade
+38ad15b77 Pull request #12852: PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
+fd1ff40f3 Pull request #12777: Feature/MVN-0407 Repo
+dfe566bbb (origin/feature/AM71511-pr12725-cleanup, feature/AM71511-pr12725-cleanup) PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
