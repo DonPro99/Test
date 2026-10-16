@@ -1,2 +1,7 @@
-git grep --cached -n "com.anthem.hoscda" -- 'snowpark/*.scala' 'snowpark/*.java'; echo "--- hoscda import check done"
-git grep --cached -n -i -E "hoschartgenerator|hoschargenerator" -- '*pom.xml'; echo "--- module check done"
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
+$ git grep --cached -n "com.anthem.hoscda" -- 'snowpark/*.scala' 'snowpark/*.java'; echo "--- hoscda import check done"
+--- hoscda import check done
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-pr12725-cleanup)
+$ git grep --cached -n -i -E "hoschartgenerator|hoschargenerator" -- '*pom.xml'; echo "--- module check done"
+--- module check done
