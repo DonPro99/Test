@@ -2,10 +2,10 @@ Hi Rajesh, I’ve raised the cleanup PR for #12725: [PR link]. It removes the 23
 
 
 ========
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/ --recursive | grep -i -E 'dtvnt|datavant' | grep 20261016
-
-SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL;
-
+SELECT *
+FROM U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL
+WHERE CLIENTCHARTID IN ('321965614200_1','26170P055750SA_1','293798412400_1','322357130000_1','324907775400_1',
+                        '293798494300_1','26139P069219SA_1','325213266000_1','324266735900_1','323824086100_1');
 
 sed -n '1,15p' /home/hadoop/scripts/Datavant_Prov_Lambda_Notification.py
 aws secretsmanager list-secrets --query "SecretList[].Name" --output text | tr '\t' '\n' | grep -i snowflake
