@@ -1,6 +1,11 @@
-
+cat /var/lib/cloud/data/instance-id
+df -h | grep -E 'nvme|Filesystem'
 
 git diff --ignore-all-space --ignore-blank-lines --stat
+
+aws emr list-clusters --active --query 'Clusters[].[Id,Name,Status.State,Status.Timeline.CreationDateTime]' --output table
+
+aws emr list-instances --cluster-id <j-ID> --query 'Instances[].Ec2InstanceId' --output text | tr '\t' '\n' | grep i-04d56afa967fb7327
 
   git diff -- <that file>
 
