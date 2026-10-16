@@ -1,69 +1,35 @@
-$ ls -l /hcaaapck/backup/IT/SIT/scripts/ /hcaaapck/backup/IT/DEV/scripts/ 2>/dev/null | grep -i -E 'pgp|decrypt'
-drwxr-sr-x 2 srcradcoolbthpr ahpck  4096 Mar 20  2025 cfx_pgp_pub_key
--rwxr-xr-x 1 srcradcoolbthts ahpck  3961 May 29  2025 cra_pgp_decrypt_and_archive.sh
--rwxr-xr-x 1 srcradcoolbthpr ahpck  8074 Mar 19  2025 pgp_decrypt_and_archive.sh
--rwxr-xr-x 1 srcradcoolbthpr ahpck  6518 Apr  1  2025 pgp_encrypt_and_sftp.sh
--rwxr-xr-x 1 srcradcoolbthpr ahpck  5601 Apr 28  2025 raa_inbound_pgp_sftp_notify_bkp.sh
--rwxr-xr-x 1 srcradcoolbthpr ahpck  7009 Apr 28  2025 raa_inbound_pgp_sftp_notify.sh
--rwxr-xr-x 1 srcradcoolbthpr ahpck  6753 Apr  1  2025 sftp_pgp_encrypt.sh
-drwxr-sr-x 2 srcradcoolbthpr ahpck     4096 Mar 28  2025 cfx_pgp_pub_key
--rwxrwxrwx 1 srcradcoolbthts ahpck       86 Aug 19  2025 cra_pgp_decrypt_and_archive.lst
--rwxr-xr-x 1 srcradcoolbthts ahpck     3982 Sep 19  2025 cra_pgp_decrypt_and_archive.sh
--rwxrwxrwx 1 srcradcoolbthts ahpck      232 Sep 19  2025 cra_prosp_pgp_decrypt_and_sas_cnvrt.lst
--rwxrwxrwx 1 srcradcoolbthts ahpck      232 Sep 19  2025 cra_retro_pgp_decrypt_and_sas_cnvrt.lst
--rwxr-xr-x 1 srcradcoolbthpr ahpck     8088 Oct 14  2025 pgp_decrypt_and_archive.sh
--rwxr-xr-x 1 srcradcoolbthts ahpck     7380 Oct  7 15:36 raa_inbound_pgp_sftp_notify.sh
--rwxr-xr-x 1 srcradcoolbthts ahpck     7045 Feb 24  2026 raa_inbound_pgp_sftp_notify.sh~
--rwxr-xr-x 1 srcradcoolbthts ahpck     7045 Oct  7 11:26 raa_inbound_pgp_sftp_notify.sh.bak_20261007
--rwxr-xr-x 1 srcradcoolbthpr ahpck     6630 Apr  1  2025 sftp_pgp_encrypt.sh
-$ grep -n -i -E 'gpg|pgp|CFX_STG|OUTBOUND|outbound' /hcaaapck/backup/IT/PROD/scripts/pgp_decrypt_and_archive.sh
-4:# Script Name: pgp_decrypt_and_archive.sh
-8:#   This script decrypts `.pgp` files based on the LOB (ACA or MRA) patterns, processes them
-23:#    ./pgp_decrypt_and_archive.sh ACA
-26:#    ./pgp_decrypt_and_archive.sh MRA
-29:#    ./pgp_decrypt_and_archive.sh ACA "Anthem_INV_CHASES_*"
-32:#    ./pgp_decrypt_and_archive.sh ACA "Anthem_INV_CHASES_*" /custom/output/
-35:#    ./pgp_decrypt_and_archive.sh ACA "ad_patient_encounter_all_lob*"
-38:#    ./pgp_decrypt_and_archive.sh MRA "rad_patient_encounter_all_lobmra*"
-41:INPUT_DIR="/hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG"
-42:ARCHIVE_DIR="/hcaaapck/backup/ProdEnvironment/SAS_Repository/DrConnect_PGP_Archive"
-43:LOG_DIR="/hcaaapck/backup/ProdEnvironment/PGP_Decrypt"
-46:OUTPUT_DIR_ACA="/hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND"
-47:OUTPUT_DIR_MRA="/raa1/backup/prodenvironment/sas_repository/outbound"
-68:    local filename=$(basename "$input_file" .pgp)
-74:    gpg --yes --output "$output_file" --decrypt "$input_file" 2>>"$LOG_FILE"
-125:    elif [[ "$file" =~ epic_hyperspace.*\.txt\.pgp$ ]]; then
-127:    elif [[ "$file" =~ mra_hedis_supp.*\.txt\.pgp$ ]]; then
-150:    for file in "$dir"/*.pgp; do
-180:    log_message "Starting PGP Decryption Process..."
-197:    log_message "PGP Decryption Process Completed."
-$ 
-$ 
-$ ls -lt /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i DTVNT_R2_MRA | head
--rw-r--r-- 1 srcradcoolbthts ahpck      2381 Oct 16 12:32 ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt.pgp
--rw-r--r-- 1 srcradcoolbthts ahpck      2158 Oct 16 12:32 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt.pgp
--rw-r--r-- 1 srcradcoolbthts ahpck      1670 Oct 16 12:27 ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt.pgp
--rw-r--r-- 1 srcradcoolbthts ahpck      1508 Oct 16 12:27 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_CPL_1.txt.pgp
--rw-r--r-- 1 srcradcoolbthts ahpck      2389 Oct 16 07:07 ELV_DTVNT_R2_MRA_ONSHORE_1_20261016030240.txt.pgp
--rw-r--r-- 1 srcradcoolbthts ahpck      2158 Oct 16 07:07 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016030240.txt.pgp
-$ ls -ld /raa1/backup/devenvironment/sas_repository/outbound
-drwxrws--- 2 ad89335 ahpck 32768 Sep 25 17:41 /raa1/backup/devenvironment/sas_repository/outbound
-$ OUT=/raa1/backup/devenvironment/sas_repository/outbound
-$ cd /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG
-$ for f in ELV_DTVNT_R2_MRA_*_20261016134701.txt.pgp ELV_DTVNT_R2_MRA_*_20261016134809_CPL_1.txt.pgp; do
->   gpg --yes --output "$OUT/${f%.pgp}" --decrypt "$f"
-> done
-gpg: encrypted with 4096-bit RSA key, ID C7A579DF682CB025, created 2024-12-18
-      "srcradcoolbthts (srcradcoolbthts test key) <dl-RAAETLDevelopers@anthem.com>"
-gpg: encrypted with 4096-bit RSA key, ID C7A579DF682CB025, created 2024-12-18
-      "srcradcoolbthts (srcradcoolbthts test key) <dl-RAAETLDevelopers@anthem.com>"
-gpg: encrypted with 4096-bit RSA key, ID C7A579DF682CB025, created 2024-12-18
-      "srcradcoolbthts (srcradcoolbthts test key) <dl-RAAETLDevelopers@anthem.com>"
-gpg: encrypted with 4096-bit RSA key, ID C7A579DF682CB025, created 2024-12-18
-      "srcradcoolbthts (srcradcoolbthts test key) <dl-RAAETLDevelopers@anthem.com>"
-$ ls -l $OUT | grep 2026101613
--rw-r--r-- 1 srcradcoolbthts ahpck      2717 Oct 16 12:34 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt
--rw-r--r-- 1 srcradcoolbthts ahpck      1094 Oct 16 12:34 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_CPL_1.txt
--rw-r--r-- 1 srcradcoolbthts ahpck      3705 Oct 16 12:34 ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt
--rw-r--r-- 1 srcradcoolbthts ahpck      1518 Oct 16 12:34 ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt
-$ 
+Hi Pranaya,
+
+RBICA-14268 test results (UAT):
+
+Deploy: deply_dtvntrt_mra_20261008, 10 records
+Table: U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
+Batch ID: <batch id>, EDL_LOAD_DTM: 2026-10-15 17:52:56
+
+CPL: 10 records
+Table: U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL
+EDL_LOAD_DTM: 2026-10-16 09:48:45, EDL_RUN_ID: 72b693e8c4d1555fa929101b7ffee896
+
+sql
+SELECT PROJECTID, CLIENTCHARTID, RENDERINGPROVIDERFIRSTNAME, RENDERINGPROVIDERLASTNAME, SPECIFICDOS
+FROM U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL
+WHERE EDL_RUN_ID = '72b693e8c4d1555fa929101b7ffee896';
+
+Outbound files on SAS:
+
+/raa1/backup/devenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt (MBR+PROV onshore)
+/raa1/backup/devenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt (MBR+PROV offshore)
+/raa1/backup/devenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt (CPL onshore)
+/raa1/backup/devenvironment/sas_repository/outbound/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_CPL_1.txt (CPL offshore)
+
+Result: ProjectID matches between the MBR+PROV and CPL files for all 10 records (6 onshore R2B_2026_1_20261008135134, 4 offshore R2B_2026_2_20261008135134).
+
+Please let me know if you need anything else for sign-off.
+
+The batch ID query, in case you need it again:
+
+sql
+SELECT DISTINCT BATCH_ID, MAX(EDL_LOAD_DTM) AS EDL_LOAD_DTM, COUNT(*)
+FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB
+WHERE FILEDATETIME = '20260910135555'
+GROUP BY 1;
