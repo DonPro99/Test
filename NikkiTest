@@ -1,4 +1,18 @@
-git diff origin/develop -- snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-develop|CHERRY-PICKING)
+$ git diff origin/develop -- snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
+diff --git a/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala b/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
+index 11b4fb886..ba4da2a52 100644
+--- a/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
++++ b/snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
+@@ -69,5 +69,8 @@ object DataLoadExec {
+
+     }
+   }
++<<<<<<< HEAD
+ }
++=======
++>>>>>>> 713012f8e (Dummy changes to rebuild jars for Snowflake JDBC upgrade)
+ }
 
 nothing added to commit but untracked files present (use "git add" to track)
 
