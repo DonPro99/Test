@@ -1,3 +1,2 @@
-   git branch -m feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
-   git push origin feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
-   git push origin --delete feature/AM71511-snowflake-jbdc-upgrade-dummyChanges
+git grep -n "def main" -- snowpark/medicaid-disenrl-automation
+git grep -n -i "mainClass" -- snowpark/medicaid-disenrl-automation/pom.xml
