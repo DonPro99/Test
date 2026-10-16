@@ -1,5 +1,14 @@
-git checkout feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
-git branch --set-upstream-to=origin/feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
-git push origin feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
-git log --oneline -n 1 origin/feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
-git log --oneline -n 1
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
+$ git push origin feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+Everything up-to-date
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
+$ git log --oneline -n 1 origin/feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+f479db391 (HEAD -> feature/AM71511-snowflake-jdbc-upgrade-dummyChanges, origin/feature/AM71511-snowflake-jdbc-upgrade-dummyChanges) Merge remote-tracking branch 'origin/master' into feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
+$ git log --oneline -n 1
+f479db391 (HEAD -> feature/AM71511-snowflake-jdbc-upgrade-dummyChanges, origin/feature/AM71511-snowflake-jdbc-upgrade-dummyChanges) Merge remote-tracking branch 'origin/master' into feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-upgrade-dummyChanges)
+$
