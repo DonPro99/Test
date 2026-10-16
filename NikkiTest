@@ -1,7 +1,8 @@
-git checkout feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
-git diff --stat origin/master
-git diff --ignore-all-space --ignore-blank-lines --stat origin/master
+git status -sb feature/AM71511-snowflake-jdbc-dummy-develop 2>/dev/null; git log --oneline -n 1 origin/feature/AM71511-snowflake-jdbc-dummy-develop
+git log --oneline -n 1 feature/AM71511-snowflake-jdbc-dummy-develop
 
-git push origin feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+git checkout feature/AM71511-snowflake-jdbc-dummy-develop
+git push origin feature/AM71511-snowflake-jdbc-dummy-develop
 
-git diff --stat origin/develop feature/AM71511-snowflake-jdbc-dummy-develop
+git log --oneline -n 1 origin/feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
+git log --oneline -n 1 feature/AM71511-snowflake-jdbc-upgrade-dummyChanges
