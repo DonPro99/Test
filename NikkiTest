@@ -1,2 +1,5 @@
 [hadoop@ip-10-197-212-189 ~]$ aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
 2026-10-16 14:03:53  321299563 verscend-etl-1.0-jar-with-dependencies.jar
+
+
+The old jar is saved in s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/backup/ if you ever need to roll back.
