@@ -1,4 +1,9 @@
 ls -lt /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i DTVNT_R2_MRA | head
+$ ls -lt /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG | grep -i DTVNT_R2_MRA | head
+-rw-r--r-- 1 srcradcoolbthts ahpck      1670 Oct 16 12:27 ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt.pgp
+-rw-r--r-- 1 srcradcoolbthts ahpck      1508 Oct 16 12:27 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_CPL_1.txt.pgp
+-rw-r--r-- 1 srcradcoolbthts ahpck      2389 Oct 16 07:07 ELV_DTVNT_R2_MRA_ONSHORE_1_20261016030240.txt.pgp
+-rw-r--r-- 1 srcradcoolbthts ahpck      2158 Oct 16 07:07 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016030240.txt.pgp
 
 cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_R2_MRA_*_2026101613*.pgp /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
 cd /hcaaapck/backup/IT/PROD/scripts
