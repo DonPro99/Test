@@ -1,1 +1,3 @@
-File: /raa1/backup/devenvironment/sas_repository/deploy_in/archive/20261008/deply_dtvntrt_mra_20261008.sas7bdat
+open the MBR+PROV and CPL files above and match records by ClientChartID; the ProjectID column is the same in both for all 10 records. The CPL records can also be seen in Snowflake with the query above.
+
+The deploy records were matched with the 09/10 MRA charts batch (loaded in UAT), and the Datavant job generated the MBR+PROV and CPL outputs below: 10 records in RAD_DATAVANT_CHASE_CPL, plus the outbound files.
