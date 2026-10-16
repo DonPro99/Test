@@ -1,9 +1,11 @@
-git checkout feature/AM71511-snowflake-jdbc-dummy-preprod
-git checkout origin/preprod -- snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
+git fetch origin
+git checkout -b feature/AM71511-snowflake-jdbc-dummy-master origin/master
+git cherry-pick 713012f8e
+git checkout origin/master -- snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/exec/DataLoadExec.scala
 git commit --amend --no-edit
-git diff --stat origin/preprod | tail -1
 
-git push origin feature/AM71511-snowflake-jdbc-dummy-sit
-git push origin feature/AM71511-snowflake-jdbc-dummy-uat
-git push origin feature/AM71511-snowflake-jdbc-dummy-preprod
+git log --oneline origin/master..HEAD
+git diff --stat origin/master | tail -1
+git diff --ignore-all-space --ignore-blank-lines --stat origin/master
 
+git push origin feature/AM71511-snowflake-jdbc-dummy-master
