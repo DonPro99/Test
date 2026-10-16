@@ -1,2 +1,1 @@
-git commit -am "Dummy change to rebuild jar"
-git push origin feature/AM71511-dummy-uat
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
