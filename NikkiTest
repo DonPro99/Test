@@ -1,17 +1,7 @@
-[hadoop@ip-10-127-204-201 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/ --recursive | grep -i -E 'dtvnt|datavant' | grep 20261016
-2026-10-16 03:03:25       2717 outbound/raa/datavantprov-retro-etl/20261016_030240/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016030240.txt
-2026-10-16 03:03:24       3705 outbound/raa/datavantprov-retro-etl/20261016_030240/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016030240.txt
-2026-10-16 13:47:51       2717 outbound/raa/datavantprov-retro-etl/20261016_134701/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt
-2026-10-16 13:47:49       3705 outbound/raa/datavantprov-retro-etl/20261016_134701/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt
-2026-10-16 13:48:46       1094 outbound/raa/datavantprov-retro-etl/20261016_134809/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_CPL_1.txt
-2026-10-16 13:48:44       1518 outbound/raa/datavantprov-retro-etl/20261016_134809/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt
-[hadoop@ip-10-127-204-201 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/ --recursive | grep -i -E 'dtvnt|datavant|ELV_' | grep 2026101
-2026-10-12 21:02:16       1408 outbound/raa/datavantprematch-etl/20261012_210141/ELV_DTVNT_R1_MRA_PREMATCH_1_20261012210141.txt
-2026-10-16 03:03:25       2717 outbound/raa/datavantprov-retro-etl/20261016_030240/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016030240.txt
-2026-10-16 03:03:24       3705 outbound/raa/datavantprov-retro-etl/20261016_030240/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016030240.txt
-2026-10-16 13:47:51       2717 outbound/raa/datavantprov-retro-etl/20261016_134701/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134701.txt
-2026-10-16 13:47:49       3705 outbound/raa/datavantprov-retro-etl/20261016_134701/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134701.txt
-2026-10-16 13:48:46       1094 outbound/raa/datavantprov-retro-etl/20261016_134809/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261016134809_CPL_1.txt
-2026-10-16 13:48:44       1518 outbound/raa/datavantprov-retro-etl/20261016_134809/ELV_DTVNT_R2_MRA_ONSHORE_1_20261016134809_CPL_1.txt
-[hadoop@ip-10-127-204-201 ~]$ aws s3 ls s3://crln-raa-uat-sf-dataz-gbd-phi-useast1/ --recursive | grep -i -E 'dtvnt|datavant|ELV_' | grep 2026101
-[hadoop@ip-10-127-204-201 ~]$ 
+mkdir -p ~/rbica14268 && cd ~/rbica14268
+aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134701/ ./mbrprov/ --recursive
+aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261016_134809/ ./cpl/ --recursive
+ls -l mbrprov cpl
+
+head -2 mbrprov/*ONSHORE*.txt
+head -2 cpl/*ONSHORE*.txt
