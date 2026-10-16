@@ -1,9 +1,19 @@
-$ rm /hcaaapck/backup/IT/SIT/work/rad_charts_mra_original.txt
-$ ls -lh /hcaaapck/backup/IT/SIT/work/rad_charts_mra*.txt
--rw-r--r-- 1 srcradcoolbthts ahpck 90M Jul  8 14:18 /hcaaapck/backup/IT/SIT/work/rad_charts_mra1.txt
--rw-r--r-- 1 srcradcoolbthpr ahpck 11G Jun 25  2025 /hcaaapck/backup/IT/SIT/work/rad_charts_mra_bkp.txt
--rw-r--r-- 1 srcradcoolbthts ahpck 56G Oct 15 10:39 /hcaaapck/backup/IT/SIT/work/rad_charts_mra.txt
-$ df -h /hcaaapck/backup/IT/SIT/work
-Filesystem      Size  Used Avail Use% Mounted on
-hcaaapckrw       70T   61T  8.4T  88% /hcaaapck-rw
-$ 
+git fetch origin
+git checkout -b feature/AM71511-snowflake-jdbc-dummy-develop origin/develop
+git cherry-pick <commit-id>
+git diff --stat origin/develop
+
+git push origin feature/AM71511-snowflake-jdbc-dummy-develop
+
+git fetch origin
+git checkout -b feature/AM71511-snowflake-jdbc-dummy-sit origin/sit
+git cherry-pick <commit-id>
+git diff --stat origin/sit
+git push origin feature/AM71511-snowflake-jdbc-dummy-sit
+
+git fetch origin
+git checkout -b feature/AM71511-snowflake-jdbc-dummy-uat origin/uat
+git cherry-pick <commit-id>
+git diff --stat origin/uat
+git push origin feature/AM71511-snowflake-jdbc-dummy-uat
+
