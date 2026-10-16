@@ -1,3 +1,16 @@
-   git show --stat 20c05d584
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$  git show --stat 20c05d584
+commit 20c05d58465bf24cad342d4d5f7b356251ae28f3 (origin/feature/RBICA-14240-datavant-prematch-no-split-files, feature/RBICA-14240-datavant-prematch-no-split-files)
+Author: Komandla, Nikhitha <Nikhitha.Komandla@elevancehealth.com>
+Date:   Fri Sep 18 17:02:19 2026 -0400
 
-   git log origin/master..origin/feature/RBICA-14070-datavant-prematch --no-merges --format="%h  %an  %ad  %s" --date=short
+    RBICA-14240: PreMatch File with no split
+
+ .../datavantmbr/DatavantMbrProvETL.scala           | 38 +++++-----------------
+ 1 file changed, 9 insertions(+), 29 deletions(-)
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$ git log origin/master..origin/feature/RBICA-14070-datavant-prematch --no-merges --format="%h  %an  %ad  %s" --date=short
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$
