@@ -1,1 +1,1 @@
-Note: The 09/10 MRA charts batch needed for this test had not been loaded in UAT. As part of this testing, it was loaded into UAT (31,656,363 records), including a fix for data issues in the file that were causing the load to fail.
+Once you confirm, I’ll proceed with loading the 09/10 MRA charts batch into Snowflake prod.
