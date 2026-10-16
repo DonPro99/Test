@@ -1,5 +1,46 @@
-[hadoop@ip-10-197-212-189 ~]$ aws s3 ls s3://crln-raa-prod-codez-nogbd-phi-useast1/etl/raa/build/libs/ | grep -i verscend
-2026-10-16 14:03:53  321299563 verscend-etl-1.0-jar-with-dependencies.jar
+cd ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn
+git fetch origin
+git ls-tree -r --name-only origin/feature/AG15138-conflict-test -- snowpark/sdigenerator/.idea/libraries | wc -l
+git diff --name-only 305779b5a origin/master
 
+===========
+git checkout -b feature/AM71511-pr12725-cleanup origin/master
+git diff --name-only --diff-filter=A 4edda1e7b 305779b5a > new_files.txt
+wc -l new_files.txt
+cat new_files.txt | xargs git rm -q
 
-The old jar is saved in s3://crln-raa-prod-sf-dataz-gbd-phi-useast1/etl/raa/build/libs/backup/ if you ever need to roll back.
+=============
+
+for f in \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlDiffIdentifier_A5.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RAChartsHOSHealowMerger.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/RptXmlExtractor_McidChaseid.scala \
+  snowpark/sdigenerator/src/main/scala/com/anthem/cda/pdfgen/BigDataPdfDownload.scala \
+  snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaCreateOutboundFiles.scala \
+  snowpark/risk-adjustment-adl/src/main/scala/com/anthem/hca/adl/core/impl/MdcdRaaMedMembersLoad.scala \
+  snowpark/sdigenerator/.idea/compiler.xml \
+  snowpark/sdigenerator/.idea/jarRepositories.xml \
+  snowpark/sdigenerator/.idea/misc.xml \
+  snowpark/ciox-retro-etl/.idea/jarRepositories.xml \
+  snowpark/ciox-retro-etl/.idea/misc.xml
+do
+  git cat-file -e 4edda1e7b:"$f" 2>/dev/null && git checkout 4edda1e7b -- "$f" && echo "restored: $f"
+done
+
+=============
+git diff --cached --shortstat
+git diff --cached --name-only | grep "RptHoscdaXmlExtractorMasterClass.scala"
+git diff --cached --name-status | grep -v "^D"
+
+=================
+
+grep -E '\.(scala|java)$' new_files.txt | while read f; do
+  n=$(basename "$f" | sed 's/\.[^.]*$//')
+  hits=$(git grep --cached -l -w "$n" -- 'snowpark/*.scala' 'snowpark/*.java' 'snowpark/*.xml')
+  [ -n "$hits" ] && echo "STILL USED: $n -> $hits"
+done; echo "usage check done"
+
+=================
+
+git commit -m "PR #12725 cleanup: remove unapproved preprod files from master and restore prod versions (owner-approved)"
+git push origin feature/AM71511-pr12725-cleanup
