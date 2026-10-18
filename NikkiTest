@@ -1,3 +1,5 @@
-cd ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files
-git fetch origin master:refs/remotes/origin/master
-git grep -n -i "dtvntrtpm" origin/master
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_files (feature/AM71511-Vers-dummy-uat)
+$ git grep -n -i "dtvntrtpm" origin/master
+origin/master:snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_dev.properties:23:intervention.datavantprematch.code=DTVNTRTPM
+origin/master:snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_prod.properties:23:intervention.datavantprematch.code=DTVNTRTPM
+origin/master:snowpark/datavant-mra-etl/conf/datavantmbrprov-etl_uat.properties:23:intervention.datavantprematch.code=DTVNTRTPM
