@@ -1,5 +1,17 @@
-git fetch origin
-B=origin/feature/AG15138-1018
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$ git fetch origin
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (3/3), 886 bytes | 40.00 KiB/s, done.
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_mvn
+   827008c2e..8ffc519cd  master               -> origin/master
+ * [new branch]          feature/AG15138-1018 -> origin/feature/AG15138-1018
+   044b9bdd2..196800097  preprod              -> origin/preprod
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$ B=origin/feature/AG15138-1018
 for env in develop sit uat preprod; do
   echo "########## $B -> $env"
   echo "Commits it would bring: $(git rev-list --count origin/$env..$B)"
@@ -7,3 +19,67 @@ for env in develop sit uat preprod; do
   git diff --shortstat origin/$env...$B
   echo "Deletions: $(git diff --name-only --diff-filter=D origin/$env...$B | wc -l)"
 done
+########## origin/feature/AG15138-1018 -> develop
+Commits it would bring: 354
+8ffc519cd Pull request #12860: RBICA-14240: PreMatch File with no split
+d3fa884cd Pull request #12858: Dummy changes to rebuild jars for Snowflake JDBC upgrade
+4ca7d719f Dummy changes to rebuild jars for Snowflake JDBC upgrade
+827008c2e Pull request #12853: Feature/AG83487 2509 MCIDNPIDOS LEGACY MVN
+38ad15b77 Pull request #12852: PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
+fd1ff40f3 Pull request #12777: Feature/MVN-0407 Repo
+dfe566bbb PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
+2554b68dd Pull request #12823: Feature/AM45700 202607 snapyearmbryearmo
+bf4730003 Pull request #12818: Feature/AM45700 202610 JDBCVersion
+92b140e83 Merge pull request #12801 in AEDLNC/ncr_dna2_raa_mvn from feature/AM18673-20261009-PRODFIX to master
+warning: origin/develop...origin/feature/AG15138-1018: multiple merge bases, using 7ab014bd899177b4bb5a21b6e3d1e635f9ff1751
+ 70 files changed, 1113 insertions(+), 490 deletions(-)
+warning: origin/develop...origin/feature/AG15138-1018: multiple merge bases, using 7ab014bd899177b4bb5a21b6e3d1e635f9ff1751
+Deletions: 0
+########## origin/feature/AG15138-1018 -> sit
+Commits it would bring: 1151
+8ffc519cd Pull request #12860: RBICA-14240: PreMatch File with no split
+d3fa884cd Pull request #12858: Dummy changes to rebuild jars for Snowflake JDBC upgrade
+4ca7d719f Dummy changes to rebuild jars for Snowflake JDBC upgrade
+827008c2e Pull request #12853: Feature/AG83487 2509 MCIDNPIDOS LEGACY MVN
+38ad15b77 Pull request #12852: PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
+fd1ff40f3 Pull request #12777: Feature/MVN-0407 Repo
+dfe566bbb PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
+2554b68dd Pull request #12823: Feature/AM45700 202607 snapyearmbryearmo
+bf4730003 Pull request #12818: Feature/AM45700 202610 JDBCVersion
+92b140e83 Merge pull request #12801 in AEDLNC/ncr_dna2_raa_mvn from feature/AM18673-20261009-PRODFIX to master
+warning: origin/sit...origin/feature/AG15138-1018: multiple merge bases, using 7ab014bd899177b4bb5a21b6e3d1e635f9ff1751
+ 70 files changed, 1113 insertions(+), 490 deletions(-)
+warning: origin/sit...origin/feature/AG15138-1018: multiple merge bases, using 7ab014bd899177b4bb5a21b6e3d1e635f9ff1751
+Deletions: 0
+########## origin/feature/AG15138-1018 -> uat
+Commits it would bring: 1151
+8ffc519cd Pull request #12860: RBICA-14240: PreMatch File with no split
+d3fa884cd Pull request #12858: Dummy changes to rebuild jars for Snowflake JDBC upgrade
+4ca7d719f Dummy changes to rebuild jars for Snowflake JDBC upgrade
+827008c2e Pull request #12853: Feature/AG83487 2509 MCIDNPIDOS LEGACY MVN
+38ad15b77 Pull request #12852: PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
+fd1ff40f3 Pull request #12777: Feature/MVN-0407 Repo
+dfe566bbb PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
+2554b68dd Pull request #12823: Feature/AM45700 202607 snapyearmbryearmo
+bf4730003 Pull request #12818: Feature/AM45700 202610 JDBCVersion
+92b140e83 Merge pull request #12801 in AEDLNC/ncr_dna2_raa_mvn from feature/AM18673-20261009-PRODFIX to master
+warning: origin/uat...origin/feature/AG15138-1018: multiple merge bases, using 7ab014bd899177b4bb5a21b6e3d1e635f9ff1751
+ 70 files changed, 1113 insertions(+), 490 deletions(-)
+warning: origin/uat...origin/feature/AG15138-1018: multiple merge bases, using 7ab014bd899177b4bb5a21b6e3d1e635f9ff1751
+Deletions: 0
+########## origin/feature/AG15138-1018 -> preprod
+Commits it would bring: 19
+8ffc519cd Pull request #12860: RBICA-14240: PreMatch File with no split
+d3fa884cd Pull request #12858: Dummy changes to rebuild jars for Snowflake JDBC upgrade
+4ca7d719f Dummy changes to rebuild jars for Snowflake JDBC upgrade
+827008c2e Pull request #12853: Feature/AG83487 2509 MCIDNPIDOS LEGACY MVN
+38ad15b77 Pull request #12852: PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
+fd1ff40f3 Pull request #12777: Feature/MVN-0407 Repo
+dfe566bbb PR #12725 cleanup: remove unapproved preprod files from master and restore prod version
+2554b68dd Pull request #12823: Feature/AM45700 202607 snapyearmbryearmo
+bf4730003 Pull request #12818: Feature/AM45700 202610 JDBCVersion
+92b140e83 Merge pull request #12801 in AEDLNC/ncr_dna2_raa_mvn from feature/AM18673-20261009-PRODFIX to master
+warning: origin/preprod...origin/feature/AG15138-1018: multiple merge bases, using 7ab014bd899177b4bb5a21b6e3d1e635f9ff1751
+ 70 files changed, 1113 insertions(+), 490 deletions(-)
+warning: origin/preprod...origin/feature/AG15138-1018: multiple merge bases, using 7ab014bd899177b4bb5a21b6e3d1e635f9ff1751
+Deletions: 0
