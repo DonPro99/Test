@@ -1,5 +1,9 @@
-Hi Nikitha
- 
-
-
-(RAA-DATAVANTPREMATCH-ETL
+git fetch origin
+B=origin/feature/AG15138-1018
+for env in develop sit uat preprod; do
+  echo "########## $B -> $env"
+  echo "Commits it would bring: $(git rev-list --count origin/$env..$B)"
+  git log --oneline origin/$env..$B | head -10
+  git diff --shortstat origin/$env...$B
+  echo "Deletions: $(git diff --name-only --diff-filter=D origin/$env...$B | wc -l)"
+done
