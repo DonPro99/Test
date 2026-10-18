@@ -1,9 +1,3 @@
-$   git grep -n -i "dtvntrtpm" origin/master
-origin/master:snowpark/intervention-loader/conf/application_prod.properties:200:dtvntrtpm.mra.processname=DTVNTRTPM Commercial Outbound File Generation
-origin/master:snowpark/intervention-loader/conf/application_prod.properties:201:dtvntrtpm.mra.processid=4500
-origin/master:snowpark/intervention-loader/conf/application_uat.properties:200:dtvntrtpm.mra.processname=DTVNTRTPM Commercial Outbound File Generation
-origin/master:snowpark/intervention-loader/conf/application_uat.properties:201:dtvntrtpm.mra.processid=4500
-origin/master:snowpark/intervention-loader/src/main/scala/com/anthem/hca/chaselist/automation/DeployLoadDriver.scala:31:      "BCBSMNRT","MTRXPRSP","OPTUMRT","AHGPRSP","EMLCMPN", "SHRCRRT", "MROCPRT","OPTUMPRSP", "CRAPCVDR","CRASYDR","SURSCRPRSP","CENTRT","DTVNTMBRRT","DTVNTRTPM","DTVNTRT","VRTXRT","VRTXRT_OOA","OPTMRT","OPTMRTT","VRSMART","CENTPRVRT")
-
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
-$
+cd ~/NikkiProjectWorkspace/ncr_dna2_raa_files/ncr_dna2_raa_files
+git fetch origin master:refs/remotes/origin/master
+git grep -n -i "dtvntrtpm" origin/master
