@@ -1,1 +1,2 @@
-“Hi, I checked feature/AG15138-1018 against the lower envs. It’s the same as current master, so it includes the #12725 cleanup commit. A dry-run merge shows it would delete about 236 files from develop, SIT, UAT and preprod (the files we kept in the lower envs for the owners). Develop, SIT and UAT also have a few conflicts. So I don’t think it should be merged into the lower envs as-is. What are you planning to use this branch for? I can help with the next step.”
+git checkout feature/AM71511-snowflake-jdbc-dummy-master
+git branch -D tmp-check-develop tmp-check-sit tmp-check-uat tmp-check-preprod
