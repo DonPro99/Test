@@ -1,2 +1,4 @@
-cd ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn
-git grep -n "MCR" origin/feature/RBICA-14240-datavant-prematch-no-split-files -- "*DatavantMbrProvETL.scala"
+$ git grep -n "MCR" origin/feature/RBICA-14240-datavant-prematch-no-split-files -- "*DatavantMbrProvETL.scala"
+origin/feature/RBICA-14240-datavant-prematch-no-split-files:snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala:435:                                    WHEN '$lineOfBusiness' LIKE 'MCR%' THEN '1104'
+origin/feature/RBICA-14240-datavant-prematch-no-split-files:snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala:575:      //To Map MRA to MCR
+origin/feature/RBICA-14240-datavant-prematch-no-split-files:snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala:576:      val joinLob = if (lob.equalsIgnoreCase("MRA")) "MCR" else lob
