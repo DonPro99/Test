@@ -1,2 +1,2 @@
-git checkout feature/AM71511-snowflake-jdbc-dummy-master
-git branch -D tmp-check-develop tmp-check-sit tmp-check-uat tmp-check-preprod
+cd ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn
+git grep -n "MCR" origin/feature/RBICA-14240-datavant-prematch-no-split-files -- "*DatavantMbrProvETL.scala"
