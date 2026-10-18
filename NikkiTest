@@ -1,5 +1,4 @@
-git fetch origin
-B=origin/feature/AG15138-1018
+$ B=origin/feature/AG15138-1018
 for env in develop sit uat preprod; do
   git checkout -q -B tmp-check-$env origin/$env
   if git merge --no-commit --no-ff -q $B >/dev/null 2>&1; then r="clean"; else r="CONFLICTS"; fi
@@ -7,4 +6,19 @@ for env in develop sit uat preprod; do
   git diff --name-only --diff-filter=U | head -5
   git merge --abort 2>/dev/null; git reset -q --hard
 done
-git checkout -q feature/AM71511-snowflake-jdbc-dummy-master
+== develop: CONFLICTS | files changed: 247 | deletions: 236
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixFileETLAca.scala
+== sit: CONFLICTS | files changed: 249 | deletions: 235
+snowpark/AnthemRAUtil/src/main/scala/com/anthem/utils/SessionCreator.scala
+snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/core/impl/mdlOutFileGeneration.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixFileETLAca.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLMra.scala
+== uat: CONFLICTS | files changed: 249 | deletions: 235
+snowpark/AnthemRAUtil/src/main/scala/com/anthem/utils/SessionCreator.scala
+snowpark/medicaid-disenrl-automation/src/main/scala/com/anthem/hca/adl/core/impl/mdlOutFileGeneration.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixFileETLAca.scala
+snowpark/virtix-etl/src/main/scala/com/anthem/hca/intervention/virtix/virtixOoaFileETLMra.scala
+== preprod: clean | files changed: 247 | deletions: 236
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (tmp-check-preprod)
+$
