@@ -1,16 +1,3 @@
-AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-sync-master-preprod)
-$ for env in develop sit uat preprod; do
-  git merge-base --is-ancestor dfe566bbb origin/$env && s="SYNCED (has cleanup)" || s="not synced"
-  left=0; while read f; do git cat-file -e origin/$env:"$f" 2>/dev/null && left=$((left+1)); done < pr_files.txt
-  echo "== $env: $s | #12725 files still present: $left"
-done
-git log --merges --format='%h | %an | %ad | %s' --date=short -n 3 origin/preprod
-== develop: SYNCED (has cleanup) | #12725 files still present: 11
-== sit: SYNCED (has cleanup) | #12725 files still present: 11
-== uat: SYNCED (has cleanup) | #12725 files still present: 11
-== preprod: SYNCED (has cleanup) | #12725 files still present: 11
-579cab69e | Bachamgari, Divya | 2026-10-19 | Pull request #12908: feature/AM45700-202607-optumvaluechange
-698ac58e4 | Bachamgari, Divya | 2026-10-19 | Pull request #12904: Feature/AM45700 202607 optumvaluechangetesting4
-1d57c84a6 | Bachamgari, Divya | 2026-10-19 | merge
-~
-(END)
+git checkout feature/AM71511-snowflake-jdbc-dummy-master
+git branch -D feature/AM71511-sync-master-preprod
+for env in develop sit uat preprod; do git push origin --delete backup/$env-before-master-sync; done
