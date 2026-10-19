@@ -1,1 +1,12 @@
-Checked: all 247 files are in your backup branch (AG15138-CONFLICTTEST), so nothing is lost. I’ll also snapshot each lower env before merging, just in case. Before merging master down, I’ll give the owners a quick heads-up, since we’d told them the files would stay in the lower envs and the merge also reverts the 11 modified files there. Then I’ll resolve the develop/SIT/UAT conflicts. OK to proceed?
+git fetch origin
+for env in develop sit uat preprod; do git push origin origin/$env:refs/heads/backup/$env-before-master-sync; done
+
+
+git checkout -b feature/AM71511-sync-master-preprod origin/preprod
+git merge --no-ff origin/master -m "Sync master into preprod"
+
+git diff --name-only --diff-filter=D origin/preprod | wc -l
+git diff --name-only --diff-filter=D origin/preprod | grep -v -F -x -f pr_files.txt; echo "--- unexpected-deletions check done"
+git merge-base --is-ancestor dfe566bbb HEAD && echo "cleanup commit included: YES"
+git diff --stat origin/preprod | tail -1
+
