@@ -1,12 +1,100 @@
-git fetch origin
-for env in develop sit uat preprod; do git push origin origin/$env:refs/heads/backup/$env-before-master-sync; done
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$ git fetch origin
+remote: Enumerating objects: 101, done.
+remote: Counting objects: 100% (101/101), done.
+remote: Compressing objects: 100% (75/75), done.
+remote: Total 101 (delta 35), reused 0 (delta 0), pack-reused 0 (from 0)
+Receiving objects: 100% (101/101), 24.77 KiB | 539.00 KiB/s, done.
+Resolving deltas: 100% (35/35), done.
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_mvn
+   edeab6c3e..4189ed2d6  develop    -> origin/develop
+   2554b68dd..b2feecd22  feature/AM18673-20261012-MBRERRLOG -> origin/feature/AM18673-20261012-MBRERRLOG
+   439ce7137..8b0668cee  feature/AM45700-202607-optumvaluechange -> origin/feature/AM45700-202607-optumvaluechange
+ * [new branch]          feature/AM45700-202607-optumvaluechangetesting1 -> origin/feature/AM45700-202607-optumvaluechangetesting1
+ * [new branch]          feature/AM45700-202607-optumvaluechangetesting2 -> origin/feature/AM45700-202607-optumvaluechangetesting2
+ * [new branch]          feature/AM45700-202607-optumvaluechangetesting4 -> origin/feature/AM45700-202607-optumvaluechangetesting4
+   712ecf022..579cab69e  preprod    -> origin/preprod
+   0873da671..d7df4cc18  sit        -> origin/sit
+   30ce8e986..2bf48dc7b  uat        -> origin/uat
 
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$ for env in develop sit uat preprod; do git push origin origin/$env:refs/heads/backup/$env-before-master-sync; done
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote:
+remote: ================================================================================
+remote: **[Inactive User Cleanup](https://confluence.elevancehealth.com/spaces/CLMTools/pages/2108626870/2026) (New!!!) | [Upcoming Tools Changes](https://confluence.elevancehealth.com/x/fIVIAg) (New!!!) | [Tools outage/patching forecast](https://confluence.elevancehealth.com/x/6jU3cg) (2026) | [Tools Release forecast](https://confluence.elevancehealth.com/x/BZDfcg) (2026)**
+remote: **Please Contact [Project Administrators](https://confluence.elevancehealth.com/x/4E-EAw) / [Repository Administrators](https://confluence.elevancehealth.com/x/hT_9Dg) for access | [Login Access & Support Procedure](https://confluence.elevancehealth.com/x/XRUKCQ) | [Service ID Access](https://confluence.elevancehealth.com/x/ZEkbYg)**
+remote: ================================================================================
+remote:
+remote:
+remote: Create pull request for backup/develop-before-master-sync:
+remote:   https://bitbucket.elevancehealth.com/projects/AEDLNC/repos/ncr_dna2_raa_mvn/pull-requests?create&sourceBranch=refs%2Fheads%2Fbackup%2Fdevelop-before-master-sync
+remote:
+To https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_mvn.git
+ * [new branch]          origin/develop -> backup/develop-before-master-sync
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote:
+remote: ================================================================================
+remote: **[Inactive User Cleanup](https://confluence.elevancehealth.com/spaces/CLMTools/pages/2108626870/2026) (New!!!) | [Upcoming Tools Changes](https://confluence.elevancehealth.com/x/fIVIAg) (New!!!) | [Tools outage/patching forecast](https://confluence.elevancehealth.com/x/6jU3cg) (2026) | [Tools Release forecast](https://confluence.elevancehealth.com/x/BZDfcg) (2026)**
+remote: **Please Contact [Project Administrators](https://confluence.elevancehealth.com/x/4E-EAw) / [Repository Administrators](https://confluence.elevancehealth.com/x/hT_9Dg) for access | [Login Access & Support Procedure](https://confluence.elevancehealth.com/x/XRUKCQ) | [Service ID Access](https://confluence.elevancehealth.com/x/ZEkbYg)**
+remote: ================================================================================
+remote:
+remote:
+remote: Create pull request for backup/sit-before-master-sync:
+remote:   https://bitbucket.elevancehealth.com/projects/AEDLNC/repos/ncr_dna2_raa_mvn/pull-requests?create&sourceBranch=refs%2Fheads%2Fbackup%2Fsit-before-master-sync
+remote:
+To https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_mvn.git
+ * [new branch]          origin/sit -> backup/sit-before-master-sync
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote:
+remote: ================================================================================
+remote: **[Inactive User Cleanup](https://confluence.elevancehealth.com/spaces/CLMTools/pages/2108626870/2026) (New!!!) | [Upcoming Tools Changes](https://confluence.elevancehealth.com/x/fIVIAg) (New!!!) | [Tools outage/patching forecast](https://confluence.elevancehealth.com/x/6jU3cg) (2026) | [Tools Release forecast](https://confluence.elevancehealth.com/x/BZDfcg) (2026)**
+remote: **Please Contact [Project Administrators](https://confluence.elevancehealth.com/x/4E-EAw) / [Repository Administrators](https://confluence.elevancehealth.com/x/hT_9Dg) for access | [Login Access & Support Procedure](https://confluence.elevancehealth.com/x/XRUKCQ) | [Service ID Access](https://confluence.elevancehealth.com/x/ZEkbYg)**
+remote: ================================================================================
+remote:
+remote:
+remote: Create pull request for backup/uat-before-master-sync:
+remote:   https://bitbucket.elevancehealth.com/projects/AEDLNC/repos/ncr_dna2_raa_mvn/pull-requests?create&sourceBranch=refs%2Fheads%2Fbackup%2Fuat-before-master-sync
+remote:
+To https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_mvn.git
+ * [new branch]          origin/uat -> backup/uat-before-master-sync
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote:
+remote: ================================================================================
+remote: **[Inactive User Cleanup](https://confluence.elevancehealth.com/spaces/CLMTools/pages/2108626870/2026) (New!!!) | [Upcoming Tools Changes](https://confluence.elevancehealth.com/x/fIVIAg) (New!!!) | [Tools outage/patching forecast](https://confluence.elevancehealth.com/x/6jU3cg) (2026) | [Tools Release forecast](https://confluence.elevancehealth.com/x/BZDfcg) (2026)**
+remote: **Please Contact [Project Administrators](https://confluence.elevancehealth.com/x/4E-EAw) / [Repository Administrators](https://confluence.elevancehealth.com/x/hT_9Dg) for access | [Login Access & Support Procedure](https://confluence.elevancehealth.com/x/XRUKCQ) | [Service ID Access](https://confluence.elevancehealth.com/x/ZEkbYg)**
+remote: ================================================================================
+remote:
+remote:
+remote: Create pull request for backup/preprod-before-master-sync:
+remote:   https://bitbucket.elevancehealth.com/projects/AEDLNC/repos/ncr_dna2_raa_mvn/pull-requests?create&sourceBranch=refs%2Fheads%2Fbackup%2Fpreprod-before-master-sync
+remote:
+To https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_mvn.git
+ * [new branch]          origin/preprod -> backup/preprod-before-master-sync
 
-git checkout -b feature/AM71511-sync-master-preprod origin/preprod
-git merge --no-ff origin/master -m "Sync master into preprod"
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-snowflake-jdbc-dummy-master)
+$ git checkout -b feature/AM71511-sync-master-preprod origin/preprod
+branch 'feature/AM71511-sync-master-preprod' set up to track 'origin/preprod'.
+Switched to a new branch 'feature/AM71511-sync-master-preprod'
 
-git diff --name-only --diff-filter=D origin/preprod | wc -l
-git diff --name-only --diff-filter=D origin/preprod | grep -v -F -x -f pr_files.txt; echo "--- unexpected-deletions check done"
-git merge-base --is-ancestor dfe566bbb HEAD && echo "cleanup commit included: YES"
-git diff --stat origin/preprod | tail -1
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-sync-master-preprod)
+$ git merge --no-ff origin/master -m "Sync master into preprod"
+Already up to date.
 
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-sync-master-preprod)
+$ git diff --name-only --diff-filter=D origin/preprod | wc -l
+0
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-sync-master-preprod)
+$ git diff --name-only --diff-filter=D origin/preprod | grep -v -F -x -f pr_files.txt; echo "--- unexpected-deletions check done"
+--- unexpected-deletions check done
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-sync-master-preprod)
+$ git merge-base --is-ancestor dfe566bbb HEAD && echo "cleanup commit included: YES"
+cleanup commit included: YES
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-sync-master-preprod)
+$ git diff --stat origin/preprod | tail -1
+
+AM71511@L8CZGFD4 MINGW64 ~/NikkiProjectWorkspace/ncr_dna2_raa_mvn (feature/AM71511-sync-master-preprod)
+$
