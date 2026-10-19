@@ -1,3 +1,18 @@
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -lh /hcaaapck/backup/IT/PROD/work/rad_charts_mra*.txt
+-rw-r--r-- 1 srcradcoolbthpr ahpck 53G Jun 10 11:43 /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>df -h /hcaaapck/backup/IT/PROD/work
+Filesystem      Size  Used Avail Use% Mounted on
+hcaaapckrw       70T   61T  8.3T  88% /hcaaapck-rw
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>IT/PROD/work/rad_charts_mra_bkp_20261019.txt                                           <
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>k/backup/IT/PROD/log/cp_mra_charts_20261019.log 2>&1 &                                 <
+[1]     2713652
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -l /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
+-rw-r--r-- 1 srcradcoolbthpr ahpck 8415870976 Oct 19 13:59 /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
+
+=================================================
+=================================================
+
+
 ls -lh /hcaaapck/backup/IT/PROD/work/rad_charts_mra*.txt
 df -h /hcaaapck/backup/IT/PROD/work
 
