@@ -1,4 +1,8 @@
-for env in develop sit uat preprod; do
+$ for env in develop sit uat preprod; do
   n=0; while read f; do git cat-file -e origin/$env:"$f" 2>/dev/null && ! git diff --quiet origin/master origin/$env -- "$f" && n=$((n+1)); done < pr_files.txt
   echo "== $env: files differing from master: $n"
 done
+== develop: files differing from master: 0
+== sit: files differing from master: 0
+== uat: files differing from master: 0
+== preprod: files differing from master: 0
