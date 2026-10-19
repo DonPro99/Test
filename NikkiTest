@@ -1,4 +1,5 @@
-$ git grep -n "MCR" origin/feature/RBICA-14240-datavant-prematch-no-split-files -- "*DatavantMbrProvETL.scala"
-origin/feature/RBICA-14240-datavant-prematch-no-split-files:snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala:435:                                    WHEN '$lineOfBusiness' LIKE 'MCR%' THEN '1104'
-origin/feature/RBICA-14240-datavant-prematch-no-split-files:snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala:575:      //To Map MRA to MCR
-origin/feature/RBICA-14240-datavant-prematch-no-split-files:snowpark/datavant-mra-etl/src/main/scala/com/anthem/hca/intervention/datavantmbr/DatavantMbrProvETL.scala:576:      val joinLob = if (lob.equalsIgnoreCase("MRA")) "MCR" else lob
+Proposed permanent fix: a one-time sync of each lower env. Merge master into it, but keep that env’s own versions of the 247 cleanup files, so nothing gets deleted. After that, git treats the cleanup as already handled everywhere, and the team can go back to branching from master as usual. Preprod merges clean, so it’s the easiest to start with; develop/SIT/UAT have a few conflicts (e.g. virtixFileETLAca.scala, SessionCreator.scala) that we’d resolve by keeping each env’s version and confirming with the owners.
+
+Until then: the team should create branches from the target env (or cherry-pick) rather than from master.
+
+I can prepare the preprod sync branch first and share the verification results with you before any PR. OK to go ahead?”
