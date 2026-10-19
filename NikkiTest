@@ -1,15 +1,6 @@
-git fetch origin
-for env in develop sit uat preprod; do
-  B=origin/feature/AM71511-snowflake-jdbc-dummy-$env
-  if git merge-base --is-ancestor $B origin/$env; then
-    echo "== $env: MERGED ✅"
-  else
-    files=$(git diff --name-only $B~1 $B)
-    if git diff --quiet origin/$env $B -- $files; then
-      echo "== $env: not merged, but your dummy changes are ALREADY in $env (PR not needed)"
-    else
-      echo "== $env: NOT merged, still needed | PR would bring: $(git rev-list --count origin/$env..$B) commit(s)"
-      git diff --stat origin/$env...$B | tail -1
-    fi
-  fi
-done
+From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_mvn
+ * [new branch]          feature/AM71511-temp1234 -> origin/feature/AM71511-temp1234
+== develop: MERGED ✅
+== sit: MERGED ✅
+== uat: MERGED ✅
+== preprod: MERGED ✅
