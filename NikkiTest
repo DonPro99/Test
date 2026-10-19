@@ -1,3 +1,4 @@
-git checkout feature/AM71511-snowflake-jdbc-dummy-master
-git branch -D feature/AM71511-sync-master-preprod
-for env in develop sit uat preprod; do git push origin --delete backup/$env-before-master-sync; done
+for env in develop sit uat preprod; do
+  n=0; while read f; do git cat-file -e origin/$env:"$f" 2>/dev/null && ! git diff --quiet origin/master origin/$env -- "$f" && n=$((n+1)); done < pr_files.txt
+  echo "== $env: files differing from master: $n"
+done
