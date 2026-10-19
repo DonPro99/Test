@@ -1,6 +1,2 @@
-From https://bitbucket.elevancehealth.com/scm/aedlnc/ncr_dna2_raa_mvn
- * [new branch]          feature/AM71511-temp1234 -> origin/feature/AM71511-temp1234
-== develop: MERGED ✅
-== sit: MERGED ✅
-== uat: MERGED ✅
-== preprod: MERGED ✅
+git push origin --delete feature/AM71511-temp1234
+
