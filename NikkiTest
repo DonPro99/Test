@@ -1,8 +1,15 @@
-$ for env in develop sit uat preprod; do
-  n=0; while read f; do git cat-file -e origin/$env:"$f" 2>/dev/null && ! git diff --quiet origin/master origin/$env -- "$f" && n=$((n+1)); done < pr_files.txt
-  echo "== $env: files differing from master: $n"
+git fetch origin
+for env in develop sit uat preprod; do
+  B=origin/feature/AM71511-snowflake-jdbc-dummy-$env
+  if git merge-base --is-ancestor $B origin/$env; then
+    echo "== $env: MERGED ✅"
+  else
+    files=$(git diff --name-only $B~1 $B)
+    if git diff --quiet origin/$env $B -- $files; then
+      echo "== $env: not merged, but your dummy changes are ALREADY in $env (PR not needed)"
+    else
+      echo "== $env: NOT merged, still needed | PR would bring: $(git rev-list --count origin/$env..$B) commit(s)"
+      git diff --stat origin/$env...$B | tail -1
+    fi
+  fi
 done
-== develop: files differing from master: 0
-== sit: files differing from master: 0
-== uat: files differing from master: 0
-== preprod: files differing from master: 0
