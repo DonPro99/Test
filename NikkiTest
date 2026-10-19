@@ -1,8 +1,5 @@
-jobs
-ls -l /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
-
-
-
-ls -l /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
-LC_ALL=C grep -c '|\\|' /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
-
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -l /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
+-rw-r--r-- 1 srcradcoolbthpr ahpck 59444598805 Oct 19 14:00 /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>
+[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>LC_ALL=C grep -c '|\\|' /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
+0
