@@ -1,2 +1,1 @@
-git push origin --delete feature/AM71511-temp1234
-
+“Hi Rajesh, update: the lower envs are now in sync with master. Today’s optumvaluechange PRs carried master (including the #12725 cleanup) into develop/SIT/UAT/preprod. I verified that the 236 #12725-only files are gone from all envs (backed up in AG15138-CONFLICTTEST) and that the 11 shared files match prod everywhere. The team can branch from master normally again.”
