@@ -1,5 +1,3 @@
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>ls -l /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
--rw-r--r-- 1 srcradcoolbthpr ahpck 59444598805 Oct 19 14:00 /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>LC_ALL=C grep -c '|\\|' /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt
-0
+export ENV=pr ENVIRONMENT=pr SAS_ENV=PROD LOG_PATH=/hcaaapck/backup/IT/PROD/log
+nohup /hcaaapck/backup/IT/PROD/scripts/common-sftp-sas-mgft-task.sh /hcaaapck/backup/IT/PROD/work/rad_charts_mra.txt mra-sftp-sas-mgft.conf > /hcaaapck/backup/IT/PROD/log/manual_mgft_mra_charts_$(date +%Y%m%d_%H%M).log 2>&1 &
+sleep 10; head -15 /hcaaapck/backup/IT/PROD/log/manual_mgft_mra_charts_*.log
