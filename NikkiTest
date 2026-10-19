@@ -1,5 +1,6 @@
-Proposed permanent fix: a one-time sync of each lower env. Merge master into it, but keep that env’s own versions of the 247 cleanup files, so nothing gets deleted. After that, git treats the cleanup as already handled everywhere, and the team can go back to branching from master as usual. Preprod merges clean, so it’s the easiest to start with; develop/SIT/UAT have a few conflicts (e.g. virtixFileETLAca.scala, SessionCreator.scala) that we’d resolve by keeping each env’s version and confirming with the owners.
+git fetch origin
+n=0; while read f; do git cat-file -e origin/feature/AG15138-CONFLICTTEST:"$f" 2>/dev/null || n=$((n+1)); done < pr_files.txt; echo "files missing from backup: $n"
 
-Until then: the team should create branches from the target env (or cherry-pick) rather than from master.
+for env in develop sit uat preprod; do git push origin origin/$env:refs/heads/backup/$env-before-master-sync; done
 
-I can prepare the preprod sync branch first and share the verification results with you before any PR. OK to go ahead?”
+total=0; miss=0; while read f; do total=$((total+1)); git cat-file -e origin/feature/AG15138-CONFLICTTEST:"$f" 2>/dev/null || miss=$((miss+1)); done < pr_files.txt; echo "checked: $total, missing: $miss"
