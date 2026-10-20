@@ -1,14 +1,8 @@
-tail -5 /hcaaapck/backup/IT/PROD/log/manual_mgft_mra_charts_*.log
-
 SELECT filedatetime, COUNT(*), COUNT(RNDRG_PROV_TAXID) AS taxid
 FROM P01_RAA.RAA_RAWZ.RAD_CHARTS_MRA GROUP BY 1;
-20260514145424	30122407	29647346
+20260910135555	31656363	31656360
 
-[SAS@dc04plpsas104-srcradcoolbthpr]/export/home/srcradcoolbthpr>tail -5 /hcaaapck/backup/IT/PROD/log/manual_mgft_mra_charts_*.log
-SUCCESS: Sending Email Notification
-Inside Email method
-MGFT file upload action: Completed
-Log Aggregation: rad_charts_mra-SFTP-SAS-S3-20261019140702.log
-Task Finished: End Time: 2026-10-19 14:17:48, Duration: 646 seconds.
-
-
+SELECT filedatetime, COUNT(*)
+FROM P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB
+WHERE filedatetime = '20260910135555' GROUP BY 1;
+20260910135555	31656363
