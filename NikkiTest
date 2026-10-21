@@ -1,2 +1,11 @@
-cat > /tmp/DatavantMbrProvETL.sql, paste, then Ctrl+D. Check with wc -l.
+cat > /tmp/DatavantMbrProvETL.sql, 
+
+
+wc -l /tmp/DatavantMbrProvETL.sql
 aws s3 cp /tmp/DatavantMbrProvETL.sql s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/
+
+
+
+SELECT GEN_AI_SA_ID, PROCESS_ID, LOB_NAME, EXECUTABLE_SQL_FILE
+FROM U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG WHERE GEN_AI_SA_ID = 5;
