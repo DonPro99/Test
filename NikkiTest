@@ -1,1 +1,8 @@
-DatavantMbrProv Outbound File Generation MCR	Insert and Outbound File Generation MCR
+SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL;
+
+
+"LOAD_LOG_KEY_TABLE": "U01_RAA.RAA_RAWZ.load_log_key"
+
+'DatavantMbrProv Outbound File Generation MCR', -- PROCESS_NAME
+'Insert and Outbound File Generation MCR',      -- STEP_NAME
+"LOAD_LOG_KEY_TABLE": "P01_RAA.RAA_RAWZ.load_log_key"
