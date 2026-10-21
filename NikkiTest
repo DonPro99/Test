@@ -1,9 +1,16 @@
-SELECT batchid, status, reccnt
-FROM U01_RAA.RAA_RAWZ.load_log_key
-WHERE processid = 255 AND stepid = 10
-ORDER BY batchid DESC LIMIT 1;
+SELECT COUNT(*)
+FROM U01_RAA.RAA_RAWZ.rad_deploy_all_lob b
+JOIN U01_RAA.RAA_RAWZ.rad_master_charts_all_lob a
+  ON TRIM(a.recordid) = TRIM(b.recordid)
+ AND TRIM(a.filedatetime) = TRIM(b.filedatetime)
+ AND TRIM(a.chartid) = TRIM(b.add_val1)
+ AND TRIM(a.chartdatetime) = TRIM(b.add_val2)
+ AND TRIM(a.lob) = TRIM(b.lob)
+WHERE TRIM(b.intervention) = 'DTVNTRT'
+  AND TRIM(b.lob) = 'MCR'
+  AND b.batch_id = '9';
 
-9	Completed	10
+SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ_STG.deply_dtvntrt_mra_stg;
 
 
 "LOAD_LOG_KEY_TABLE": "U01_RAA.RAA_RAWZ.load_log_key"
