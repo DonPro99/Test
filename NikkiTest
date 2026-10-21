@@ -1,4 +1,7 @@
-SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL;
+SELECT batchid, status, reccnt
+FROM U01_RAA.RAA_RAWZ.load_log_key
+WHERE processid = 255 AND stepid = 10
+ORDER BY batchid DESC LIMIT 1;
 
 
 "LOAD_LOG_KEY_TABLE": "U01_RAA.RAA_RAWZ.load_log_key"
