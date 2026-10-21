@@ -1,4 +1,1 @@
-SELECT DISTINCT processname, stepname
-FROM P01_RAA.RAA_RAWZ.load_log_key
-WHERE processid = 255 AND stepid = 20;
-
+DatavantMbrProv Outbound File Generation MCR	Insert and Outbound File Generation MCR
