@@ -1,2 +1,2 @@
-feature/RBICA-14353-datavant-genaisa-conversion.
-genaisa/sql/DATAVANT/.
+cat > /tmp/DatavantMbrProvETL.sql, paste, then Ctrl+D. Check with wc -l.
+aws s3 cp /tmp/DatavantMbrProvETL.sql s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
