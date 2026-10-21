@@ -3,6 +3,8 @@ FROM U01_RAA.RAA_RAWZ.load_log_key
 WHERE processid = 255 AND stepid = 10
 ORDER BY batchid DESC LIMIT 1;
 
+9	Completed	10
+
 
 "LOAD_LOG_KEY_TABLE": "U01_RAA.RAA_RAWZ.load_log_key"
 
