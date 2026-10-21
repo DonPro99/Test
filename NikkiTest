@@ -713,3 +713,9 @@ Perform the conversion module by module. For each source job:
 - use explicit target insert column lists where applicable
 - save the result to the correct `SQL_Code/<module_name>/` location
 - document required config and unresolved placeholders
+
+
+
+====================
+
+  SELECT MAX(GEN_AI_SA_ID) FROM U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG;
