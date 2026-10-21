@@ -29,3 +29,7 @@ Additional requirements:
 - Keep the file select (with P01_PROTEGRITY.SCRTY_ACS_CNTRL.ANTM_SSN_DETOK) and the table-insert select (plain MBR_SSNLST4) as two separate selects.
 - Keep the quoted mixed-case column aliases so file headers match exactly.
 - No stitching: files are written directly with SINGLE = TRUE and exact file names as in the Scala.
+
+
+
+  SELECT MAX(GEN_AI_SA_ID) FROM U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG;
