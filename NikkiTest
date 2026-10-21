@@ -1,12 +1,12 @@
 Read instruction in file @devin_task_v2.txt and complete the task, below are the details required.
 LOB_CODE: MCR
 GEN_AI_SA_ID : <max+1 from Snowflake>
-domain ID : <your domain ID>
-PRIMARY_TECH_POC_ID : <your domain ID>
-SECONDARY_TECH_POC_ID : <your domain ID>
-PRIMARY_BIZ_POC_ID : <Pranaya's name, Last, First format>
-SECONDARY_BIZ_POC_ID : <Pranaya's name, Last, First format>
-JIRA_STORY : <your conversion story number>
+domain ID : AM71511
+PRIMARY_TECH_POC_ID : AM71511
+SECONDARY_TECH_POC_ID : AM71511
+PRIMARY_BIZ_POC_ID : Cyr, Sandra J.
+SECONDARY_BIZ_POC_ID : Cyr, Sandra J.
+JIRA_STORY :RBICA-14353
 
 {
   "LOAD_LOG_KEY_TABLE": "U01_RAA.RAA_RAWZ.load_log_key",
