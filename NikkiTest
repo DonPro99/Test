@@ -1,20 +1,219 @@
-SELECT COUNT(*)
-FROM U01_RAA.RAA_RAWZ.rad_deploy_all_lob b
-JOIN U01_RAA.RAA_RAWZ.rad_master_charts_all_lob a
-  ON TRIM(a.recordid) = TRIM(b.recordid)
- AND TRIM(a.filedatetime) = TRIM(b.filedatetime)
- AND TRIM(a.chartid) = TRIM(b.add_val1)
- AND TRIM(a.chartdatetime) = TRIM(b.add_val2)
- AND TRIM(a.lob) = TRIM(b.lob)
-WHERE TRIM(b.intervention) = 'DTVNTRT'
-  AND TRIM(b.lob) = 'MCR'
-  AND b.batch_id = '9';
+Snowpark to Snowflake SQL Conversion Guide
+Overview
+This repository contains a reusable conversion prompt, devin_task_v2.txt, for converting Snowpark-based Scala/Python jobs into native Snowflake SQL for the GenAiSa framework.
 
-SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ_STG.deply_dtvntrt_mra_stg;
+The prompt is designed to guide a coding assistant through:
 
+analyzing Snowpark code and config files
+converting business logic into Snowflake SQL scripting
+preserving batch logic, validation, export behavior, and operational metadata
+generating GenAISA configuration SQL for UAT and PROD where applicable
+Primary prompt file:
 
-"LOAD_LOG_KEY_TABLE": "U01_RAA.RAA_RAWZ.load_log_key"
+devin_task_v2.txt
+Primary SQL template:
 
-'DatavantMbrProv Outbound File Generation MCR', -- PROCESS_NAME
-'Insert and Outbound File Generation MCR',      -- STEP_NAME
-"LOAD_LOG_KEY_TABLE": "P01_RAA.RAA_RAWZ.load_log_key"
+TEMPLATE_snowflake_scripting.sql
+Repository Structure
+Typical structure expected by the prompt:
+
+Code-Conversion/
+├── devin_task_v2.txt
+├── TEMPLATE_snowflake_scripting.sql
+├── Scala_Code/
+│   └── <module_name>/
+│       ├── <source_file>.scala
+│       ├── <config_file>.conf
+│       └── optional helper files such as merge.py, Lambda_Notification.py
+├── Python_Code/
+│   └── <module_name>/
+│       ├── <source_file>.py
+│       ├── <config_file>.json
+│       └── optional helper files
+└── SQL_Code/
+    └── <module_name>/
+What the Prompt Produces
+For each module, the prompt is intended to generate:
+
+the converted SQL script
+the output SQL file path
+the list of source files used
+the list of Jinja2 parameters required
+a short list of assumptions or unresolved placeholders
+SQL header metadata with:
+Author = the user/domain ID provided for config insertion fields
+Co-Author = Devin, GPT-5.4 High Thinking
+Depending on the module, it may also generate environment-specific GenAISA config SQL files:
+
+genaisa_config_<app_name>_uat.sql
+genaisa_config_<app_name>_prod.sql
+These may include inserts for:
+
+GENAISA_RUN_CONFIG
+GENAISA_MASTER_CONFIG
+GENAISA_LAMBDA_CONFIG (only when needed)
+GENAISA_STITCHING_CONFIG (only when needed)
+Required Inputs from the User
+The prompt tries to derive as much as possible from source code, config files, and helper files. If values cannot be determined confidently, the assistant should ask the user.
+
+Asked once and reused
+These values should be collected once and reused consistently:
+
+LOB_CODE
+GEN_AI_SA_ID
+domain user ID / YOUR_USER_ID
+LOB code mapping
+001 = ACA
+002 = MRA
+003 = MCR
+Additional possible user inputs
+If not found in code/config/helper files, the assistant may ask for:
+
+APP_ID
+SUB_GRP_ID
+primary/secondary notification email lists
+technical/business POC IDs
+Jira story ID
+Lambda-specific routing, bucket, and notification values
+stitching-specific header/footer/split values
+Null behavior
+If the following fields are prompted but not provided, they should be set to NULL in the generated config SQL:
+
+APP_ID
+SUB_GRP_ID
+PRIMARY_TECH_POC_ID
+SECONDARY_TECH_POC_ID
+PRIMARY_BIZ_POC_ID
+SECONDARY_BIZ_POC_ID
+JIRA_STORY
+Files the Prompt Will Inspect
+The prompt is designed to inspect all relevant artifacts for a module, including:
+
+.scala or .py source files
+.conf, .json, or .JSON config files
+embedded SQL inside source files
+helper/config files such as:
+merge.py
+Merge.py
+Lambda_Notification.py
+lambda_config.txt
+similar files that contain routing, merge, header/footer, split, or notification logic
+These helper files are especially important for:
+
+GENAISA_STITCHING_CONFIG
+GENAISA_LAMBDA_CONFIG
+How to Use devin_task_v2.txt
+Step 1: Prepare the repository
+Make sure the repository contains:
+
+devin_task_v2.txt
+TEMPLATE_snowflake_scripting.sql
+source module folders under Scala_Code/ or Python_Code/
+any related config/helper files
+Step 2: Provide the conversion instruction and required details
+Use the following request:
+
+Read instruction in file @devin_task_v2.txt and complete the task, below are the details required.
+LOB_CODE: <LOB CODE e.g. ACA>
+GEN_AI_SA_ID: <Query the genaisa_master_config max GEN_AI_SA_ID and + 1 to it>
+domain ID: <Your domain id>
+PRIMARY_TECH_POC_ID: <domain id for poc or name>
+SECONDARY_TECH_POC_ID: <domain id for poc or name>
+PRIMARY_BIZ_POC_ID: <domain id for poc or name>
+SECONDARY_BIZ_POC_ID: <domain id for poc or name>
+JIRA_STORY: RBICA-004
+Step 3: Review generated outputs
+Converted files are typically written under:
+
+SQL_Code/<module_name>/
+Review:
+
+the converted SQL script
+any generated UAT/PROD GenAISA config SQL
+unresolved placeholders or assumptions
+Output Naming Conventions
+Converted SQL file
+Use the source file base name and change the extension to .sql.
+
+Example:
+
+Scala_Code/Inv_Mbr_Enroll/InvprspMbrEnrollmentLoad.scala
+→ SQL_Code/Inv_Mbr_Enroll/InvprspMbrEnrollmentLoad.sql
+GenAISA config SQL files
+Use:
+
+genaisa_config_<app_name>_uat.sql
+genaisa_config_<app_name>_prod.sql
+Example:
+
+genaisa_config_invprsp_uat.sql
+genaisa_config_invprsp_prod.sql
+Important Behaviors Enforced by the Prompt
+The prompt is designed to enforce the following behaviors:
+
+wrap scripts in EXECUTE IMMEDIATE $$...$$
+use a single DECLARE section
+use :variable syntax
+use Jinja2 placeholders such as {{ targetTable }}
+preserve the structure of TEMPLATE_snowflake_scripting.sql
+create validation_counts
+use transaction boundaries
+preserve export/file naming logic
+use explicit final target INSERT column lists
+generate environment-specific config SQL when required
+COPY INTO Path Convention
+When the source job writes files to a Snowflake stage, the preferred generated pattern is:
+
+@{{ snow_flake_stage }}/{{ s3_folder_path }}/{{ TIMESTAMP_FOLDER }}/<file_name_prefix>{{ TIMESTAMP_DATE }}
+This keeps:
+
+stage name separate from folder path
+timestamp folder logic intact
+filename prefix consistent with the source job
+Environment-Specific GenAISA Rules
+For config SQL generation:
+
+UAT
+Use:
+
+USE SCHEMA U01_RAA.RAA_RAWZ;
+PROD
+Use:
+
+USE SCHEMA P01_RAA.RAA_RAWZ;
+SQL file path format
+UAT:
+
+s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP_NAME>/<SQL_FILE>
+PROD:
+
+s3://crln-raa-prod-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP_NAME>/<SQL_FILE>
+Recommended Review Checklist
+Before accepting generated output, confirm that:
+
+the correct module was converted
+the SQL file is in the right SQL_Code/<module_name>/ folder
+Author uses the expected domain ID
+Co-Author is Devin, GPT-5.4 High Thinking
+final INSERT statements use explicit target column lists
+export path logic matches the source implementation
+helper files were considered when generating Lambda or stitching config
+fields not provided by the user were handled according to the prompt (NULL vs placeholder)
+Additional Resources
+Snowflake Scripting Docs: https://docs.snowflake.com/en/developer-guide/snowflake-scripting/index
+Snowpark API Reference: https://docs.snowflake.com/en/developer-guide/snowpark/reference/python/latest/index
+Template File: TEMPLATE_snowflake_scripting.sql
+Example Module in This Repository
+A tested example in this repository is:
+
+source: Scala_Code/Inv_Mbr_Enroll/InvprspMbrEnrollmentLoad.scala
+converted SQL: SQL_Code/Inv_Mbr_Enroll/InvprspMbrEnrollmentLoad.sql
+UAT config: SQL_Code/Inv_Mbr_Enroll/genaisa_config_invprsp_uat.sql
+PROD config: SQL_Code/Inv_Mbr_Enroll/genaisa_config_invprsp_prod.sql
+Support Notes
+If conversion results are incomplete or ambiguous:
+
+verify the source config files are present
+verify any helper files (merge.py, Lambda_Notification.py, etc.) are included
+provide the missing user inputs when prompted
+review unresolved placeholders and update them as needed
