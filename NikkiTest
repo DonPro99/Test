@@ -1,35 +1,139 @@
-Read instruction in file @devin_task_v2.txt and complete the task, below are the details required.
-LOB_CODE: MCR
-GEN_AI_SA_ID : <max+1 from Snowflake>
-domain ID : AM71511
-PRIMARY_TECH_POC_ID : AM71511
-SECONDARY_TECH_POC_ID : AM71511
-PRIMARY_BIZ_POC_ID : Cyr, Sandra J.
-SECONDARY_BIZ_POC_ID : Cyr, Sandra J.
-JIRA_STORY :RBICA-14353
 
-{
-  "LOAD_LOG_KEY_TABLE": "U01_RAA.RAA_RAWZ.load_log_key",
-  "chartsMasterTable": "U01_RAA.RAA_RAWZ.rad_master_charts_all_lob",
-  "deployTable": "U01_RAA.RAA_RAWZ.rad_deploy_all_lob",
-  "deployTempTable": "U01_RAA.RAA_RAWZ_STG.deply_dtvntrt_mra_stg"
-}
+1h
+Read
+README.md
+DatavantMbrProvETL.sql
++866
+--       - Use LEFT JOIN when INNER JOIN is appropriate (causes NULL rows)
+--       - Use CALL SYSTEM$LOG (function doesn't exist)
+--
+-- ============================================================================
+ 
 
-{
-  "snow_flake_stage": "RAA_SF_SSMOUTBOUND_GBD_PHI",
-  "s3_folder_path": "datavantprov-retro-etl",
-  "mbrProvTargetTable": "U01_RAA.RAA_RAWZ.rad_cioxrt_all_lob",
-  "cplTargetTable": "U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL"
-}
+DatavantMbrProvETL.sql
++3
+-1
+    IF ((SELECT COUNT(*) FROM temp_db.temp_schema.mbrprov_dply_data) = 0) THEN
+    SELECT COUNT(*) INTO mbrprov_dply_cnt FROM temp_db.temp_schema.mbrprov_dply_data;
+ 
+    IF (mbrprov_dply_cnt = 0) THEN
+        RAISE e_mbrprov_no_data;
 
-Additional requirements:
-- Convert only generateDatavantMbrProvOutboundFile and generateDatavantCPLOutboundFile, in the order the driver calls them.
-- Target tables must be loaded with INSERT INTO and explicit column lists exactly as in the Scala. Never CREATE OR REPLACE a target table. rad_cioxrt_all_lob is shared with other interventions.
-- Batch lookup must match the Scala: processid 255, stepid 10, highest batchid, status Completed and reccnt > 0. Do not default batch_id to 1.
-- Keep the file select (with P01_PROTEGRITY.SCRTY_ACS_CNTRL.ANTM_SSN_DETOK) and the table-insert select (plain MBR_SSNLST4) as two separate selects.
-- Keep the quoted mixed-case column aliases so file headers match exactly.
-- No stitching: files are written directly with SINGLE = TRUE and exact file names as in the Scala.
+DatavantMbrProvETL.sql
++3
+-1
+    IF ((SELECT COUNT(*) FROM temp_db.temp_schema.cpl_dply_data) = 0) THEN
+    SELECT COUNT(*) INTO cpl_dply_cnt FROM temp_db.temp_schema.cpl_dply_data;
+ 
+    IF (cpl_dply_cnt = 0) THEN
+        RAISE e_cpl_no_data;
 
+DatavantMbrProvETL.sql
++2
+    deploy_temp_cnt INTEGER;
+    mbrprov_dply_cnt INTEGER;
+    cpl_dply_cnt INTEGER;
+ 
+genaisa_config_datavantmbrprov_uat.sql
++103
+;
+ 
+-- GENAISA_LAMBDA_CONFIG: not generated (no Lambda dispatch; no Lambda helper/config files in module)
+-- GENAISA_STITCHING_CONFIG: not generated (no merge/split helper; source writes SINGLE final files)
+ 
 
+Now the PROD version (only environment-specific values differ).
 
-  SELECT MAX(GEN_AI_SA_ID) FROM U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG;
+Command diff in …\CodeConversion
+sed -e 's/ - UAT$/ - PROD/' -e 's/datavantmbrprov-etl_uat.properties/datavantmbrprov-etl_prod.properties/' -e 's/U01_RAA/P01_RAA/g' -e 's/crln-raa-uat-codez/crln-raa-prod-codez/g' -e 's/-- UAT SQL path format/-- PROD SQL path format/' SQL_Code/datavant/genaisa_config_datavantmbrprov_uat.sql > SQL_Code/datavant/genaisa_config_datavantmbrprov_prod.sql && diff SQL_Code/datavant/genaisa_config_datavantmbrprov_uat.sql SQL_Code/datavant/genaisa_config_datavantmbrprov_prod.sql
+2c2
+< -- GenAISA Configuration: Datavant Member/Provider + CPL Outbound (DTVNTRT) - UAT
+---
+> -- GenAISA Configuration: Datavant Member/Provider + CPL Outbound (DTVNTRT) - PROD
+8c8
+< -- Source: Scala_codes/datavant/DatavantMbrProvETL.scala, datavantmbrprov-etl_uat.properties,
+---
+> -- Source: Scala_codes/datavant/DatavantMbrProvETL.scala, datavantmbrprov-etl_prod.properties,
+12c12
+< USE SCHEMA U01_RAA.RAA_RAWZ;
+---
+> USE SCHEMA P01_RAA.RAA_RAWZ;
+43,44c43,44
+< -- UAT SQL path format (mandatory):
+< -- s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP_NAME>/<SQL_FILE>
+---
+> -- PROD SQL path format (mandatory):
+> -- s3://crln-raa-prod-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP_NAME>/<SQL_FILE>
+69c69
+<     's3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql', -- EXECUTABLE_SQL_FIL
+E - strict environment path format
+---
+>     's3://crln-raa-prod-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql', -- EXECUTABLE_SQL_FI
+LE - strict environment path format
+72,74c72,74
+<         "chartsMasterTable": "U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB",
+<         "deployTable": "U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB",
+<         "deployTempTable": "U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRT_MRA_STG",
+---
+>         "chartsMasterTable": "P01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB",
+>         "deployTable": "P01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB",
+>         "deployTempTable": "P01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRT_MRA_STG",
+79,81c79,81
+<         "targetTable": "U01_RAA.RAA_RAWZ.RAD_CIOXRT_ALL_LOB",
+<         "cplTargetTable": "U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL",
+<         "snow_flake_stage": "U01_RAA.RAA_RAWZ.RAA_SF_SSMOUTBOUND_GBD_PHI",
+---
+>         "targetTable": "P01_RAA.RAA_RAWZ.RAD_CIOXRT_ALL_LOB",
+>         "cplTargetTable": "P01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL",
+>         "snow_flake_stage": "P01_RAA.RAA_RAWZ.RAA_SF_SSMOUTBOUND_GBD_PHI",
+
+I converted the datavant module to Snowflake SQL and wrote the UAT and PROD config files. I haven't run anything against Snowflake, so none of the scripts have been executed or syntax-checked yet. A few items below need your confirmation before deploying, starting with the CPL target table.
+
+Output files
+Converted SQL: DatavantMbrProvETL.sql @C:\Users\AM71511\OneDrive - Elevance Health\Desktop\CodeConversion\SQL_Code\datavant\DatavantMbrProvETL.sql
+UAT config: @C:\Users\AM71511\OneDrive - Elevance Health\Desktop\CodeConversion\SQL_Code\datavant\genaisa_config_datavantmbrprov_uat.sql
+PROD config: @C:\Users\AM71511\OneDrive - Elevance Health\Desktop\CodeConversion\SQL_Code\datavant\genaisa_config_datavantmbrprov_prod.sql
+Source files used
+DatavantMbrProvETL.scala
+DatavantMbrProvETLDriver.scala
+datavantmbrprov-etl_uat.properties and datavantmbrprov-etl_prod.properties
+RAA-DATAVANTPROV-ETL.json
+The source folder is named Scala_codes, which isn't one of the names the instructions list. I treated it as the source folder anyway.
+
+What the script does
+It follows the template section order and covers the two functions the driver calls: the member/provider file and the CPL file.
+
+Batch ID: it takes the latest load_log_key entry for process 255, step 10 and reuses that batch ID without incrementing it, as the Scala job does.
+Up-front checks: it stops with a fixed error message if that entry is missing, its status isn't Completed, its record count is 0, the deploy staging table is empty, or the deploy-to-charts join returns no rows. All of these checks run before anything is written.
+Tables: it inserts into RAD_CIOXRT_ALL_LOB and RAD_DATAVANT_CHASE_CPL with explicit column lists. As in the source, the SSN is detokenized in the file but not in the table.
+Files: the export keeps the source behaviour:
+Files are split by ONSHORE/OFFSHORE and every 500,000 rows.
+They are pipe-delimited with a header, uncompressed, one file per COPY, and overwrite existing files.
+The .txt extension is in the file name, not in the file format settings.
+Path: @stage/datavantprov-retro-etl/<YYYYMMDD_HHMMSS>/ELV_DTVNT_<R>_MRA_<ind>_<n>_<yyyyMMddHHmmss>.txt, with _CPL_<n>.txt at the end for CPL files.
+Validation: validation_counts holds row_count, stage_count and duplicate_count, plus CPL and batch information columns.
+Jinja2 parameters
+PROCESS_ID (255), STEP_ID (20), STEP_ID_MBR (declared by the template but not used here), EDL_RUN_ID, LOB, LOAD_LOG_KEY_TABLE, chartsMasterTable, deployTable, deployTempTable, targetTable, cplTargetTable, snow_flake_stage, s3_folder_path, TIMESTAMP_FOLDER, TIMESTAMP_DATE.
+
+Config values
+LOB code 003 (name MCR), GEN_AI_SA_ID 005, domain ID AM71511.
+Tech POCs AM71511, business POCs Cyr, Sandra J., Jira RBICA-14353.
+APP_ID and SUB_GRP_ID are NULL because they weren't provided.
+Stitching and dispatch flags are FALSE, so no Lambda or stitching config was generated. There are no helper files for either, the files are already written as final single files, and the source says SFTP is handled by the existing CFX step.
+Needs your confirmation
+CPL target table: the properties files have no intervention.master.hive.table.datavantcpl key, so the original Scala CPL step would fail when it looks it up. I used RAD_DATAVANT_CHASE_CPL, the name given in a code comment.
+{{ LOB }} must come through as 'MCR', not '003'. The join filter and EDL_LOB_CD both depend on it.
+SUB_GROUP_NAME is set to DATAVANT, which puts the SQL at .../genaisa/sql/DATAVANT/DatavantMbrProvETL.sql. S3 paths are case-sensitive, so check this matches where you deploy it.
+Process and step names are DatavantMbrProv Outbound File GenerationMCR and Insert and Outbound File GenerationMCR, with no space before MCR. That's what the source builds by appending the LOB to the property value.
+Hardcoded values: DTVNTRT, deploy step 10 and Completed are written into the script. They come from the properties files and are the same in UAT and PROD.
+PROD detokenization UDF in UAT: P01_PROTEGRITY...ANTM_SSN_DETOK is hardcoded to the PROD database in the source, and I kept it that way, so UAT also calls it.
+Differences from the Scala job
+One timestamp folder: both outputs land in the same folder. The Scala job took a separate timestamp for each function, so its two sets of files could end up in different folders.
+Run ID: the script uses the framework's EDL_RUN_ID instead of generating md5(current_timestamp) itself.
+Load log: writing the load_log_key entry is left to the Python framework, as the template expects.
+Email: the failure emails sent by the Scala job are left to the framework's notifications.
+CPL empty check: this now runs up front instead of after the member/provider output is written. It uses the same join as the member/provider data, so it can only trigger in the same cases.
+Row-count audit: the source's check against the deploy record count is commented out, so stage_count is the deduplicated join count and won't fail on that comparison.
+Not converted
+generateDatavantPreMatchOutboundFile wasn't converted because the driver never calls it and it uses a hardcoded temporary process ID (4500).
+
