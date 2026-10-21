@@ -1,105 +1,715 @@
-#Hive DB configuration
-#PROD
-intervention.hive.database=U01_RAA.RAA_RAWZ
-intervention.hive.nogbddatabase=U01_RAA.RAA_RAWZ
+# Snowpark to SQL Conversion Prompt
 
-#Master Mbrs table.
-intervention.master.hive.table.mbrs=rad_master_charts_all_lob
-# rad_master_member_all_lob is changed to rad_master_mbrs_all_lob
-intervention.master.hive.table.nogbdmbrs=rad_master_charts_all_lob
+# Author: Prakash, Ravi (AH62178)
+# Team: GenAISA, Risk Adjustment Analytics 
+# Co-Author: Devin, GPT-5.4 High Thinking
 
-#Deploy table.
-intervention.master.hive.table.deploy=rad_deploy_all_lob
-intervention.master.hive.table.nogbddeploy=rad_deploy_all_lob
+## Objective
+Convert Snowpark code (Python/Scala) to native Snowflake SQL using the standardized template for the GenAiSa framework.
 
-#Deploy temp table.
-intervention.dtvntrt.mcare.deploy.temp.hive.table=raa_rawz_stg.deply_dtvntrt_mra_stg
+## Source and Destination Discovery Rules
+source_code_path:
+- In the repository root, look for source folders named `Scala_Code`, `Scala_code`, `Python_Code`, or `Python_code`.
+- Each immediate subfolder under those source folders is one module to convert.
+- `.scala` or `.py` files contain executable source code.
+- `.conf`, `.json`, or `.JSON` files contain configuration that must be mined for table names, stages, process identifiers, step metadata, and output locations.
 
-# Centauri files intervention code
-intervention.datavantmbrprov.code=DTVNTRT
+destination_folder:
+- Save converted SQL under `SQL_Code/<module_name>/`.
+- Create the module folder if it does not exist.
+- Use the source file base name for the output SQL file.
+- Example: `Scala_Code/Inv_Mbr_Enroll/InvprspMbrEnrollmentLoad.scala` → `SQL_Code/Inv_Mbr_Enroll/InvprspMbrEnrollmentLoad.sql`
 
-# Datavant Pre-Match (RBICA-14070)
-intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
-intervention.datavantprematch.code=DTVNTRTPM
+## Required Output Per Module
+For each module converted, produce:
+1. the converted SQL script
+2. the output SQL file path
+3. the list of source code/config files used
+4. the list of Jinja2 parameters required
+5. a short list of assumptions or unresolved placeholders
+6. SQL header metadata where:
+   - `Author` is the domain ID of the person/user provided for config insertion fields
+   - `Co-Author` is `Devin, GPT-5.4 High Thinking`
 
-# Centauri files delimiter
-intervention.dtvntrt.delimiter=|
+---
 
-#Intervention table.
-intervention.master.hive.table.datavantmbrprov=rad_cioxrt_all_lob
-intervention.master.hive.table.nogbddatavantmbrprov=rad_cioxrt_all_lob
+## Conversion Instructions
 
-# Outbound location on s3
-Outbound_Location:@RAA_SF_SSMOUTBOUND_GBD_PHI
+You are an expert Snowflake SQL developer. Your task is to convert the provided Snowpark code to native Snowflake SQL following these requirements:
 
-# Email and Load Log key parameters
-riskadjustment.hive.table.loadlog=load_log_key
-source=DTVNTRT
-processname1=DatavantMbrProv Outbound File Generation
-processname2=DatavantMbrProv Outbound File Generation
-step1=Insert to Persistant Table
-step2=Insert and Outbound File Generation
-processID.MCR=255
-stepID1=10
-stepID2=20
-status1=Completed
-status2=Failed
-emailFrom=dtvntrt.etl.aws@anthem.com
-emailTo=dl-RAAETLDevelopers@anthem.com
-emailToList=dl-RAAETLDevelopers@anthem.com
+### 1. **Analyze the Snowpark Code**
+- Identify all DataFrame operations (select, filter, join, groupBy, agg, union, distinct, withColumn, orderBy, limit, write)
+- Map Snowpark transformations to SQL equivalents
+- Identify data sources (tables, files, stages)
+- Extract business logic and transformations
+- Note any UDFs or custom functions
+- Identify all output targets and side effects
 
+### 1A. **Analyze Operational Behavior Beyond DataFrames**
+- Identify batch ID logic, run ID generation, and load log usage
+- Identify stage/file export logic and preserve naming behavior
+- Identify row-count/validation logic
+- Identify embedded SQL strings inside Scala/Python and preserve their business logic
+- Identify configuration-driven values that must become Jinja2 parameters
 
-===============================================================
-===========================================
+### 2. **Use the SQL Template**
+- Start with `TEMPLATE_snowflake_scripting.sql`
+- Replace all placeholders with actual values when they are known
+- Follow the section structure exactly
+- Preserve all required sections from the template
 
+### 2A. **Preserve the Template Contract**
+- Do not remove instructions related to `TEMPLATE_snowflake_scripting.sql`
+- Do not collapse template sections into a different structure
+- Only replace placeholders, add module-specific logic, and add required SQL statements within the template structure
+- If a value cannot be confirmed from the source code or config, keep a descriptive Jinja2 placeholder and document it
+- In the generated SQL file header, set:
+  - `Author` to the domain ID provided by the user for config insertion/user fields
+  - `Co-Author` to `Devin, GPT-5.4 High Thinking`
+  - the change-log author reference to the same domain ID used for `Author`
 
-#Hive DB configuration
-#PROD
-intervention.hive.database=P01_RAA.RAA_RAWZ
-intervention.hive.nogbddatabase=P01_RAA.RAA_RAWZ
+### 3. **Mapping Rules**
 
-#Master Mbrs table.
-intervention.master.hive.table.mbrs=rad_master_charts_all_lob
-# rad_master_member_all_lob is changed to rad_master_mbrs_all_lob
-intervention.master.hive.table.nogbdmbrs=rad_master_charts_all_lob
+#### **Snowpark DataFrame Operations → SQL**
 
-#Deploy table.
-intervention.master.hive.table.deploy=rad_deploy_all_lob
-intervention.master.hive.table.nogbddeploy=rad_deploy_all_lob
+| Snowpark (Python) | Snowpark (Scala) | SQL Equivalent |
+|-------------------|------------------|----------------|
+| `df.select("col1", "col2")` | `df.select("col1", "col2")` | `SELECT col1, col2 FROM table` |
+| `df.filter(col("status") == "ACTIVE")` | `df.filter($"status" === "ACTIVE")` | `WHERE status = 'ACTIVE'` |
+| `df.join(df2, "key")` | `df.join(df2, "key")` | `INNER JOIN table2 ON table1.key = table2.key` |
+| `df.groupBy("col").agg(sum("amount"))` | `df.groupBy("col").agg(sum("amount"))` | `SELECT col, SUM(amount) FROM table GROUP BY col` |
+| `df.withColumn("new", lit("value"))` | `df.withColumn("new", lit("value"))` | `SELECT *, 'value' AS new` |
+| `df.distinct()` | `df.distinct()` | `SELECT DISTINCT` |
+| `df.orderBy("col")` | `df.orderBy("col")` | `ORDER BY col` |
+| `df.limit(100)` | `df.limit(100)` | `LIMIT 100` |
+| `df.union(df2)` | `df.union(df2)` | `UNION ALL` |
+| `df.write.mode("overwrite").saveAsTable("table")` | `df.write.mode("overwrite").saveAsTable("table")` | `CREATE OR REPLACE TABLE` or target-specific reload logic |
 
-#Deploy temp table.
-intervention.dtvntrt.mcare.deploy.temp.hive.table=raa_rawz_stg.deply_dtvntrt_mra_stg
+#### **Snowpark Functions → SQL Functions**
 
-# Centauri files intervention code
-intervention.datavantmbrprov.code=DTVNTRT
+| Snowpark | SQL |
+|----------|-----|
+| `col("name")` | `name` |
+| `lit("value")` | `'value'` |
+| `when(condition, value).otherwise(default)` | `CASE WHEN condition THEN value ELSE default END` |
+| `concat(col("a"), col("b"))` | `CONCAT(a, b)` |
+| `current_timestamp()` | `CURRENT_TIMESTAMP()` |
+| `to_date(col("date"), "yyyy-MM-dd")` | `TO_DATE(date, 'YYYY-MM-DD')` |
+| `coalesce(col("a"), col("b"))` | `COALESCE(a, b)` |
+| `substring(col("text"), 1, 10)` | `SUBSTR(text, 1, 10)` |
 
-# Datavant Pre-Match (RBICA-14070)
-intervention.master.hive.table.datavantprematch=RAD_DATAVANT_CHASE_PREMATCH
-intervention.datavantprematch.code=DTVNTRTPM
+### 4. **Variable Handling**
 
-# Centauri files delimiter
-intervention.dtvntrt.delimiter=|
+#### **Snowpark Variables → SQL Variables**
 
-#Intervention table.
-intervention.master.hive.table.datavantmbrprov=rad_cioxrt_all_lob
-intervention.master.hive.table.nogbddatavantmbrprov=rad_cioxrt_all_lob
+```python
+# Snowpark (Python)
+process_id = "MTRX_PRSP"
+df = session.table("source").filter(col("process") == process_id)
+```
 
-# Outbound location on s3
-Outbound_Location:@RAA_SF_SSMOUTBOUND_GBD_PHI
+```sql
+-- SQL (in DECLARE section)
+DECLARE
+    process_id VARCHAR := '{{ PROCESS_ID }}';
+BEGIN
+    CREATE TEMP TABLE source_data AS
+    SELECT * FROM {{ sourceTable }}
+    WHERE process = :process_id;
+END;
+```
 
-# Email and Load Log key parameters
-riskadjustment.hive.table.loadlog=load_log_key
-source=DTVNTRT
-processname1=DatavantMbrProv Outbound File Generation 
-processname2=DatavantMbrProv Outbound File Generation 
-step1=Insert to Persistant Table 
-step2=Insert and Outbound File Generation 
-processID.MCR=255
-stepID1=10
-stepID2=20
-status1=Completed
-status2=Failed
-emailFrom=dtvntrt.etl.aws@anthem.com
-emailTo=dl-RAAETLDevelopers@anthem.com
-emailToList=dl-RAAETLDevelopers@anthem.com
+### 5. **Temp Table Strategy**
+Convert Snowpark DataFrame chains to temp tables:
 
+```python
+# Snowpark
+df1 = session.table("source").filter(col("status") == "ACTIVE")
+df2 = df1.select("id", "name", "amount")
+df3 = df2.groupBy("name").agg(sum("amount").alias("total"))
+```
+
+```sql
+-- SQL
+CREATE OR REPLACE TEMPORARY TABLE temp_db.temp_schema.step1 AS
+SELECT * FROM {{ sourceTable }}
+WHERE status = 'ACTIVE';
+
+CREATE OR REPLACE TEMPORARY TABLE temp_db.temp_schema.step2 AS
+SELECT id, name, amount
+FROM temp_db.temp_schema.step1;
+
+CREATE OR REPLACE TEMPORARY TABLE temp_db.temp_schema.step3 AS
+SELECT name, SUM(amount) AS total
+FROM temp_db.temp_schema.step2
+GROUP BY name;
+```
+
+### 6. **Join Conversion**
+
+```python
+# Snowpark
+result = df1.join(df2, df1["key"] == df2["key"], "inner") \
+            .select(df1["*"], df2["value"])
+```
+
+```sql
+-- SQL
+CREATE OR REPLACE TEMPORARY TABLE temp_db.temp_schema.joined AS
+SELECT t1.*, t2.value
+FROM temp_db.temp_schema.table1 t1
+INNER JOIN temp_db.temp_schema.table2 t2
+    ON t1.key = t2.key;
+```
+
+### 7. **Embedded SQL Handling**
+- If the source job already contains embedded SQL strings (for example `spark.sql(...)` or `session.sql(...)`), preserve the SQL business logic and adapt the orchestration into Snowflake scripting.
+- Do not force a DataFrame-style rewrite when the source already expresses the transformation in SQL.
+- Normalize embedded SQL into the template sections, variable model, temp table model, and config placeholder model.
+
+### 8. **Export / File Naming Preservation**
+- If the source job writes files to a stage or path, preserve:
+  - folder structure
+  - timestamp folder logic
+  - file prefix logic
+  - delimiter/header/compression settings
+  - single-vs-multi-file behavior
+  - overwrite behavior
+- Do not hardcode the file extension in both the export path and `FILE_EXTENSION` unless the source explicitly does that.
+- If the source builds a file prefix without an extension, preserve that behavior and let the export/file-format settings control extension creation.
+- Use separate Jinja2 placeholders for Snowflake stage name and S3 folder path when those values come from configuration.
+- Preferred `COPY INTO` path format:
+  - `@{{ snow_flake_stage }}/{{ s3_folder_path }}/{{ TIMESTAMP_FOLDER }}/<file_name_prefix>{{ TIMESTAMP_DATE }}`
+- Do not collapse stage name and folder path into a single placeholder when the source/config distinguishes them.
+
+### 9. **Critical Requirements**
+
+**MUST DO:**
+1. Wrap entire script in `EXECUTE IMMEDIATE $$...$$`
+2. Use single `DECLARE` section at top
+3. Use `:variable` syntax for variable references in SQL
+4. Use `{{ template }}` syntax for Jinja2 parameters from config
+5. Use `SELECT...INTO` for assigning query results to variables
+6. Create `validation_counts` temp table for Python validation
+7. Use `BEGIN TRANSACTION` and `COMMIT`
+8. Add EDL columns: `EDL_LOAD_DTM`, `EDL_RUN_ID`, `EDL_LOB_CD`
+9. Use INNER JOIN unless business logic requires LEFT JOIN
+10. Include batch_id tracking with `LOAD_LOG_KEY_TABLE`
+11. Use explicit target column lists for all final `INSERT INTO {{ targetTable }} (...) SELECT ...` statements unless the target table is fully recreated in the same statement
+12. Match the source job’s batch ID behavior exactly (reuse vs increment) and document it if not obvious
+13. Preserve export/file naming logic exactly when converting outbound file generation
+14. Extract config-driven values from `.conf` / `.json` files and convert them to Jinja2 placeholders or resolved values
+15. Document unresolved values using descriptive Jinja2 placeholders instead of inventing hardcoded environment-specific values
+16. Keep the template section order from `TEMPLATE_snowflake_scripting.sql`
+
+**NEVER DO:**
+1. Use `SET` with subqueries or functions
+2. Use `$variable` syntax (PostgreSQL style)
+3. Use `IDENTIFIER(:variable)` in `EXECUTE IMMEDIATE` blocks unless explicitly required and proven valid for the use case
+4. Create nested `DECLARE...BEGIN...END` blocks
+5. Use `RAISE EXCEPTION` with dynamic strings
+6. Use LEFT JOIN when INNER JOIN is appropriate
+7. Use `CALL SYSTEM$LOG` (doesn't exist)
+8. Use `LET` for variables (use `DECLARE` instead)
+9. Invent source tables, target tables, stage names, process IDs, or step IDs that cannot be confirmed
+10. Omit final insert column lists for durable target tables
+
+### 10. **Template Parameters Setup**
+After conversion, document the required config.
+
+Use the detailed environment-specific config generation rules and insert templates in **Section 12** for:
+- `GENAISA_MASTER_CONFIG`
+- `GENAISA_RUN_CONFIG`
+- `GENAISA_LAMBDA_CONFIG` (when applicable)
+- `GENAISA_STITCHING_CONFIG` (when applicable)
+
+At minimum, ensure the generated config captures:
+- process identifiers and step metadata
+- source and destination object mappings
+- executable SQL file path
+- notification and ownership fields
+- effective dating and current-record indicators
+
+Also document:
+- source files used for the conversion
+- all Jinja2 placeholders required by the script
+- config keys extracted from source config files
+- any unresolved placeholders that still need real values
+
+### 11. **Completion Checklist**
+Before considering the conversion complete, verify that:
+- The script is wrapped in `EXECUTE IMMEDIATE $$...$$`
+- There is exactly one `DECLARE` section
+- SQL variables use `:variable` syntax
+- Configurable objects use `{{ ... }}` syntax
+- Final target inserts use explicit column lists
+- `validation_counts` is created
+- `BEGIN TRANSACTION` and `COMMIT` are present
+- Export/file naming matches the source job behavior
+- Required `GENAISA_MASTER_CONFIG` values are documented
+- Any unresolved values remain as descriptive placeholders and are documented
+- Output SQL file is placed under the correct `SQL_Code/<module_name>/` folder
+
+### 12. **Environment-Specific GenAISA Config SQL Generation**
+In addition to the converted Snowflake SQL script, generate environment-specific GenAISA configuration SQL files during code conversion.
+
+#### Required output files
+Generate two configuration files for each application/module:
+- `genaisa_config_<app_name>_uat.sql`
+- `genaisa_config_<app_name>_prod.sql`
+
+Example:
+- `genaisa_config_invprsp_uat.sql`
+- `genaisa_config_invprsp_prod.sql`
+
+#### Required contents
+Each config SQL file should include:
+1. `GENAISA_RUN_CONFIG`
+2. `GENAISA_MASTER_CONFIG`
+3. `GENAISA_LAMBDA_CONFIG` (only if Lambda-based file dispatch is required)
+4. `GENAISA_STITCHING_CONFIG` (only if output files require stitching/merge/split processing)
+
+#### Environment schema rule
+Do not fully qualify every config table with the schema prefix in each insert statement.
+
+Use environment context at the top of each file.
+
+For UAT:
+```sql
+USE  U01_RAA.RAA_RAWZ;
+```
+
+For PROD:
+```sql
+USE  P01_RAA.RAA_RAWZ;
+```
+
+Then use unqualified table names:
+- `GENAISA_RUN_CONFIG`
+- `GENAISA_MASTER_CONFIG`
+- `GENAISA_LAMBDA_CONFIG`
+- `GENAISA_STITCHING_CONFIG`
+
+#### Shared value rule
+The following values must be collected once and reused consistently across all generated insert statements in the same config file:
+- `<LOB_CODE>`
+- `<GEN_AI_SA_ID>`
+- `<YOUR_USER_ID>`
+
+Do not ask the user for the same value multiple times.
+
+#### LOB code rule
+Use `<LOB_CODE>` as the numeric line-of-business code:
+- `001` = ACA
+- `002` = MRA
+- `003` = MCR
+
+If the LOB code cannot be confidently detected from source config or repository context, prompt the user once and reuse the same value everywhere.
+
+If a textual LOB value is also required in another field, populate it separately.
+
+#### GEN_AI_SA_ID rule
+`<GEN_AI_SA_ID>` must be the same across:
+- `GENAISA_RUN_CONFIG`
+- `GENAISA_MASTER_CONFIG`
+- `GENAISA_LAMBDA_CONFIG`
+- `GENAISA_STITCHING_CONFIG`
+
+Do not derive `GEN_AI_SA_ID` from source code. Prompt the user once and reuse the same value throughout all generated config SQL.
+
+#### Domain user ID rule
+Always prompt the user for domain ID if it is not explicitly provided.
+
+Reuse the same domain ID value for fields such as:
+- `LST_UPDATED_BY_USER`
+- `CREATED_BY`
+- `UPDATED_BY`
+- technical/business POC fields when applicable and when the user chooses to reuse the same value
+
+#### S3 SQL file path rule
+`<S3_SQL_FILE_PATH>` must strictly follow the environment-specific format below.
+
+Use for UAT:
+`s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP_NAME>/<SQL_FILE>`
+
+Use for PROD:
+`s3://crln-raa-prod-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP_NAME>/<SQL_FILE>`
+
+This format is mandatory and non-negotiable.
+
+#### Generation rules
+- Use the provided insert templates as the base structure.
+- Preserve column order exactly.
+- Keep concise professional comments for each column.
+- Auto-populated/system-managed values must not be changed.
+- If a value can be derived from source code or config, populate it.
+- If a value cannot be derived confidently, retain the placeholder and mark it for user input.
+- Only environment-specific values should differ between UAT and PROD files.
+- Keep shared business identifiers aligned across both files where applicable:
+  - `GEN_AI_SA_ID`
+  - `PROCESS_ID`
+  - `PROCESS_NAME`
+  - `STEP_ID`
+  - `STEP_NAME`
+  - source/target table mappings
+
+#### User input rules
+Prompt the user only for values that cannot be reliably detected from:
+- source code
+- `.conf` / `.json` configuration files
+- existing SQL patterns
+- repository naming conventions
+- stitching helper files such as `merge.py`, `Merge.py`, or similar merge/split scripts
+- Lambda helper/config files such as `Lambda_Notification.py`, `lambda_config.txt`, or similar notification/dispatch configuration files
+
+Prompt once and reuse for repeated values such as:
+- `LOB_CODE`
+- `GEN_AI_SA_ID`
+- domain ID
+
+Typical additional user-supplied fields may include:
+- `APP_ID`
+- `SUB_GRP_ID`
+- notification email lists
+- technical/business POC IDs
+- Jira story ID
+- Lambda-specific routing and bucket details
+- stitching-specific header/footer/split settings
+- values not found in `Lambda_Notification.py`, `lambda_config.txt`, `merge.py`, `Merge.py`, or similar helper/config files
+
+If these fields are prompted but not provided by the user, set them to `NULL` in the generated config SQL instead of leaving placeholder text:
+- `APP_ID`
+- `SUB_GRP_ID`
+- `PRIMARY_TECH_POC_ID`
+- `SECONDARY_TECH_POC_ID`
+- `PRIMARY_BIZ_POC_ID`
+- `SECONDARY_BIZ_POC_ID`
+- `JIRA_STORY`
+
+#### Conditional generation rules
+- Generate `GENAISA_LAMBDA_CONFIG` only when Lambda-based dispatch is required.
+- Before generating `GENAISA_LAMBDA_CONFIG`, inspect any Lambda-related helper/config files available in the module or repository, such as `Lambda_Notification.py`, `lambda_config.txt`, or similarly named files that define routing, notification, bucket, or dispatch behavior.
+- Generate `GENAISA_STITCHING_CONFIG` only when file stitching/merge/split behavior is required.
+- Before generating `GENAISA_STITCHING_CONFIG`, inspect any stitching/merge helper files available in the module or repository, such as `merge.py`, `Merge.py`, or similarly named scripts that define output naming, headers, footers, merge logic, split logic, or destination paths.
+- If those helper files are not present or do not provide enough information, prompt the user for the missing values.
+
+#### Insert template: GENAISA_RUN_CONFIG
+```sql
+-- ============================================================================
+-- INSERT TEMPLATE: GENAISA_RUN_CONFIG
+-- Purpose: Register process-level runtime configuration.
+-- Generate this statement during code conversion.
+-- Shared values such as LOB code, GEN_AI_SA_ID, and domain ID must be prompted
+-- once and reused consistently across all generated config inserts.
+-- ============================================================================
+
+INSERT INTO GENAISA_RUN_CONFIG
+SELECT
+    CURRENT_TIMESTAMP(),            -- EDL_LOAD_DTM - system generated
+    MD5(CURRENT_TIMESTAMP()),       -- EDL_RUN_ID - system generated unique run ID
+    'NA',                           -- EDL_SCRTY_LVL_CD - system default
+    '<LOB_CODE>',                   -- EDL_LOB_CD - shared value; prompt once if not known
+    'NA',                           -- EDL_EXTRNL_LOAD_CD - system default
+    '09',                           -- EDL_SOR_CD - system default
+    CURRENT_TIMESTAMP(),            -- KF_TMS - system generated
+    CURRENT_TIMESTAMP(),            -- EDL_CREAT_DTM - system generated
+    CURRENT_TIMESTAMP(),            -- EDL_INCRMNTL_LOAD_DTM - system generated
+    <GEN_AI_SA_ID>,                 -- GEN_AI_SA_ID - shared value; prompt once
+    TRUE,                           -- EXECUTION_FLG - execution enabled
+    <TRUE/FALSE>,                   -- STITCHING_FLG - user input or derived value
+    <TRUE/FALSE>,                   -- DISPATCH_FLG - user input or derived value
+    TRUE,                           -- ACTIVE - active record flag
+    '<YOUR_USER_ID>',               -- LST_UPDATED_BY_USER - shared domain ID
+    '<DESCRIPTION_OF_PURPOSE>',     -- COMMENTS - config purpose summary
+    CURRENT_TIMESTAMP(),            -- CREATED_AT - system generated
+    CURRENT_TIMESTAMP(),            -- UPDATED_AT - system generated
+    '<YOUR_USER_ID>',               -- CREATED_BY - shared domain ID
+    '<YOUR_USER_ID>'                -- UPDATED_BY - shared domain ID
+;
+```
+
+#### Insert template: GENAISA_MASTER_CONFIG
+```sql
+-- ============================================================================
+-- INSERT TEMPLATE: GENAISA_MASTER_CONFIG
+-- Purpose: Register the master metadata for a GenAISA process.
+-- Generate this statement during code conversion.
+-- Generate separate UAT and PROD versions using the required S3 SQL path format.
+-- ============================================================================
+
+INSERT INTO GENAISA_MASTER_CONFIG
+SELECT
+    CURRENT_TIMESTAMP(),                        -- EDL_LOAD_DTM - system generated
+    MD5(CURRENT_TIMESTAMP()),                   -- EDL_RUN_ID - system generated unique run ID
+    'NA',                                       -- EDL_SCRTY_LVL_CD - system default
+    '<LOB_CODE>',                               -- EDL_LOB_CD - shared value; prompt once if not known
+    'NA',                                       -- EDL_EXTRNL_LOAD_CD - system default
+    '09',                                       -- EDL_SOR_CD - system default
+    CURRENT_TIMESTAMP(),                        -- KF_TMS - system generated
+    CURRENT_TIMESTAMP(),                        -- EDL_CREAT_DTM - system generated
+    CURRENT_TIMESTAMP(),                        -- EDL_INCRMNTL_LOAD_DTM - system generated
+    <GEN_AI_SA_ID>,                             -- GEN_AI_SA_ID - shared value; prompt once
+    NULL,                                       -- APP_ID - prompt user; use NULL if not provided
+    'RAA',                                      -- APP_NAME - constant
+    '<LOB_CODE>',                               -- LOB_CD - shared value
+    '<LOB_NAME>',                               -- LOB_NAME - line of business name
+    NULL,                                       -- SUB_GRP_ID - prompt user; use NULL if not provided
+    '<SUB_GROUP_NAME>',                         -- SUB_GROUP_NAME - vendor/sub-group name
+    <PROCESS_ID>,                               -- PROCESS_ID - source process ID
+    '<PROCESS_NAME>',                           -- PROCESS_NAME - source process name
+    <STEP_ID>,                                  -- STEP_ID - source step ID
+    '<STEP_NAME>',                              -- STEP_NAME - source step name
+    '<SOURCE_FROM>',                            -- SOURCE_FROM - source/vendor/process code
+    '<S3_SQL_FILE_PATH>',                       -- EXECUTABLE_SQL_FILE - strict environment path format
+
+    PARSE_JSON('{
+        "<key1>": "<DB.SCHEMA.TABLE1>",
+        "<key2>": "<DB.SCHEMA.TABLE2>",
+        "LOAD_LOG_KEY_TABLE": "load_log_key"
+    }'),                                        -- SOURCE_TABLE_NAMES - source object mapping
+
+    PARSE_JSON('{
+        "<targetKey>": "<DB.SCHEMA.TARGET_TABLE>",
+        "snow_flake_stage": "<STAGE_NAME>",
+        "s3_folder_path": "<S3_FOLDER_PATH>"
+    }'),                                        -- DESTINATION_TABLE_NAMES - destination object mapping
+
+    '<PRIMARY_EMAIL>',                          -- PRIMARY_NOTIFICATION_LIST - primary recipients
+    '<SECONDARY_EMAIL>',                        -- SECONDARY_NOTIFICATION_LIST - secondary recipients
+    NULL,                                       -- PRIMARY_TECH_POC - prompt user; use NULL if not provided
+    NULL,                                       -- SECONDARY_TECH_POC - prompt user; use NULL if not provided
+    NULL,                                       -- PRIMARY_BUSINESS_POC - prompt user; use NULL if not provided
+    NULL,                                       -- SECONDARY_BUSINESS_POC - prompt user; use NULL if not provided
+    NULL,                                       -- LATEST_JIRA_STORY - prompt user; use NULL if not provided
+    TRUE,                                       -- IS_CURRENT - active config flag
+    CURRENT_TIMESTAMP(),                        -- EFFECTIVE_START_TS - system generated
+    '8888-12-31 00:00:00.000',                  -- EFFECTIVE_END_TS - far-future end date
+    CURRENT_TIMESTAMP(),                        -- CREATED_AT - system generated
+    CURRENT_TIMESTAMP(),                        -- UPDATED_AT - system generated
+    '<YOUR_USER_ID>',                           -- CREATED_BY - shared domain ID
+    '<YOUR_USER_ID>'                            -- UPDATED_BY - shared domain ID
+;
+```
+
+Required SQL path note:
+```sql
+-- UAT SQL path format (mandatory):
+-- s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP_NAME>/<SQL_FILE>
+--
+-- PROD SQL path format (mandatory):
+-- s3://crln-raa-prod-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP_NAME>/<SQL_FILE>
+```
+
+#### Insert template: GENAISA_LAMBDA_CONFIG
+```sql
+-- ============================================================================
+-- INSERT TEMPLATE: GENAISA_LAMBDA_CONFIG
+-- Purpose: Configure Lambda-based file dispatch/notification.
+-- Generate only when Lambda integration is required.
+-- ============================================================================
+
+INSERT INTO GENAISA_LAMBDA_CONFIG
+SELECT
+    CURRENT_TIMESTAMP(),                        -- EDL_LOAD_DTM - system generated
+    MD5(CURRENT_TIMESTAMP()),                   -- EDL_RUN_ID - system generated unique run ID
+    'UNK',                                      -- EDL_SCRTY_LVL_CD - system default
+    'NA',                                       -- EDL_LOB_CD - system default
+    'NA',                                       -- EDL_EXTRNL_LOAD_CD - system default
+    'NA',                                       -- EDL_SOR_CD - system default
+    CURRENT_TIMESTAMP(),                        -- KF_TMS - system generated
+    CURRENT_TIMESTAMP(),                        -- EDL_CREAT_DTM - system generated
+    CURRENT_TIMESTAMP(),                        -- EDL_INCRMNTL_LOAD_DTM - system generated
+    <GEN_AI_SA_ID>,                             -- GEN_AI_SA_ID - shared value; prompt once
+    '<LAMBDA_FUNCTION_NAME>',                   -- LAMBDA_FUNCTION_NAME - target Lambda function
+    '<ROUTING_SOURCE_TABLE_FQN>',               -- ROUTING_FLAG_SOURCE_TABLE - routing table or 'NA'
+    '<ROUTING_COLUMN>',                         -- ROUTING_FLAG_COLUMN - routing column or 'NA'
+    '<ROUTING_VALUE>',                          -- ROUTING_FLAG_VALUE - routing value or 'NA'
+    '<SRC_S3_BUCKET>',                          -- PRIMARY_SRC_S3_BUCKET - source bucket
+    '<SRC_S3_PATH>',                            -- PRIMARY_SRC_S3_PATH - source path
+    '<DEST_S3_BUCKET>',                         -- PRIMARY_DEST_S3_BUCKET - destination bucket
+    '<DEST_S3_PATH>',                           -- PRIMARY_DEST_S3_PATH - destination path
+    '<ALT_DEST_S3_BUCKET_OR_NA>',               -- ALTERNATE_DEST_S3_BUCKET - alternate bucket or 'NA'
+    '<ALT_DEST_S3_PATH_OR_NA>',                 -- ALTERNATE_DEST_S3_PATH - alternate path or 'NA'
+    '<ARCHIVE_S3_BUCKET>',                      -- LAMBDA_ARH_S3_BUCKET - archive bucket
+    '<ARCHIVE_S3_PATH>',                        -- LAMBDA_ARH_S3_PATH - archive path
+    '<NOTIFY_EMAIL_LIST>',                      -- LAMBDA_NOTIFY_TO - email recipients
+    '<Y_OR_N>',                                 -- LAMBDA_IS_DEPLOY - deployment flag
+    PARSE_JSON('{"process_name": "<PROCESS>"}'),-- LAMBDA_ADDITIONAL_PARAMS - extra parameters
+    CURRENT_TIMESTAMP(),                        -- CREATED_AT - system generated
+    CURRENT_TIMESTAMP(),                        -- UPDATED_AT - system generated
+    '<YOUR_USER_ID>',                           -- CREATED_BY - shared domain ID
+    '<YOUR_USER_ID>'                            -- UPDATED_BY - shared domain ID
+;
+```
+
+#### Insert template: GENAISA_STITCHING_CONFIG
+```sql
+-- ============================================================================
+-- INSERT TEMPLATE: GENAISA_STITCHING_CONFIG
+-- Purpose: Configure outbound file stitching, merge, or split behavior.
+-- Generate only when the converted process produces part files or requires
+-- merge/split/stitching behavior.
+-- ============================================================================
+
+INSERT INTO GENAISA_STITCHING_CONFIG
+SELECT
+    CURRENT_TIMESTAMP(),                        -- EDL_LOAD_DTM - system generated
+    MD5(CURRENT_TIMESTAMP()),                   -- EDL_RUN_ID - system generated unique run ID
+    'NA',                                       -- EDL_SCRTY_LVL_CD - system default
+    '<LOB_CODE>',                               -- EDL_LOB_CD - shared value; prompt once if not known
+    'NA',                                       -- EDL_EXTRNL_LOAD_CD - system default
+    '09',                                       -- EDL_SOR_CD - system default
+    CURRENT_TIMESTAMP(),                        -- KF_TMS - system generated
+    CURRENT_TIMESTAMP(),                        -- EDL_CREAT_DTM - system generated
+    CURRENT_TIMESTAMP(),                        -- EDL_INCRMNTL_LOAD_DTM - system generated
+    <GEN_AI_SA_ID>,                             -- GEN_AI_SA_ID - shared value; prompt once
+    '<SRC_S3_BUCKET>',                          -- SRC_S3_BUCKET - source bucket
+    '<SRC_S3_FOLDER_PATH>',                     -- SRC_S3_FOLDER_PATH - source folder
+    '<DEST_S3_BUCKET>',                         -- DEST_S3_BUCKET - destination bucket
+    '<DEST_S3_FOLDER>',                         -- DEST_S3_FOLDER - destination folder
+    '<INPUT_FILE_PATTERN>',                     -- INPUT_FILE_FORMAT - input file pattern
+    '<OUTPUT_FILE_NAME>',                       -- OUT_PUT_FILE_NAME - final output file name
+    '<HEADER_WITH_DELIMITERS>',                 -- OUT_PUT_FILE_HEADER - header text
+    'NA',                                       -- OUT_PUT_FILE_FOOTER - footer text or 'NA'
+    <TRUE/FALSE>,                               -- SIZE_BASED_SPLIT_REQ - size split flag
+    NULL,                                       -- SPLIT_SIZE_MB - split size when enabled
+    CURRENT_TIMESTAMP(),                        -- CREATED_AT - system generated
+    CURRENT_TIMESTAMP(),                        -- UPDATED_AT - system generated
+    '<YOUR_USER_ID>',                           -- CREATED_BY - shared domain ID
+    '<YOUR_USER_ID>'                            -- UPDATED_BY - shared domain ID
+;
+```
+
+---
+
+## Example Conversion
+
+### **Input: Snowpark Code**
+
+```python
+from snowflake.snowpark import Session
+from snowflake.snowpark.functions import col, count, when, current_timestamp
+
+# Create session
+session = Session.builder.configs(connection_params).create()
+
+# Read source data
+source_df = session.table("RAW.CUSTOMER_DATA") \
+    .filter(col("LOB") == "COM") \
+    .filter(col("STATUS") == "ACTIVE")
+
+# Apply transformations
+transformed_df = source_df.select(
+    col("CUSTOMER_ID"),
+    col("FIRST_NAME"),
+    col("LAST_NAME"),
+    when(col("STATE").isNull(), "UNKNOWN").otherwise(col("STATE")).alias("STATE"),
+    current_timestamp().alias("LOAD_DATE")
+)
+
+# Aggregate
+summary_df = transformed_df.groupBy("STATE") \
+    .agg(count("CUSTOMER_ID").alias("CUSTOMER_COUNT"))
+
+# Write to target
+summary_df.write.mode("overwrite").saveAsTable("ANALYTICS.CUSTOMER_SUMMARY")
+```
+
+### **Output: SQL Script**
+
+```sql
+EXECUTE IMMEDIATE $$
+DECLARE
+    process_id VARCHAR := '{{ PROCESS_ID }}';
+    lob VARCHAR := '{{ LOB }}';
+    edl_run_id VARCHAR := '{{ EDL_RUN_ID }}';
+    batch_id INTEGER;
+BEGIN
+    SELECT COALESCE(batchid, 1) INTO batch_id
+    FROM {{ LOAD_LOG_KEY_TABLE }}
+    WHERE processid = :process_id
+      AND UPPER(status) = 'COMPLETED'
+    ORDER BY createdatetime DESC
+    LIMIT 1;
+
+    IF (batch_id IS NULL) THEN
+        batch_id := 1;
+    END IF;
+
+    BEGIN TRANSACTION;
+
+    CREATE OR REPLACE TEMPORARY TABLE temp_db.temp_schema.source_data AS
+    SELECT *
+    FROM {{ sourceTable }}
+    WHERE LOB = :lob
+      AND STATUS = 'ACTIVE';
+
+    CREATE OR REPLACE TEMPORARY TABLE temp_db.temp_schema.transformed_data AS
+    SELECT
+        CUSTOMER_ID,
+        FIRST_NAME,
+        LAST_NAME,
+        CASE WHEN STATE IS NULL THEN 'UNKNOWN' ELSE STATE END AS STATE,
+        CURRENT_TIMESTAMP() AS LOAD_DATE
+    FROM temp_db.temp_schema.source_data;
+
+    CREATE OR REPLACE TEMPORARY TABLE temp_db.temp_schema.summary_data AS
+    SELECT STATE, COUNT(CUSTOMER_ID) AS CUSTOMER_COUNT
+    FROM temp_db.temp_schema.transformed_data
+    GROUP BY STATE;
+
+    CREATE OR REPLACE TEMPORARY TABLE temp_db.temp_schema.validation_counts AS
+    SELECT
+        (SELECT COUNT(*) FROM temp_db.temp_schema.summary_data) AS row_count,
+        0 AS stage_count,
+        (SELECT COUNT(*) FROM {{ targetTable }} WHERE EDL_RUN_ID = :edl_run_id) AS duplicate_count;
+
+    CREATE OR REPLACE TABLE {{ targetTable }} AS
+    SELECT
+        CURRENT_TIMESTAMP() AS EDL_LOAD_DTM,
+        :edl_run_id AS EDL_RUN_ID,
+        :lob AS EDL_LOB_CD,
+        STATE,
+        CUSTOMER_COUNT
+    FROM temp_db.temp_schema.summary_data;
+
+    COMMIT;
+END;
+$$;
+```
+
+---
+
+## Additional Resources
+- **Snowflake Scripting Docs**: https://docs.snowflake.com/en/developer-guide/snowflake-scripting/index
+- **Snowpark API Reference**: https://docs.snowflake.com/en/developer-guide/snowpark/reference/python/latest/index
+- **Template File**: `TEMPLATE_snowflake_scripting.sql`
+
+Use official Snowflake documentation and reference material as needed for the following topics:
+- Snowflake SQL Scripting
+- Snowflake SQL command and function reference
+- Snowpark Python API reference
+- Snowpark Scala API reference
+- `COPY INTO` syntax and unload behavior
+- File format options and stage configuration
+- `CREATE STAGE`, named stages, and external/internal stage usage
+- Transactions, error handling, and procedural SQL behavior
+- Window functions, analytic functions, and aggregation behavior
+- `DESCRIBE`, `SHOW`, and Information Schema metadata lookups
+- Date, timestamp, string, null-handling, and conversion functions
+- Temporary tables, transient tables, and table lifecycle behavior
+
+When uncertainty remains, prefer Snowflake-native syntax and behavior that is consistent with official Snowflake documentation.
+
+---
+
+## Final Instruction
+Perform the conversion module by module. For each source job:
+- inspect the code file(s)
+- inspect the config file(s)
+- preserve business logic
+- preserve template usage
+- preserve export behavior
+- use explicit target insert column lists where applicable
+- save the result to the correct `SQL_Code/<module_name>/` location
+- document required config and unresolved placeholders
