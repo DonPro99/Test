@@ -4,3 +4,6 @@ SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG WHERE GEN_AI_SA_ID =
 
 SELECT GEN_AI_SA_ID, PROCESS_ID, LOB_NAME, EXECUTABLE_SQL_FILE
 FROM U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG WHERE GEN_AI_SA_ID = 5;
+
+
+“Hi Ravi, when I try to run my GenAISA config inserts in U01, I get an insufficient privileges error on GENAISA_RUN_CONFIG. Looks like INSERT is only granted to U01_RAA_ENV_PREP and U01_RAA_DML_PROXY_PRIVS, and I don’t have either. How did you run yours?”
