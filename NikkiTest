@@ -1,10 +1,4 @@
-
-tail -5 /tmp/DatavantMbrProvETL.sql
---       - Use RAISE EXCEPTION with dynamic strings (use Python validation)
---       - Use LEFT JOIN when INNER JOIN is appropriate (causes NULL rows)
---       - Use CALL SYSTEM$LOG (function doesn't exist)
---
--- ============================================================================
+SQL access control error: Insufficient privileges to operate on table 'GENAISA_RUN_CONFIG'. Your primary role PUBLIC or one of your secondary roles must have INSERT granted on TABLE U01_RAA.RAA_RAWZ.GENAISA_RUN_CONFIG.
 
 
 
