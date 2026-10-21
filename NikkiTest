@@ -1,6 +1,6 @@
 SQL access control error: Insufficient privileges to operate on table 'GENAISA_RUN_CONFIG'. Your primary role PUBLIC or one of your secondary roles must have INSERT granted on TABLE U01_RAA.RAA_RAWZ.GENAISA_RUN_CONFIG.
 
-
+SHOW GRANTS ON TABLE U01_RAA.RAA_RAWZ.GENAISA_RUN_CONFIG;
 
 SELECT GEN_AI_SA_ID, PROCESS_ID, LOB_NAME, EXECUTABLE_SQL_FILE
 FROM U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG WHERE GEN_AI_SA_ID = 5;
