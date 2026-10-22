@@ -1,4 +1,115 @@
-cd /home/hadoop
-python3.11 main_refactored.py --SQL_FILENAME s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
+
+-- ============================================================================
+2026-10-22 20:08:57 - INFO - ================================================================================
+2026-10-22 20:08:57 - INFO - SQL Query Length: 37009 characters
+2026-10-22 20:08:57 - INFO - SQL Query (first 500 chars): -- ============================================================================
+-- Script: DatavantMbrProvETL.sql
+-- Purpose: Generate the Datavant Member/Provider (DTVNTRT) retro outbound files
+--          and the Datavant CPL outbound files for MCR, and persist the output
+--          rows to RAD_CIOXRT_ALL_LOB and RAD_DATAVANT_CHASE_CPL.
+-- Author: AM71511
+-- Co-Author: Devin, GPT-5.4 High Thinking
+-- Created: 2026-10-21
+--
+-- Description:
+--   Converted from Scala_codes/datavant/DatavantMbrPr
+2026-10-22 20:09:49 - INFO - Extracted row count from validation_counts table: 10
+2026-10-22 20:09:49 - INFO - Load log inserted: BATCHID=11, STATUS=Completed, RECCNT=10
+2026-10-22 20:09:49 - INFO - SQL executed successfully - Load log recorded with BATCHID=11, RECCNT=10
+2026-10-22 20:09:50 - INFO - Audit trail record INSERTED for EDL_RUN_ID: 3bc002f2de9f5bebf49809cdb1d65572
+2026-10-22 20:09:50 - INFO - EXECUTION phase completed successfully - Audit trail recorded
+2026-10-22 20:09:51 - INFO - Audit trail record UPDATED for EDL_RUN_ID: 3bc002f2de9f5bebf49809cdb1d65572
+2026-10-22 20:09:51 - INFO - STITCHING phase not required - Audit trail recorded
+2026-10-22 20:09:51 - INFO - ================================================================================
+DISPATCH PHASE
+--------------------------------------------------------------------------------
+2026-10-22 20:09:51 - INFO - Lambda config loaded for GEN_AI_SA_ID: 5 - 1 config row(s) found
+2026-10-22 20:09:51 - INFO - Processing 1 lambda config row(s)
+2026-10-22 20:09:51 - INFO - Processing lambda config row 1/1
+2026-10-22 20:09:52 - INFO - Routing flag from U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRT_MRA_STG.ADD_VAL8: N
+2026-10-22 20:09:52 - INFO - Routing flag matched (N == N)
+2026-10-22 20:09:52 - INFO - Will send to PRIMARY + ALTERNATE destinations
+2026-10-22 20:09:52 - INFO - Invoking Lambda for PRIMARY destination: CRLN-RAA-uat-Lmda-CopyFileAndNotify
+2026-10-22 20:09:52 - INFO - PRIMARY payload: {
+  "etl_stp_parms": {
+    "src_s3_bucket": "crln-652798729258-ssm-uat-filetransfer",
+    "src_s3_path": "outbound/raa/datavantprov-retro-etl/",
+    "dest_s3_bucket": "crln-652798729258-ssm-uat-filetransfer",
+    "dest_s3_path": "outbound/raa/genaisa_test/sas/",
+    "arh_s3_bucket": "crln-652798729258-ssm-uat-filetransfer",
+    "arh_s3_path": "outbound/raa/genaisa_test/archive/",
+    "process_name": "DTVNTRT-MRA",
+    "notiy_to": "Nikhitha.Komandla@elevancehealth.com",
+    "is_deploy": "Y"
+  }
+}
+2026-10-22 20:09:54 - INFO - PRIMARY Lambda invocation completed. Status: 200
+2026-10-22 20:09:54 - INFO - PRIMARY response: {
+  "errorMessage": "list index out of range",
+  "errorType": "IndexError",
+  "requestId": "1efef452-e62a-49af-9e67-86c3679c34ed",
+  "stackTrace": [
+    "  File \"/var/task/CopyFileAndNotify.py\", line 72, in lambda_handler\n    archive_prefix = get_latest_date_folder_prefix(arh_s3_bucket,arh_s3_path)\n",
+    "  File \"/var/task/CopyFileAndNotify.py\", line 93, in get_latest_date_folder_prefix\n    print(objects[-1].key)\n"
+  ]
+}
+2026-10-22 20:09:55 - INFO - Audit trail record UPDATED for EDL_RUN_ID: 3bc002f2de9f5bebf49809cdb1d65572
+2026-10-22 20:09:55 - ERROR - DISPATCH phase failed - Audit trail recorded
+2026-10-22 20:09:55 - ERROR - ================================================================================
+Pipeline execution failed: PRIMARY Lambda function failed with IndexError: list index out of range
+================================================================================
+Traceback (most recent call last):
+  File "/home/hadoop/main_refactored.py", line 1233, in run
+    self.executePhase('DISPATCH', dispatch_phase, 'DISPATCH_ERR')
+  File "/home/hadoop/main_refactored.py", line 1146, in executePhase
+    phase_func()
+  File "/home/hadoop/main_refactored.py", line 1231, in dispatch_phase
+    self.dispatch.invokeLambda()
+  File "/home/hadoop/main_refactored.py", line 913, in invokeLambda
+    responses = self._invokeLambdaForConfig(config, lambda_client)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hadoop/main_refactored.py", line 988, in _invokeLambdaForConfig
+    raise Exception(f"PRIMARY Lambda function failed with {error_type}: {error_msg}")
+Exception: PRIMARY Lambda function failed with IndexError: list index out of range
+2026-10-22 20:09:55 - INFO - Email notification sent: FAILED to dl-RAAETLDevelopers@anthem.com (CC: dl-RAAETLDevelopers@anthem.com)
+2026-10-22 20:09:55 - CRITICAL - Job failed with error: PRIMARY Lambda function failed with IndexError: list index out of range
+Traceback (most recent call last):
+  File "/home/hadoop/main_refactored.py", line 1262, in main
+    result = processor.run()
+             ^^^^^^^^^^^^^^^
+  File "/home/hadoop/main_refactored.py", line 1233, in run
+    self.executePhase('DISPATCH', dispatch_phase, 'DISPATCH_ERR')
+  File "/home/hadoop/main_refactored.py", line 1146, in executePhase
+    phase_func()
+  File "/home/hadoop/main_refactored.py", line 1231, in dispatch_phase
+    self.dispatch.invokeLambda()
+  File "/home/hadoop/main_refactored.py", line 913, in invokeLambda
+    responses = self._invokeLambdaForConfig(config, lambda_client)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hadoop/main_refactored.py", line 988, in _invokeLambdaForConfig
+    raise Exception(f"PRIMARY Lambda function failed with {error_type}: {error_msg}")
+Exception: PRIMARY Lambda function failed with IndexError: list index out of range
+Traceback (most recent call last):
+  File "/home/hadoop/main_refactored.py", line 1273, in <module>
+    main()
+  File "/home/hadoop/main_refactored.py", line 1262, in main
+    result = processor.run()
+             ^^^^^^^^^^^^^^^
+  File "/home/hadoop/main_refactored.py", line 1233, in run
+    self.executePhase('DISPATCH', dispatch_phase, 'DISPATCH_ERR')
+  File "/home/hadoop/main_refactored.py", line 1146, in executePhase
+    phase_func()
+  File "/home/hadoop/main_refactored.py", line 1231, in dispatch_phase
+    self.dispatch.invokeLambda()
+  File "/home/hadoop/main_refactored.py", line 913, in invokeLambda
+    responses = self._invokeLambdaForConfig(config, lambda_client)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hadoop/main_refactored.py", line 988, in _invokeLambdaForConfig
+    raise Exception(f"PRIMARY Lambda function failed with {error_type}: {error_msg}")
+Exception: PRIMARY Lambda function failed with IndexError: list index out of range
+2026-10-22 20:09:55 - INFO - Closing session: 15658177076906646
+2026-10-22 20:09:55 - INFO - Canceling all running queries
+2026-10-22 20:09:55 - INFO - Closed session: 15658177076906646
+
 
 aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/genaisa_test/ --recursive
