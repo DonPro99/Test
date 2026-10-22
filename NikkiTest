@@ -1,5 +1,1278 @@
-find ~ /tmp -name "main_ref.py" 2>/dev/null
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i main_ref
+Sharing here - copy to EMR cluster, before running code run below 
+sudo python3.11 -m pip install jinja2
+copy generated sql file to s3 location as per column value of EXECUTABLE_SQL_FILE
+3. python3.11 main_refactored.py ----SQL_FILENAME <provide path to file>
+
+import sys
+import os
+import logging
+import smtplib
+import json
+import argparse
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from datetime import date
+from jinja2 import Template
+from botocore.exceptions import ClientError
+
+sys.path.append("/home/hadoop")
+from AnthemRaUtil.rrr_snowpark_session_util import get_rrr_snowpark_session
 
 
-Thanks Ravi, the config inserts worked through 800009263 (GEN_AI_SA_ID 005). I’m ready to test on a UAT cluster. Could you share main_ref.py, or where to get it, so I can set it up like in the demo? Anything besides pip install jinja2 needed?”
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+    stream=sys.stdout
+)
+
+# Global environment variable
+env = os.getenv('ENV', 'uat')
+
+
+class SnowflakeService:
+    
+    def __init__(self):
+        self.session = None
+    
+    def connect(self):
+        env = os.getenv('ENV', 'uat')
+        # self.session = get_rrr_snowpark_session(
+        #     log=logging,
+        #     aplctn_cd='GEN_AI_SA',
+        #     env=env,
+        #     region_name='us-east-1',
+        #     warehouse_size_suffix='_XL',
+        #     query_tag={'program': 'genai_sa', 'env': f'genai_sa_{env}', 'job_type': 'sql_automation'}
+        # )
+        self.session  = get_rrr_snowpark_session(env='uat')
+        self.session.sql("USE U01_RAA.RAA_RAWZ").count()
+
+
+
+
+        logging.info("Snowflake connected")
+    
+    def execute(self, query, fetch=False):
+        if not self.session:
+            raise ConnectionError("Not connected to Snowflake")
+        if fetch:
+            # For queries that need results (SELECT statements)
+            result = self.session.sql(query)
+            return [row.as_dict() for row in result.collect()]
+        else:
+            # For execution without fetching results (DML/DDL)
+            # Check if query contains EXECUTE IMMEDIATE - treat as single statement
+            if 'EXECUTE IMMEDIATE' in query.upper():
+                # Use cursor.execute for single EXECUTE IMMEDIATE block
+                cursor = self.session.connection.cursor()
+                try:
+                    cursor.execute(query)
+                finally:
+                    cursor.close()
+            else:
+                # Use execute_string which handles both single and multi-statement SQL
+                self.session.connection.execute_string(query)
+            return None
+    
+    def getMasterConfig(self, sql_filename):
+        # Extract filename from full S3 path if provided
+        if sql_filename.startswith('s3://'):
+            filename_only = sql_filename.split('/')[-1]
+        else:
+            filename_only = sql_filename
+        
+        logging.info(f"Searching for SQL file: '{sql_filename}' or filename: '{filename_only}'")
+        
+        query = f"""
+        WITH RANKED_CONFIG AS (
+            SELECT 
+                GEN_AI_SA_ID, PROCESS_ID, PROCESS_NAME, STEP_ID, STEP_NAME,
+                SOURCE_FROM, EXECUTABLE_SQL_FILE, SUB_GROUP_NAME,
+                SOURCE_TABLE_NAMES, DESTINATION_TABLE_NAMES,
+                PRIMARY_NOTIFICATION_LIST, SECONDARY_NOTIFICATION_LIST,
+                EFFECTIVE_START_TS, EFFECTIVE_END_TS,
+                ROW_NUMBER() OVER (PARTITION BY EXECUTABLE_SQL_FILE ORDER BY EFFECTIVE_START_TS DESC) AS RN
+            FROM GENAISA_MASTER_CONFIG
+            WHERE (EXECUTABLE_SQL_FILE = '{sql_filename}' 
+                   OR EXECUTABLE_SQL_FILE LIKE '%{filename_only}')
+              AND IS_CURRENT = TRUE
+        )
+        SELECT 
+            GEN_AI_SA_ID, PROCESS_ID, PROCESS_NAME, STEP_ID, STEP_NAME,
+            SOURCE_FROM, EXECUTABLE_SQL_FILE, SUB_GROUP_NAME,
+            SOURCE_TABLE_NAMES, DESTINATION_TABLE_NAMES,
+            PRIMARY_NOTIFICATION_LIST, SECONDARY_NOTIFICATION_LIST,
+            EFFECTIVE_START_TS, EFFECTIVE_END_TS
+        FROM RANKED_CONFIG
+        WHERE RN = 1
+        """
+        
+        results = self.execute(query, fetch=True)
+        return results[0] if results else None
+    
+    def getConfig(self, table_name, gen_ai_sa_id):
+        query = f"SELECT * FROM {table_name} WHERE GEN_AI_SA_ID = {gen_ai_sa_id} LIMIT 1"
+        results = self.execute(query, fetch=True)
+        return results[0] if results else None
+    
+    def getStitchingConfig(self, gen_ai_sa_id):
+        query = f"""
+        SELECT 
+            GEN_AI_SA_ID, SRC_S3_BUCKET, SRC_S3_FOLDER_PATH,
+            DEST_S3_BUCKET, DEST_S3_FOLDER, INPUT_FILE_FORMAT,
+            OUT_PUT_FILE_NAME, OUT_PUT_FILE_HEADER, OUT_PUT_FILE_FOOTER,
+            SIZE_BASED_SPLIT_REQ, SPLIT_SIZE_MB
+        FROM GENAISA_STITCHING_CONFIG
+        WHERE GEN_AI_SA_ID = {gen_ai_sa_id}
+        ORDER BY EDL_LOAD_DTM DESC, CREATED_AT DESC
+        """
+        results = self.execute(query, fetch=True)
+        return results if results else None
+    
+    def getLambdaConfig(self, gen_ai_sa_id):
+        query = f"""
+        SELECT 
+            GEN_AI_SA_ID, LAMBDA_FUNCTION_NAME,
+            ROUTING_FLAG_SOURCE_TABLE, ROUTING_FLAG_COLUMN, ROUTING_FLAG_VALUE,
+            PRIMARY_SRC_S3_BUCKET, PRIMARY_SRC_S3_PATH,
+            PRIMARY_DEST_S3_BUCKET, PRIMARY_DEST_S3_PATH,
+            ALTERNATE_DEST_S3_BUCKET, ALTERNATE_DEST_S3_PATH,
+            LAMBDA_ARH_S3_BUCKET, LAMBDA_ARH_S3_PATH,
+            LAMBDA_NOTIFY_TO, LAMBDA_IS_DEPLOY, LAMBDA_ADDITIONAL_PARAMS
+        FROM GENAISA_LAMBDA_CONFIG
+        WHERE GEN_AI_SA_ID = {gen_ai_sa_id}
+        ORDER BY EDL_LOAD_DTM DESC, CREATED_AT DESC
+        """
+        results = self.execute(query, fetch=True)
+        return results if results else None
+    
+    def getLastAuditTrail(self, gen_ai_sa_id):
+        query = f"""
+        SELECT 
+            GEN_AI_SA_ID, EXECUTABLE_SQL_FILE, EDL_RUN_ID,
+            EXECUTION_REQ_STATUS, STITCHING_REQ_STATUS, DISPATCH_REQ_STATUS,
+            FINAL_STATUS, CREATED_AT, EDL_LOAD_DTM
+        FROM GENAISA_AUDIT_TRAIL
+        WHERE GEN_AI_SA_ID = {gen_ai_sa_id}
+        ORDER BY EDL_LOAD_DTM DESC, CREATED_AT DESC
+        LIMIT 1
+        """
+        results = self.execute(query, fetch=True)
+        return results[0] if results else None
+    
+    def upsertAuditTrail(self, audit_data, edl_run_id):
+        """Insert new audit trail record or update existing one based on EDL_RUN_ID"""
+        
+        # Check if record exists for this EDL_RUN_ID
+        check_query = f"""
+        SELECT EDL_RUN_ID 
+        FROM GENAISA_AUDIT_TRAIL 
+        WHERE EDL_RUN_ID = '{edl_run_id}'
+        LIMIT 1
+        """
+        existing = self.execute(check_query, fetch=True)
+        
+        if existing and len(existing) > 0:
+            # UPDATE existing record
+            update_query = f"""
+            UPDATE GENAISA_AUDIT_TRAIL
+            SET
+                EXECUTION_REQ_STATUS = {self._formatValue(audit_data.get('execution_status'))},
+                EXECUTION_REQ_START_TIME_STAMP = {self._formatTimestamp(audit_data.get('execution_start'))},
+                EXECUTION_REQ_END_TIME_STAMP = {self._formatTimestamp(audit_data.get('execution_end'))},
+                EXECUTION_ERROR_CD = {self._formatValue(audit_data.get('execution_error_cd'))},
+                EXECUTION_ERROR_MSG = {self._formatValue(audit_data.get('execution_error_msg'))},
+                STITCHING_REQ_STATUS = {self._formatValue(audit_data.get('stitching_status'))},
+                STITCHING_REQ_START_TIME_STAMP = {self._formatTimestamp(audit_data.get('stitching_start'))},
+                STITCHING_REQ_END_TIME_STAMP = {self._formatTimestamp(audit_data.get('stitching_end'))},
+                STITCHING_ERROR_CD = {self._formatValue(audit_data.get('stitching_error_cd'))},
+                STITCHING_ERROR_MSG = {self._formatValue(audit_data.get('stitching_error_msg'))},
+                DISPATCH_REQ_STATUS = {self._formatValue(audit_data.get('dispatch_status'))},
+                DISPATCH_REQ_START_TIME_STAMP = {self._formatTimestamp(audit_data.get('dispatch_start'))},
+                DISPATCH_REQ_END_TIME_STAMP = {self._formatTimestamp(audit_data.get('dispatch_end'))},
+                DISPATCH_ERROR_CD = {self._formatValue(audit_data.get('dispatch_error_cd'))},
+                DISPATCH_ERROR_MSG = {self._formatValue(audit_data.get('dispatch_error_msg'))},
+                FINAL_STATUS = {self._formatValue(audit_data.get('final_status'))},
+                UPDATED_AT = CURRENT_TIMESTAMP(),
+                UPDATED_BY = 'GENAI_SA_AUTOMATION'
+            WHERE EDL_RUN_ID = '{edl_run_id}'
+            """
+            self.execute(update_query, fetch=False)
+            logging.info(f"Audit trail record UPDATED for EDL_RUN_ID: {edl_run_id}")
+        else:
+            # INSERT new record
+            insert_query = f"""
+            INSERT INTO GENAISA_AUDIT_TRAIL VALUES (
+                CURRENT_TIMESTAMP(), '{edl_run_id}', 'NA', 'ACA',
+                'NA', '09', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+                {audit_data['gen_ai_sa_id']}, '{audit_data['executable_sql_file']}',
+                {self._formatValue(audit_data.get('execution_status'))}, 
+                {self._formatTimestamp(audit_data.get('execution_start'))},
+                {self._formatTimestamp(audit_data.get('execution_end'))},
+                {self._formatValue(audit_data.get('execution_error_cd'))},
+                {self._formatValue(audit_data.get('execution_error_msg'))},
+                {self._formatValue(audit_data.get('stitching_status'))},
+                {self._formatTimestamp(audit_data.get('stitching_start'))},
+                {self._formatTimestamp(audit_data.get('stitching_end'))},
+                {self._formatValue(audit_data.get('stitching_error_cd'))},
+                {self._formatValue(audit_data.get('stitching_error_msg'))},
+                {self._formatValue(audit_data.get('dispatch_status'))},
+                {self._formatTimestamp(audit_data.get('dispatch_start'))},
+                {self._formatTimestamp(audit_data.get('dispatch_end'))},
+                {self._formatValue(audit_data.get('dispatch_error_cd'))},
+                {self._formatValue(audit_data.get('dispatch_error_msg'))},
+                {self._formatValue(audit_data.get('final_status'))},
+                CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(),
+                'GENAI_SA_AUTOMATION', 'GENAI_SA_AUTOMATION'
+            )
+            """
+            self.execute(insert_query, fetch=False)
+            logging.info(f"Audit trail record INSERTED for EDL_RUN_ID: {edl_run_id}")
+    
+    def insertLoadLog(self, load_log_data):
+        """Insert load log entry for SQL execution tracking"""
+        import hashlib
+        from datetime import datetime
+        
+        current_ts = datetime.now()
+        # Use provided run_id if available, otherwise generate new one
+        run_id = load_log_data.get('run_id')
+        if not run_id:
+            run_id = hashlib.md5(str(current_ts).encode()).hexdigest()
+        
+        # Generate batch_id if not provided
+        batch_id = load_log_data.get('batch_id')
+        if not batch_id:
+            # Get max batch_id for this process and increment
+            max_batch_query = f"""
+            SELECT COALESCE(MAX(BATCHID), 0) + 1 AS next_batch
+            FROM {load_log_data.get('load_log_table', 'LOAD_LOG_KEY')}
+            WHERE PROCESSID = '{load_log_data.get('process_id')}'
+            """
+            result = self.execute(max_batch_query, fetch=True)
+            batch_id = result[0]['NEXT_BATCH'] if result else 1
+        
+        query = f"""
+        INSERT INTO {load_log_data.get('load_log_table', 'LOAD_LOG_KEY')} (
+            EDL_LOAD_DTM, EDL_RUN_ID, EDL_SCRTY_LVL_CD, EDL_LOB_CD,
+            EDL_EXTRNL_LOAD_CD, EDL_SOR_CD, ID, BATCHID, SOURCE,
+            PATH, RECCNT, PROCESSNAME, PROCESSID, STEP, STEPID,
+            STATUS, CREATEDATETIME, ENDDATETIME
+        ) VALUES (
+            CURRENT_TIMESTAMP(),
+            '{run_id}',
+            'NA',
+            '{load_log_data.get('lob', 'COM')}',
+            'I',
+            '9',
+            '{run_id}',
+            {batch_id},
+            '{load_log_data.get('source', 'GENAISA')}',
+            '{load_log_data.get('path', 'N/A')}',
+            {load_log_data.get('record_count', 0)},
+            '{load_log_data.get('process_name', 'UNKNOWN')}',
+            '{load_log_data.get('process_id', '0')}',
+            '{load_log_data.get('step_name', 'SQL Execution')}',
+            '{load_log_data.get('step_id', '0')}',
+            '{load_log_data.get('status', 'Completed')}',
+            '{load_log_data.get('start_time', current_ts)}',
+            CURRENT_TIMESTAMP()
+        )
+        """
+        
+        self.execute(query, fetch=False)
+        logging.info(f"Load log inserted: BATCHID={batch_id}, STATUS={load_log_data.get('status')}, RECCNT={load_log_data.get('record_count', 0)}")
+        return batch_id
+    
+    def _formatValue(self, value):
+        if value is None:
+            return 'NULL'
+        return f"'{str(value).replace(chr(39), chr(39)+chr(39))}'"
+    
+    def _formatTimestamp(self, value):
+        if value is None:
+            return 'NULL'
+        return f"'{value}'"
+
+
+class S3Service:
+    
+    def __init__(self, sub_group_name=None):
+        import boto3
+        self.client = boto3.client('s3')
+        self.bucket = os.getenv('S3_BUCKET', 'crln-raa-uat-codez-nogbd-phi-useast1')
+        self.prefix = os.getenv('S3_PREFIX', 'raa/genaisa/sql')
+        self.sub_group_name = sub_group_name
+    
+    def getFullPath(self, filename):
+        if filename.startswith('s3://'):
+            path_parts = filename[5:].split('/', 1)
+            return path_parts[0], path_parts[1] if len(path_parts) > 1 else ''
+        else:
+            if self.sub_group_name:
+                return self.bucket, f"{self.prefix}/{self.sub_group_name}/{filename}"
+            else:
+                return self.bucket, f"{self.prefix}/{filename}"
+    
+    def fileExists(self, filename):
+        bucket, key = self.getFullPath(filename)
+        try:
+            self.client.head_object(Bucket=bucket, Key=key)
+            return True
+        except ClientError as e:
+            return False if e.response['Error']['Code'] == '404' else (_ for _ in ()).throw(e)
+    
+    def readFile(self, filename):
+        bucket, key = self.getFullPath(filename)
+        response = self.client.get_object(Bucket=bucket, Key=key)
+        content = response['Body'].read().decode('utf-8')
+        logging.info(f"Read file from S3: s3://{bucket}/{key} ({len(content)} bytes)")
+        return content
+    
+    def readFileBinary(self, bucket, key):
+        """Read file in binary mode"""
+        response = self.client.get_object(Bucket=bucket, Key=key)
+        return response['Body'].read()
+    
+    def writeFileBinary(self, bucket, key, content_bytes):
+        """Write file in binary mode"""
+        self.client.put_object(Bucket=bucket, Key=key, Body=content_bytes)
+        logging.info(f"Wrote file to S3: s3://{bucket}/{key} ({len(content_bytes)} bytes)")
+    
+    def listObjects(self, bucket, prefix, continuation_token=None):
+        """List objects with pagination support"""
+        params = {'Bucket': bucket, 'Prefix': prefix}
+        if continuation_token:
+            params['ContinuationToken'] = continuation_token
+        return self.client.list_objects_v2(**params)
+    
+    def getLatestFolder(self, bucket, prefix):
+        """Get the latest timestamped folder in S3 path"""
+        import boto3
+        s3_resource = boto3.resource('s3')
+        objects = list(s3_resource.Bucket(bucket).objects.filter(Prefix=prefix))
+        
+        if not objects:
+            raise ValueError(f"No objects found in s3://{bucket}/{prefix}")
+        
+        objects.sort(key=lambda o: o.last_modified)
+        latest_key = objects[-1].key
+        latest_date_str = latest_key.replace(prefix, '').split('/', 1)[0]
+        final_prefix = prefix + latest_date_str + "/"
+        
+        logging.info(f"Latest folder: s3://{bucket}/{final_prefix}")
+        return final_prefix
+
+
+class Gatekeeping:
+    
+    def __init__(self, snowflake, s3):
+        self.snowflake = snowflake
+        self.s3 = s3
+        self.masterConfig = None
+        self.runConfig = None
+        self.genAiSaId = None
+    
+    def validateS3File(self, sql_filename):
+        self.masterConfig = self.snowflake.getMasterConfig(sql_filename)
+        
+        if not self.masterConfig:
+            error_msg = f"SQL file '{sql_filename}' not found in GENAISA_MASTER_CONFIG"
+            logging.error(error_msg)
+            self.sendNotification("FAILED", error_msg)
+            raise ValueError(error_msg)
+        
+        self.genAiSaId = self.masterConfig.get('GEN_AI_SA_ID')
+        executable_sql_file = self.masterConfig.get('EXECUTABLE_SQL_FILE')
+        sub_group_name = self.masterConfig.get('SUB_GROUP_NAME')
+        
+        # Update S3Service with sub_group_name from master config
+        self.s3.sub_group_name = sub_group_name
+        logging.info(f"S3 sub-group path set to: {sub_group_name}")
+        
+        s3_bucket = os.getenv('S3_BUCKET', 'crln-raa-uat-codez-nogbd-phi-useast1')
+        s3_prefix = os.getenv('S3_PREFIX', 'raa/genaisa/sql')
+        #self.s3Path = f"s3://{s3_bucket}/{s3_prefix}/{executable_sql_file}"
+        self.s3Path = executable_sql_file
+                
+        if not self.s3.fileExists(self.s3Path):
+            error_msg = f"SQL file not found in S3: {self.s3Path}"
+            logging.error(error_msg)
+            self.sendNotification("FAILED", error_msg)
+            raise FileNotFoundError(error_msg)
+        
+        logging.info(f"SQL file validated: {self.s3Path}")
+    
+    def validateRunConfig(self):
+        self.runConfig = self.snowflake.getConfig('GENAISA_RUN_CONFIG', self.genAiSaId)
+        
+        if not self.runConfig:
+            error_msg = f"RUN_CONFIG not found for GEN_AI_SA_ID: {self.genAiSaId}"
+            logging.error(error_msg)
+            self.sendNotification("FAILED", error_msg)
+            raise ValueError(error_msg)
+        
+        if not self.runConfig.get('ACTIVE'):
+            error_msg = f"Job disabled for GEN_AI_SA_ID: {self.genAiSaId}"
+            logging.warning("Job is disabled in RUN_CONFIG")
+            self.sendNotification("DISABLED", error_msg)
+            raise ValueError("Job is disabled in RUN_CONFIG")
+        
+        logging.info(f"RUN_CONFIG validated: ACTIVE=True, "
+                   f"EXECUTION_FLG={self.runConfig.get('EXECUTION_FLG')}, "
+                   f"STITCHING_FLG={self.runConfig.get('STITCHING_FLG')}, "
+                   f"DISPATCH_FLG={self.runConfig.get('DISPATCH_FLG')}")
+    
+    def validateDependentConfigs(self):
+        for flag, table in [('STITCHING_FLG', 'GENAISA_STITCHING_CONFIG'), ('DISPATCH_FLG', 'GENAISA_LAMBDA_CONFIG')]:
+            if self.runConfig.get(flag):
+                if not self.snowflake.getConfig(table, self.genAiSaId):
+                    error_msg = f"{table} not found for GEN_AI_SA_ID: {self.genAiSaId}"
+                    logging.error(error_msg)
+                    self.sendNotification("FAILED", error_msg)
+                    raise ValueError(error_msg)
+    
+    def sendNotification(self, status, error=""):
+        if not self.masterConfig:
+            logging.debug("Master config not available, skipping notification")
+            return
+        
+        primary_list = self.masterConfig.get('PRIMARY_NOTIFICATION_LIST')
+        secondary_list = self.masterConfig.get('SECONDARY_NOTIFICATION_LIST')
+        
+        if not primary_list:
+            logging.debug("PRIMARY_NOTIFICATION_LIST not configured, skipping notification")
+            return
+        
+        try:
+            env = os.getenv('ENV', 'uat')
+            process_id = self.masterConfig.get('PROCESS_ID')
+            process_name = self.masterConfig.get('PROCESS_NAME')
+            application_id = self.genAiSaId
+            
+            sender_email = "no-reply@wellpoint.com"
+            subject = f"Risk Adjustment Analytics {env.capitalize()} : Business Process Notification"
+            today = date.today()
+            order_date = today.strftime("%Y-%m-%d")
+            
+            body = f"<html><head><style>table{{border-collapse:collapse;width:100%}}th{{background-color:green;color:white;padding:8px}}td{{border:1px solid black;padding:8px}}</style></head><body><h3>Risk Adjustment Analytics AWS-{env.upper()} : Business Process Notification</h3><table><thead><tr><th>Process ID</th><th>Process Name</th><th>Application ID</th><th>Order Date</th><th>Status</th></tr></thead><tbody><tr><td>{process_id}</td><td>{process_name}</td><td>{application_id}</td><td>{order_date}</td><td>{status}</td></tr></tbody></table><br><p><u>Exception/Error Details (If Any)</u></p><p>{error}</p><br><p>Thank You!<br>Anthem Information Technology<br>For assistance, contact the RAA Risky Business Team at <a href='mailto:dl-raa-teamriskybusiness@anthem.com'>dl-raa-teamriskybusiness@anthem.com</a></p></body></html>"
+            
+            msg = MIMEMultipart()
+            msg['From'] = sender_email
+            msg['To'] = primary_list
+            if secondary_list:
+                msg['Cc'] = secondary_list
+            msg['Subject'] = subject
+            msg.attach(MIMEText(body, 'html'))
+            
+            recipients = [primary_list]
+            if secondary_list:
+                recipients.append(secondary_list)
+            
+            server = smtplib.SMTP('smtp.wellpoint.com', 25)
+            server.sendmail(sender_email, recipients, msg.as_string())
+            server.quit()
+            
+            logging.info(f"Email notification sent: {status} to {primary_list}" + (f" (CC: {secondary_list})" if secondary_list else ""))
+        except Exception as e:
+            logging.warning(f"Failed to send email notification: {str(e)}")
+
+
+class Execution:
+    
+    def __init__(self, snowflake, s3, gatekeeping):
+        self.snowflake = snowflake
+        self.s3 = s3
+        self.gatekeeping = gatekeeping
+    
+    def processSqlTemplate(self):
+        import hashlib
+        from datetime import datetime
+        
+        master_config = self.gatekeeping.masterConfig
+        source_from = self.gatekeeping.s3Path
+        sql_content = self.s3.readFile(source_from)
+        
+        # Generate consistent EDL_RUN_ID for this execution
+        current_ts = datetime.now()
+        edl_run_id = hashlib.md5(str(current_ts).encode()).hexdigest()
+        
+        logging.info(f"DEBUG: Master config keys: {list(master_config.keys())}")
+        logging.info(f"DEBUG: Master config values: {master_config}")
+        logging.info(f"Generated EDL_RUN_ID: {edl_run_id}")
+        
+        # Generate timestamp parameters for S3 export path
+        timestamp_folder = current_ts.strftime('%Y%m%d_%H%M%S')  # e.g., 20260915_143000
+        timestamp_date = current_ts.strftime('%Y%m%d')  # e.g., 20260915
+        
+        parameters = {
+            'PROCESS_ID': str(master_config.get('PROCESS_ID')),
+            'PROCESS_NAME': master_config.get('PROCESS_NAME'),
+            'STEP_ID': str(master_config.get('STEP_ID')),
+            'STEP_NAME': master_config.get('STEP_NAME'),
+            'SOURCE_FROM': master_config.get('SOURCE_FROM'),
+            'EDL_RUN_ID': edl_run_id,
+            'TIMESTAMP_FOLDER': timestamp_folder,
+            'TIMESTAMP_DATE': timestamp_date
+        }
+        
+        # Store run_id for later use in load log
+        self.edl_run_id = edl_run_id
+        
+        source_tables_raw = master_config.get('SOURCE_TABLE_NAMES')
+        if source_tables_raw:
+            source_tables = json.loads(source_tables_raw) if isinstance(source_tables_raw, str) else source_tables_raw
+            parameters.update(source_tables)
+        
+        dest_tables_raw = master_config.get('DESTINATION_TABLE_NAMES')
+        if dest_tables_raw:
+            dest_tables = json.loads(dest_tables_raw) if isinstance(dest_tables_raw, str) else dest_tables_raw
+            parameters.update(dest_tables)
+        
+        return Template(sql_content).render(**parameters)
+    
+    def executeSql(self, sql_query):
+        from datetime import datetime
+        
+        statement_count = sql_query.count(';')
+        logging.info(f"{'='*80}\nEXECUTING SQL ({statement_count} statements)\n{'='*80}")
+        
+        # Print the rendered SQL query
+        logging.info("="*80)
+        logging.info("RENDERED SQL QUERY:")
+        logging.info("="*80)
+        logging.info(sql_query)
+        logging.info("="*80)
+        
+        # Validate SQL is not empty
+        if not sql_query or not sql_query.strip():
+            raise ValueError("SQL query is empty after template rendering")
+        
+        logging.info(f"SQL Query Length: {len(sql_query)} characters")
+        logging.info(f"SQL Query (first 500 chars): {sql_query[:500]}")
+        
+        master_config = self.gatekeeping.masterConfig
+        execution_start_time = datetime.now()
+        
+        # Prepare load log data with consistent run_id from template processing
+        load_log_data = {
+            'load_log_table': 'LOAD_LOG_KEY',
+            'run_id': getattr(self, 'edl_run_id', None),  # Use same run_id as SQL
+            'process_id': str(master_config.get('PROCESS_ID', '0')),
+            'process_name': master_config.get('PROCESS_NAME', 'UNKNOWN'),
+            'step_id': str(master_config.get('STEP_ID', '0')),
+            'step_name': master_config.get('STEP_NAME', 'SQL Execution'),
+            'source': master_config.get('SOURCE', 'GENAISA'),
+            'path': master_config.get('SOURCE_FROM', 'N/A'),
+            'lob': master_config.get('LOB', 'COM'),
+            'start_time': execution_start_time
+        }
+        
+        try:
+            # Execute SQL
+            self.snowflake.execute(sql_query, fetch=False)
+            
+            # Extract row count from validation_counts temp table created by SQL
+            record_count = 0
+            try:
+                result = self.snowflake.execute(
+                    "SELECT row_count FROM temp_db.temp_schema.validation_counts", 
+                    fetch=True
+                )
+                if result and len(result) > 0:
+                    record_count = result[0].get('ROW_COUNT', 0)
+                    logging.info(f"Extracted row count from validation_counts table: {record_count}")
+            except Exception as count_error:
+                logging.warning(f"Could not extract row count from validation_counts table: {str(count_error)}")
+                record_count = 0
+            
+            # Insert success load log
+            load_log_data['status'] = 'Completed'
+            load_log_data['record_count'] = record_count
+            batch_id = self.snowflake.insertLoadLog(load_log_data)
+            
+            logging.info(f"SQL executed successfully - Load log recorded with BATCHID={batch_id}, RECCNT={record_count}")
+            
+        except Exception as e:
+            # Insert failure load log
+            load_log_data['status'] = 'Failed'
+            load_log_data['record_count'] = 0
+            try:
+                batch_id = self.snowflake.insertLoadLog(load_log_data)
+                logging.error(f"SQL execution failed - Load log recorded with BATCHID={batch_id}")
+            except Exception as log_error:
+                logging.error(f"Failed to insert load log: {str(log_error)}")
+            raise
+
+
+class Stitching:
+    
+    def __init__(self, snowflake, s3, gatekeeping):
+        self.snowflake = snowflake
+        self.s3 = s3
+        self.gatekeeping = gatekeeping
+        self.stitchingConfig = None
+    
+    def loadStitchingConfig(self, gen_ai_sa_id):
+        """Load stitching configuration from database (may return multiple rows)"""
+        self.stitchingConfig = self.snowflake.getStitchingConfig(gen_ai_sa_id)
+        
+        if not self.stitchingConfig:
+            raise ValueError(f"No stitching config found for GEN_AI_SA_ID: {gen_ai_sa_id}")
+        
+        logging.info(f"Stitching config loaded for GEN_AI_SA_ID: {gen_ai_sa_id} - {len(self.stitchingConfig)} config row(s) found")
+    
+    def listAllFiles(self, bucket, prefix):
+        """List all files in S3 folder with pagination"""
+        all_files = []
+        continuation_token = None
+        
+        while True:
+            response = self.s3.listObjects(bucket, prefix, continuation_token)
+            
+            if 'Contents' in response:
+                # Filter out directory entries
+                files = [obj for obj in response['Contents'] if not obj['Key'].endswith('/')]
+                all_files.extend(files)
+            
+            if response.get('IsTruncated'):
+                continuation_token = response.get('NextContinuationToken')
+            else:
+                break
+        
+        # Sort files by name to maintain proper order (e.g., a_0_1.txt, a_0_2.txt, a_1_0.txt)
+        all_files.sort(key=lambda obj: obj['Key'])
+        
+        logging.info(f"Found {len(all_files)} files in s3://{bucket}/{prefix} (sorted by name)")
+        return all_files
+    
+    def mergeFiles(self):
+        """Main method to merge files based on configuration.
+        Iterates over all stitching config rows for the GEN_AI_SA_ID."""
+        configs = self.stitchingConfig
+        logging.info(f"Processing {len(configs)} stitching config row(s)")
+        for idx, config in enumerate(configs, start=1):
+            logging.info(f"Processing stitching config row {idx}/{len(configs)}")
+            self._mergeFilesForConfig(config)
+
+    def _mergeFilesForConfig(self, config):
+        """Merge files for a single stitching config row"""
+        from datetime import datetime
+        
+        # Get configuration - normalize bucket names (no s3:// prefix) and folder paths
+        src_bucket = config['SRC_S3_BUCKET'].replace('s3://', '').strip('/')
+        src_folder = config['SRC_S3_FOLDER_PATH'].strip('/') + '/'
+        dest_bucket = config['DEST_S3_BUCKET'].replace('s3://', '').strip('/')
+        dest_folder = config['DEST_S3_FOLDER'].strip('/')
+        file_format = config['INPUT_FILE_FORMAT']
+        output_filename = config['OUT_PUT_FILE_NAME']
+        header_template = config.get('OUT_PUT_FILE_HEADER')
+        footer_template = config.get('OUT_PUT_FILE_FOOTER')
+        # Treat 'NA' sentinel as not configured
+        if header_template and header_template.strip().upper() == 'NA':
+            header_template = None
+        if footer_template and footer_template.strip().upper() == 'NA':
+            footer_template = None
+        size_split_req = config.get('SIZE_BASED_SPLIT_REQ', False)
+        split_size_mb = config.get('SPLIT_SIZE_MB')
+        
+        # Get latest folder
+        latest_folder = self.s3.getLatestFolder(src_bucket, src_folder)
+        
+        # List all files in latest folder
+        all_files = self.listAllFiles(src_bucket, latest_folder)
+        
+        # Filter files by glob pattern (e.g., ANTHEM_Member_Enroll_*.txt)
+        from fnmatch import fnmatch
+        logging.info(f"Using file pattern: '{file_format}'")
+        
+        matching_files = [f for f in all_files if fnmatch(f['Key'].split('/')[-1], file_format)]
+        
+        if not matching_files:
+            logging.warning(f"No files matching pattern '{file_format}' found in {latest_folder}")
+            return
+        
+        logging.info(f"Found {len(matching_files)} matching files:")
+        for f in matching_files:
+            logging.info(f"  - {f['Key'].split('/')[-1]}")
+        
+        logging.info(f"Merging {len(matching_files)} files...")
+        
+        # Read and merge all files
+        merged_content = b''
+        for file_obj in matching_files:
+            file_key = file_obj['Key']
+            logging.info(f"Reading file: s3://{src_bucket}/{file_key}")
+            file_content = self.s3.readFileBinary(src_bucket, file_key)
+            merged_content += file_content
+        
+        # Decode and normalize line endings
+        merged_text = merged_content.decode('utf-8')
+        merged_text = merged_text.replace('\r\n', '\n').replace('\r', '\n').replace('\n', '\r\n')
+        
+        # Count rows (non-empty lines)
+        row_count = len([line for line in merged_text.splitlines() if line.strip()])
+        
+        # Delimiter map - supports any {*_delimiter} placeholder from config
+        delimiter_map = {
+            'tab_delimiter':       '\t',
+            'pipe_delimiter':      '|',
+            'comma_delimiter':     ',',
+            'semicolon_delimiter': ';',
+            'caret_delimiter':     '^',
+            'tilde_delimiter':     '~',
+            'colon_delimiter':     ':',
+        }
+
+        def resolve_placeholders(text, row_count=None):
+            import re
+            # Replace known delimiters dynamically
+            for key, char in delimiter_map.items():
+                text = text.replace(f'{{{key}}}', char)
+            # Warn on any unresolved {*_delimiter} placeholders
+            unresolved = re.findall(r'\{[^}]*_delimiter\}', text)
+            if unresolved:
+                logging.warning(f"Unresolved delimiter placeholders: {unresolved}")
+            # Replace other standard placeholders
+            text = text.replace('{timestamp}', datetime.now().strftime("%Y%m%d%H%M%S"))
+            if row_count is not None:
+                text = text.replace('{row_count}', str(row_count))
+            return text
+
+        # Add header if configured
+        final_content = ''
+        if header_template:
+            header = resolve_placeholders(header_template)
+            final_content = header + "\r\n"
+            logging.info(f"Added header: {header[:100]}...")
+        
+        # Add merged content
+        final_content += merged_text.rstrip()
+        
+        # Add footer if configured
+        if footer_template:
+            footer = resolve_placeholders(footer_template, row_count=row_count)
+            final_content += "\r\n" + footer
+            logging.info(f"Added footer: {footer}")
+        
+        # Generate output filename with date format placeholders
+        from datetime import datetime
+        current_dt = datetime.now()
+        timestamp_folder = current_dt.strftime("%Y%m%d_%H%M%S")
+        
+        # Replace various date format placeholders
+        output_name = output_filename
+        output_name = output_name.replace('{YYYYMMDD}', current_dt.strftime("%Y%m%d"))
+        output_name = output_name.replace('{YYYMMDD}', current_dt.strftime("%Y%m%d"))  # Handle typo
+        output_name = output_name.replace('{MMDDYYYY}', current_dt.strftime("%m%d%Y"))
+        output_name = output_name.replace('{DDMMYYYY}', current_dt.strftime("%d%m%Y"))
+        output_name = output_name.replace('{MMDDYY}', current_dt.strftime("%m%d%y"))
+        output_name = output_name.replace('{DDMMYY}', current_dt.strftime("%d%m%y"))
+        output_name = output_name.replace('{timestamp}', timestamp_folder)
+        
+        logging.info(f"Output filename: {output_filename} -> {output_name}")
+        
+        output_key = f"{dest_folder}/{timestamp_folder}/{output_name}"
+        
+        # Handle file splitting if required
+        if size_split_req and split_size_mb:
+            self.splitAndWriteFiles(dest_bucket, output_key, final_content, split_size_mb, header_template, footer_template)
+        else:
+            # Write single merged file
+            self.s3.writeFileBinary(dest_bucket, output_key, final_content.encode('utf-8'))
+            logging.info(f"Merged file written to: s3://{dest_bucket}/{output_key}")
+        
+        logging.info(f"Stitching completed successfully. Total rows: {row_count}")
+    
+    def splitAndWriteFiles(self, bucket, base_key, content, max_size_mb, header_template, footer_template):
+        """Split large file into smaller chunks"""
+        from datetime import datetime
+        
+        max_size_bytes = max_size_mb * 1024 * 1024
+        lines = content.splitlines(keepends=True)
+        
+        part_num = 1
+        current_chunk = []
+        current_size = 0
+        
+        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        
+        for line in lines:
+            line_size = len(line.encode('utf-8'))
+            
+            if current_size + line_size > max_size_bytes and current_chunk:
+                # Write current chunk
+                self.writeChunk(bucket, base_key, part_num, current_chunk, header_template, footer_template, timestamp)
+                part_num += 1
+                current_chunk = []
+                current_size = 0
+            
+            current_chunk.append(line)
+            current_size += line_size
+        
+        # Write remaining chunk
+        if current_chunk:
+            self.writeChunk(bucket, base_key, part_num, current_chunk, header_template, footer_template, timestamp)
+        
+        logging.info(f"File split into {part_num} parts")
+    
+    def writeChunk(self, bucket, base_key, part_num, lines, header_template, footer_template, timestamp):
+        """Write a single chunk with optional header/footer"""
+        import re
+        delimiter_map = {
+            'tab_delimiter':       '\t',
+            'pipe_delimiter':      '|',
+            'comma_delimiter':     ',',
+            'semicolon_delimiter': ';',
+            'caret_delimiter':     '^',
+            'tilde_delimiter':     '~',
+            'colon_delimiter':     ':',
+        }
+
+        def resolve_placeholders(text, row_count=None):
+            for key, char in delimiter_map.items():
+                text = text.replace(f'{{{key}}}', char)
+            unresolved = re.findall(r'\{[^}]*_delimiter\}', text)
+            if unresolved:
+                logging.warning(f"Unresolved delimiter placeholders in chunk: {unresolved}")
+            text = text.replace('{timestamp}', timestamp)
+            if row_count is not None:
+                text = text.replace('{row_count}', str(row_count))
+            return text
+
+        chunk_content = ''
+        
+        # Add header if configured
+        if header_template:
+            chunk_content = resolve_placeholders(header_template) + "\r\n"
+        
+        # Add lines
+        chunk_content += ''.join(lines).rstrip()
+        
+        # Add footer if configured
+        if footer_template:
+            row_count = len([line for line in lines if line.strip()])
+            chunk_content += "\r\n" + resolve_placeholders(footer_template, row_count=row_count)
+        
+        # Generate part filename
+        base_name = base_key.rsplit('.', 1)
+        if len(base_name) == 2:
+            part_key = f"{base_name[0]}_part{part_num}.{base_name[1]}"
+        else:
+            part_key = f"{base_key}_part{part_num}"
+        
+        self.s3.writeFileBinary(bucket, part_key, chunk_content.encode('utf-8'))
+        logging.info(f"Written part {part_num}: s3://{bucket}/{part_key}")
+
+
+class Dispatch:
+    
+    def __init__(self, snowflake, gatekeeping):
+        self.snowflake = snowflake
+        self.gatekeeping = gatekeeping
+        self.lambdaConfig = None
+    
+    def loadLambdaConfig(self, gen_ai_sa_id):
+        """Load Lambda dispatch configuration from database (may return multiple rows)"""
+        self.lambdaConfig = self.snowflake.getLambdaConfig(gen_ai_sa_id)
+        
+        if not self.lambdaConfig:
+            raise ValueError(f"No Lambda config found for GEN_AI_SA_ID: {gen_ai_sa_id}")
+        
+        logging.info(f"Lambda config loaded for GEN_AI_SA_ID: {gen_ai_sa_id} - {len(self.lambdaConfig)} config row(s) found")
+    
+    def getRoutingFlag(self, config):
+        """Query Snowflake table to get routing flag value for a given config row"""
+        routing_table = config.get('ROUTING_FLAG_SOURCE_TABLE')
+        routing_column = config.get('ROUTING_FLAG_COLUMN')
+        
+        # Treat 'NA' as NULL/not configured
+        if not routing_table or not routing_column or routing_table == 'NA' or routing_column == 'NA':
+            logging.warning("No routing flag configured, using primary destination")
+            return None
+        
+        query = f"SELECT DISTINCT {routing_column} FROM {routing_table} LIMIT 1"
+        results = self.snowflake.execute(query, fetch=True)
+        
+        if results and len(results) > 0:
+            flag_value = results[0].get(routing_column)
+            logging.info(f"Routing flag from {routing_table}.{routing_column}: {flag_value}")
+            return flag_value
+        
+        logging.warning(f"No routing flag found in {routing_table}.{routing_column}")
+        return None
+    
+    def invokeLambda(self):
+        """Invoke Lambda function(s) for every config row associated with the GEN_AI_SA_ID"""
+        import boto3
+        import json
+        
+        configs = self.lambdaConfig
+        lambda_client = boto3.client('lambda')
+        all_responses = []
+        
+        logging.info(f"Processing {len(configs)} lambda config row(s)")
+        for idx, config in enumerate(configs, start=1):
+            logging.info(f"Processing lambda config row {idx}/{len(configs)}")
+            responses = self._invokeLambdaForConfig(config, lambda_client)
+            all_responses.extend(responses)
+        
+        return all_responses
+
+    def _invokeLambdaForConfig(self, config, lambda_client):
+        """Invoke Lambda function(s) for a single config row based on routing flag"""
+        import json
+        
+        # Get routing flag
+        routing_flag = self.getRoutingFlag(config)
+        routing_flag_value = config.get('ROUTING_FLAG_VALUE')
+        process_name = self.gatekeeping.masterConfig.get('PROCESS_NAME', 'UNKNOWN')
+        
+        # Determine destinations based on routing flag
+        # If flag matches configured value, send to BOTH primary AND alternate
+        # Otherwise, send to primary only
+        send_to_alternate = (routing_flag == routing_flag_value)
+        
+        if send_to_alternate:
+            logging.info(f"Routing flag matched ({routing_flag} == {routing_flag_value})")
+            logging.info(f"Will send to PRIMARY + ALTERNATE destinations")
+        else:
+            logging.info(f"Routing flag not matched ({routing_flag} != {routing_flag_value})")
+            logging.info(f"Will send to PRIMARY destination only")
+        
+        # Build Lambda payload for PRIMARY destination
+        primary_payload = {
+            "etl_stp_parms": {
+                "src_s3_bucket": config['PRIMARY_SRC_S3_BUCKET'],
+                "src_s3_path": config['PRIMARY_SRC_S3_PATH'],
+                "dest_s3_bucket": config.get('PRIMARY_DEST_S3_BUCKET'),
+                "dest_s3_path": config.get('PRIMARY_DEST_S3_PATH'),
+                "arh_s3_bucket": config.get('LAMBDA_ARH_S3_BUCKET'),
+                "arh_s3_path": config.get('LAMBDA_ARH_S3_PATH'),
+                "process_name": process_name,
+                "notiy_to": config.get('LAMBDA_NOTIFY_TO'),
+                "is_deploy": config.get('LAMBDA_IS_DEPLOY', 'Y')
+            }
+        }
+        
+        # Add additional params if configured
+        additional_params = config.get('LAMBDA_ADDITIONAL_PARAMS')
+        if additional_params:
+            if isinstance(additional_params, str):
+                additional_params = json.loads(additional_params)
+            primary_payload["etl_stp_parms"].update(additional_params)
+        
+        lambda_function_name = config['LAMBDA_FUNCTION_NAME']
+        responses = []
+        
+        # Invoke Lambda for PRIMARY destination
+        logging.info(f"Invoking Lambda for PRIMARY destination: {lambda_function_name}")
+        logging.info(f"PRIMARY payload: {json.dumps(primary_payload, indent=2)}")
+        
+        primary_response = lambda_client.invoke(
+            FunctionName=lambda_function_name,
+            InvocationType='RequestResponse',
+            Payload=json.dumps(primary_payload)
+        )
+        
+        primary_response_payload = json.loads(primary_response['Payload'].read())
+        primary_status = primary_response.get('StatusCode')
+        
+        logging.info(f"PRIMARY Lambda invocation completed. Status: {primary_status}")
+        logging.info(f"PRIMARY response: {json.dumps(primary_response_payload, indent=2)}")
+        
+        # Check HTTP status code
+        if primary_status != 200:
+            raise Exception(f"PRIMARY Lambda invocation failed with HTTP status {primary_status}: {primary_response_payload}")
+        
+        # Check if Lambda function itself failed (errorMessage in response)
+        if 'errorMessage' in primary_response_payload or 'errorType' in primary_response_payload:
+            error_type = primary_response_payload.get('errorType', 'Unknown')
+            error_msg = primary_response_payload.get('errorMessage', 'Unknown error')
+            raise Exception(f"PRIMARY Lambda function failed with {error_type}: {error_msg}")
+        
+        responses.append({
+            'destination': 'PRIMARY',
+            'status': primary_status,
+            'response': primary_response_payload
+        })
+        
+        # Invoke Lambda for ALTERNATE destination if routing flag matched
+        if send_to_alternate:
+            alternate_payload = {
+                "etl_stp_parms": {
+                    "src_s3_bucket": config['PRIMARY_SRC_S3_BUCKET'],
+                    "src_s3_path": config['PRIMARY_SRC_S3_PATH'],
+                    "dest_s3_bucket": config.get('ALTERNATE_DEST_S3_BUCKET'),
+                    "dest_s3_path": config.get('ALTERNATE_DEST_S3_PATH'),
+                    "arh_s3_bucket": config.get('LAMBDA_ARH_S3_BUCKET'),
+                    "arh_s3_path": config.get('LAMBDA_ARH_S3_PATH'),
+                    "process_name": process_name,
+                    "notiy_to": config.get('LAMBDA_NOTIFY_TO'),
+                    "is_deploy": config.get('LAMBDA_IS_DEPLOY', 'Y')
+                }
+            }
+            
+            if additional_params:
+                alternate_payload["etl_stp_parms"].update(additional_params)
+            
+            logging.info(f"Invoking Lambda for ALTERNATE destination: {lambda_function_name}")
+            logging.info(f"ALTERNATE payload: {json.dumps(alternate_payload, indent=2)}")
+            
+            alternate_response = lambda_client.invoke(
+                FunctionName=lambda_function_name,
+                InvocationType='RequestResponse',
+                Payload=json.dumps(alternate_payload)
+            )
+            
+            alternate_response_payload = json.loads(alternate_response['Payload'].read())
+            alternate_status = alternate_response.get('StatusCode')
+            
+            logging.info(f"ALTERNATE Lambda invocation completed. Status: {alternate_status}")
+            logging.info(f"ALTERNATE response: {json.dumps(alternate_response_payload, indent=2)}")
+            
+            # Check HTTP status code
+            if alternate_status != 200:
+                raise Exception(f"ALTERNATE Lambda invocation failed with HTTP status {alternate_status}: {alternate_response_payload}")
+            
+            # Check if Lambda function itself failed (errorMessage in response)
+            if 'errorMessage' in alternate_response_payload or 'errorType' in alternate_response_payload:
+                error_type = alternate_response_payload.get('errorType', 'Unknown')
+                error_msg = alternate_response_payload.get('errorMessage', 'Unknown error')
+                raise Exception(f"ALTERNATE Lambda function failed with {error_type}: {error_msg}")
+            
+            responses.append({
+                'destination': 'ALTERNATE',
+                'status': alternate_status,
+                'response': alternate_response_payload
+            })
+        
+        return responses
+
+
+class GenAiSa:
+    
+    def __init__(self, sql_filename):
+        self.sqlFilename = sql_filename
+        self.statusTracker = {
+            'execution_status': None,
+            'execution_start': None,
+            'execution_end': None,
+            'execution_error_cd': None,
+            'execution_error_msg': None,
+            'stitching_status': None,
+            'stitching_start': None,
+            'stitching_end': None,
+            'stitching_error_cd': None,
+            'stitching_error_msg': None,
+            'dispatch_status': None,
+            'dispatch_start': None,
+            'dispatch_end': None,
+            'dispatch_error_cd': None,
+            'dispatch_error_msg': None,
+            'final_status': None
+        }
+        
+        self.snowflake = SnowflakeService()
+        self.s3 = S3Service()
+        self.gatekeeping = Gatekeeping(self.snowflake, self.s3)
+        self.execution = Execution(self.snowflake, self.s3, self.gatekeeping)
+        self.stitching = Stitching(self.snowflake, self.s3, self.gatekeeping)
+        self.dispatch = Dispatch(self.snowflake, self.gatekeeping)
+        
+        logging.info(f"GenAiSa initialized for SQL file: {sql_filename}")
+    
+    def checkLastRunAndDetermineStep(self):
+        """Check last audit trail and determine which step to run"""
+        last_audit = self.snowflake.getLastAuditTrail(self.gatekeeping.genAiSaId)
+        
+        if not last_audit:
+            logging.info("No previous audit trail found. Starting fresh execution.")
+            return 'execution'
+        
+        final_status = last_audit.get('FINAL_STATUS')
+        logging.info(f"Last run FINAL_STATUS: {final_status}")
+        
+        if final_status == 'FAILED':
+            # Determine which step failed
+            if last_audit.get('EXECUTION_REQ_STATUS') == 'FAILED':
+                logging.info("Last run failed at EXECUTION step. Retrying EXECUTION.")
+                return 'execution'
+            elif last_audit.get('STITCHING_REQ_STATUS') == 'FAILED':
+                logging.info("Last run failed at STITCHING step. Retrying STITCHING.")
+                return 'stitching'
+            elif last_audit.get('DISPATCH_REQ_STATUS') == 'FAILED':
+                logging.info("Last run failed at DISPATCH step. Retrying DISPATCH.")
+                return 'dispatch'
+        
+        logging.info("Last run was successful. Starting fresh execution.")
+        return 'execution'
+    
+    def insertAuditTrail(self):
+        """Upsert audit trail record with current status"""
+        audit_data = {
+            'gen_ai_sa_id': self.gatekeeping.genAiSaId,
+            'executable_sql_file': self.gatekeeping.masterConfig.get('EXECUTABLE_SQL_FILE'),
+            **self.statusTracker
+        }
+        
+        # Get edl_run_id from execution phase if available (fresh run)
+        edl_run_id = getattr(self.execution, 'edl_run_id', None) if hasattr(self, 'execution') else None
+        
+        # If not available, get it from last audit trail (re-run scenario)
+        if not edl_run_id:
+            last_audit = self.snowflake.getLastAuditTrail(self.gatekeeping.genAiSaId)
+            if last_audit and last_audit.get('EDL_RUN_ID'):
+                edl_run_id = last_audit.get('EDL_RUN_ID')
+                logging.info(f"Using EDL_RUN_ID from last audit trail for re-run: {edl_run_id}")
+            else:
+                # Generate new one if still not available (shouldn't happen)
+                import hashlib
+                from datetime import datetime
+                current_ts = datetime.now()
+                edl_run_id = hashlib.md5(str(current_ts).encode()).hexdigest()
+                logging.warning(f"No EDL_RUN_ID found, generated new one: {edl_run_id}")
+        
+        self.snowflake.upsertAuditTrail(audit_data, edl_run_id)
+    
+    def executePhase(self, phase_name, phase_func, error_code):
+        """Execute a phase with standardized error handling and audit trail"""
+        from datetime import datetime
+        
+        status_key = f'{phase_name.lower()}_status'
+        start_key = f'{phase_name.lower()}_start'
+        end_key = f'{phase_name.lower()}_end'
+        error_cd_key = f'{phase_name.lower()}_error_cd'
+        error_msg_key = f'{phase_name.lower()}_error_msg'
+        
+        self.statusTracker[start_key] = datetime.now()
+        try:
+            phase_func()
+            self.statusTracker[status_key] = 'SUCCESS'
+            self.statusTracker[end_key] = datetime.now()
+            self.statusTracker['final_status'] = 'SUCCESS'
+            self.insertAuditTrail()
+            logging.info(f"{phase_name} phase completed successfully - Audit trail recorded")
+        except Exception as e:
+            self.statusTracker[status_key] = 'FAILED'
+            self.statusTracker[end_key] = datetime.now()
+            self.statusTracker[error_cd_key] = error_code
+            self.statusTracker[error_msg_key] = str(e)[:5000]
+            self.statusTracker['final_status'] = 'FAILED'
+            self.insertAuditTrail()
+            logging.error(f"{phase_name} phase failed - Audit trail recorded")
+            raise
+    
+    def markPhaseNotRequired(self, phase_name):
+        """Mark a phase as not required and insert audit trail"""
+        status_key = f'{phase_name.lower()}_status'
+        self.statusTracker[status_key] = 'NR'
+        self.statusTracker['final_status'] = 'SUCCESS'
+        self.insertAuditTrail()
+        logging.info(f"{phase_name} phase not required - Audit trail recorded")
+    
+    def run(self):
+        from datetime import datetime
+        
+        try:
+            logging.info(f"{'='*80}\nStarting GenAiSa SQL Automation Pipeline\n{'='*80}")
+            self.snowflake.connect()
+            
+            logging.info(f"GATEKEEPING PHASE\n{'-'*80}")
+            try:
+                self.gatekeeping.validateS3File(self.sqlFilename)
+                self.gatekeeping.validateRunConfig()
+                self.gatekeeping.validateDependentConfigs()
+            except Exception as e:
+                # Gatekeeping failure - insert audit trail if we have gen_ai_sa_id
+                if self.gatekeeping.genAiSaId:
+                    self.statusTracker['execution_status'] = 'FAILED'
+                    self.statusTracker['execution_error_cd'] = 'GATEKEEP_ERR'
+                    self.statusTracker['execution_error_msg'] = str(e)[:5000]
+                    self.statusTracker['final_status'] = 'FAILED'
+                    self.insertAuditTrail()
+                raise
+            
+            # Check last run and determine starting step
+            start_step = self.checkLastRunAndDetermineStep()
+            
+            # Get run config flags
+            run_config = self.gatekeeping.runConfig
+            execution_flg = run_config.get('EXECUTION_FLG', True)
+            stitching_flg = run_config.get('STITCHING_FLG', False)
+            dispatch_flg = run_config.get('DISPATCH_FLG', False)
+            
+            # EXECUTION PHASE
+            if start_step == 'execution' and execution_flg:
+                logging.info(f"{'='*80}\nEXECUTION PHASE\n{'-'*80}")
+                
+                def execute_phase():
+                    sql_content = self.execution.processSqlTemplate()
+                    self.execution.executeSql(sql_content)
+                
+                self.executePhase('EXECUTION', execute_phase, 'EXEC_ERR')
+            elif not execution_flg:
+                self.markPhaseNotRequired('EXECUTION')
+            
+            # STITCHING PHASE
+            if start_step in ['execution', 'stitching'] and stitching_flg:
+                logging.info(f"{'='*80}\nSTITCHING PHASE\n{'-'*80}")
+                
+                def stitching_phase():
+                    self.stitching.loadStitchingConfig(self.gatekeeping.genAiSaId)
+                    self.stitching.mergeFiles()
+                
+                self.executePhase('STITCHING', stitching_phase, 'STITCH_ERR')
+            elif not stitching_flg:
+                self.markPhaseNotRequired('STITCHING')
+            
+            # DISPATCH PHASE
+            if start_step in ['execution', 'stitching', 'dispatch'] and dispatch_flg:
+                logging.info(f"{'='*80}\nDISPATCH PHASE\n{'-'*80}")
+                
+                def dispatch_phase():
+                    self.dispatch.loadLambdaConfig(self.gatekeeping.genAiSaId)
+                    self.dispatch.invokeLambda()
+                
+                self.executePhase('DISPATCH', dispatch_phase, 'DISPATCH_ERR')
+            elif not dispatch_flg:
+                self.markPhaseNotRequired('DISPATCH')
+            
+            # All phases completed - audit trail already inserted after each phase
+            logging.info(f"{'='*80}\nPipeline execution completed successfully\n{'='*80}")
+            self.gatekeeping.sendNotification("SUCCEEDED")
+            
+            return {'status': 'SUCCESS', 'sql_filename': self.sqlFilename, 'gen_ai_sa_id': self.gatekeeping.genAiSaId,
+                    'process_name': self.gatekeeping.masterConfig.get('PROCESS_NAME'), 'step_name': self.gatekeeping.masterConfig.get('STEP_NAME')}
+            
+        except Exception as e:
+            error_msg = str(e)
+            logging.error(f"{'='*80}\nPipeline execution failed: {error_msg}\n{'='*80}", exc_info=True)
+            self.gatekeeping.sendNotification("FAILED", error_msg)
+            raise
+
+
+def main():
+    try:
+        parser = argparse.ArgumentParser(description='GenAiSa SQL Automation Pipeline')
+        parser.add_argument('--SQL_FILENAME', type=str, required=True, help='SQL file name to execute')
+        args = parser.parse_args()
+        sql_filename = args.SQL_FILENAME
+        
+        logging.info(f"Starting GenAiSa job")
+        logging.info(f"Processing SQL file: {sql_filename}")
+        
+        processor = GenAiSa(sql_filename)
+        result = processor.run()
+        
+        logging.info(f"Job completed with status: {result['status']}")
+        return result
+        
+    except Exception as e:
+        logging.critical(f"Job failed with error: {str(e)}", exc_info=True)
+        raise
+
+
+if __name__ == '__main__':
+    main()
