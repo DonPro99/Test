@@ -1,2 +1,5 @@
 find ~ /tmp -name "main_ref.py" 2>/dev/null
 aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i main_ref
+
+
+Hi Ravi, I’m ready to test GEN_AI_SA_ID 005 on a UAT cluster. Could you share main_ref.py (or its location) so I can paste it on the cluster like in the demo? Anything else besides pip install jinja2 I need to set up?
