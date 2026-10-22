@@ -62,3 +62,19 @@ SELECT
     'AM71511',
     'AM71511'
 ;
+
+
+
+
+
+==========================
+
+Overwrite the file: cat > /tmp/adhoc_vendor_st.sql, paste the block above, press Enter, then Ctrl+D.
+Check it: cat /tmp/adhoc_vendor_st.sql. It should show only your two inserts, with no delete lines.
+Upload: aws s3 cp /tmp/adhoc_vendor_st.sql s3://crln-raa-uat-codez-nogbd-phi-useast1/files/sql/adhoc_vendor_st.sql
+Run job 800009263 in UAT, once.
+Verify:
+
+
+   SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.GENAISA_RUN_CONFIG WHERE GEN_AI_SA_ID = 5;
+   SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG WHERE GEN_AI_SA_ID = 5;
