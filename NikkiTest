@@ -1,2 +1,4 @@
-you need to edit this adhoc_vendor_st.sql  on any of available EMR cluster and them copy it back to s3, post that you need to run job ID "800009263" in UAT yourself. 
-s3://crln-raa-uat-codez-nogbd-phi-useast1/files/sql/adhoc_vendor_st.sql
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/sql/adhoc_vendor_st.sql /tmp/adhoc_vendor_st.sql
+cp /tmp/adhoc_vendor_st.sql /tmp/adhoc_vendor_st.sql.bak_20261022
+cat /tmp/adhoc_vendor_st.sql
+
