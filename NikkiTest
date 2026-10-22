@@ -1,13 +1,127 @@
-[hadoop@ip-10-127-204-200 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/genaisa_test/ --recursive
-2026-10-22 20:29:08       2717 outbound/raa/genaisa_test/sas/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022200857.txt
-2026-10-22 20:29:08       1094 outbound/raa/genaisa_test/sas/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022200857_CPL_1.txt
-2026-10-22 20:29:08       3705 outbound/raa/genaisa_test/sas/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022200857.txt
-2026-10-22 20:29:08       1518 outbound/raa/genaisa_test/sas/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022200857_CPL_1.txt
-[hadoop@ip-10-127-204-200 ~]$ 
-[hadoop@ip-10-127-204-200 ~]$ 
-[hadoop@ip-10-127-204-200 ~]$ 
-[hadoop@ip-10-127-204-200 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_200857/
-2026-10-22 20:09:48       2717 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022200857.txt
-2026-10-22 20:09:49       1094 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022200857_CPL_1.txt
-2026-10-22 20:09:47       3705 ELV_DTVNT_R2_MRA_ONSHORE_1_20261022200857.txt
-2026-10-22 20:09:49       1518 ELV_DTVNT_R2_MRA_ONSHORE_1_20261022200857_CPL_1.txt
+hadoop@ip-10-127-204-200 tmp]$ aws s3 cp /tmp/adhoc_vendor_st.sql s3://crln-raa-uat-codez-nogbd-phi-useast1/files/sql/adhoc_vendor_st.sql
+upload: ./adhoc_vendor_st.sql to s3://crln-raa-uat-codez-nogbd-phi-useast1/files/sql/adhoc_vendor_st.sql
+[hadoop@ip-10-127-204-200 tmp]$ cd /home/hadoop
+[hadoop@ip-10-127-204-200 ~]$ python3.11 main_refactored.py --SQL_FILENAME s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
+2026-10-22 20:29:02 - INFO - Starting GenAiSa job
+2026-10-22 20:29:02 - INFO - Processing SQL file: s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
+2026-10-22 20:29:02 - INFO - Found credentials from IAM Role: CRLN-RAA-uat-EC2EMR-Role
+2026-10-22 20:29:02 - INFO - GenAiSa initialized for SQL file: s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
+2026-10-22 20:29:02 - INFO - ================================================================================
+Starting GenAiSa SQL Automation Pipeline
+================================================================================
+2026-10-22 20:29:02,569 - INFO - [RRR] Creating Snowpark session for env=uat, app=RAA
+2026-10-22 20:29:02 - INFO - [RRR] Creating Snowpark session for env=uat, app=RAA
+2026-10-22 20:29:02 - INFO - Found credentials from IAM Role: CRLN-RAA-uat-EC2EMR-Role
+2026-10-22 20:29:02,722 - INFO - Warehouse ='U01_LOAD_02_WH_XL', User ='SRCRAADU' and Database ='U01_RAA' will be used for current session.
+2026-10-22 20:29:02 - INFO - Warehouse ='U01_LOAD_02_WH_XL', User ='SRCRAADU' and Database ='U01_RAA' will be used for current session.
+2026-10-22 20:29:02 - INFO - Snowflake Connector for Python Version: 4.8.0, Python Version: 3.11.16, Platform: Linux-6.1.186-228.376.amzn2023.x86_64-x86_64-with-glibc2.34
+2026-10-22 20:29:02 - INFO - Connecting to GLOBAL Snowflake domain
+2026-10-22 20:29:03 - INFO - Snowpark Session information: 
+"version" : 1.55.2,
+"python.version" : 3.11.16,
+"python.connector.version" : 4.8.0,
+"python.connector.session.id" : 15658177076971298,
+"os.name" : Linux
+
+2026-10-22 20:29:03,289 - INFO - Snowpark session established for Application ='raa', UserType ='lduser' and Warehouse_Size_Suffix ='_xl': {'session': <snowflake.snowpark.session.Session object at 0x7fc1d489c690>, 'database': 'U01_RAA', 'warehouse': 'U01_LOAD_02_WH_XL', 'lduser': 'SRCRAADU'}
+2026-10-22 20:29:03 - INFO - Snowpark session established for Application ='raa', UserType ='lduser' and Warehouse_Size_Suffix ='_xl': {'session': <snowflake.snowpark.session.Session object at 0x7fc1d489c690>, 'database': 'U01_RAA', 'warehouse': 'U01_LOAD_02_WH_XL', 'lduser': 'SRCRAADU'}
+2026-10-22 20:29:03,290 - INFO - [RRR] Snowpark session created successfully for program='main_refactored'
+2026-10-22 20:29:03 - INFO - [RRR] Snowpark session created successfully for program='main_refactored'
+2026-10-22 20:29:03 - INFO - Snowflake connected
+2026-10-22 20:29:03 - INFO - GATEKEEPING PHASE
+--------------------------------------------------------------------------------
+2026-10-22 20:29:03 - INFO - Searching for SQL file: 's3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql' or filename: 'DatavantMbrProvETL.sql'
+2026-10-22 20:29:03 - INFO - S3 sub-group path set to: DATAVANT
+2026-10-22 20:29:03 - INFO - SQL file validated: s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
+2026-10-22 20:29:04 - INFO - RUN_CONFIG validated: ACTIVE=True, EXECUTION_FLG=True, STITCHING_FLG=False, DISPATCH_FLG=True
+2026-10-22 20:29:04 - INFO - Last run FINAL_STATUS: FAILED
+2026-10-22 20:29:04 - INFO - Last run failed at DISPATCH step. Retrying DISPATCH.
+2026-10-22 20:29:04 - INFO - Using EDL_RUN_ID from last audit trail for re-run: 3bc002f2de9f5bebf49809cdb1d65572
+2026-10-22 20:29:05 - INFO - Audit trail record UPDATED for EDL_RUN_ID: 3bc002f2de9f5bebf49809cdb1d65572
+2026-10-22 20:29:05 - INFO - STITCHING phase not required - Audit trail recorded
+2026-10-22 20:29:05 - INFO - ================================================================================
+DISPATCH PHASE
+--------------------------------------------------------------------------------
+2026-10-22 20:29:05 - INFO - Lambda config loaded for GEN_AI_SA_ID: 5 - 1 config row(s) found
+2026-10-22 20:29:05 - INFO - Processing 1 lambda config row(s)
+2026-10-22 20:29:05 - INFO - Processing lambda config row 1/1
+2026-10-22 20:29:05 - INFO - Routing flag from U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRT_MRA_STG.ADD_VAL8: N
+2026-10-22 20:29:05 - INFO - Routing flag matched (N == N)
+2026-10-22 20:29:05 - INFO - Will send to PRIMARY + ALTERNATE destinations
+2026-10-22 20:29:05 - INFO - Invoking Lambda for PRIMARY destination: CRLN-RAA-uat-Lmda-CopyFileAndNotify
+2026-10-22 20:29:05 - INFO - PRIMARY payload: {
+  "etl_stp_parms": {
+    "src_s3_bucket": "crln-652798729258-ssm-uat-filetransfer",
+    "src_s3_path": "outbound/raa/datavantprov-retro-etl/",
+    "dest_s3_bucket": "crln-652798729258-ssm-uat-filetransfer",
+    "dest_s3_path": "outbound/raa/genaisa_test/sas/",
+    "arh_s3_bucket": "crln-652798729258-ssm-uat-filetransfer",
+    "arh_s3_path": "outbound/raa/genaisa_test/archive/",
+    "process_name": "DTVNTRT-MRA",
+    "notiy_to": "Nikhitha.Komandla@elevancehealth.com",
+    "is_deploy": "N"
+  }
+}
+2026-10-22 20:29:08 - INFO - PRIMARY Lambda invocation completed. Status: 200
+2026-10-22 20:29:08 - INFO - PRIMARY response: null
+2026-10-22 20:29:08 - INFO - Using EDL_RUN_ID from last audit trail for re-run: 3bc002f2de9f5bebf49809cdb1d65572
+2026-10-22 20:29:09 - INFO - Audit trail record UPDATED for EDL_RUN_ID: 3bc002f2de9f5bebf49809cdb1d65572
+2026-10-22 20:29:09 - ERROR - DISPATCH phase failed - Audit trail recorded
+2026-10-22 20:29:09 - ERROR - ================================================================================
+Pipeline execution failed: argument of type 'NoneType' is not iterable
+================================================================================
+Traceback (most recent call last):
+  File "/home/hadoop/main_refactored.py", line 1233, in run
+    self.executePhase('DISPATCH', dispatch_phase, 'DISPATCH_ERR')
+  File "/home/hadoop/main_refactored.py", line 1146, in executePhase
+    phase_func()
+  File "/home/hadoop/main_refactored.py", line 1231, in dispatch_phase
+    self.dispatch.invokeLambda()
+  File "/home/hadoop/main_refactored.py", line 913, in invokeLambda
+    responses = self._invokeLambdaForConfig(config, lambda_client)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hadoop/main_refactored.py", line 985, in _invokeLambdaForConfig
+    if 'errorMessage' in primary_response_payload or 'errorType' in primary_response_payload:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: argument of type 'NoneType' is not iterable
+2026-10-22 20:29:09 - INFO - Email notification sent: FAILED to dl-RAAETLDevelopers@anthem.com (CC: dl-RAAETLDevelopers@anthem.com)
+2026-10-22 20:29:09 - CRITICAL - Job failed with error: argument of type 'NoneType' is not iterable
+Traceback (most recent call last):
+  File "/home/hadoop/main_refactored.py", line 1262, in main
+    result = processor.run()
+             ^^^^^^^^^^^^^^^
+  File "/home/hadoop/main_refactored.py", line 1233, in run
+    self.executePhase('DISPATCH', dispatch_phase, 'DISPATCH_ERR')
+  File "/home/hadoop/main_refactored.py", line 1146, in executePhase
+    phase_func()
+  File "/home/hadoop/main_refactored.py", line 1231, in dispatch_phase
+    self.dispatch.invokeLambda()
+  File "/home/hadoop/main_refactored.py", line 913, in invokeLambda
+    responses = self._invokeLambdaForConfig(config, lambda_client)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hadoop/main_refactored.py", line 985, in _invokeLambdaForConfig
+    if 'errorMessage' in primary_response_payload or 'errorType' in primary_response_payload:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: argument of type 'NoneType' is not iterable
+Traceback (most recent call last):
+  File "/home/hadoop/main_refactored.py", line 1273, in <module>
+    main()
+  File "/home/hadoop/main_refactored.py", line 1262, in main
+    result = processor.run()
+             ^^^^^^^^^^^^^^^
+  File "/home/hadoop/main_refactored.py", line 1233, in run
+    self.executePhase('DISPATCH', dispatch_phase, 'DISPATCH_ERR')
+  File "/home/hadoop/main_refactored.py", line 1146, in executePhase
+    phase_func()
+  File "/home/hadoop/main_refactored.py", line 1231, in dispatch_phase
+    self.dispatch.invokeLambda()
+  File "/home/hadoop/main_refactored.py", line 913, in invokeLambda
+    responses = self._invokeLambdaForConfig(config, lambda_client)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hadoop/main_refactored.py", line 985, in _invokeLambdaForConfig
+    if 'errorMessage' in primary_response_payload or 'errorType' in primary_response_payload:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: argument of type 'NoneType' is not iterable
+2026-10-22 20:29:09 - INFO - Closing session: 15658177076971298
+2026-10-22 20:29:09 - INFO - Canceling all running queries
+2026-10-22 20:29:09 - INFO - Closed session: 15658177076971298
