@@ -1,4 +1,9 @@
 aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/
+[hadoop@ip-10-127-204-200 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/
+2026-10-22 16:51:57       2717 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022165104.txt
+2026-10-22 16:51:58       1094 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022165104_CPL_1.txt
+2026-10-22 16:51:56       3705 ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104.txt
+2026-10-22 16:51:58       1518 ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104_CPL_1.txt
 
   aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/
 
