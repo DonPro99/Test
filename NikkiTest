@@ -1,5 +1,163 @@
-URL=$(aws lambda get-function --function-name CRLN-RAA-uat-Lmda-CopyFileAndNotify --query 'Code.Location' --output text)
-curl -s -o /tmp/cfan.zip "$URL"
-cd /tmp && unzip -o cfan.zip -d cfan
-ls /tmp/cfan
-cat /tmp/cfan/CopyFileAndNotify.py
+[hadoop@ip-10-127-204-200 ~]$ cd /tmp && unzip -o cfan.zip -d cfan
+Archive:  cfan.zip
+  inflating: cfan/CopyFileAndNotify.py  
+[hadoop@ip-10-127-204-200 tmp]$ ls /tmp/cfan
+CopyFileAndNotify.py
+[hadoop@ip-10-127-204-200 tmp]$ cat /tmp/cfan/CopyFileAndNotify.py
+import configparser
+from datetime import date, datetime
+import os
+import boto3
+import json
+import re
+import subprocess
+import smtplib, ssl
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+#################################################
+s3 = boto3.client('s3')
+s3_resource = boto3.resource('s3')
+
+
+def lambda_handler(event, context):
+    ##CINFIG
+
+    jsonbody = event['etl_stp_parms']
+    json_dict = json.loads(json.dumps(jsonbody))
+    extraArgs = {'ACL': 'bucket-owner-full-control'}
+    dest_s3_bucket = json_dict["dest_s3_bucket"]
+    dest_s3_path_prefix = json_dict["dest_s3_path"]
+    src_s3_bucket = json_dict["src_s3_bucket"]
+    src_s3_path = json_dict["src_s3_path"]
+    arh_s3_bucket= json_dict["arh_s3_bucket"]
+    arh_s3_path = json_dict["arh_s3_path"]
+    process_name = json_dict["process_name"]
+    notiy_to = json_dict["notiy_to"]
+    is_deploy = json_dict["is_deploy"]
+    arch_env = src_s3_bucket.split('-')[3]
+    archv_s3_bucket= f'crln-raa-{arch_env}-archz-nogbd-phi-useast1'
+    arch_fol = src_s3_path.split('/',2)[2]
+    archv_s3_path = f'outbound/raa/ftp/aca/{arch_fol}'
+    
+    print(event)
+
+    ##LTST
+    final_prefix = get_latest_date_folder_prefix(src_s3_bucket,src_s3_path)
+    key_count = s3.list_objects_v2(Bucket=src_s3_bucket, Prefix=final_prefix + 'cfx/')['KeyCount']
+    print(f"<<< file count in path {final_prefix}cfx/ is: {key_count}>>>")
+    cfx = 'cfx/' if key_count > 0 else ''
+    print(f"<<< files fetching directory: {final_prefix}{cfx} >>>>")
+
+    for file in s3.list_objects(Bucket=src_s3_bucket, Prefix=final_prefix + cfx)['Contents']:
+        print(f'inloop files is: {file}')
+        copy_source = {'Bucket': src_s3_bucket, 'Key': file['Key']}
+        print(f'inloop copy source is:{copy_source}')
+        destKey = dest_s3_path_prefix + file['Key'].split('/')[-1]
+        print(f"CFX copy file {destKey} - started")
+        s3_resource.meta.client.copy(CopySource= copy_source,Bucket = dest_s3_bucket,Key=dest_s3_path_prefix + file['Key'].split('/')[-1], ExtraArgs = extraArgs)
+        print(f"CFX copy file {destKey} - completed")
+    print("***** Files Copy Has Completed Successfully *****")
+    
+    summary_lines = []
+    
+    for file in s3.list_objects(Bucket=src_s3_bucket, Prefix=final_prefix + cfx)['Contents']:
+                    copy_source = {'Bucket': src_s3_bucket, 'Key': file['Key']}
+                    curr_bucket = list(copy_source.values())[0]
+                    curr_file_to_rd  = list(copy_source.values())[1]
+                    out_file_name=curr_file_to_rd.split('/')[-1]
+                    curr_file_cnt = get_file_count(src_s3_bucket,curr_file_to_rd)
+                    summary_lines.append(f"Output file name is: {out_file_name} \nRecord count of file including header is:{curr_file_cnt} \n\n")
+
+
+    #curr_bucket = list(copy_source.values())[0]
+    #curr_file_to_rd  = list(copy_source.values())[1]
+    file_to_rd_1 = ""
+
+    if is_deploy=="Y":
+        archive_prefix = get_latest_date_folder_prefix(arh_s3_bucket,arh_s3_path)
+        for arh_file in s3.list_objects(Bucket=arh_s3_bucket, Prefix=archive_prefix)['Contents']:
+            file_to_rd = arh_file['Key']
+            file_to_rd_1 = file_to_rd.split('/')[-1]
+            if file_to_rd_1.lower().endswith(".txt"):
+                arh_file_cnt = get_file_count(arh_s3_bucket,file_to_rd)
+                #curr_file_cnt = get_file_count(src_s3_bucket,curr_file_to_rd)
+            else:
+                print("No text file found")
+        send_ftp_notification(etl_name=process_name,receiver_email=notiy_to,is_deploy="Y",outfile=summary_lines,deply_file_name=file_to_rd_1,deply_cnt=arh_file_cnt,cfx_bucket=dest_s3_bucket,cfx_path=dest_s3_path_prefix)
+    else:
+        #curr_file_cnt = get_file_count(curr_bucket,curr_file_to_rd)
+        send_ftp_notification(etl_name=process_name,receiver_email=notiy_to,is_deploy="N",outfile=summary_lines,cfx_bucket=dest_s3_bucket,cfx_path=dest_s3_path_prefix)
+
+    if dest_s3_bucket == f'cfx-antm-{arch_env}-modranefx-outbound':
+      print("***** Achive process has been started*****")
+      archive_files(src_s3_bucket, final_prefix, archv_s3_bucket, archv_s3_path,extraArgs)
+
+def get_latest_date_folder_prefix(bucket_name, prefix):
+    objects = list(s3_resource.Bucket(bucket_name).objects.filter(Prefix=prefix))
+    objects.sort(key=lambda o: o.last_modified)
+    print(objects[-1].key)
+    latest_date_str = objects[-1].key.replace(prefix, '').split('/', 1)[0]
+    print("latest_date_str " + latest_date_str)
+    final_prefix = prefix+latest_date_str+"/"
+    return final_prefix
+
+def get_file_count(src_bucket_name,src_file_name):
+    response = s3.get_object(Bucket=src_bucket_name,Key=src_file_name)
+    line_count = 0
+    for line in response['Body'].iter_lines():
+        line_count += 1
+    return line_count
+
+def send_ftp_notification(etl_name,receiver_email,is_deploy="N",deply_file_name="",outfile="",deply_cnt=0, out_cnt=0, cfx_bucket="",cfx_path=""):
+
+    sender_email = f"FTP-Notification-{etl_name}-AWS@carelon.com"
+    host="smtp.wellpoint.com"
+    message = MIMEMultipart("alternative")
+    message["Subject"] = f'FTP Sucessful for {etl_name}-{date.today()}'
+    message["From"] = sender_email
+    message["To"] = receiver_email
+
+    text_deploy = f"""
+    ******** {etl_name} Summary ********
+    {''.join(outfile)}
+
+    Deploy file name is: {deply_file_name}
+    Record count of file is: {deply_cnt}
+
+    Action: upload to CFX Bucket path: {cfx_bucket}{cfx_path}
+    *****************************************
+    """
+    text_no_deploy = f"""
+    ******** {etl_name} Summary ********
+    {''.join(outfile)}
+
+    Action: upload to S3 Bucket: f'{cfx_bucket}/{cfx_path}'
+    *****************************************
+    """
+
+    if is_deploy=="Y":
+        part1 = MIMEText(text_deploy, "plain")
+    else:
+        part1 = MIMEText(text_no_deploy,"plain")
+
+    message.attach(part1)
+
+    try:
+        server = smtplib.SMTP(host)
+        server.set_debuglevel(False)
+        server.sendmail(sender_email, receiver_email.split(','), message.as_string())
+    except Exception as ex:
+        print(f'failed with error {ex}')
+
+def archive_files(src_s3_bucket, final_prefix, archv_s3_bucket, archv_s3_path,extraArgs):
+    for file in s3.list_objects(Bucket=src_s3_bucket, Prefix=final_prefix)['Contents']:
+        print(f'inloop files is: {file}')
+        copy_source = {'Bucket': src_s3_bucket, 'Key': file['Key']}
+        destKey = final_prefix.split('/')[-2]+"/"
+        fn = file['Key'].split('/')[-1]
+        s3_resource.meta.client.copy(CopySource= copy_source,Bucket = archv_s3_bucket,Key=archv_s3_path + destKey+fn, ExtraArgs = extraArgs)
+    print(f"***** All latest Files have been archieved to '{archv_s3_path}' Successfully *****")       
+
+
+[hadoop@ip-10-127-204-200 tmp]$ 
