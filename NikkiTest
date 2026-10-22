@@ -1,6 +1,2 @@
-hadoop@ip-10-127-204-200 ~]$ grep -n "isinstance" main_refactored.py
-520:            source_tables = json.loads(source_tables_raw) if isinstance(source_tables_raw, str) else source_tables_raw
-525:            dest_tables = json.loads(dest_tables_raw) if isinstance(dest_tables_raw, str) else dest_tables_raw
-957:            if isinstance(additional_params, str):
-985:        if isinstance(primary_response_payload, dict) and ('errorMessage' in primary_response_payload or 'errorType' in primary_response_payload):
-1035:            if isinstance(alternate_response_payload, dict) and ('errorMessage' in alternate_response_payload or 'errorType' in alternate_response_payload):
+cd /home/hadoop
+python3.11 main_refactored.py --SQL_FILENAME s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
