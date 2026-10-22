@@ -1,4 +1,9 @@
-aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104.txt - | head -1
-aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104_CPL_1.txt - | head -1
+[hadoop@ip-10-127-204-200 ~]$ aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104.txt - | head -1
+ContractNumber|MemberId|MemberHIC|MemberFirstName|MemberLastName|MemberGender|MemberDOB|Source|BusinessUnit|LOB|FacilityType|ProviderID|ProviderSpecialty|ProviderFirstName|ProviderLastName|ProviderAddress1|ProviderAddress2|ProviderCity|ProviderState|ProviderZip|ProviderPhone|ProviderFax|ProviderContact|ProviderGroupName|ProjectID|ProjectName|CentralizedHandling|CentralizedHandlingCode|CentralizedHandlingContactName|CentralizedHandlingContactPhone|SpecialHandlingInstructions|ClientChartID|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4|UserDefinedCategory1|UserDefinedCategory2|UserDefinedDate1|UserDefinedDate2|UserDefinedNumber1|UserDefinedNumber2|BegDOS|EndDOS|GroupTIN|ClaimId|MemberZip|MemberSSN|NPI|MBI|MemberAddress1|MemberAddress2|MemberAlias|MemberCity|MemberState|MemberInsuranceID|OSEligible
+[hadoop@ip-10-127-204-200 ~]$ aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104_CPL_1.txt - | head -1
+ProjectID|ClientChartID|RenderingProviderGroupName|RenderingProviderFirstName|RenderingProviderLastName|SpecificLocationofCareAddress1|SpecificLocationofCareAddress2|SpecificLocationOfCareCity|SpecificLocationofCareState|SpecificLocationOfCareZIP|SpecificDOS|ClaimNumber|AccountNumber|LocationCode|SupplementalNPI|SupplementalNPISpecialtyCode|HMO_PPOFlag|SpecificLocationOfCarePhone
+[hadoop@ip-10-127-204-200 ~]$ aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104.txt - | head -3 | cut -d'|' -f48
+MemberSSN
 
-aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104.txt - | head -3 | cut -d'|' -f48
+
+[hadoop@ip-10-127-204-200 ~]$ 
