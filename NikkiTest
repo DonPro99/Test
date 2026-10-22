@@ -1,4 +1,3 @@
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/sql/adhoc_vendor_st.sql /tmp/adhoc_vendor_st.sql
-cp /tmp/adhoc_vendor_st.sql /tmp/adhoc_vendor_st.sql.bak_20261022
-cat /tmp/adhoc_vendor_st.sql
-
+[hadoop@ip-10-127-204-200 ~]$ cat /tmp/adhoc_vendor_st.sql
+delete from u01_RAA.RAA_RAWZ.CHART_PDFNM_BYZIP where lob_cd = 'MRAPRSP';
+Delete from u01_RAA.RAA_RAWZ.RAA_MRAPRSP_TRANSACT_LOAD;
