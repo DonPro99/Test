@@ -1,1 +1,1 @@
-   SELECT DISTINCT ADD_VAL8 FROM U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRT_MRA_STG;
+aws lambda list-functions --query "Functions[?contains(FunctionName,'CopyFile')].FunctionName"
