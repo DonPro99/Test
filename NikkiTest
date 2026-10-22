@@ -1,5 +1,91 @@
-aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/ --recursive | grep -i Datavant_Prov_Lambda
+import boto3
+import json
+import sys
+from snowflake.snowpark import Session
+from snowflake.snowpark.functions import col
+sys.path.append("/home/hadoop")
+from AnthemRaUtil.rrr_snowpark_session_util import get_rrr_snowpark_session
+region = boto3.Session().region_name
+environment='prod'
+client = boto3.client('secretsmanager', region_name=region)
+secretsConfig = client.get_secret_value(SecretId=f'{environment}/snowflake/raa')
+lambda_client = boto3.client('lambda')
+ 
+def get_snow_spark_session(secrets_config, warehouse, use_database):
+    try:
+        #connection_parameters = {
+        #    "account": "{0}".format(eval(secrets_config['SecretString']).get('account').replace("\"", "")),
+        #    "user": eval(secrets_config['SecretString']).get('raa_user'),
+        #    "password": eval(secrets_config['SecretString']).get('raa_password'),
+        #    "role": eval(secrets_config['SecretString']).get('raa_role'),
+        #    "warehouse": warehouse,
+        #    "database": use_database,
+        #    "schema": 'RAA_RAWZ'
+        #}
+        session = get_rrr_snowpark_session(env=environment)
+        session.sql(f"use {use_database}.RAA_RAWZ").count()
+        return session
+    except Exception as err:
+        raise err
+ 
+ 
+snow_spark = get_snow_spark_session(secretsConfig, 'P01_RAA_LOAD_WH_M', 'P01_RAA')
+file_location_flg =  dataframe = snow_spark.table("P01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRT_MRA_STG").select(col("add_val8")).distinct().collect()[0][0]
 
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/<path from step 1> -
+#set ftp location
 
+if file_location_flg == "N":
+    s3_folder = "outbound/raa/datavantprov-retro-etl/"
+    s3_bucket = "cfx-antm-prod-raaetl-outbound"
+    s3_path   = "hcaaapck_CFX_STG/"
+    proc_name = "DTVNTRT-MRA-OUTBOUND"
+else:
+    s3_folder = "outbound/raa/datavantprov-retro-etl/"
+    s3_bucket = "cfx-antm-prod-mgft-raafiles-outbound"
+    s3_path   = "I_ELV_CFX013/prod/mra/ciox/"
+    proc_name = "DTVNTRT-MRA"
 
+lambda_name = "CRLN-RAA-prod-Lmda-CopyFileAndNotify"
+lambda_payload ={
+  "etl_stp_parms": {
+    "src_s3_bucket": "crln-163391535226-ssm-prod-filetransfer",
+    "src_s3_path": s3_folder,
+    "dest_s3_bucket": s3_bucket,
+    "dest_s3_path": s3_path,
+    "arh_s3_bucket": "crln-raa-prod-archz-gbd-phi-useast1",
+    "arh_s3_path": "raa/medicare/na/deply_dtvntrt_mra_stg/",
+    "process_name": proc_name,
+    "notiy_to": "dl-raaetldevelopers@anthem.com,DL-RAA_ETL_Process_Owners@anthem.com",
+    "is_deploy": "Y"
+}
+}
+
+lambda_name_sas = "CRLN-RAA-prod-Lmda-CopyFile"
+lambda_payload_sas ={
+  "etl_stp_parms": {
+   "src_s3_bucket":"crln-163391535226-ssm-prod-filetransfer",
+   "src_s3_path":s3_folder,
+   "dest_s3_bucket":"cfx-antm-prod-raaetl-outbound",
+   "dest_s3_path":"hcaaapck_CFX_STG/"
+}
+}
+
+if file_location_flg == "N":
+
+        response = lambda_client.invoke(
+            FunctionName=lambda_name,
+            InvocationType='RequestResponse',  # 'Event' for asynchronous invocation
+            Payload=json.dumps(lambda_payload)
+        )
+
+else:
+        response = lambda_client.invoke(
+            FunctionName=lambda_name_sas,
+            InvocationType='RequestResponse',  # 'Event' for asynchronous invocation
+            Payload=json.dumps(lambda_payload_sas)
+        )
+        response = lambda_client.invoke(
+            FunctionName=lambda_name,
+            InvocationType='RequestResponse',  # 'Event' for asynchronous invocation
+            Payload=json.dumps(lambda_payload)
+        )
