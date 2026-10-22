@@ -1,3 +1,5 @@
-LIST @U01_RAA.RAA_RAWZ.RAA_SF_SSMOUTBOUND_GBD_PHI/datavantprov-retro-etl/20261022_165104/;
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/
 
-aws s3 cp <file path> - | head -1
+  aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/
+
+aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/<file name> - | head -1
