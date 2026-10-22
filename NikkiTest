@@ -1,5 +1,37 @@
-UPDATE U01_RAA.RAA_RAWZ.GENAISA_RUN_CONFIG
-SET DISPATCH_FLG = FALSE
-WHERE GEN_AI_SA_ID = 5;
+To: Ravi CC: Tagore
+Subject: Datavant MBR+PROV – GenAISA UAT test results (RBICA-14353)
 
-SELECT DISPATCH_FLG FROM U01_RAA.RAA_RAWZ.GENAISA_RUN_CONFIG WHERE GEN_AI_SA_ID = 5;
+Hi Ravi,
+
+I tested the Datavant MBR+PROV conversion (GEN_AI_SA_ID 005) in UAT with main_refactored.py. Results below.
+
+Execution: succeeded for deploy batch 9.
+
+EDL_LOAD_DTM: 2026-10-22 12:51:52.724
+RAD_CIOXRT_ALL_LOB: 10 rows (matches the previous Scala run for the same batch)
+RAD_DATAVANT_CHASE_CPL: 10 rows
+
+Files generated:
+Path: s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/
+
+ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104.txt
+ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022165104.txt
+ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104_CPL_1.txt
+ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022165104_CPL_1.txt
+
+Dispatch (tested with UAT test folders): works with 1 Lambda row, routing on ADD_VAL8 (SAS primary, vendor alternate) via CopyFileAndNotify. Files were copied to both test paths:
+
+s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/genaisa_test/sas/
+s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/genaisa_test/vendor/
+
+The Lambda only copies files, so the order is safe. Dispatch is turned off again in UAT.
+
+Notes:
+
+{{ LOB }} rendered empty, since main_refactored.py doesn’t pass LOB. I added "LOB": "MCR" to SOURCE_TABLE_NAMES. Others will need to add their own LOB the same way, unless the script is updated.
+The load log row is written with batch max+1, not the deploy batch the Scala job used. Is this intended?
+Bug: CopyFileAndNotify returns null, so 'errorMessage' in primary_response_payload throws TypeError after a successful call, and the alternate leg never runs. Fix: check isinstance(payload, dict) first (lines ~985 and ~1035). I patched my local copy to finish the test.
+Both legs now send a notification email, where the old script sent one.
+
+Thanks,
+Nikhitha
