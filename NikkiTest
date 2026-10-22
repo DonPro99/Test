@@ -1,15 +1,3 @@
-SELECT COUNT(*) AS new_not_in_old FROM (
-  SELECT * EXCLUDE (EDL_LOAD_DTM, EDL_RUN_ID) FROM U01_RAA.RAA_RAWZ.RAD_CIOXRT_ALL_LOB
-  WHERE EDL_RUN_ID = 'f2ca1aed45fae4694493b1ae4af95fb1'
-  MINUS
-  SELECT * EXCLUDE (EDL_LOAD_DTM, EDL_RUN_ID) FROM U01_RAA.RAA_RAWZ.RAD_CIOXRT_ALL_LOB
-  WHERE EDL_RUN_ID = 'fabb51d69e9849494acf4dd176f31848'
-);
+{    "clusternm":"RAA2",    "jobargs":[       {          "jobname":"RAA-DATAVANTPROV-ETL",          "job":[             "java",             "-cp",             "/home/hadoop/jars/datavantmbr-etl-1.0-jar-with-dependencies.jar:/home/hadoop/jars/reduce_reuse_recycle-0.1-SNAPSHOT.jar",             "com.anthem.hca.intervention.datavantmbr.DatavantMbrProvETLDriver",             "MCR",             "/home/hadoop/config/datavantmbrprov-etl_${env}.properties",             "/home/hadoop/config/",             "db.properties",             "${edl_run_id}"          ]       }    ],    "createcluster":"YES",    "application":"RAA",    "configfile":"s3://crln-raa-${env}-codez-nogbd-phi-useast1/files/snowpark/config/STANDARD_S.json",    "maxconcurrency":1,    "clusterid":"na",    "bootstrapbucket":"crln-raa-${env}-codez-nogbd-phi-useast1",    "bootstrapkey":"files/snowpark/config/bootstrap_key_${env}.sh",    "emrenv":"${env}",    "logpath":"s3://crln-raa-${env}-codez-nogbd-phi-useast1/logs/",    "terminationwaittime":10,    "terminateoption":"NO" }
 
-SELECT COUNT(*) AS old_not_in_new FROM (
-  SELECT * EXCLUDE (EDL_LOAD_DTM, EDL_RUN_ID) FROM U01_RAA.RAA_RAWZ.RAD_CIOXRT_ALL_LOB
-  WHERE EDL_RUN_ID = 'fabb51d69e9849494acf4dd176f31848'
-  MINUS
-  SELECT * EXCLUDE (EDL_LOAD_DTM, EDL_RUN_ID) FROM U01_RAA.RAA_RAWZ.RAD_CIOXRT_ALL_LOB
-  WHERE EDL_RUN_ID = 'f2ca1aed45fae4694493b1ae4af95fb1'
-);
+780009056
