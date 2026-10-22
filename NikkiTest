@@ -1,1 +1,6 @@
-aws lambda list-functions --query "Functions[?contains(FunctionName,'CopyFile')].FunctionName"
+"CRLN-RAA-preprod-Lmda-CopyFile",
+    "CRLN-RAA-uat-Lmda-CopyFileOnPattern",
+    "CRLN-RAA-uat-Lmda-CopyFileAndNotify",
+    "CRLN-RAA-preprod-Lmda-CopyFileOnPattern",
+    "CRLN-RAA-preprod-Lmda-CopyFileAndNotify",
+    "CRLN-RAA-uat-Lmda-CopyFile"
