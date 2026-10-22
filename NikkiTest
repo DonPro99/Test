@@ -1,9 +1,17 @@
-[hadoop@ip-10-127-204-200 ~]$ aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104.txt - | head -1
-ContractNumber|MemberId|MemberHIC|MemberFirstName|MemberLastName|MemberGender|MemberDOB|Source|BusinessUnit|LOB|FacilityType|ProviderID|ProviderSpecialty|ProviderFirstName|ProviderLastName|ProviderAddress1|ProviderAddress2|ProviderCity|ProviderState|ProviderZip|ProviderPhone|ProviderFax|ProviderContact|ProviderGroupName|ProjectID|ProjectName|CentralizedHandling|CentralizedHandlingCode|CentralizedHandlingContactName|CentralizedHandlingContactPhone|SpecialHandlingInstructions|ClientChartID|UserDefinedText1|UserDefinedText2|UserDefinedText3|UserDefinedText4|UserDefinedCategory1|UserDefinedCategory2|UserDefinedDate1|UserDefinedDate2|UserDefinedNumber1|UserDefinedNumber2|BegDOS|EndDOS|GroupTIN|ClaimId|MemberZip|MemberSSN|NPI|MBI|MemberAddress1|MemberAddress2|MemberAlias|MemberCity|MemberState|MemberInsuranceID|OSEligible
-[hadoop@ip-10-127-204-200 ~]$ aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104_CPL_1.txt - | head -1
-ProjectID|ClientChartID|RenderingProviderGroupName|RenderingProviderFirstName|RenderingProviderLastName|SpecificLocationofCareAddress1|SpecificLocationofCareAddress2|SpecificLocationOfCareCity|SpecificLocationofCareState|SpecificLocationOfCareZIP|SpecificDOS|ClaimNumber|AccountNumber|LocationCode|SupplementalNPI|SupplementalNPISpecialtyCode|HMO_PPOFlag|SpecificLocationOfCarePhone
-[hadoop@ip-10-127-204-200 ~]$ aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022165104.txt - | head -3 | cut -d'|' -f48
-MemberSSN
+-- 1. Does the source have SSN values for batch 9?
+SELECT COUNT(*) AS total_rows,
+       COUNT(NULLIF(TRIM(a.MBR_SSNLST4), '')) AS rows_with_ssn
+FROM U01_RAA.RAA_RAWZ.RAD_DEPLOY_ALL_LOB b
+JOIN U01_RAA.RAA_RAWZ.RAD_MASTER_CHARTS_ALL_LOB a
+  ON TRIM(a.recordid) = TRIM(b.recordid)
+ AND TRIM(a.filedatetime) = TRIM(b.filedatetime)
+ AND TRIM(a.chartid) = TRIM(b.add_val1)
+ AND TRIM(a.chartdatetime) = TRIM(b.add_val2)
+ AND TRIM(a.lob) = TRIM(b.lob)
+WHERE TRIM(b.intervention) = 'DTVNTRT' AND TRIM(b.lob) = 'MCR' AND b.batch_id = '9';
 
-
-[hadoop@ip-10-127-204-200 ~]$ 
+-- 2. Did the table insert (token, not detokenized) get values?
+SELECT COUNT(*) AS total_rows,
+       COUNT(NULLIF(TRIM(MemberSSN), '')) AS rows_with_ssn
+FROM U01_RAA.RAA_RAWZ.RAD_CIOXRT_ALL_LOB
+WHERE EDL_RUN_ID = 'f2ca1aed45fae4694493b1ae4af95fb1';
