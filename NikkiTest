@@ -1,3 +1,1 @@
-ls /home/hadoop/scripts/ | grep -i datavant
-
-aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/snowpark/config/bootstrap_key_uat.sh - | grep -i script
+   SELECT DISTINCT ADD_VAL8 FROM U01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRT_MRA_STG;
