@@ -1,19 +1,5 @@
-[hadoop@ip-10-127-204-200 ~]$ aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_200857/
-2026-10-22 20:09:48       2717 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022200857.txt
-2026-10-22 20:09:49       1094 ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022200857_CPL_1.txt
-2026-10-22 20:09:47       3705 ELV_DTVNT_R2_MRA_ONSHORE_1_20261022200857.txt
-2026-10-22 20:09:49       1518 ELV_DTVNT_R2_MRA_ONSHORE_1_20261022200857_CPL_1.txt
-
-
-[hadoop@ip-10-127-204-200 ~]$ aws lambda get-function --function-name CRLN-RAA-uat-Lmda-CopyFileAndNotify --query 'Code.Location' --output text
-https://prod-iad-c1-djusa-tasks.s3.us-east-1.amazonaws.com/snapshots/652798729258/CRLN-RAA-uat-Lmda-CopyFileAndNotify-51b68175-0a56-4cf2-9f9e-42c4a787420f?versionId=HCbIWLS0h1d0d4dw_u6_mHiUseCfHy5Q&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEKv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIHu3qrr6eY4G%2FV2Ks%2BufNZZVG2kUCcxVnqYr8lurOq6jAiEAk%2BMrjyf5Umdj7PrymUlRNQc8ZstuWCUc5I6CuOuhAdkqiwIIcxAEGgw0NzkyMzMwMjUzNzkiDJP8%2BWPULYX7yViapCroAcZog%2FfKXMaqyKDnYRZt5m7PERyuL4b08DwakX6PDSNy8P1Qva17%2Fgmc7wcy6JmhTtR0jWGZkM%2FOdf9LLoITmtfTsVGqp%2Fhq9COtXVXXPVvCt%2BprZuw0ppbHAz3%2F3n620NaANHlUH1Jpd0N7UkSHCXA05lufOYsf1Zs1qhU96WQ%2Fku3NtNs%2BR8HaqEYQZTaYHQCZD5CDxYj689lwo%2Fubw38cZ4WULCMoq46%2BsxC0X3ho88COb5JhaE63tvsneEVSgMP3W9XX6nTgJDqTqEaR0Y3B2t0w2sOz06lV8KhS5xPWHG%2Fa%2FchD%2FDowxcLn1gY6jQGXA6lAUqRdkNuoiH8zoqNE0LgUfvvzkhY24TEmRyx67CL31CNBVCDsU61ap7Dr1zy1KXSC9lAyT55uJsY5PmMVGgegjOcP4VkUGJM1ZdaZybXiCHvEbixf%2FsR%2BAM3uGxR4%2Bz85bS7ce3nKR2yw1L3lGmit3jgM3CHFI2EqwmdkHjxVf%2BxjjcuLLi19GTs%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261022T201420Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Credential=ASIAW7FEDUVR45KWIQWB%2F20261022%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=baef5a8708263ff36d3c73371f1fbd0e5ee4f5303d1af4a30bd44d642d1c0cd0
-[hadoop@ip-10-127-204-200 ~]$ 
-[hadoop@ip-10-127-204-200 ~]$ 
-[hadoop@ip-10-127-204-200 ~]$ aws lambda get-function --function-name CRLN-RAA-uat-Lmda-CopyFileAndNotify --query 'Code.Location' --output text
-https://prod-iad-c1-djusa-tasks.s3.us-east-1.amazonaws.com/snapshots/652798729258/CRLN-RAA-uat-Lmda-CopyFileAndNotify-51b68175-0a56-4cf2-9f9e-42c4a787420f?versionId=HCbIWLS0h1d0d4dw_u6_mHiUseCfHy5Q&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEKz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQDp5b3o7AIICfz0BbWMIsBgsRC5VGwQAZpNT7cbokr2lQIhAPOkHtST8Fwj5bedK11mnfpNB7B2ZmkJDcKF1OaZxP9CKosCCHQQBBoMNDc5MjMzMDI1Mzc5IgwJzlqFBmIHTWbEDRUq6AEB0Kq%2BRmUcfKg13IG9CWKeCxkysl9NEKTKY%2FyC7JLXEQtgjzKWQboZ%2BT7XjVl0Va5lKonUyZGiH9EpT4gvSZ0MJptnXp4hDSjxzkuMdH6x8u8onfEys9Kk4Tu7Yj79xfw4hNNxRHEgqELiEH4qHLM3CFkxXzjorqnk2OUc3h6mCLM0lewokT1YJMOrhDWfFMo83t8dfjGT1lD7U354ILExUkjkeYQh%2BLvDGh%2Bldso89pOK9PeMudw%2B%2F1humkMdTCry%2BcIDB935syoxvaSNMozedLVGOcV6A2xYdjUpIUFVP%2BCb4qIBu6noMMPt59YGOowBBbvkUfjOf3Dk72EdMUFXz71nJNuxfkr%2BiEfM4tN8Z6MzcT8bmMqSYm0Wh87DLpHRzifZwhKZp9%2FR6YXZFLsrm2cEHWzorvbhpX5Tjpsg8zk2KcpCvq%2FCTPwyky6HOjvaEW1AYc2h1ot%2BGcCjS8L2oSQ7nPLH2CT7bPKX4pbFvrvMH4VxqnYy5BB7FgQ%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261022T201430Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Credential=ASIAW7FEDUVR5F4R5QKY%2F20261022%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=d59aca35fc1505ed37beee155dcbeb1ecf246657d0bb9a9b9671f8f508af2cc4
-
-curl -s -o /tmp/cfan.zip "<paste the URL>"
+URL=$(aws lambda get-function --function-name CRLN-RAA-uat-Lmda-CopyFileAndNotify --query 'Code.Location' --output text)
+curl -s -o /tmp/cfan.zip "$URL"
 cd /tmp && unzip -o cfan.zip -d cfan
+ls /tmp/cfan
 cat /tmp/cfan/CopyFileAndNotify.py
-
-aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/genaisa_test/ --recursive
