@@ -3,3 +3,12 @@
 2026-10-22 20:09:55       1094 outbound/raa/genaisa_test/sas/ELV_DTVNT_R2_MRA_OFFSHORE_1_20261022200857_CPL_1.txt
 2026-10-22 20:09:55       3705 outbound/raa/genaisa_test/sas/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022200857.txt
 2026-10-22 20:09:55       1518 outbound/raa/genaisa_test/sas/ELV_DTVNT_R2_MRA_ONSHORE_1_20261022200857_CPL_1.txt
+
+
+aws lambda get-function --function-name CRLN-RAA-uat-Lmda-CopyFileAndNotify --query 'Code.Location' --output text
+
+curl -s -o /tmp/cfan.zip "<paste the URL>"
+cd /tmp && unzip -o cfan.zip -d cfan
+cat /tmp/cfan/CopyFileAndNotify.py
+
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/genaisa_test/ --recursive
