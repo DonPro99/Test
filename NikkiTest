@@ -1,7 +1,7 @@
 RADV: rename the folder. Change deply_dtvntmbrrt_rv_aca_stg to deply_dtvntmbrrt_radv_aca_stg on the RITM, for UAT and prod. You raise this one. Richard’s ingest won’t pick up RADV files until it’s done.
 
 
-
+“Non-RADV file deply_dtvntmbrrt_aca.txt is matching the generic preprod/BDF/deply_.*_aca.txt pattern and landing in all_files_deploy_aca. Per the RITM, it should go to .../commercial/na/deply_dtvntmbrrt_aca_stg/. Can you add a DTVNTMBRRT-specific pattern with priority over the generic one, for both UAT and prod?”
 
 
 
