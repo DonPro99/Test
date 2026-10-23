@@ -1,14 +1,17 @@
-# 1. Your SQL goes to S3 (path must match EXECUTABLE_SQL_FILE in your master config)
-aws s3 cp /tmp/<your file>.sql s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP>/<your file>.sql
-
-# 2. Ravi's framework script goes on the node
-cat > /home/hadoop/main_refactored.py << 'EOF'
-(paste Ravi's main_refactored.py code here)
+# 1. Paste the SQL onto the EMR node
+cat > /tmp/abc.sql << 'EOF'
+(paste the contents of abc.sql)
 EOF
 
-# 3. Install Jinja2
+# 2. Copy it to S3 (same path as EXECUTABLE_SQL_FILE in the master config)
+aws s3 cp /tmp/abc.sql s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/MYGROUP/abc.sql
+
+# 3. Ravi's script on the node (one time per cluster)
+cat > /home/hadoop/main_refactored.py << 'EOF'
+(paste Ravi's main_refactored.py code)
+EOF
 sudo python3.11 -m pip install jinja2
 
-# 4. Run it with your SQL's S3 path
+# 4. Run it, pointing at the same S3 path
 cd /home/hadoop
-python3.11 main_refactored.py --SQL_FILENAME s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP>/<your file>.sql
+python3.11 main_refactored.py --SQL_FILENAME s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/MYGROUP/abc.sql
