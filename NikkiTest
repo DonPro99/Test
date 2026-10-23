@@ -1,3 +1,10 @@
+RADV: rename the folder. Change deply_dtvntmbrrt_rv_aca_stg to deply_dtvntmbrrt_radv_aca_stg on the RITM, for UAT and prod. You raise this one. Richard’s ingest won’t pick up RADV files until it’s done.
+
+
+
+
+
+
 cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_MBR_RADV_ACA_20261022110440.txt.pgp /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
 
 cd /hcaaapck/backup/IT/PROD/scripts/
