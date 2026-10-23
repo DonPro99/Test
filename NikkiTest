@@ -1,16 +1,231 @@
-RADV: rename the folder. Change deply_dtvntmbrrt_rv_aca_stg to deply_dtvntmbrrt_radv_aca_stg on the RITM, for UAT and prod. You raise this one. Richard’s ingest won’t pick up RADV files until it’s done.
+GenAISA Code Conversion – How I Did It (Datavant Example)
+Oct 23, 2026 · @don
+I converted the Datavant MBR+PROV job (RAA-DATAVANTPROV-ETL, job 780009056) to the GenAISA framework and tested it end to end in UAT, including dispatch. These are the steps I followed, with my actual files as examples, plus the issues I hit so you don't have to.
+My job for reference: GEN_AI_SA_ID 005, Jira RBICA-14353, LOB MCR. The converted output in UAT matched the old Scala run row for row.
+The overall flow:
+1. Collect the source files for your job.
+2. Set up the conversion folder and run Devin.
+3. Review what Devin generates and fix the config.
+4. Upload the SQL to S3.
+5. Insert the config rows through the adhoc job.
+6. Run main_refactored.py on a cluster.
+7. Verify the files and tables against the old job.
+8. Set up and test dispatch (Lambda config).
+Before you start
+Gather these first. It saves a lot of back and forth later.
+What
+Where I found it
+My Datavant example
+Scala source class
+ncr_dna2_raa_mvn
+DatavantMbrProvFileETL.scala
+Driver class
+same repo
+DatavantMbrProvETLDriver.scala (calls MBR+PROV, then CPL)
+Properties files (UAT + prod)
+ncr_dna2_raa_files
+datavantmbrprov-etl_uat.properties, datavantmbrprov-etl_prod.properties
+AEDL job parameters (JSON)
+AEDL portal, step 1 of the job
+RAA-DATAVANTPROV-ETL (780009056)
+Dispatch step, if any
+AEDL portal, step 2 of the same job
+Datavant_Prov_Lambda_Notification.py
+Ravi's template and prompt
+his branch in ncr_dna2_raa_files
+TEMPLATE_snowflake_scripting.sql, devin_task_v2.txt
+Framework script
+Ravi (shared in the KT group)
+main_refactored.py
+A few things I learned while collecting:
+• Check which driver your AEDL job actually runs. There were three Datavant drivers. Only DatavantMbrProvETLDriver matched my job, and it calls two methods in one run.
+• Open each step of the AEDL job. My dispatch logic lived in step 2 of 780009056, not in a separate job.
+Step 1: Set up the conversion folder
+Devin only reads files inside Scala_Code/<module>/, so anything outside that folder is ignored. My setup:
+Code_Conversion/
+  devin_task_v2.txt
+  TEMPLATE_snowflake_scripting.sql
+  Scala_Code/
+    datavant/
+      DatavantMbrProvETL.scala
+      DatavantMbrProvETLDriver.scala
+      datavantmbrprov-etl_uat.conf
+      datavantmbrprov-etl_prod.conf
+      RAA-DATAVANTPROV-ETL.json
+• Rename .properties to .conf. The prompt only mines .conf and .json files, so it skips .properties. The content works as is.
+• Copy, don't move. Make the copies outside your repo checkouts so your edits don't touch the real code.
+• Remove methods your job doesn't call. My Scala file also had the Pre-Match method, which is a separate job, so I deleted it from my copy. Otherwise Devin converts it too.
+• Leave out other jobs' JSON. I almost included the plain MBR dispatch job (780009026), which would have given Devin the wrong paths.
+• Keep devin_task_v2.txt and the template at the root, unchanged. Your job-specific rules go in the prompt instead.
+Step 2: Run Devin
+Open Code_Conversion in Devin, make sure you're in code mode, and paste the prompt. Here's mine, based on Ravi's example:
+Read instruction in file @devin_task_v2.txt and complete the task, below are the details required.
+LOB_CODE: MCR
+GEN_AI_SA_ID : 005
+domain ID : AM71511
+PRIMARY_TECH_POC_ID : AM71511
+SECONDARY_TECH_POC_ID : AM71511
+PRIMARY_BIZ_POC_ID : Cyr, Sandra J.
+SECONDARY_BIZ_POC_ID : Cyr, Sandra J.
+JIRA_STORY : RBICA-14353
 
+{
+  "LOAD_LOG_KEY_TABLE": "U01_RAA.RAA_RAWZ.load_log_key",
+  "chartsMasterTable": "U01_RAA.RAA_RAWZ.rad_master_charts_all_lob",
+  "deployTable": "U01_RAA.RAA_RAWZ.rad_deploy_all_lob",
+  "deployTempTable": "U01_RAA.RAA_RAWZ_STG.deply_dtvntrt_mra_stg"
+}
 
-“Non-RADV file deply_dtvntmbrrt_aca.txt is matching the generic preprod/BDF/deply_.*_aca.txt pattern and landing in all_files_deploy_aca. Per the RITM, it should go to .../commercial/na/deply_dtvntmbrrt_aca_stg/. Can you add a DTVNTMBRRT-specific pattern with priority over the generic one, for both UAT and prod?”
+{
+  "snow_flake_stage": "RAA_SF_SSMOUTBOUND_GBD_PHI",
+  "s3_folder_path": "datavantprov-retro-etl",
+  "mbrProvTargetTable": "U01_RAA.RAA_RAWZ.rad_cioxrt_all_lob",
+  "cplTargetTable": "U01_RAA.RAA_RAWZ.RAD_DATAVANT_CHASE_CPL"
+}
 
-
-
-cp /hcaaapck/backup/DevEnvironment/SAS_Repository/CFX_STG/ELV_DTVNT_MBR_RADV_ACA_20261022110440.txt.pgp /hcaaapck/backup/ProdEnvironment/SAS_Repository/CFX_STG/
-
-cd /hcaaapck/backup/IT/PROD/scripts/
-./pgp_decrypt_and_archive.sh ACA "ELV_DTVNT_MBR_RADV_ACA_20261022110440.txt.pgp"
-
-ls -l /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND/ELV_DTVNT_MBR_RADV_ACA_20261022110440*
-
-cp /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND/ELV_DTVNT_MBR_RADV_ACA_20261022110440.txt /hcaaapck/backup/DevEnvironment/SAS_Repository/OUTBOUND/
-rm /hcaaapck/backup/ProdEnvironment/SAS_Repository/OUTBOUND/ELV_DTVNT_MBR_RADV_ACA_20261022110440.txt
+Additional requirements:
+- Convert only generateDatavantMbrProvOutboundFile and generateDatavantCPLOutboundFile, in the order the driver calls them.
+- Target tables must be loaded with INSERT INTO and explicit column lists exactly as in the Scala. Never CREATE OR REPLACE a target table. rad_cioxrt_all_lob is shared with other interventions.
+- Batch lookup must match the Scala: processid 255, stepid 10, highest batchid, status Completed and reccnt > 0. Do not default batch_id to 1.
+- Keep the file select (with the SSN detok function) and the table-insert select (plain MBR_SSNLST4) as two separate selects.
+- Keep the quoted mixed-case column aliases so file headers match exactly.
+- No stitching: files are written directly with SINGLE = TRUE and exact file names as in the Scala.
+Things to get right in your prompt:
+• GEN_AI_SA_ID: query SELECT MAX(GEN_AI_SA_ID) FROM U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG; and add 1, but check the team chat first. The max was 3 when I looked, but Ravi's demo already uses 004, so I took 005. Post your number in the group once you pick it.
+• Stage: use the PHI stage if your file has member data. Ravi's example uses a NOPHI stage.
+• Tables: use U01 for sources, not S01 like Ravi's example, since the load_log batch and deploy data live in UAT.
+• Additional requirements: the template has defaults (default batch to 1, CREATE OR REPLACE TABLE, SELECT DISTINCT with no column list) that can be wrong for your job. Spell out your job's rules here.
+Permission prompts while it runs:
+• Allow: reading or listing files, and writing files inside your Code_Conversion folder. "Allow for this session" is fine.
+• Reject: anything that connects to Snowflake or AWS, deletes files, uses git, or touches anything outside the folder.
+It takes about 4 to 5 minutes. You'll get the converted SQL plus genaisa_config_<app>_uat.sql and _prod.sql under SQL_Code/<module>/.
+Step 3: Review what Devin generated
+Devin's conversion was solid, but don't accept it without checking. I compared the SQL against the Scala line by line. What I looked for:
+[ ] The batch lookup uses the upstream step (step 10 for me), takes the highest batchid, and fails if nothing is found instead of defaulting to batch 1.
+[ ] Target tables use INSERT INTO ... (explicit columns). CREATE OR REPLACE appears only on TEMPORARY tables.
+[ ] Header aliases are still quoted and mixed case ("ContractNumber"), so the file header doesn't come out uppercase.
+[ ] Anything detokenized for the file stays out of the table insert (separate selects).
+[ ] File names, split logic and COPY INTO options match the Scala.
+[ ] Existing quirks are preserved, not "fixed". Changing behavior is a separate decision.
+Edits I made to the config files:
+• Fully qualified LOAD_LOG_KEY_TABLE (U01_RAA.RAA_RAWZ.load_log_key in UAT, P01_RAA... in prod). Devin left it bare.
+• Added "LOB": "MCR" to SOURCE_TABLE_NAMES. See "Things I ran into" for why.
+• In the prod file, matched the process and step names to what prod load_log_key already has. My prod properties had trailing spaces (...Generation MCR), UAT didn't. Check with:
+SELECT DISTINCT processname, stepname
+FROM P01_RAA.RAA_RAWZ.load_log_key
+WHERE processid = 255 AND stepid = 20;
+Don't edit the SQL file after review unless you found a real bug. And don't touch the .conf copies; they were only input for Devin.
+Step 4: Upload the SQL to S3
+The SQL has to be at exactly the path in your master config's EXECUTABLE_SQL_FILE, case included. Mine:
+s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
+There's no repo folder for converted SQL yet (Ravi's branch only has the template, prompt and README), so for UAT testing I uploaded manually from an EMR node:
+cat > /tmp/DatavantMbrProvETL.sql << 'EOF'
+(paste the whole SQL file)
+EOF
+wc -l /tmp/DatavantMbrProvETL.sql
+tail -5 /tmp/DatavantMbrProvETL.sql
+aws s3 cp /tmp/DatavantMbrProvETL.sql s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
+aws s3 ls s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/
+• wc -l should match your editor's line count, and tail should show the last lines of the template comment block. That confirms the paste wasn't cut off.
+• Use cat with EOF, not vi. Vi can mess up indentation on a long paste.
+• For prod, ask Ravi how the SQL should go through the repo and deployment.
+Step 5: Insert the config rows
+Our personal roles can't insert into the GENAISA tables (only U01_RAA_ENV_PREP and the SRCRAADU service role can). Per Ravi, you put your SQL into a shared adhoc file and run a UAT job that executes it as the service account:
+• File: s3://crln-raa-uat-codez-nogbd-phi-useast1/files/sql/adhoc_vendor_st.sql
+• Job: 800009263 (UAT)
+The same route works for any later UPDATE or DELETE on your config rows.
+This file is shared, so be careful:
+1. Check what's in it first. When I opened it, it had someone else's DELETE statements, one of which empties a UAT table. Running the job as is would have wiped their test data.
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/sql/adhoc_vendor_st.sql /tmp/adhoc_vendor_st.sql
+cp /tmp/adhoc_vendor_st.sql /tmp/adhoc_vendor_st.sql.bak
+cat /tmp/adhoc_vendor_st.sql
+2. Replace the whole contents with only your statements. Don't append.
+3. Format: fully qualified table names, no USE SCHEMA, no comments, one statement per ;. Watch for semicolons inside text values (I had one in the COMMENTS field and changed it to a comma).
+4. Upload, then confirm what S3 actually has before running the job:
+aws s3 cp /tmp/adhoc_vendor_st.sql s3://crln-raa-uat-codez-nogbd-phi-useast1/files/sql/adhoc_vendor_st.sql
+aws s3 cp s3://crln-raa-uat-codez-nogbd-phi-useast1/files/sql/adhoc_vendor_st.sql -
+5. Run 800009263 once, then verify you have exactly one row each:
+SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG WHERE GEN_AI_SA_ID = 5;
+SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.GENAISA_RUN_CONFIG WHERE GEN_AI_SA_ID = 5;
+6. Post in the group that the file now has your statements, so the next person replaces them.
+I skipped the upload once and the job re-ran my old inserts, which gave me duplicate config rows. Step 4 (printing the S3 copy) is what prevents that.
+Step 6: Run the framework on a cluster
+Until the Glue job is deployed, the framework runs from any UAT EMR node. Files on a cluster disappear when it's recreated, so you may need to redo the setup.
+1. Check the Snowflake session helper is there: ls /home/hadoop/AnthemRaUtil should list rrr_snowpark_session_util.py.
+2. Save Ravi's code as /home/hadoop/main_refactored.py. Paste only the code (from import sys to main()), not his instruction lines at the top.
+cat > /home/hadoop/main_refactored.py << 'EOF'
+(paste the code)
+EOF
+head -3 /home/hadoop/main_refactored.py
+tail -3 /home/hadoop/main_refactored.py
+3. Install Jinja2 and run. The argument is --SQL_FILENAME with two dashes (Ravi's message shows four):
+sudo python3.11 -m pip install jinja2
+cd /home/hadoop
+python3.11 main_refactored.py --SQL_FILENAME s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/DATAVANT/DatavantMbrProvETL.sql
+What to look for in the log:
+• Gatekeeping: SQL file validated, and the flags you expect (mine: STITCHING_FLG=False, DISPATCH_FLG=False for the first test).
+• Rendered SQL: every {{ ... }} is filled. Check lob VARCHAR := 'MCR'; (or your LOB). An empty value means it's missing from your config JSON.
+• End: "Pipeline execution completed successfully".
+The run emails PRIMARY_NOTIFICATION_LIST on success or failure, so with the dev DL in there, the whole team gets your test emails.
+If a run fails, the next run resumes from the failed step (it won't re-run the SQL if that already succeeded). Fix the cause and rerun the same command.
+Step 7: Verify the results
+A successful run doesn't prove the output is right. Compare it against what the old job produced. My checks:
+Files. The stage RAA_SF_SSMOUTBOUND_GBD_PHI points to the UAT filetransfer bucket:
+aws s3 ls s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/
+aws s3 cp s3://crln-652798729258-ssm-uat-filetransfer/outbound/raa/datavantprov-retro-etl/20261022_165104/<file name> - | head -1
+I got all 4 files (MBR+PROV and CPL, onshore and offshore), with names and headers matching the Scala output exactly.
+Tables. Count your run's rows by the EDL_RUN_ID from the log:
+SELECT COUNT(*) FROM U01_RAA.RAA_RAWZ.RAD_CIOXRT_ALL_LOB WHERE EDL_RUN_ID = '<your run id>';
+Comparison with the old job. If the old Scala job processed the same batch, you can compare every column except the run ID and load time. Run it both ways; 0 and 0 means identical output:
+SELECT COUNT(*) FROM (
+  SELECT * EXCLUDE (EDL_LOAD_DTM, EDL_RUN_ID) FROM U01_RAA.RAA_RAWZ.RAD_CIOXRT_ALL_LOB WHERE EDL_RUN_ID = '<new run id>'
+  MINUS
+  SELECT * EXCLUDE (EDL_LOAD_DTM, EDL_RUN_ID) FROM U01_RAA.RAA_RAWZ.RAD_CIOXRT_ALL_LOB WHERE EDL_RUN_ID = '<old run id>'
+);
+Mine came back 0 and 0 against the Scala run for batch 9.
+Sensitive columns. Look at detokenized fields (like MemberSSN) yourself, but don't paste the values anywhere. My test data had no SSNs, so detokenization under the service account still needs a check with real data.
+Dispatch (Lambda config)
+Devin only generates a Lambda config if it finds a dispatch helper file, so I built mine by hand from the old job's dispatch script.
+1. Find the old dispatch logic. For me it was step 2 of the same AEDL job (780009056), which runs Datavant_Prov_Lambda_Notification.py. It reads ADD_VAL8 from the deploy staging table: if it's N, files go to SAS only; otherwise to SAS and the vendor.
+2. Map it to the framework. The framework always sends to PRIMARY, and also to ALTERNATE when the routing flag matches. So this was one Lambda row, not one per onshore/offshore file:
+Lambda config field
+Prod value (from the old script)
+LAMBDA_FUNCTION_NAME
+CRLN-RAA-prod-Lmda-CopyFileAndNotify
+ROUTING_FLAG_SOURCE_TABLE / COLUMN / VALUE
+P01_RAA.RAA_RAWZ_STG.DEPLY_DTVNTRT_MRA_STG / ADD_VAL8 / Y
+PRIMARY_SRC bucket / path
+crln-163391535226-ssm-prod-filetransfer / outbound/raa/datavantprov-retro-etl/
+PRIMARY_DEST (SAS)
+cfx-antm-prod-raaetl-outbound / hcaaapck_CFX_STG/
+ALTERNATE_DEST (vendor)
+cfx-antm-prod-mgft-raafiles-outbound / I_ELV_CFX013/prod/mra/ciox/
+LAMBDA_ARH bucket / path
+crln-raa-prod-archz-gbd-phi-useast1 / raa/medicare/na/deply_dtvntrt_mra_stg/
+LAMBDA_IS_DEPLOY
+Y
+Write the routing column in capitals (ADD_VAL8), since the framework looks it up by exact name.
+What the Lambda actually does. I downloaded its code (aws lambda get-function ... --query 'Code.Location') to check:
+• It only copies files from the latest dated folder; it never deletes the source. So SAS first, then the vendor, is safe.
+• The arh_* fields are not where outbound files get archived. With is_deploy = Y, the Lambda reads the latest deploy file there just to put its record count in the email. An empty archive path makes it fail.
+• Each call sends its own email, so prod will send two per run (one per leg).
+3. Test it safely in UAT. The UAT Lambdas can reach the prod CFX buckets, so never copy the prod destinations into a UAT row. I pointed everything at test folders in the UAT bucket:
+• Lambda: CRLN-RAA-uat-Lmda-CopyFileAndNotify
+• Routing value: N (to match UAT's ADD_VAL8, so both legs run)
+• Primary / alternate: outbound/raa/genaisa_test/sas/ and .../vendor/ in crln-652798729258-ssm-uat-filetransfer
+• LAMBDA_IS_DEPLOY = 'N', notify = my own email
+• Then DISPATCH_FLG = TRUE in the run config
+Both folders got all 4 files and the source folder stayed untouched. Afterwards I set DISPATCH_FLG back to FALSE so later test runs don't dispatch.
+Things I ran into
+{{ LOB }} comes through empty. main_refactored.py doesn't pass LOB to the template, even though every converted SQL declares lob VARCHAR := '{{ LOB }}'. If your SQL filters on :lob, the join finds nothing and the run fails. Workaround: add it to your source JSON, since every key there becomes a template value:
+UPDATE U01_RAA.RAA_RAWZ.GENAISA_MASTER_CONFIG
+SET SOURCE_TABLE_NAMES = PARSE_JSON('{ ...your existing keys..., "LOB": "MCR"}')
+WHERE GEN_AI_SA_ID = <your id>;
+The vendor (alternate) leg never runs. CopyFileAndNotify returns nothing, so the framework's check 'errorMessage' in primary_response_payload throws a TypeError after a successful call, and the run stops before the alternate leg. I patched my local copy on the cluster to finish the test:
+cp main_refactored.py main_refactored.py.orig
+sed -i "s/if 'errorMessage' in primary_response_payload or 'errorType' in primary_response_payload:/if isinstance(primary_response_payload, dict) and ('errorMessage' in primary_response_payload or 'errorType' in primary_response_payload):/" main_refactored.py
+sed -i "s/if 'errorMessage' in alternate_response_payload or 'errorType' in alternate_response_payload:/if isinstance(alternate_response_payload, dict) and ('errorMessage' in alternate_response_payload or 'errorType' in alternate_response_payload):/" main_refactored.py
+I've shared this with Ravi, so check whether his latest version already includes it.
+Duplicate config rows. I ran 800009263 without uploading my new file, so it re-ran the old inserts. Always print the S3 copy of the adhoc file right before running the job.
+Load log batch numbers. The framework writes its load_log row with max(batch)+1, not the deploy batch the old job reused. It doesn't affect processing, but keep it in mind if anything downstream reads those rows.
+Email noise. Every test run, pass or fail, emails the notification list. Use your own email in the Lambda config while testing.
