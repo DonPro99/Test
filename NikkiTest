@@ -1,1 +1,14 @@
-Hi all, FYI I’ve used GEN_AI_SA_ID 005 for the Datavant conversion, so please pick a different number to avoid overlapping.
+# 1. Your SQL goes to S3 (path must match EXECUTABLE_SQL_FILE in your master config)
+aws s3 cp /tmp/<your file>.sql s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP>/<your file>.sql
+
+# 2. Ravi's framework script goes on the node
+cat > /home/hadoop/main_refactored.py << 'EOF'
+(paste Ravi's main_refactored.py code here)
+EOF
+
+# 3. Install Jinja2
+sudo python3.11 -m pip install jinja2
+
+# 4. Run it with your SQL's S3 path
+cd /home/hadoop
+python3.11 main_refactored.py --SQL_FILENAME s3://crln-raa-uat-codez-nogbd-phi-useast1/raa/genaisa/sql/<SUB_GROUP>/<your file>.sql
